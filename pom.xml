@@ -120,11 +120,12 @@
             <artifactId>hibernate-jpa-2.1-api</artifactId>
             <version>${hibernate-jpa-2-1.version}</version>
         </dependency>
-        <!-- <dependency> falta arregar el driver para conectar
-             <groupId>com.h2database</groupId>
-             <artifactId>h2</artifactId>
-             <version>1.4.199</version>
-         </dependency> -->
+
+        <dependency>
+            <groupId>postgresql</groupId>   <!--base de datos-->
+            <artifactId>postgresql</artifactId>
+            <version>9.1-901-1.jdbc4</version>
+        </dependency>
 
         <dependency>
             <groupId>javax.xml.bind</groupId>
