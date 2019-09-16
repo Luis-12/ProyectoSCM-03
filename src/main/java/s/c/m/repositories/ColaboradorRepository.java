@@ -14,9 +14,4 @@ import java.util.List;
 
 @Repository
 public interface ColaboradorRepository extends CrudRepository<Colaborador, String> {
-    @Query("select pk_idColaborador,fk_codDepartamento,fk_idPuesto,nombre,clave,telefono,correo,fechainiciolaboral,estado from colaboradores where estado = 'Activo'")
-    List<Colaborador> getAllDepartamentosByEstado();
-
-
-
 }

@@ -9,6 +9,4 @@ import java.util.List;
 
 @Repository
 public interface DepartamentoRepository extends CrudRepository<Departamento, String> {
-   /* @Query("select pk_coddepartamento,nombre,descripcion,fk_idadmin,estado from departamentos where estado = 'Activo'")
-    List<Departamento> getAllDepartamentosByEstado();*/
 }

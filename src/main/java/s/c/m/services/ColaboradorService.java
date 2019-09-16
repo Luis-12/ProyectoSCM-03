@@ -20,11 +20,11 @@ public class ColaboradorService {
         return list;
     }
 
-    public List<Colaborador> getAllColaboradoresActivos() {
+    /*public List<Colaborador> getAllColaboradoresActivos() {
         List<Colaborador> list = new ArrayList<Colaborador>();
         colaboradorRepository.getAllDepartamentosByEstado().forEach(e -> list.add(e));
         return list;
-    }
+    }*/
 
     public void createColaborador(Colaborador colaborador){
         colaborador.setEstado("Activo");
