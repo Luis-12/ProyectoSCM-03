@@ -20,11 +20,17 @@ public class ColaboradorService {
         return list;
     }
 
-    /*public List<Colaborador> getAllColaboradoresActivos() {
+    public List<Colaborador> getAllColaboradoresActivos() {
         List<Colaborador> list = new ArrayList<Colaborador>();
-        colaboradorRepository.getAllDepartamentosByEstado().forEach(e -> list.add(e));
-        return list;
-    }*/
+        List<Colaborador> listA = new ArrayList<Colaborador>();
+        colaboradorRepository.findAll().forEach(e -> list.add(e));
+        for(Colaborador c: list){
+            if(c.getEstado().equals("Activo")){
+                listA.add(c);
+            }
+        }
+        return listA;
+    }
 
     public void createColaborador(Colaborador colaborador){
         colaborador.setEstado("Activo");
@@ -33,7 +39,7 @@ public class ColaboradorService {
 
     public void deleteColaborador(Colaborador colaborador){
         //ColaboradorRepository.deleteById(id);
-        colaborador.setEstado("Desactivado");
+        colaborador.setEstado("Inactivo");
         colaboradorRepository.save(colaborador);
     }
 

@@ -23,7 +23,7 @@ public class ColaboradorBean {
 
     @PostConstruct
     public String init() {
-        departamentos = colaboradorService.getAllColaboradores();
+        departamentos = colaboradorService.getAllColaboradoresActivos();
         return "colaboradorList.xhtml";
     }
 

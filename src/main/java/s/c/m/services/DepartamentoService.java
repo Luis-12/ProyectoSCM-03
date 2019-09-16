@@ -19,11 +19,17 @@ public class DepartamentoService {
         return list;
     }
 
-    /*public List<Departamento> getAllDepartamentosActivos() {
+    public List<Departamento> getAllDepartamentosActivos() {
         List<Departamento> list = new ArrayList<Departamento>();
-        departamentoRepository.getAllDepartamentosByEstado().forEach(e -> list.add(e));
-        return list;
-    }*/
+        List<Departamento> listA = new ArrayList<Departamento>();
+        departamentoRepository.findAll().forEach(e -> list.add(e));
+        for(Departamento d: list){
+            if(d.getEstado().equals("Activo")){
+                listA.add(d);
+            }
+        }
+        return listA;
+    }
 
     public void createDepartamento(Departamento departamento){
         departamento.setEstado("Activo");
@@ -32,7 +38,7 @@ public class DepartamentoService {
 
     public void deleteDepartamento(Departamento departamento){
         //departamentoRepository.deleteById(id);
-        departamento.setEstado("Desactivado");
+        departamento.setEstado("Inactivo");
         departamentoRepository.save(departamento);
     }
 

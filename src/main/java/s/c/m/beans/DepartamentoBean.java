@@ -21,7 +21,7 @@ public class DepartamentoBean {
 
     @PostConstruct
     public String init() {
-        departamentos = departamentoService.getAllDepartamentos();
+        departamentos = departamentoService.getAllDepartamentosActivos();
         return "departamentoList.xhtml";
     }
 
@@ -39,5 +39,18 @@ public class DepartamentoBean {
 
     public void setDepartamentos(List<Departamento> departamentos) {
         this.departamentos = departamentos;
+    }
+
+    public Departamento obtieneDepartamento(String id)
+    {
+        if(id == null){
+            throw new IllegalArgumentException("no se provee el id");
+        }
+        for (Departamento d : departamentos){
+            if(id.equals(d.getPk_codDepartamento())){
+                return d;
+            }
+        }
+        return null;
     }
 }
