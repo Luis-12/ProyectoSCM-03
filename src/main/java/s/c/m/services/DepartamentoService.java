@@ -19,11 +19,11 @@ public class DepartamentoService {
         return list;
     }
 
-    public List<Departamento> getAllDepartamentosActivos() {
+    /*public List<Departamento> getAllDepartamentosActivos() {
         List<Departamento> list = new ArrayList<Departamento>();
         departamentoRepository.getAllDepartamentosByEstado().forEach(e -> list.add(e));
         return list;
-    }
+    }*/
 
     public void createDepartamento(Departamento departamento){
         departamento.setEstado("Activo");

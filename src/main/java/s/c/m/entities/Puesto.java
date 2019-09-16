@@ -6,21 +6,21 @@ import java.io.Serializable;
 import java.util.Set;
 
 @Entity
-@Table(name = "puestos")
+@Table(name = "PUESTO")
 public class Puesto implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String pk_idPuesto;
+    private int pk_idPuesto;
     private String descripcion;
     @OneToMany(mappedBy = "puesto")
     private Set<Colaborador> colaboradores;
 
-    public String getPk_idPuesto() {
+    public int getPk_idPuesto() {
         return pk_idPuesto;
     }
 
-    public void setPk_idPuesto(String pk_idPuesto) {
+    public void setPk_idPuesto(int pk_idPuesto) {
         this.pk_idPuesto = pk_idPuesto;
     }
 

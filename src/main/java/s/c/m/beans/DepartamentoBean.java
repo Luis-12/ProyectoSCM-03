@@ -21,7 +21,7 @@ public class DepartamentoBean {
 
     @PostConstruct
     public String init() {
-        departamentos = departamentoService.getAllDepartamentosActivos();
+        departamentos = departamentoService.getAllDepartamentos();
         return "departamentoList.xhtml";
     }
 

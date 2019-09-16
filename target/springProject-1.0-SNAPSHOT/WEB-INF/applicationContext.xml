@@ -9,12 +9,13 @@
      http://www.springframework.org/schema/data/jpa
      https://www.springframework.org/schema/data/jpa/spring-jpa.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <context:component-scan base-package="s.c.m"/>
+    <jpa:repositories base-package="s.c.m.repositories"/><!--Aca se indica donde van a estar los repositorios-->
+    <context:component-scan base-package="s.c.m"/><!--Tambien donde van a estar los beans-->
 
 
     <bean id="entityManagerFactory"
           class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-    <!--    <property name="dataSource" ref="dataSource"/> data source de la conexion  -->
+        <property name="dataSource" ref="dataSource"/>
         <property name="packagesToScan" value="s.c.m.entities"/>
         <property name="jpaVendorAdapter">
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
@@ -30,18 +31,14 @@
               class="org.springframework.jdbc.datasource.DriverManagerDataSource">
             <property name="driverClassName" value="org.postgresql.Driver"/>
         <property name="url" value="jdbc:postgresql://localhost:5432/scm"/>
-        <property name="username" value="root"/>
+        <property name="username" value="postgres"/>
         <property name="password" value="root"/>
     </bean>
-
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean>
-
-
     <bean id="persistenceExceptionTranslationPostProcessor" class=
             "org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
-
 
 
 </beans>
