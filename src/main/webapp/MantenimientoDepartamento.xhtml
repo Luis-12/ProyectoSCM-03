@@ -18,6 +18,33 @@
         <div id="logo"></div>
     </div>
 
+    <h1>Crear Departamento</h1>
+
+    <h:form id="registrationForm" >
+        <p:growl id="msgs" showDetail="true"/>
+
+        <h:panelGrid columns="2" cellpadding="5">
+            <p:outputLabel value="Código de Departamento:" for="codigoDepartamento"/>
+            <p:inputText id="codigoDepartamento" />
+
+            <p:outputLabel value="Nombre completo de departamento:" />
+            <p:inputText id="nombreCompleto" />
+
+            <p:outputLabel value="Encargado de departamento:" />
+            <p:inputText id="encargado"/>
+
+            <p:outputLabel value="Descripción de departamento:" />
+            <p:inputText id="descripcion" value=""/>
+
+        </h:panelGrid>
+        <p:commandButton value="Guardar" id="ajax"  style="margin-right:20px;" styleClass="ui-priority-primary" />
+
+        <p:linkButton  value="Lista de departamentos" style="margin-right:20px;">
+            <p:ajax update="registrationForm" resetValues="true" />
+        </p:linkButton>
+
+    </h:form>
+
 
     <div id="footer">
         <br/>
