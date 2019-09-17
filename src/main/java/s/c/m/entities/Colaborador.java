@@ -20,7 +20,7 @@ public class Colaborador implements Serializable {
     private String clave;
     private int telefono;
     private String correo;
-    private Date fechainiciolaboral;
+    private Date fechaInicioLaboral;
     private String estado;
 
     public String getPk_idColaborador() {
@@ -79,12 +79,12 @@ public class Colaborador implements Serializable {
         this.correo = correo;
     }
 
-    public Date getFechainiciolaboral() {
-        return fechainiciolaboral;
+    public Date getFechaInicioLaboral() {
+        return fechaInicioLaboral;
     }
 
-    public void setFechainiciolaboral(Date fechainiciolaboral) {
-        this.fechainiciolaboral = fechainiciolaboral;
+    public void setFechaInicioLaboral(Date fechaInicioLaboral) {
+        this.fechaInicioLaboral = fechaInicioLaboral;
     }
 
     public String getEstado() {

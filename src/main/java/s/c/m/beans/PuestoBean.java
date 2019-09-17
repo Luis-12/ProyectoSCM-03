@@ -6,6 +6,7 @@ import s.c.m.entities.Puesto;
 import s.c.m.services.PuestoService;
 
 import javax.annotation.ManagedBean;
+import javax.annotation.PostConstruct;
 import java.time.Period;
 import java.util.List;
 
@@ -18,6 +19,12 @@ public class PuestoBean {
     private Puesto puesto = new Puesto();
 
     private List<Puesto> puestos;
+
+    @PostConstruct
+    public String init() {
+        puestos = puestoService.getAllPuestos();
+        return "puestoList.xhtml";
+    }
 
     public Puesto getPuesto() {
         return puesto;
