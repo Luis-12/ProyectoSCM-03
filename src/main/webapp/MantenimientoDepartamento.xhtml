@@ -4,9 +4,8 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
+
 
 <head>
     <link href="css/style.css" rel="stylesheet" type="text/css" />
@@ -19,31 +18,32 @@
     </div>
 
     <h1>Crear Departamento</h1>
-
+<div>
     <h:form id="registrationForm" >
         <p:growl id="msgs" showDetail="true"/>
 
         <h:panelGrid columns="2" cellpadding="5">
             <p:outputLabel value="Código de Departamento:" for="codigoDepartamento"/>
-            <p:inputText id="codigoDepartamento" />
+            <p:inputText type="text" id="codigoDepartamento" />
 
             <p:outputLabel value="Nombre completo de departamento:" />
-            <p:inputText id="nombreCompleto" />
+            <p:inputText type="text" id="nombreCompleto" />
 
             <p:outputLabel value="Encargado de departamento:" />
-            <p:inputText id="encargado"/>
+            <p:inputText type="text" id="encargado"/>
 
             <p:outputLabel value="Descripción de departamento:" />
-            <p:inputText id="descripcion" value=""/>
+            <p:inputText type="text" id="descripcion" value=""/>
 
         </h:panelGrid>
-        <p:commandButton value="Guardar" id="ajax"  style="margin-right:20px;" styleClass="ui-priority-primary" />
+        <p:commandButton type="submit" value="Guardar" id="ajax"  style="margin-right:20px;" styleClass="ui-priority-primary" />
 
-        <p:linkButton  value="Lista de departamentos" style="margin-right:20px;">
+        <p:linkButton type="submit"  value="Lista de departamentos" style="margin-right:20px;">
             <p:ajax update="registrationForm" resetValues="true" />
         </p:linkButton>
 
     </h:form>
+</div>
 
 
     <div id="footer">
