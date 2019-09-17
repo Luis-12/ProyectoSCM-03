@@ -5,7 +5,7 @@
 }
 
 #page {
-    width: 90%;
+    width: 100%;
 
 }
 
@@ -20,8 +20,8 @@
      box-sizing: border-box;
  }
 
-input[type=submit] {
-    width: 100%;
+.ui-commandbutton  {
+    width: 10%;
     background-color: #4CAF50;
     color: white;
     padding: 14px 20px;
@@ -31,20 +31,20 @@ input[type=submit] {
     cursor: pointer;
 }
 
-input[type=submit]:hover {
-    background-color: #45a049;
+.panelGridCenter {
+    margin: 0 auto;
+}
+
+.ui-commandbutton:hover {
+    background-color: blue;
 }
 
 div {
     border-radius: 5px;
     background-color: #f2f2f2;
-    padding: 20px;
-    width: 90%;
+    width: 100%;
 }
 
-p.serif {
-    font-family: "Times New Roman", Times, serif;
-}
 
 #logo{
     width: 40%;
@@ -55,7 +55,7 @@ p.serif {
 }
 
 #header {
-    width: 90%;
+    width: 100%;
     height: 80px;
     background: -webkit-linear-gradient(#6FCBDC, #3DBBD3, #109EB8);
     background: -o-linear-gradient(#6FCBDC, #3DBBD3,#109EB8);
@@ -73,12 +73,16 @@ p.serif {
     background: -moz-linear-gradient(#6FCBDC, #3DBBD3, #109EB8);
     background: linear-gradient(#6FCBDC,#3DBBD3, #109EB8);
     background-color: #3DBBD3;
-    width: 90%;
-    height: 80px;
+    width: 100%;
+    height: 60px;
     text-align: center;
     color: white;
-    margin-right: 40px;
-    margin-top: 90px;
+    margin-right: 60px;
+    margin-top: 80px;
 }
 
-
+.ui-outputlabel {
+    font-size: 17px;
+    font-family: 'Times New Roman';
+    color: black;
+}
