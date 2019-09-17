@@ -1,4 +1,17 @@
-.clearing {
+@font-face {font-family: "GestaW01-Medium";
+    src: url("//db.onlinewebfonts.com/t/f977213040abc486420980aae60e0db3.eot");
+    src: url("//db.onlinewebfonts.com/t/f977213040abc486420980aae60e0db3.eot?#iefix") format("embedded-opentype"),
+    url("//db.onlinewebfonts.com/t/f977213040abc486420980aae60e0db3.woff2") format("woff2"),
+    url("//db.onlinewebfonts.com/t/f977213040abc486420980aae60e0db3.woff") format("woff"),
+    url("//db.onlinewebfonts.com/t/f977213040abc486420980aae60e0db3.ttf") format("truetype"),
+    url("//db.onlinewebfonts.com/t/f977213040abc486420980aae60e0db3.svg#GestaW01-Medium") format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
+h1{
+    font-family:GestaW01-Medium;
+}
+clearing {
     clear: both;
     height: 1px;
     overflow: hidden;
@@ -6,6 +19,7 @@
 
 #page {
     width: 100%;
+    background-color: #f2f2f2;
 
 }
 
@@ -26,7 +40,9 @@ body
 
 .ui-commandbutton  {
     width: 10%;
-    background-color: #4CAF50;
+    background-color:#1DB386  ;
+    font-family:GestaW01-Medium;
+    font-size:15px;
     color: white;
     padding: 14px 20px;
     margin: 8px 0;
@@ -35,12 +51,12 @@ body
     cursor: pointer;
 }
 
-.panelGridCenter {
+.panelGridCenter {background-color: #f2f2f2;
     margin: 0 auto;
 }
 
 .ui-commandbutton:hover {
-    background-color: blue;
+    background-color:#A4A4A4;
 }
 
 div {
@@ -84,8 +100,13 @@ div {
     margin-top: 75px;
 }
 
+body{
+    background-color: #f2f2f2;
+}
+
+
 .ui-outputlabel {
     font-size: 17px;
-    font-family: 'Times New Roman';
-    color: black;
+    font-family:GestaW01-Medium;
+    color: #404041;
 }
