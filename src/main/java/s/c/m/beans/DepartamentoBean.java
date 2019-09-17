@@ -7,8 +7,11 @@ import s.c.m.services.DepartamentoService;
 
 import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import java.util.List;
+
+
 
 @Component
 @ManagedBean
@@ -52,5 +55,30 @@ public class DepartamentoBean {
             }
         }
         return null;
+    }
+    public void create(){
+        try{
+            departamentoService.createDepartamento(departamento);
+            addMessage("Aviso", "Departamento creado correctamente!");
+            departamentos=departamentoService.getAllDepartamentos();
+        }catch (Exception e){
+        }finally {
+            departamento = new Departamento();
+        }
+    }
+    /* public void create() {
+        try{
+            personaService.createPersona(persona);
+            addMessage("Aviso", "Registro insertado correctamente.");
+            personas = personaService.getAllPersonas();
+        }catch (Exception e){
+        } finally {
+            persona = new Persona();
+        }
+    }*/
+
+    public void addMessage(String summary, String detail) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 }

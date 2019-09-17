@@ -4,6 +4,8 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
 
 
@@ -22,24 +24,24 @@
     <h1 style="text-align: center;color: dimgrey">Crear Departamento</h1>
 <div >
     <h:form id="registrationForm"  >
-        <p:growl id="msgs" showDetail="true"/>
 
-        <h:panelGrid columns="2" cellpadding="5" styleClass="panelGridCenter" >
-            <p:outputLabel  value="Código de Departamento:" for="codigoDepartamento"/>
-            <p:inputText type="text" id="codigoDepartamento" />
-
-            <p:outputLabel value="Nombre completo de departamento:" />
-            <p:inputText type="text" id="nombreCompleto" />
-
-            <p:outputLabel value="Encargado de departamento:" />
-            <p:inputText type="text" id="encargado"/>
-
-            <p:outputLabel value="Descripción de departamento:" />
-            <p:inputText type="text" id="descripcion" value=""/>
-
+        <p:growl id="msgs" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
+        <h:panelGrid columns="3" cellpadding="5" id="panel" styleClass="panelGridCenter" >
+            <p:outputLabel indicateRequired="true" value="Código de Departamento:" for="codigoDepartamento"/>
+            <p:inputText type="text" required="true" requiredMessage="Debe ingresar un código que identifique el Departamento"
+                         placeholder="Código" id="codigoDepartamento" value="#{departamentoBean.departamento.pk_codDepartamento}" />
+            <p:message for="codigoDepartamento"/>
+            <p:outputLabel indicateRequired="true" value="Nombre Completo del Departamento:"  for="nombreCompleto"/>
+            <p:inputText  type="text"  required="true" requiredMessage="Debe ingresar el nombre del Departamento"
+                          placeholder="Nombre" id="nombreCompleto" value="#{departamentoBean.departamento.nombre}"/>
+            <p:message for="nombreCompleto"/>
+            <p:outputLabel indicateRequired="true" value="Descripción de Departamento:"  for="descripcion"/>
+            <p:inputText type="text" required="true" requiredMessage="Debe ingresar una descripción del Departamento"
+                         placeholder="Descripción" id="descripcion" value="#{departamentoBean.departamento.descripcion}"/>
+            <p:message for="descripcion"/>
         </h:panelGrid>
         <center>
-            <p:commandButton  type="submit" value="Guardar" id="ajax"  style="margin-right:20px;" styleClass="ui-commandbutton" />
+            <p:commandButton  type="submit" value="Guardar" id="ajax" update="msgs,panel" action="#{departamentoBean.create}" style="margin-right:20px;" styleClass="ui-commandbutton" />
         </center>
 
 

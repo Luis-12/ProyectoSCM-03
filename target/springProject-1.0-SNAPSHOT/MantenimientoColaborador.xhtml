@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+<h:body>
+    <h1>Crear Colaborador</h1>
+
+    <h:form>
+        <p:growl id="msgs" showDetail="true"/>
+
+        <h:panelGrid columns="2" cellpadding="5">
+            <p:outputLabel value="Id:" indicateRequired="true" for="pk_idColaborador"/>
+            <p:inputText id="pk_idColaborador" required="true" requiredMessage="Ingrese un id" value="#{colaboradorBean.colaborador.pk_idColaborador}"/>
+            <p:outputLabel  value="Departamento:" />
+            <p:selectOneMenu value="#{colaboradorBean.colaborador.departamento}" converter="departamentoConverter">
+                <f:selectItems value="#{departamentoBean.departamentos}" var="departamento"
+                               itemValue="#{departamento}"
+                               itemLabel="#{departamento.nombre}"/>
+            </p:selectOneMenu>
+            <p:outputLabel  value="Puesto:" />
+            <p:selectOneMenu value="#{colaboradorBean.colaborador.puesto}" converter="puestoConverter">
+                <f:selectItems value="#{puestoBean.puestos}" var="puesto"
+                               itemValue="#{puesto}"
+                               itemLabel="#{puesto.descripcion}"/>
+            </p:selectOneMenu>
+            <p:outputLabel value="Nombre:" indicateRequired="true" for="nombre"/>
+            <p:inputText id="nombre" required="true" requiredMessage="Ingrese un nombre" value="#{colaboradorBean.colaborador.nombre}"/>
+            <p:outputLabel value="Clave:" indicateRequired="true" for="clave"/>
+            <p:inputText id="clave" required="true" requiredMessage="Ingrese una clave" value="#{colaboradorBean.colaborador.clave}"/>
+            <p:outputLabel value="Telefono" indicateRequired="true" for="telefono"/>
+            <p:inputText id="telefono" required="true" requiredMessage="Ingrese un telefono" value="#{colaboradorBean.colaborador.telefono}"/>
+            <p:outputLabel value="Correo" indicateRequired="true" for="correo"/>
+            <p:inputText id="correo" required="true" requiredMessage="Ingrese un correo" value="#{colaboradorBean.colaborador.correo}"/>
+            <p:outputLabel value="Fecha de inicio laboral" indicateRequired="true" for="fechaInicioLaboral"/>
+            <p:calendar id="fechaInicioLaboral" value="#{colaboradorBean.colaborador.fechaInicioLaboral}" pattern="yyyy-MM-dd"/>
+
+
+        </h:panelGrid>
+        <p:commandButton value="Guardar" id="ajax" update="msgs" action="#{colaboradorBean.create}" style="margin-right:20px;" styleClass="ui-priority-primary" />
+        <p:linkButton outcome="departamentoList" value="Lista de Departamentos" style="margin-right:20px;"/>
+    </h:form>
+</h:body>
+</html>
