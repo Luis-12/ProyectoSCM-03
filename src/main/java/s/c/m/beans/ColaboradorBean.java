@@ -27,8 +27,14 @@ public class ColaboradorBean {
     @PostConstruct
     public String init() {
         colaboradores = colaboradorService.getAllColaboradoresActivos();
+        //colaboradores.clear();
         return "colaboradorList.xhtml";
     }
+    /*public void init() {
+        colaboradores = colaboradorService.getAllColaboradoresActivos();
+        //return "colaboradorList.xhtml";
+    }*/
+
 
     public Colaborador getColaborador() {
         return colaborador;
@@ -91,6 +97,23 @@ public class ColaboradorBean {
         }
     }
 
+    public void find(){
+        String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("ColaboradorIdBusqueda");
+        /*if(id.equals(null)){
+            colaboradores = colaboradorService.getAllColaboradoresActivos();
+        }else{
+            colaboradores.clear();
+            if(colaboradorService.findColaborador(id)== null){
+                addMessage("Aviso", "El colaborador consultado no se encuentra en el sistema.");
+            }
+            else{
+                colaboradores.add(colaboradorService.findColaborador(id));
+            }
+        }*/
+        colaboradores.clear();
+        colaboradores.add(colaboradorService.findColaborador(id));
+    }
+
     public String carga(){//Aca se carga la persona y se redirecciona a la ventana update
         String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("ColaboradorId");
         colaborador=colaboradorService.findColaborador(id);
@@ -101,6 +124,5 @@ public class ColaboradorBean {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-
 
 }

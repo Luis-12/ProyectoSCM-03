@@ -13,38 +13,103 @@
     <h1>Crear Colaborador</h1>
 
     <h:form>
-        <p:growl id="msgs" showDetail="true"/>
+        <p:outputLabel value="Id:" indicateRequired="true" for="idColaborador"/>
+        <p:inputText id="idColaborador" required="true" requiredMessage="Ingrese un id" value="#{colaboradorBean.colaborador.pk_idColaborador}"/>
+        <p:commandButton icon="fa fa-fw fa-edit"  value="Buscar" id="buscar" update="tablaColaborador" action="#{colaboradorBean.find}">
+            <f:param name="ColaboradorIdBusqueda" value="#{colaborador.pk_idColaborador}"/><!--Aca se le pase el id para eliminar la persona-->
+        </p:commandButton>
 
-        <h:panelGrid columns="2" cellpadding="5">
-            <p:outputLabel value="Id:" indicateRequired="true" for="pk_idColaborador"/>
-            <p:inputText id="pk_idColaborador" required="true" requiredMessage="Ingrese un id" value="#{colaboradorBean.colaborador.pk_idColaborador}"/>
-            <p:outputLabel  value="Departamento:" />
-            <p:selectOneMenu value="#{colaboradorBean.colaborador.departamento}" converter="departamentoConverter">
-                <f:selectItems value="#{departamentoBean.departamentos}" var="departamento"
-                               itemValue="#{departamento}"
-                               itemLabel="#{departamento.nombre}"/>
-            </p:selectOneMenu>
-            <p:outputLabel  value="Puesto:" />
-            <p:selectOneMenu value="#{colaboradorBean.colaborador.puesto}" converter="puestoConverter">
-                <f:selectItems value="#{puestoBean.puestos}" var="puesto"
-                               itemValue="#{puesto}"
-                               itemLabel="#{puesto.descripcion}"/>
-            </p:selectOneMenu>
-            <p:outputLabel value="Nombre:" indicateRequired="true" for="nombre"/>
-            <p:inputText id="nombre" required="true" requiredMessage="Ingrese un nombre" value="#{colaboradorBean.colaborador.nombre}"/>
-            <p:outputLabel value="Clave:" indicateRequired="true" for="clave"/>
-            <p:inputText id="clave" required="true" requiredMessage="Ingrese una clave" value="#{colaboradorBean.colaborador.clave}"/>
-            <p:outputLabel value="Telefono" indicateRequired="true" for="telefono"/>
-            <p:inputText id="telefono" required="true" requiredMessage="Ingrese un telefono" value="#{colaboradorBean.colaborador.telefono}"/>
-            <p:outputLabel value="Correo" indicateRequired="true" for="correo"/>
-            <p:inputText id="correo" required="true" requiredMessage="Ingrese un correo" value="#{colaboradorBean.colaborador.correo}"/>
-            <p:outputLabel value="Fecha de inicio laboral" indicateRequired="true" for="fechaInicioLaboral"/>
-            <p:calendar id="fechaInicioLaboral" value="#{colaboradorBean.colaborador.fechaInicioLaboral}" pattern="yyyy-MM-dd"/>
-
-
-        </h:panelGrid>
-        <p:commandButton value="Guardar" id="ajax" update="msgs" action="#{colaboradorBean.create}" style="margin-right:20px;" styleClass="ui-priority-primary" />
-        <p:linkButton outcome="departamentoList" value="Lista de Departamentos" style="margin-right:20px;"/>
+        <p:commandButton  value="Agregar" id="desplegarFA" onclick="PF('dlAC').show();">
+        </p:commandButton>
     </h:form>
+
+    <p:growl id="msgs" showDetail="true"/>
+    <p:dataTable var="colaborador" value="#{colaboradorBean.colaboradores}" id="tablaColaborador">
+        <p:column headerText="Id">
+            <h:outputText value="#{colaborador.pk_idColaborador}" />
+        </p:column>
+
+        <p:column headerText="Nombre">
+            <h:outputText value="#{colaborador.nombre}" />
+        </p:column>
+
+        <p:column headerText="Telefono">
+            <h:outputText value="#{colaborador.telefono}" />
+        </p:column>
+
+        <p:column headerText="Correo">
+            <h:outputText value="#{colaborador.correo}" />
+        </p:column>
+
+        <p:column headerText="Clave">
+            <h:outputText value="#{colaborador.clave}" />
+        </p:column>
+
+        <p:column headerText="Fecha de inicio laboral">
+            <h:outputText value="#{colaborador.fechaInicioLaboral}" />
+        </p:column>
+
+        <p:column headerText="Puesto">
+            <h:outputText value="#{colaborador.puesto.descripcion}" />
+        </p:column>
+
+        <p:column headerText="Departamento al que pertenece">
+            <h:outputText value="#{colaborador.departamento.nombre}" />
+        </p:column>
+
+        <p:column headerText="Acciones">
+
+            <p:commandButton icon="fa fa-fw fa-remove" value="Eliminar" id="eliminar" update="tablaColaborador" action="#{colaboradorBean.delete}">
+                <f:param name="ColaboradorId" value="#{colaborador.pk_idColaborador}"/><!--Aca se le pase el id para eliminar la persona-->
+                <p:confirm header="Confirmación" message="¿Está seguro de desactivar este colaborador?"
+                           icon="pi pi-exclamation-triangle"/>
+            </p:commandButton>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times"/>
+            </p:confirmDialog>
+
+        </p:column>
+    </p:dataTable>
+
+
+    <p:dialog id="dlAC" header="Agregar Colaborador" showEffect="fade" hideEffect="fade"
+              widgetVar="dlAC" modal="true" resizable="false" minWidth="200">
+        <h:form>
+            <h:panelGrid columns="2" cellpadding="5">
+                <p:outputLabel value="Id:" indicateRequired="true" for="pk_idColaborador"/>
+                <p:inputText id="pk_idColaborador" required="true" requiredMessage="Ingrese un id" value="#{colaboradorBean.colaborador.pk_idColaborador}"/>
+                <p:outputLabel  value="Departamento:" />
+                <p:selectOneMenu value="#{colaboradorBean.colaborador.departamento}" converter="departamentoConverter">
+                    <f:selectItems value="#{departamentoBean.departamentos}" var="departamento"
+                                   itemValue="#{departamento}"
+                                   itemLabel="#{departamento.nombre}"/>
+                </p:selectOneMenu>
+                <p:outputLabel  value="Puesto:" />
+                <p:selectOneMenu value="#{colaboradorBean.colaborador.puesto}" converter="puestoConverter">
+                    <f:selectItems value="#{puestoBean.puestos}" var="puesto"
+                                   itemValue="#{puesto}"
+                                   itemLabel="#{puesto.descripcion}"/>
+                </p:selectOneMenu>
+                <p:outputLabel value="Nombre:" indicateRequired="true" for="nombre"/>
+                <p:inputText id="nombre" required="true" requiredMessage="Ingrese un nombre" value="#{colaboradorBean.colaborador.nombre}"/>
+
+                <p:outputLabel value="Clave:" indicateRequired="true" for="clave"/>
+                <p:inputText id="clave" required="true" requiredMessage="Ingrese una clave" value="#{colaboradorBean.colaborador.clave}"/>
+
+                <p:outputLabel value="Telefono" indicateRequired="true" for="telefono"/>
+                <p:inputText id="telefono" required="true" requiredMessage="Ingrese un telefono" value="#{colaboradorBean.colaborador.telefono}"/>
+
+                <p:outputLabel value="Correo" indicateRequired="true" for="correo"/>
+                <p:inputText id="correo" required="true" requiredMessage="Ingrese un correo" value="#{colaboradorBean.colaborador.correo}"/>
+
+                <p:outputLabel value="Fecha de inicio laboral" indicateRequired="true" for="fechaInicioLaboral"/>
+                <p:calendar id="fechaInicioLaboral" value="#{colaboradorBean.colaborador.fechaInicioLaboral}" pattern="yyyy-MM-dd"/>
+            </h:panelGrid>
+            <p:commandButton value="Guardar" id="ajax" update="msgs" action="#{colaboradorBean.create}" style="margin-right:20px;" styleClass="ui-priority-primary" />
+        </h:form>
+    </p:dialog>
+    <p:linkButton outcome="departamentoList" value="Lista de Departamentos" style="margin-right:20px;"/>
 </h:body>
 </html>
