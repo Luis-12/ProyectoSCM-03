@@ -18,7 +18,7 @@ public class Colaborador implements Serializable {
     private Puesto puesto;
     private String nombre;
     private String clave;
-    private String telefono;
+    private java.lang.Integer telefono;
     private String correo;
     private Date fechaInicioLaboral;
     private String estado;
@@ -63,11 +63,11 @@ public class Colaborador implements Serializable {
         this.clave = clave;
     }
 
-    public String getTelefono() {
+    public Integer getTelefono() {
         return telefono;
     }
 
-    public void setTelefono(String telefono) {
+    public void setTelefono(Integer telefono) {
         this.telefono = telefono;
     }
 

@@ -27,14 +27,9 @@ public class ColaboradorBean {
     @PostConstruct
     public String init() {
         colaboradores = colaboradorService.getAllColaboradoresActivos();
-        //colaboradores.clear();
+
         return "colaboradorList.xhtml";
     }
-    /*public void init() {
-        colaboradores = colaboradorService.getAllColaboradoresActivos();
-        //return "colaboradorList.xhtml";
-    }*/
-
 
     public Colaborador getColaborador() {
         return colaborador;

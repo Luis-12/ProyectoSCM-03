@@ -66,16 +66,6 @@ public class DepartamentoBean {
             departamento = new Departamento();
         }
     }
-    /* public void create() {
-        try{
-            personaService.createPersona(persona);
-            addMessage("Aviso", "Registro insertado correctamente.");
-            personas = personaService.getAllPersonas();
-        }catch (Exception e){
-        } finally {
-            persona = new Persona();
-        }
-    }*/
 
     public void addMessage(String summary, String detail) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);

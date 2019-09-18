@@ -18,7 +18,7 @@
     </h:form>
 
     <p:growl id="msgs" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
-    <p:dataTable var="departamento" value="#{departamentoBean.departamentos}" id="tablaColaborador">
+    <p:dataTable var="departamento" value="#{departamentoBean.departamentos}" id="tablaDepartamentos">
         <p:column headerText="Codigo">
             <h:outputText value="#{departamento.pk_codDepartamento}" />
         </p:column>
@@ -35,7 +35,7 @@
 
         <p:column headerText="Acciones">
 
-            <p:commandButton icon="fa fa-fw fa-remove" value="Eliminar" id="eliminar" update="tablaColaborador" action="#{colaboradorBean.delete}">
+            <p:commandButton icon="fa fa-fw fa-remove" value="Eliminar" id="eliminar" update="tablaDepartamentos" action="#{colaboradorBean.delete}">
                 <f:param name="ColaboradorId" value="#{colaborador.pk_idColaborador}"/><!--Aca se le pase el id para eliminar la persona-->
                 <p:confirm header="Confirmación" message="¿Está seguro de desactivar este colaborador?"
                            icon="pi pi-exclamation-triangle"/>
@@ -73,7 +73,10 @@
 
             </h:panelGrid>
             <center>
-                <p:commandButton value="Guardar" id="ajax" update="msgs2,panel2" action="#{departamentoBean.create}" style="margin-right:20px;margin-top: 20px" styleClass="ui-priority-primary" />
+                <p:commandButton value="Guardar" id="ajax" update="msgs2,panel2, @(id$=tablaDepartamentos)" action="#{departamentoBean.create}" style="margin-right:20px;margin-top: 20px" styleClass="ui-priority-primary"
+                oncomplete="PF('dlAC').hide();"
+                />
+
             </center>
 
         </h:form>
