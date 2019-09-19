@@ -1,5 +1,6 @@
 package s.c.m.beans;
 
+import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import s.c.m.entities.Colaborador;
@@ -75,8 +76,11 @@ public class ColaboradorBean {
     }
 
     public void delete(){
-        String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("ColaboradorId");
-        colaboradorService.deleteColaborador(colaboradorService.findColaborador(id));
+        //String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("ColaboradorId");
+        //System.out.println("El id del colaborador que se desea borrar es "+id);
+        //Colaborador miC = colaboradorService.findColaborador(id);
+        //miC.toString();
+        colaboradorService.deleteColaborador(colaborador);
         addMessage("Aviso", "Registro eliminado correctamente.");
         colaboradores = colaboradorService.getAllColaboradoresActivos();
     }
@@ -94,17 +98,6 @@ public class ColaboradorBean {
 
     public void find(){
         String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("ColaboradorIdBusqueda");
-        /*if(id.equals(null)){
-            colaboradores = colaboradorService.getAllColaboradoresActivos();
-        }else{
-            colaboradores.clear();
-            if(colaboradorService.findColaborador(id)== null){
-                addMessage("Aviso", "El colaborador consultado no se encuentra en el sistema.");
-            }
-            else{
-                colaboradores.add(colaboradorService.findColaborador(id));
-            }
-        }*/
         colaboradores.clear();
         colaboradores.add(colaboradorService.findColaborador(id));
     }
@@ -118,6 +111,16 @@ public class ColaboradorBean {
     public void addMessage(String summary, String detail) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
         FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public void onRowSelectedColaborador(SelectEvent event){
+        FacesMessage msg = new FacesMessage("Colaborador Seleccionado",((Colaborador) event.getObject()).getNombre());
+        FacesContext.getCurrentInstance().addMessage("asdasdasdasd",msg);
+    }
+
+    public void onRowUnselectColaborador(SelectEvent event){
+        FacesMessage msg = new FacesMessage("Colaborador deselecionada",((Colaborador) event.getObject()).getNombre());
+        FacesContext.getCurrentInstance().addMessage("dasdasdasdas",msg);
     }
 
 }

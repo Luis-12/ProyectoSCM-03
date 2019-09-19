@@ -59,7 +59,11 @@
             <artifactId>primefaces</artifactId>
             <version>${org.primefaces.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>font-awesome</artifactId>
+            <version>5.10.1</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
