@@ -1,5 +1,6 @@
 package s.c.m.beans;
 
+import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -96,8 +97,16 @@ public class ColaboradorBean {
 
     public void update(){
         try{
+            /*System.out.println("El nombre a actualizado es:"+colaborador.getNombre());
             colaboradorService.updateColaborador(colaborador);
+            addMessage("Aviso", "Registro modificado correctamente.");*/
+            System.out.println("El nombre a actualizado es:"+selectcolaborador.getNombre());
+            colaboradorService.updateColaborador(selectcolaborador);
             addMessage("Aviso", "Registro modificado correctamente.");
+            /*
+             FacesMessage msg = new FacesMessage("Colaborador Editado", ((Colaborador) event.getObject()).getPk_idColaborador());
+             FacesContext.getCurrentInstance().addMessage(null, msg);
+            */
             colaboradores = colaboradorService.getAllColaboradoresActivos();
         }catch (Exception e){
         } finally {
@@ -114,7 +123,7 @@ public class ColaboradorBean {
     public String carga(){//Aca se carga la persona y se redirecciona a la ventana update
         String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("ColaboradorId");
         colaborador=colaboradorService.findColaborador(id);
-        return "colaboradorUpdate.xhtml";
+        return "MantenimientoColaboradorV2.xhtml";
     }
 
     public void addMessage(String summary, String detail) {
@@ -132,4 +141,23 @@ public class ColaboradorBean {
         FacesContext.getCurrentInstance().addMessage("dasdasdasdas",msg);
     }
 
+
+    public void onRowEdit(RowEditEvent event) {
+        colaboradorService.updateColaborador(((Colaborador) event.getObject()));
+        System.out.println(((Colaborador) event.getObject()).getNombre());
+        FacesMessage msg = new FacesMessage("Colaborador Editado", ((Colaborador) event.getObject()).getPk_idColaborador());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void onRowCancel(RowEditEvent event) {
+        FacesMessage msg = new FacesMessage("Actualización Cancelada", ((Colaborador) event.getObject()).getPk_idColaborador());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void onRowDelete(RowEditEvent event) {
+        colaboradorService.deleteColaborador((Colaborador) event.getObject());
+        FacesMessage msg = new FacesMessage("Colaborador eliminado", ((Colaborador) event.getObject()).getPk_idColaborador());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        colaboradores = colaboradorService.getAllColaboradoresActivos();
+    }
 }
