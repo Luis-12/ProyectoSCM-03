@@ -21,14 +21,15 @@ public class ColaboradorBean {
     @Autowired
     ColaboradorService colaboradorService;
     private Colaborador colaborador = new Colaborador();
+    private Colaborador selectcolaborador=new Colaborador();
     private Departamento departamento = new Departamento();
     private Puesto puesto = new Puesto();
     private List<Colaborador> colaboradores;
 
+
     @PostConstruct
     public String init() {
         colaboradores = colaboradorService.getAllColaboradoresActivos();
-
         return "colaboradorList.xhtml";
     }
 
@@ -38,6 +39,14 @@ public class ColaboradorBean {
 
     public void setColaborador(Colaborador colaborador) {
         this.colaborador = colaborador;
+    }
+
+    public Colaborador getSelectcolaborador() {
+        return selectcolaborador;
+    }
+
+    public void setSelectcolaborador(Colaborador selectcolaborador) {
+        this.selectcolaborador = selectcolaborador;
     }
 
     public Departamento getDepartamento() {
@@ -80,7 +89,7 @@ public class ColaboradorBean {
         //System.out.println("El id del colaborador que se desea borrar es "+id);
         //Colaborador miC = colaboradorService.findColaborador(id);
         //miC.toString();
-        colaboradorService.deleteColaborador(colaborador);
+        colaboradorService.deleteColaborador(selectcolaborador);
         addMessage("Aviso", "Registro eliminado correctamente.");
         colaboradores = colaboradorService.getAllColaboradoresActivos();
     }
