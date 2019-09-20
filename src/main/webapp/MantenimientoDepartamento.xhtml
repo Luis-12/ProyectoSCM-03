@@ -18,7 +18,7 @@
     </h:form>
 
     <p:growl id="msgs" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
-    <p:dataTable var="departamento" value="#{departamentoBean.departamentos}" id="tablaDepartamentos">
+    <p:dataTable var="departamento" value="#{departamentoBean.departamentos}"  id="tablaDepartamentos" >
         <p:column headerText="Codigo">
             <h:outputText value="#{departamento.pk_codDepartamento}" />
         </p:column>
