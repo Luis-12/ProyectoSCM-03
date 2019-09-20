@@ -8,79 +8,91 @@
       xmlns:p="http://primefaces.org/ui">
 
 <h:head>
+    <link rel="stylesheet" href="css/style.css"/>
+    <link href="//db.onlinewebfonts.com/c/f977213040abc486420980aae60e0db3?family=GestaW01-Medium" rel="stylesheet" type="text/css"/>
+    <title>Mantenimiento de Departamentos</title>
 </h:head>
-<h:body>
-    <h1>Crear Departamento</h1>
-
-    <h:form>
-        <p:commandButton  value="Agregar"  onclick="PF('dlAC').show();">
-        </p:commandButton>
-    </h:form>
-
-    <p:growl id="msgs" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
-    <p:dataTable var="departamento" value="#{departamentoBean.departamentos}" id="tablaDepartamentos">
-        <p:column headerText="Codigo">
-            <h:outputText value="#{departamento.pk_codDepartamento}" />
-        </p:column>
-
-        <p:column headerText="Nombre">
-            <h:outputText value="#{departamento.nombre}" />
-        </p:column>
-
-        <p:column headerText="Descripción">
-            <h:outputText value="#{departamento.descripcion}" />
-        </p:column>
-
-
-
-        <p:column headerText="Acciones">
-
-            <p:commandButton icon="fa fa-fw fa-remove" value="Eliminar" id="eliminar" update="tablaDepartamentos" action="#{colaboradorBean.delete}">
-                <f:param name="ColaboradorId" value="#{colaborador.pk_idColaborador}"/><!--Aca se le pase el id para eliminar la persona-->
-                <p:confirm header="Confirmación" message="¿Está seguro de desactivar este colaborador?"
-                           icon="pi pi-exclamation-triangle"/>
-            </p:commandButton>
-
-            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
-                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times"/>
-            </p:confirmDialog>
-
-        </p:column>
-    </p:dataTable>
-
-
-    <p:dialog id="dlAC" header="Agregar Colaborador" showEffect="fade" hideEffect="fade"
-              widgetVar="dlAC" modal="true" resizable="false" minWidth="200">
+<div id="page">
+    <div id="header">
+        <div id="logo"></div>
+    </div>
+    <h:body>
+        <h1>Mantenimiento de Departamentos</h1>
 
         <h:form>
-            <p:growl id="msgs2" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
-            <h:panelGrid columns="2"  id="panel2">
-                <p:outputLabel value="Codigo de Departamento:" indicateRequired="true" for="codigo"/>
-                <p:inputText id="codigo" required="true" requiredMessage="Ingrese un id" value="#{departamentoBean.departamento.pk_codDepartamento}"/>
-                <p:watermark value="Codigo" for="codigo"/>
-                <p:message for="codigo"/>
-
-                <p:outputLabel value="Nombre del Departamento:" indicateRequired="true" for="nombre"/>
-                <p:inputText id="nombre" required="true" requiredMessage="Ingrese un nombre" value="#{departamentoBean.departamento.nombre}"/>
-                <p:watermark value="Nombre" for="nombre"/>
-                <p:message for="nombre"/>
-
-                <p:outputLabel value="Descripción de Departamento:" indicateRequired="true" for="descripcion"/>
-                <p:inputText id="descripcion" required="true" requiredMessage="Ingrese una clave" value="#{departamentoBean.departamento.descripcion}"/>
-                <p:watermark value="Descripción:" for="descripcion"/>
-                <p:message for="descripcion"/>
-
-            </h:panelGrid>
-            <center>
-                <p:commandButton value="Guardar" id="ajax" update="msgs2,panel2, @(id$=tablaDepartamentos)" action="#{departamentoBean.create}" style="margin-right:20px;margin-top: 20px" styleClass="ui-priority-primary"
-                oncomplete="PF('dlAC').hide();"
-                />
-
-            </center>
-
+            <p:commandButton  value="Agregar"  onclick="PF('dlAC').show();">
+            </p:commandButton>
         </h:form>
-    </p:dialog>
-    <p:linkButton outcome="departamentoList" value="Lista de Departamentos" style="margin-right:20px;"/>
-</h:body>
+
+        <p:growl id="msgs" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
+        <p:dataTable var="departamento" value="#{departamentoBean.departamentos}" id="tablaColaborador">
+            <p:column headerText="Codigo">
+                <h:outputText value="#{departamento.pk_codDepartamento}" />
+            </p:column>
+
+            <p:column headerText="Nombre">
+                <h:outputText value="#{departamento.nombre}" />
+            </p:column>
+
+            <p:column headerText="Descripción">
+                <h:outputText value="#{departamento.descripcion}" />
+            </p:column>
+
+
+
+            <p:column headerText="Acciones">
+
+                <p:commandButton icon="fa fa-fw fa-remove" value="Eliminar" id="eliminar" update="tablaColaborador" action="#{colaboradorBean.delete}">
+                    <f:param name="ColaboradorId" value="#{colaborador.pk_idColaborador}"/><!--Aca se le pase el id para eliminar la persona-->
+                    <p:confirm header="Confirmación" message="¿Está seguro de desactivar este colaborador?"
+                               icon="pi pi-exclamation-triangle"/>
+                </p:commandButton>
+
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times"/>
+                </p:confirmDialog>
+
+            </p:column>
+        </p:dataTable>
+
+
+        <p:dialog id="dlAC" header="Agregar Colaborador" showEffect="fade" hideEffect="fade"
+                  widgetVar="dlAC" modal="true" resizable="false" minWidth="200">
+
+            <h:form>
+                <p:growl id="msgs2" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
+                <h:panelGrid columns="2"  id="panel2">
+                    <p:outputLabel value="Codigo de Departamento:" indicateRequired="true" for="codigo"/>
+                    <p:inputText id="codigo" required="true" requiredMessage="Ingrese un id" value="#{departamentoBean.departamento.pk_codDepartamento}"/>
+                    <p:watermark value="Codigo" for="codigo"/>
+                    <p:message for="codigo"/>
+
+                    <p:outputLabel value="Nombre del Departamento:" indicateRequired="true" for="nombre"/>
+                    <p:inputText id="nombre" required="true" requiredMessage="Ingrese un nombre" value="#{departamentoBean.departamento.nombre}"/>
+                    <p:watermark value="Nombre" for="nombre"/>
+                    <p:message for="nombre"/>
+
+                    <p:outputLabel value="Descripción de Departamento:" indicateRequired="true" for="descripcion"/>
+                    <p:inputText id="descripcion" required="true" requiredMessage="Ingrese una clave" value="#{departamentoBean.departamento.descripcion}"/>
+                    <p:watermark value="Descripción:" for="descripcion"/>
+                    <p:message for="descripcion"/>
+
+                </h:panelGrid>
+                <center>
+                    <p:commandButton value="Guardar" id="ajax" update="msgs2,panel2" action="#{departamentoBean.create}" style="margin-right:20px;margin-top: 20px" styleClass="ui-priority-primary" />
+                </center>
+
+            </h:form>
+        </p:dialog>
+        <p:linkButton outcome="departamentoList" value="Lista de Departamentos" style="margin-right:20px;"/>
+
+        <div id="footer">
+            <p> SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA</p>
+        </div>
+
+    </h:body>
+
+</div>
+
 </html>
