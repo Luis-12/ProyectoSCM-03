@@ -15,7 +15,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import java.util.List;
 
-@Component
+//@Component
 @ManagedBean
 public class ColaboradorBean {
     @Autowired

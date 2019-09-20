@@ -14,10 +14,11 @@
 
 <h:form>
     <p:growl id="msgs" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
-
     <p:contextMenu for="tablaColaborador" >
+        <p:menuitem value="Agregar" onclick="PF('dlAC').show();">
+        </p:menuitem>
         <p:menuitem value="Actualizar" onclick="PF('dlUC').show();">
-            <f:param name="ColaboradorId" value="#{olaborador.pk_idColaborador}"/>
+            <f:param name="ColaboradorId" value="#{colaborador.pk_idColaborador}"/>
         </p:menuitem>
         <p:menuitem value="Eliminar" icon="ui-icon-close" update="tablaColaborador" actionListener="#{colaboradorBean.delete}">
             <p:confirm header="Confirmación" message="¿Está seguro de eliminar este registro?"
@@ -83,10 +84,9 @@
 
 
 
-
     <p:dialog id="dlAC" header="Agregar Colaborador" showEffect="fade" hideEffect="fade"
               widgetVar="dlAC" modal="true" resizable="false" minWidth="200">
-        <h:form>
+        <h:form id="AgregarColaborador">
             <p:growl id="msgs2" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
             <h:panelGrid columns="2"  id="panel2">
                 <p:outputLabel value="Cédula:" indicateRequired="true" for="pk_idColaborador"/>
@@ -141,7 +141,7 @@
 
     <p:dialog id="dlUC" header="Actualizar Colaborador" showEffect="fade" hideEffect="fade"
               widgetVar="dlUC" modal="true" resizable="false" minWidth="200">
-        <h:form>
+        <h:form id="actualizarColaborador">
             <p:growl id="msgs3" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
             <h:panelGrid columns="2"  id="panel3">
                 <p:outputLabel value="Cédula:" indicateRequired="true" for="pk_idColaboradorA"/>
@@ -192,8 +192,6 @@
             </center>
         </h:form>
     </p:dialog>
-
-    <p:commandButton value="Agregar" onclick="PF('dlAC').show();"/>
     <p:linkButton outcome="departamentoList" value="Lista de Departamentos" style="margin-right:20px;"/>
 </h:body>
 </html>
