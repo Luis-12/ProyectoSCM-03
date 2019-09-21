@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+<head>
+    <link rel="stylesheet" href="css/style.css"/>
+    <link href="//db.onlinewebfonts.com/c/f977213040abc486420980aae60e0db3?family=GestaW01-Medium" rel="stylesheet" type="text/css"/>
+    <title>Title</title>
+</head>
+
+<div id="page">
+
+    <div id="header">
+        <div id="logo"></div>
+    </div>
+
+    <h:body>
+        <div id="top">
+            <ui:insert name="title">
+                <h:form>
+                    <p:sidebar widgetVar="sidebar1" baseZIndex="10000">
+                        <h1 style="font-weight:normal">Menú</h1>
+                        <h:button value="Marcar"/>
+                        <h:button value="Mantenimiento de Departamento" outcome="MantenimientoDepartamento.xhtml"/>
+                        <h:button value="Mantenimiento de Colaboradores" outcome="MantenimientoColaborador.xhtml"/>
+                        <h:button value="Informe Colaborador"/>
+                    </p:sidebar>
+                    <p:commandLink oncomplete="PF('sidebar1').show()">
+                        <h:outputText value="≡≡" />
+                    </p:commandLink>
+                </h:form>
+            </ui:insert>
+        </div>
+
+        <h:form>
+            <h:panelGrid columns="3" cellpadding="5">
+                <p:photoCam widgetVar="pc" Listener="" update=""/>
+                <p:commandButton type="button" value=""/>
+
+            </h:panelGrid>
+        </h:form>
+
+
+
+
+
+
+
+        <div id="footer">
+            <p> SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA</p>
+        </div>
+
+    </h:body>
+
+</div>
+
+</html>
