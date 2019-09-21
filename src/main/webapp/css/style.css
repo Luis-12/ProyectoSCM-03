@@ -23,20 +23,40 @@ clearing {
 
 }
 
+
+.myHeader{
+    font-family:GestaW01-Medium;
+
+}
+
+
+.ui-commandbutton{
+    font-family:GestaW01-Medium;
+
+}
+
+.ui-datatable table{
+    border-collapse:collapse;
+    text-align: center;
+    margin-right: 60px;
+    margin-top: 75px;
+    font-family:GestaW01-Medium;
+
+}
 body
 {
     background: #f2f2f2;
 }
 
- input[type=text], select {
-     width: 100%;
-     padding: 12px 20px;
-     margin: 8px 0;
-     display: inline-block;
-     border: 1px solid #ccc;
-     border-radius: 4px;
-     box-sizing: border-box;
- }
+input[type=text], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
 
 .ui-commandbutton  {
     width: 10%;
@@ -98,6 +118,9 @@ div {
     color: white;
     margin-right: 60px;
     margin-top: 75px;
+    position: fixed;
+    bottom: 0;
+
 }
 
 
