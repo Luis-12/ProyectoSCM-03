@@ -8,74 +8,94 @@
       xmlns:p="http://primefaces.org/ui">
 
 <h:head>
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
+    <link href="//db.onlinewebfonts.com/c/f977213040abc486420980aae60e0db3?family=GestaW01-Medium" rel="stylesheet" type="text/css"/>
+    <title>Mantenimiento de Colaboradores</title>
+
 </h:head>
-<h:body>
-    <h1>Crear Colaborador</h1>
 
-<h:form>
-    <p:growl id="msgs" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
-    <p:contextMenu for="tablaColaborador" >
-        <p:menuitem value="Agregar" onclick="PF('dlAC').show();">
-        </p:menuitem>
-        <p:menuitem value="Actualizar" update="dlUC" oncomplete="PF('dlUC').show()"/>
-        <p:menuitem value="Eliminar" icon="ui-icon-close" update="tablaColaborador" actionListener="#{colaboradorBean.delete}">
-            <p:confirm header="Confirmación" message="¿Está seguro de eliminar este registro?"
-                       icon="pi pi-exclamation-triangle"/>
-        </p:menuitem>
-    </p:contextMenu>
-    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-        <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
-        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times"/>
-    </p:confirmDialog>
+<h:body >
+    <div id="header">
+        <div id="logo"></div>
 
-    <p:dataTable var="colaborador" value="#{colaboradorBean.colaboradores}" id="tablaColaborador"
-                 widgetVar="colaboradorTabla"
-                 resizableColumns="true"
-                 selectionMode="single"
-                 rowKey="#{colaborador.pk_idColaborador}"
-                 paginator="true"
-                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                 rowsPerPageTemplate="10"
-                 selection="#{colaboradorBean.selectcolaborador}">
+    </div>
+    <div id="top">
+        <ui:insert name="title">
+            <h:form>
+                <p:sidebar widgetVar="sidebar1" baseZIndex="10000">
+                    <h1 style="font-weight:normal">Menu</h1>
+                    <h:button value="Colaboradores" outcome="MantenimientoColaborador.xhtml"/>
+                </p:sidebar>
+                <p:commandButton value="≡" icon="pi pi-arrow-right" oncomplete="PF('sidebar1').show()" />
+            </h:form>
+        </ui:insert>
+    </div>
+    <div>
 
+        <h:form>
+            <p:growl id="msgs" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
+            <p:contextMenu for="tablaColaborador" >
+                <p:menuitem value="Agregar" onclick="PF('dlAC').show();">
+                </p:menuitem>
+                <p:menuitem value="Actualizar" update="dlUC" oncomplete="PF('dlUC').show()"/>
+                <p:menuitem value="Eliminar" icon="ui-icon-close" update="tablaColaborador" actionListener="#{colaboradorBean.delete}">
+                    <p:confirm header="Confirmación" message="¿Está seguro de eliminar este registro?"
+                               icon="pi pi-exclamation-triangle"/>
+                </p:menuitem>
+            </p:contextMenu>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times"/>
+            </p:confirmDialog>
 
-        <p:column headerText="Id" filterBy="#{colaborador.pk_idColaborador}">
-            <h:outputText value="#{colaborador.pk_idColaborador}" />
-        </p:column>
-
-        <p:column headerText="Nombre" filterBy="#{colaborador.nombre}">
-            <h:outputText value="#{colaborador.nombre}" />
-        </p:column>
-
-        <p:column headerText="Telefono" filterBy="#{colaborador.telefono}">
-            <h:outputText value="#{colaborador.telefono}" />
-        </p:column>
-
-        <p:column headerText="Correo" filterBy="#{colaborador.correo}">
-            <h:outputText value="#{colaborador.correo}" />
-        </p:column>
-
-        <p:column headerText="Clave" >
-            <h:outputText value="#{colaborador.clave}" />
-        </p:column>
-
-        <p:column headerText="Fecha de inicio laboral" filterBy="#{colaborador.fechaInicioLaboral}">
-            <h:outputText value="#{colaborador.fechaInicioLaboral}" />
-        </p:column>
-
-        <p:column headerText="Puesto" filterBy="#{colaborador.puesto.descripcion}">
-            <h:outputText value="#{colaborador.puesto.descripcion}" />
-        </p:column>
-
-        <p:column headerText="Departamento al que pertenece" filterBy="#{colaborador.departamento.nombre}">
-            <h:outputText value="#{colaborador.departamento.nombre}" />
-        </p:column>
-    </p:dataTable>
+            <p:dataTable var="colaborador" value="#{colaboradorBean.colaboradores}" id="tablaColaborador"
+                         widgetVar="colaboradorTabla"
+                         resizableColumns="true"
+                         selectionMode="single"
+                         rowKey="#{colaborador.pk_idColaborador}"
+                         paginator="true"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="10"
+                         selection="#{colaboradorBean.selectcolaborador}">
 
 
+                <p:column headerText="Id" filterBy="#{colaborador.pk_idColaborador}">
+                    <h:outputText value="#{colaborador.pk_idColaborador}" />
+                </p:column>
 
-</h:form>
+                <p:column headerText="Nombre" filterBy="#{colaborador.nombre}">
+                    <h:outputText value="#{colaborador.nombre}" />
+                </p:column>
 
+                <p:column headerText="Telefono" filterBy="#{colaborador.telefono}">
+                    <h:outputText value="#{colaborador.telefono}" />
+                </p:column>
+
+                <p:column headerText="Correo" filterBy="#{colaborador.correo}">
+                    <h:outputText value="#{colaborador.correo}" />
+                </p:column>
+
+                <p:column headerText="Clave" >
+                    <h:outputText value="#{colaborador.clave}" />
+                </p:column>
+
+                <p:column headerText="Fecha de inicio laboral" filterBy="#{colaborador.fechaInicioLaboral}">
+                    <h:outputText value="#{colaborador.fechaInicioLaboral}" />
+                </p:column>
+
+                <p:column headerText="Puesto" filterBy="#{colaborador.puesto.descripcion}">
+                    <h:outputText value="#{colaborador.puesto.descripcion}" />
+                </p:column>
+
+                <p:column headerText="Departamento al que pertenece" filterBy="#{colaborador.departamento.nombre}">
+                    <h:outputText value="#{colaborador.departamento.nombre}" />
+                </p:column>
+            </p:dataTable>
+
+
+
+        </h:form>
+    </div>
 
 
     <p:dialog id="dlAC" header="Agregar Colaborador" showEffect="fade" hideEffect="fade"
@@ -116,7 +136,7 @@
                 <p:message for="telefono"/>
                 <p:outputLabel value="Correo:" indicateRequired="true" for="correo"/>
                 <p:inputText id="correo" required="true"  label="email" requiredMessage="Ingrese un correo" value="#{colaboradorBean.colaborador.correo}">
-                <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                    <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                 </p:inputText>
                 <p:watermark value="ejemplo@gmail.com" for="correo"/>
                 <p:message for="correo"/>
@@ -128,6 +148,8 @@
             </h:panelGrid>
             <center>
                 <p:commandButton value="Guardar" id="ajax" update="msgs2,panel2, @(id$=tablaColaborador)" action="#{colaboradorBean.create}" style="margin-right:20px;margin-top: 20px" styleClass="ui-priority-primary" />
+                <p:commandButton value="Cancelar" onclick="PF('dlAC').hide();"/>
+
             </center>
         </h:form>
     </p:dialog>
@@ -184,11 +206,18 @@
             </h:panelGrid>
             <center>
                 <p:commandButton value="Actualizar" id="ajax2" update="msgs3,panel3, @(id$=tablaColaborador)" action="#{colaboradorBean.update}" style="margin-right:20px;margin-top: 20px" styleClass="ui-priority-primary" />
+                <p:commandButton value="Cancelar" onclick="PF('dlUC').hide();"/>
+
             </center>
         </h:form>
     </p:dialog>
     <p:linkButton outcome="departamentoList" value="Lista de Departamentos" style="margin-right:20px;"/>
 
 
+    <div id="footer">
+        <br/>
+        © &nbsp; &nbsp; SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA
+
+    </div> 
 </h:body>
 </html>
