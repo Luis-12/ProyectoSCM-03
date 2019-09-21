@@ -7,6 +7,7 @@ import s.c.m.repositories.DepartamentoRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DepartamentoService {
@@ -17,6 +18,11 @@ public class DepartamentoService {
         List<Departamento> list = new ArrayList<Departamento>();
         departamentoRepository.findAll().forEach(e -> list.add(e));
         return list;
+    }
+
+
+    public Optional<Departamento> findDepartamentoById(String departamento){
+        return  departamentoRepository.findById(departamento);
     }
 
     public List<Departamento> getAllDepartamentosActivos() {

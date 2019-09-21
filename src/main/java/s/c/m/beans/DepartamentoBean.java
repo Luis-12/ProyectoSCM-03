@@ -10,7 +10,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import java.util.List;
-
+import java.util.Optional;
 
 
 @Component
@@ -56,19 +56,69 @@ public class DepartamentoBean {
         }
         return null;
     }
+
+    public void delete(){
+        String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("DepartamentoId");
+        Optional<Departamento> departamentoOptional=departamentoService.findDepartamentoById(id);
+        if(departamentoOptional.isPresent())
+            departamento=departamentoOptional.get();
+        departamentoService.deleteDepartamento(departamento);
+        departamentos=departamentoService.getAllDepartamentosActivos();
+        departamento = new Departamento();
+    }
+
+
+    public String buscar(){
+        String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("DepartamentoId");
+        Optional<Departamento> departamentoOptional=departamentoService.findDepartamentoById(id);
+        if(departamentoOptional.isPresent()) {
+            departamento = departamentoOptional.get();
+
+            //PrimeFaces.current().executeScript("PF('dlA').show();");
+        }
+        departamentos=departamentoService.getAllDepartamentosActivos();
+        return "MantenimientoDepartamento";
+
+    }
+
+    public void delete1(){
+        //String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("ColaboradorId");
+        //System.out.println("El id del colaborador que se desea borrar es "+id);
+        //Colaborador miC = colaboradorService.findColaborador(id);
+        //miC.toString();
+        departamentoService.deleteDepartamento(departamento);
+        addMessage("Aviso", "Registro eliminado correctamente.");
+        departamentos = departamentoService.getAllDepartamentosActivos();
+    }
+
     public void create(){
         try{
             departamentoService.createDepartamento(departamento);
             addMessage("Aviso", "Departamento creado correctamente!");
-            departamentos=departamentoService.getAllDepartamentos();
+            departamentos=departamentoService.getAllDepartamentosActivos();
         }catch (Exception e){
         }finally {
             departamento = new Departamento();
         }
     }
 
+
     public void addMessage(String summary, String detail) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
