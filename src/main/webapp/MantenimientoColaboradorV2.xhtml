@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+<h:body>
+    <h1>Crear Colaborador</h1>
+<h:form id="form">
+    <p:growl id="msgs" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
+    <p:contextMenu for="colaboradores" >
+        <p:menuitem value="Eliminar" icon="ui-icon-close" update="colaboradores" actionListener="#{colaboradorBean.delete}">
+            <p:confirm header="Confirmación" message="¿Está seguro de eliminar este registro?"
+                       icon="pi pi-exclamation-triangle"/>
+        </p:menuitem>
+    </p:contextMenu>
+    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+        <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times"/>
+    </p:confirmDialog>
+    <p:dataTable id="colaboradores" var="colaborador"
+                 value="#{colaboradorBean.colaboradores}"
+                 editable="true"
+                 widgetVar="colaboradorTabla"
+                 resizableColumns="true"
+                 selectionMode="single"
+                 rowKey="#{colaborador.pk_idColaborador}"
+                 paginator="true"
+                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                 rowsPerPageTemplate="10"
+                 selection="#{colaboradorBean.colaborador}"
+                 style="margin-bottom:20px">
+
+        <p:ajax event="rowEdit" listener="#{colaboradorBean.onRowEdit}" update=":form:msgs" />
+        <p:ajax event="rowEditCancel" listener="#{colaboradorBean.onRowCancel}" update=":form:msgs" />
+
+        <p:column headerText="Id" filterBy="#{colaborador.pk_idColaborador}">
+            <p:cellEditor>
+                <f:facet name="output"> <h:outputText value="#{colaborador.pk_idColaborador}" /></f:facet>
+                <f:facet name="input"><p:inputText id="modelInput" value="#{colaborador.pk_idColaborador}" style="width:100%"/></f:facet>
+            </p:cellEditor>
+        </p:column>
+
+        <p:column headerText="Nombre" filterBy="#{colaborador.nombre}">
+            <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{colaborador.nombre}" /></f:facet>
+                <f:facet name="input"><p:inputText value="#{colaborador.nombre}" style="width:100%"/></f:facet>
+            </p:cellEditor>
+        </p:column>
+
+        <p:column headerText="Telefono" filterBy="#{colaborador.telefono}">
+            <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{colaborador.telefono}" /></f:facet>
+                <f:facet name="input"><p:inputText value="#{colaborador.telefono}" style="width:100%"/></f:facet>
+            </p:cellEditor>
+        </p:column>
+
+        <p:column headerText="Correo" filterBy="#{colaborador.correo}">
+            <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{colaborador.correo}" /></f:facet>
+                <f:facet name="input"><p:inputText value="#{colaborador.correo}" style="width:100%"/></f:facet>
+            </p:cellEditor>
+        </p:column>
+
+        <p:column headerText="Clave" filterBy="#{colaborador.clave}">
+            <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{colaborador.clave}" /></f:facet>
+                <f:facet name="input"><p:inputText value="#{colaborador.clave}" style="width:100%"/></f:facet>
+            </p:cellEditor>
+        </p:column>
+
+        <p:column headerText="Fecha de inicio Laboral" filterBy="#{colaborador.fechaInicioLaboral}">
+            <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{colaborador.fechaInicioLaboral}"  /></f:facet>
+                <f:facet name="input"><p:calendar value="#{colaborador.fechaInicioLaboral}" style="width:100%"/></f:facet>
+            </p:cellEditor>
+        </p:column>
+
+        <p:column headerText="Puesto" filterBy="#{colaborador.puesto.descripcion}">
+            <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{colaborador.puesto.descripcion}" /></f:facet>
+                <f:facet name="input">
+                    <p:selectOneMenu value="#{colaboradorBean.colaborador.puesto}" converter="puestoConverter">
+                        <f:selectItems value="#{puestoBean.puestos}" var="puesto"
+                                       itemValue="#{puesto}"
+                                       itemLabel="#{puesto.descripcion}"/>
+                    </p:selectOneMenu>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+
+        <p:column  headerText="Departamento al que pertenece" filterBy="#{colaborador.departamento.nombre}">
+            <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{colaborador.departamento.nombre}" /></f:facet>
+                <f:facet name="input">
+                    <p:selectOneMenu value="#{colaboradorBean.colaborador.departamento}" converter="departamentoConverter">
+                        <f:selectItems value="#{departamentoBean.departamentos}" var="departamento"
+                                       itemValue="#{departamento}"
+                                       itemLabel="#{departamento.nombre}"/>
+                    </p:selectOneMenu>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+
+        <p:column style="width:32px">
+            <p:rowEditor />
+        </p:column>
+    </p:dataTable>
+
+    <div class="ui-g">
+        <div class="ui-g-12">
+            <p:commandButton value="Agregar colaborador" styleClass="ui-priority-primary" process="@this" update=":form:msgs"
+                             onclick="PF('dlAC').show();"/>
+        </div>
+    </div>
+
+</h:form>
+    <p:dialog id="dlAC" header="Agregar Colaborador" showEffect="fade" hideEffect="fade"
+              widgetVar="dlAC" modal="true" resizable="false" minWidth="200">
+        <h:form id="AgregarColaborador">
+            <p:growl id="msgs2" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
+            <h:panelGrid columns="2"  id="panel2">
+                <p:outputLabel value="Cédula:" indicateRequired="true" for="pk_idColaborador"/>
+                <p:inputText id="pk_idColaborador" required="true" requiredMessage="Ingrese un id" pattern="[0-9]"
+                             validatorMessage=" La cédula debe ingresar tener mínimo 9 caracteres numericos" value="#{colaboradorBean.colaborador.pk_idColaborador}"/>
+                <p:watermark value="ID" for="pk_idColaborador"/>
+                <p:message for="pk_idColaborador"/>
+                <p:outputLabel  value="Departamento:"  />
+                <p:selectOneMenu value="#{colaboradorBean.colaborador.departamento}" converter="departamentoConverter">
+                    <f:selectItems value="#{departamentoBean.departamentos}" var="departamento"
+                                   itemValue="#{departamento}"
+                                   itemLabel="#{departamento.nombre}"/>
+                </p:selectOneMenu>
+                <p:outputLabel  value="Puesto:" />
+                <p:selectOneMenu value="#{colaboradorBean.colaborador.puesto}" converter="puestoConverter">
+                    <f:selectItems value="#{puestoBean.puestos}" var="puesto"
+                                   itemValue="#{puesto}"
+                                   itemLabel="#{puesto.descripcion}"/>
+                </p:selectOneMenu>
+                <p:outputLabel value="Nombre:" indicateRequired="true" for="nombre"/>
+                <p:inputText id="nombre" required="true" requiredMessage="Ingrese un nombre"  pattern="[A-Za-Z]" value="#{colaboradorBean.colaborador.nombre}"/>
+                <p:watermark value="Nombre" for="nombre"/>
+                <p:message for="nombre"/>
+                <p:outputLabel value="Clave:" indicateRequired="true" for="clave"/>
+                <p:inputText id="clave" required="true" requiredMessage="Ingrese una clave" value="#{colaboradorBean.colaborador.clave}"/>
+                <p:watermark value="Clave:" for="clave"/>
+                <p:message for="clave"/>
+                <p:outputLabel value="Telefono" indicateRequired="true" for="telefono"/>
+                <p:inputText id="telefono" required="true" requiredMessage="Ingrese un teléfono"
+                             value="#{colaboradorBean.colaborador.telefono}">
+                </p:inputText>
+                <p:watermark value="Telefono" for="telefono"/>
+                <p:message for="telefono"/>
+                <p:outputLabel value="Correo:" indicateRequired="true" for="correo"/>
+                <p:inputText id="correo" required="true"  label="email" requiredMessage="Ingrese un correo" value="#{colaboradorBean.colaborador.correo}">
+                    <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                </p:inputText>
+                <p:watermark value="ejemplo@gmail.com" for="correo"/>
+                <p:message for="correo"/>
+                <p:outputLabel value="Fecha de inicio laboral" indicateRequired="true" for="fechaInicioLaboral"/>
+                <p:calendar id="fechaInicioLaboral" required="true" requiredMessage="Ingrese la Fecha" value="#{colaboradorBean.colaborador.fechaInicioLaboral}" pattern="yyyy-MM-dd"/>
+                <p:watermark value="Fecha" for="fechaInicioLaboral"/>
+                <p:message for="fechaInicioLaboral"/>
+
+            </h:panelGrid>
+            <center>
+                <p:commandButton value="Guardar" id="ajax" update="msgs2,panel2, @(id$=tablaColaborador)" action="#{colaboradorBean.create}" style="margin-right:20px;margin-top: 20px" styleClass="ui-priority-primary" />
+            </center>
+        </h:form>
+    </p:dialog>
+</h:body>
+</html>

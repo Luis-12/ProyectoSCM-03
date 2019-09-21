@@ -17,9 +17,7 @@
     <p:contextMenu for="tablaColaborador" >
         <p:menuitem value="Agregar" onclick="PF('dlAC').show();">
         </p:menuitem>
-        <p:menuitem value="Actualizar" onclick="PF('dlUC').show();">
-            <f:param name="ColaboradorId" value="#{colaborador.pk_idColaborador}"/>
-        </p:menuitem>
+        <p:menuitem value="Actualizar" update="dlUC" oncomplete="PF('dlUC').show()"/>
         <p:menuitem value="Eliminar" icon="ui-icon-close" update="tablaColaborador" actionListener="#{colaboradorBean.delete}">
             <p:confirm header="Confirmación" message="¿Está seguro de eliminar este registro?"
                        icon="pi pi-exclamation-triangle"/>
@@ -39,7 +37,7 @@
                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                  rowsPerPageTemplate="10"
                  selection="#{colaboradorBean.selectcolaborador}">
-        
+
 
         <p:column headerText="Id" filterBy="#{colaborador.pk_idColaborador}">
             <h:outputText value="#{colaborador.pk_idColaborador}" />
@@ -73,6 +71,9 @@
             <h:outputText value="#{colaborador.departamento.nombre}" />
         </p:column>
     </p:dataTable>
+
+
+
 </h:form>
 
 
@@ -139,45 +140,46 @@
             <h:panelGrid columns="2"  id="panel3">
                 <p:outputLabel value="Cédula:" indicateRequired="true" for="pk_idColaboradorA"/>
                 <p:inputText id="pk_idColaboradorA" required="true" requiredMessage="Ingrese un id" pattern="[0-9]"
-                             validatorMessage=" La cédula debe ingresar tener mínimo 9 caracteres numericos" value="#{colaboradorBean.colaborador.pk_idColaborador}"/>
-                <p:watermark value="ID" for="pk_idColaboradorA"/>
-                <p:message for="pk_idColaboradorA"/>
+                             validatorMessage=" La cédula debe ingresar tener mínimo 9 caracteres numericos" value="#{colaboradorBean.selectcolaborador.pk_idColaborador}"/>
+
+
                 <p:outputLabel  value="Departamento:"  />
-                <p:selectOneMenu value="#{colaboradorBean.colaborador.departamento}" converter="departamentoConverter">
+                <p:selectOneMenu value="#{colaboradorBean.selectcolaborador.departamento}" converter="departamentoConverter">
                     <f:selectItems value="#{departamentoBean.departamentos}" var="departamento"
                                    itemValue="#{departamento}"
                                    itemLabel="#{departamento.nombre}"/>
                 </p:selectOneMenu>
+
                 <p:outputLabel  value="Puesto:" />
-                <p:selectOneMenu value="#{colaboradorBean.colaborador.puesto}" converter="puestoConverter">
+                <p:selectOneMenu value="#{colaboradorBean.selectcolaborador.puesto}" converter="puestoConverter">
                     <f:selectItems value="#{puestoBean.puestos}" var="puesto"
                                    itemValue="#{puesto}"
                                    itemLabel="#{puesto.descripcion}"/>
                 </p:selectOneMenu>
+
                 <p:outputLabel value="Nombre:" indicateRequired="true" for="nombreA"/>
-                <p:inputText id="nombreA" required="true" requiredMessage="Ingrese un nombre"  pattern="[A-Za-Z]" value="#{colaboradorBean.colaborador.nombre}"/>
-                <p:watermark value="Nombre" for="nombreA"/>
-                <p:message for="nombreA"/>
+                <p:inputText id="nombreA" required="true" requiredMessage="Ingrese un nombre"  pattern="[A-Za-Z]" value="#{colaboradorBean.selectcolaborador.nombre}"/>
+
+
                 <p:outputLabel value="Clave:" indicateRequired="true" for="claveA"/>
-                <p:inputText id="claveA" required="true" requiredMessage="Ingrese una clave" value="#{colaboradorBean.colaborador.clave}"/>
-                <p:watermark value="Clave:" for="claveA"/>
-                <p:message for="claveA"/>
+                <p:inputText id="claveA" required="true" requiredMessage="Ingrese una clave" value="#{colaboradorBean.selectcolaborador.clave}"/>
+
+
                 <p:outputLabel value="Telefono" indicateRequired="true" for="telefonoA"/>
                 <p:inputText id="telefonoA" required="true" requiredMessage="Ingrese un teléfono"
-                             value="#{colaboradorBean.colaborador.telefono}">
+                             value="#{colaboradorBean.selectcolaborador.telefono}">
                 </p:inputText>
-                <p:watermark value="Telefono" for="telefonoA"/>
-                <p:message for="telefonoA"/>
+
+
                 <p:outputLabel value="Correo:" indicateRequired="true" for="correoA"/>
-                <p:inputText id="correoA" required="true"  label="email" requiredMessage="Ingrese un correo" value="#{colaboradorBean.colaborador.correo}">
+                <p:inputText id="correoA" required="true"  label="email" requiredMessage="Ingrese un correo" value="#{colaboradorBean.selectcolaborador.correo}">
                     <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                 </p:inputText>
-                <p:watermark value="ejemplo@gmail.com" for="correoA"/>
-                <p:message for="correoA"/>
+
+
                 <p:outputLabel value="Fecha de inicio laboral" indicateRequired="true" for="fechaInicioLaboralA"/>
-                <p:calendar id="fechaInicioLaboralA" required="true" requiredMessage="Ingrese la Fecha" value="#{colaboradorBean.colaborador.fechaInicioLaboral}" pattern="yyyy-MM-dd"/>
-                <p:watermark value="Fecha" for="fechaInicioLaboralA"/>
-                <p:message for="fechaInicioLaboralA"/>
+                <p:calendar id="fechaInicioLaboralA" required="true" requiredMessage="Ingrese la Fecha" value="#{colaboradorBean.selectcolaborador.fechaInicioLaboral}" pattern="yyyy-MM-dd"/>
+
 
             </h:panelGrid>
             <center>
