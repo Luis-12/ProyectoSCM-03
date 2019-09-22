@@ -94,7 +94,7 @@
                     <h:outputText value="#{colaborador.puesto.descripcion}" />
                 </p:column>
 
-                <p:column headerText="Departamento al que Pertenece" filterBy="#{colaborador.departamento.nombre}">
+                <p:column headerText="Departamento" filterBy="#{colaborador.departamento.nombre}">
                     <h:outputText value="#{colaborador.departamento.nombre}" />
                 </p:column>
             </p:dataTable>
@@ -112,8 +112,8 @@
             <p:growl id="msgs2" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
             <h:panelGrid columns="2"  id="panel2">
                 <p:outputLabel value="Cédula:" indicateRequired="true" for="pk_idColaborador"/>
-                <p:inputText maxlength="20" id="pk_idColaborador" required="true" requiredMessage="Ingrese un id" pattern="[0-9]"
-                             validatorMessage=" La cédula debe ingresar tener mínimo 9 caracteres numericos" value="#{colaboradorBean.colaborador.pk_idColaborador}">
+                <p:inputText maxlength="20" id="pk_idColaborador" required="true" requiredMessage="Ingrese una cédula" pattern="[0-9]"
+                             validatorMessage=" La cédula debe tener mínimo 9 caracteres numéricos" value="#{colaboradorBean.colaborador.pk_idColaborador}">
                 <f:validateLength minimum="8"/>
                 </p:inputText>
                 <p:watermark value="ID" for="pk_idColaborador"/>
@@ -140,11 +140,11 @@
                 </p:inputText>
                 <p:watermark value="Clave:" for="clave"/>
                 <p:message for="clave"/>
-                <p:outputLabel value="Telefono" indicateRequired="true" for="telefono"/>
-                <p:inputText maxlength="9" id="telefono" required="true" converterMessage="Ingrese solo numeros" requiredMessage="Ingrese un teléfono" value="#{colaboradorBean.colaborador.telefono}">
+                <p:outputLabel value="Teléfono" indicateRequired="true" for="telefono"/>
+                <p:inputText maxlength="9" id="telefono" required="true" requiredMessage="Ingrese un teléfono" value="#{colaboradorBean.colaborador.telefono}">
                     <f:validateLength minimum="8"/>
                 </p:inputText>
-                <p:watermark value="Telefono" for="telefono"/>
+                <p:watermark value="Teléfono" for="telefono"/>
                 <p:message for="telefono"/>
                 <p:outputLabel value="Correo:" indicateRequired="true" for="correo"/>
                 <p:inputText id="correo" maxlength="50" required="true"  label="email" validatorMessage="Formato incorrecto ej. nombre@gmail.com" requiredMessage="Ingrese un correo" value="#{colaboradorBean.colaborador.correo}">
@@ -152,7 +152,7 @@
                 </p:inputText>
                 <p:watermark value="ejemplo@gmail.com" for="correo"/>
                 <p:message for="correo"/>
-                <p:outputLabel value="Fecha de inicio laboral" indicateRequired="true" for="fechaInicioLaboral"/>
+                <p:outputLabel value="Fecha de Inicio Laboral" indicateRequired="true" for="fechaInicioLaboral"/>
                 <p:calendar id="fechaInicioLaboral" required="true" requiredMessage="Ingrese la Fecha" value="#{colaboradorBean.colaborador.fechaInicioLaboral}" pattern="yyyy-MM-dd"/>
                 <p:watermark value="Fecha" for="fechaInicioLaboral"/>
                 <p:message for="fechaInicioLaboral"/>
@@ -203,12 +203,12 @@
                 <p:watermark value="Clave:" for="claveA"/>
                 <p:message for="claveA"/>
 
-                <p:outputLabel value="Telefono" indicateRequired="true" for="telefonoA"/>
-                <p:inputText id="telefonoA"  maxlength="9" converterMessage="Ingrese solo numeros" required="true" requiredMessage="Ingrese un teléfono"
+                <p:outputLabel value="Teléfono" indicateRequired="true" for="telefonoA"/>
+                <p:inputText id="telefonoA"  maxlength="9" converterMessage="Ingrese solo números" required="true" requiredMessage="Ingrese un teléfono"
                              value="#{colaboradorBean.selectcolaborador.telefono}">
                     <f:validateLength minimum="8"/>
                 </p:inputText>
-                <p:watermark value="Telefono" for="telefonoA"/>
+                <p:watermark value="Teléfono" for="telefonoA"/>
                 <p:message for="telefonoA"/>
 
                 <p:outputLabel value="Correo:" indicateRequired="true" for="correoA"/>
@@ -219,7 +219,7 @@
                 <p:message for="correoA"/>
 
 
-                <p:outputLabel value="Fecha de inicio laboral" indicateRequired="true" for="fechaInicioLaboralA"/>
+                <p:outputLabel value="Fecha de Inicio Laboral" indicateRequired="true" for="fechaInicioLaboralA"/>
                 <p:calendar id="fechaInicioLaboralA" required="true" requiredMessage="Ingrese la Fecha"  value="#{colaboradorBean.selectcolaborador.fechaInicioLaboral}" pattern="yyyy-MM-dd"/>
                 <p:watermark value="Fecha" for="fechaInicioLaboralA"/>
                 <p:message for="fechaInicioLaboralA"/>

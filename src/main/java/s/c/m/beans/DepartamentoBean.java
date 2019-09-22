@@ -1,6 +1,7 @@
 package s.c.m.beans;
 
 import org.hibernate.sql.Select;
+import org.primefaces.PrimeFaces;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +67,28 @@ public class DepartamentoBean {
             }
         }
         return null;
+    }
+    public void checkSelection(){
+        PrimeFaces current = PrimeFaces.current();
+
+        if(selectDepartamento==null){
+            addMessage("Aviso", "Debe seleccionar un Departamento"); //si esta vacío muestra este mensaje
+        }else {
+            current.executeScript("PF('dlUC').show();"); //si no esta vacío muestra el dialogo
+        }
+    }
+
+
+    public  void showconfirm()
+    {
+        PrimeFaces current = PrimeFaces.current();
+
+        if (selectDepartamento==null) {
+            addMessage("Aviso", "Debe Seleccionar un Departamento."); //si esta vacio muetra este mensaje
+        } else {
+            current.executeScript("PF('dlCFD').show();"); //si no esta vacio muestra el dialogo
+        }
+
     }
 
 

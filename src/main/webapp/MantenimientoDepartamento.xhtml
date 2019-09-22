@@ -33,21 +33,24 @@
     <div>
 
         <h:form>
-            <p:growl id="msgs" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
+            <p:growl id="msgs" showDetail="true" rendered="#{not facesContext.validationFailed}"><p:autoUpdate/></p:growl>
+
             <p:contextMenu for="tablaDepartamento" >
                 <p:menuitem value="Agregar" onclick="PF('dlAC').show();">
                 </p:menuitem>
-                <p:menuitem value="Actualizar" update="dlUC" oncomplete="PF('dlUC').show()"/>
-                <p:menuitem value="Eliminar" icon="ui-icon-close" update="tablaDepartamento" actionListener="#{departamentoBean.delete}">
-                    <p:confirm header="Confirmación" message="¿Está seguro de eliminar este registro?"
-                               icon="pi pi-exclamation-triangle"/>
-                </p:menuitem>
+                <p:menuitem value="Actualizar" update="dlUC"  action="#{departamentoBean.checkSelection}"/>
+                <p:menuitem value="Eliminar" update="dlCFD" icon="ui-icon-close" action="#{departamentoBean.showconfirm}" />
             </p:contextMenu>
-            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
-                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times"/>
-            </p:confirmDialog>
 
+            <p:dialog id="dlCFD" header="Confirmación"  showEffect="fade" hideEffect="fade"
+                      widgetVar="dlCFD" modal="true" resizable="false" minWidth="300">
+                <h6 >¿Está seguro de eliminar este registro?</h6>
+                <hr/>
+                <center>
+                    <p:commandButton value="Sí"  styleClass="ui-confirmdialog-yes"  actionListener="#{departamentoBean.delete}" onclick="PF('dlCFD').hide();"  style="margin-right: 30px" />
+                    <p:commandButton value="No"  styleClass="ui-confirmdialog-no"  style="margin-right: 20px"  onclick="PF('dlCFD').hide();"/>
+                </center>
+            </p:dialog>
             <p:dataTable var="departamento" value="#{departamentoBean.departamentos}" id="tablaDepartamento"
                          widgetVar="departamentoTabla"
                          resizableColumns="true"
@@ -57,7 +60,7 @@
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                          rowsPerPageTemplate="10"
                          selection="#{departamentoBean.selectDepartamento}">
-
+                <p:autoUpdate />
                 <p:column headerText="Código" filterBy="#{departamento.pk_codDepartamento}">
                     <h:outputText value="#{departamento.pk_codDepartamento}" />
                 </p:column>
@@ -77,10 +80,11 @@
     <p:dialog id="dlAC" header="Agregar Departamento" showEffect="fade" hideEffect="fade"
               widgetVar="dlAC" modal="true" resizable="false" minWidth="200">
         <h:form id="AgregarDepartamento">
+            <p:autoUpdate/>
             <p:growl id="msgs2" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
             <h:panelGrid columns="2"  id="panel2">
                 <p:outputLabel value="Código de Departamento" indicateRequired="true" for="pk_codDepartamento"/>
-                <p:inputText maxlength="6" id="pk_codDepartamento" required="true" requiredMessage="Ingrese un código"
+                <p:inputText maxlength="6" id="pk_codDepartamento" required="true" requiredMessage="Ingrese un código" pattern="[A-Za-Z]"
                              value="#{departamentoBean.departamento.pk_codDepartamento}"/>
                 <p:watermark value="Código" for="pk_codDepartamento"/>
                 <p:message for="pk_codDepartamento"/>
@@ -97,9 +101,8 @@
 
             </h:panelGrid>
             <center>
-                <p:commandButton value="Guardar" id="ajax" update="msgs2,panel2, @(id$=tablaDepartamento)" action="#{departamentoBean.create}" style="margin-right:20px;margin-top: 20px" styleClass="ui-priority-primary" />
-                <p:commandButton value="Cancelar" onclick="PF('dlAC').hide();"/>
-
+                <p:commandButton value="Guardar"  oncomplete="if (args &amp;&amp; !args.validationFailed) PF('dlAC').hide()"
+                                 action="#{departamentoBean.create}" style="margin-right:20px;margin-top: 20px" styleClass="ui-priority-primary" />
             </center>
         </h:form>
     </p:dialog>
@@ -128,9 +131,10 @@
 
             </h:panelGrid>
             <center>
-                <p:commandButton value="Actualizar" id="ajax2" update="msgs3,panel3, @(id$=tablaDepartamento)" action="#{departamentoBean.update}" style="margin-right:20px;margin-top: 20px" styleClass="ui-priority-primary" />
-                <p:commandButton value="Cancelar" onclick="PF('dlUC').hide();"/>
-
+                <p:commandButton value="Actualizar" id="ajax2" update="msgs3,panel3"
+                                 oncomplete="if (args &amp;&amp; !args.validationFailed) PF('dlUC').hide()"
+                                 action="#{departamentoBean.update}"
+                                 style="margin-right:20px;margin-top: 20px" styleClass="ui-priority-primary" />
             </center>
         </h:form>
     </p:dialog>
