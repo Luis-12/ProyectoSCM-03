@@ -20,11 +20,6 @@ public class DepartamentoService {
         return list;
     }
 
-
-    public Optional<Departamento> findDepartamentoById(String departamento){
-        return  departamentoRepository.findById(departamento);
-    }
-
     public List<Departamento> getAllDepartamentosActivos() {
         List<Departamento> list = new ArrayList<Departamento>();
         List<Departamento> listA = new ArrayList<Departamento>();
@@ -43,12 +38,13 @@ public class DepartamentoService {
     }
 
     public void deleteDepartamento(Departamento departamento){
-        //departamentoRepository.deleteById(id);
+        departamento.toString();
         departamento.setEstado("Inactivo");
         departamentoRepository.save(departamento);
     }
 
     public Departamento findDepartamento(String id){
+
         return departamentoRepository.findById(id).get();
     }
 
@@ -56,7 +52,5 @@ public class DepartamentoService {
         departamento.setEstado("Activo");
         departamentoRepository.save(departamento);
     }
-
-
 
 }

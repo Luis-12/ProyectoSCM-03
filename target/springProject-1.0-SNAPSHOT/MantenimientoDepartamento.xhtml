@@ -5,9 +5,7 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
-
+      xmlns:p="http://primefaces.org/ui">
 
 <h:head>
     <link href="css/style.css" rel="stylesheet" type="text/css" />
@@ -26,7 +24,7 @@
             <h:form>
                 <p:sidebar widgetVar="sidebar1" baseZIndex="10000">
                     <h1 style="font-weight:normal">Menu</h1>
-                    <h:button value="Mantenimiento Colaborador" outcome="MantenimientoColaborador.xhtml"/>
+                    <h:button value="Departamentos" outcome="MantenimientoDepartamento.xhtml"/>
                 </p:sidebar>
                 <p:commandButton value="≡" icon="pi pi-arrow-right" oncomplete="PF('sidebar1').show()" />
             </h:form>
@@ -35,13 +33,12 @@
     <div>
 
         <h:form>
-            <h1 id="titulo">Mantenimiento Departamentos</h1>
-            <p:growl id="msgs1" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
+            <p:growl id="msgs" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
             <p:contextMenu for="tablaDepartamento" >
                 <p:menuitem value="Agregar" onclick="PF('dlAC').show();">
                 </p:menuitem>
-
-                <p:menuitem icon="fa fa-fw fa-remove" value="Eliminar" id="eliminar" update="tablaDepartamento" actionListener="#{departamentoBean.delete}">
+                <p:menuitem value="Actualizar" update="dlUC" oncomplete="PF('dlUC').show()"/>
+                <p:menuitem value="Eliminar" icon="ui-icon-close" update="tablaDepartamento" actionListener="#{departamentoBean.delete}">
                     <p:confirm header="Confirmación" message="¿Está seguro de eliminar este registro?"
                                icon="pi pi-exclamation-triangle"/>
                 </p:menuitem>
@@ -51,127 +48,95 @@
                 <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times"/>
             </p:confirmDialog>
 
-
             <p:dataTable var="departamento" value="#{departamentoBean.departamentos}" id="tablaDepartamento"
                          widgetVar="departamentoTabla"
                          resizableColumns="true"
                          selectionMode="single"
                          rowKey="#{departamento.pk_codDepartamento}"
-                         selection="#{departamentoBean.departamento}"
-                         styleClass="myHeader">
+                         paginator="true"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="10"
+                         selection="#{departamentoBean.selectDepartamento}">
 
-                <f:facet name="header">
-                    <p:outputPanel styleClass="myHeader">
-                        <h:outputText value="Buscar:" />
-                        <p:inputText styleClass="myHeader" id="filtroGlobal" onkeyup="PF('departamentoTabla').filter()" style="width: 350px"
-                                     placeholder="Ingrese palabra clave" />
-                    </p:outputPanel>
-                </f:facet>
-
-
-                <p:column headerText="Codigo">
+                <p:column headerText="Código" filterBy="#{departamento.pk_codDepartamento}">
                     <h:outputText value="#{departamento.pk_codDepartamento}" />
                 </p:column>
-
-                <p:column headerText="Nombre">
+                <p:column headerText="Nombre" filterBy="#{departamento.nombre}">
                     <h:outputText value="#{departamento.nombre}" />
                 </p:column>
-
-                <p:column headerText="Descripción">
+                <p:column headerText="Descripción" filterBy="#{departamento.descripcion}">
                     <h:outputText value="#{departamento.descripcion}" />
                 </p:column>
-                <p:column>
-                    <p:commandButton icon="fa fa-fw fa-remove" value="Eliminar" update="tablaDepartamento" actionListener="#{departamentoBean.delete}">
-                        <f:param name="DepartamentoId" value="#{departamento.pk_codDepartamento}" />
-                    </p:commandButton>
-                </p:column>
-                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                    <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
-                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times"/>
-                </p:confirmDialog>
 
-                <p:column>
-                    <p:commandButton value="Actualizar" oncomplete="PF('dlA').show()" update="tablaDepartamento" action="#{departamentoBean.buscar}">
-                        <f:param name="DepartamentoId"  value="#{departamento.pk_codDepartamento}" />
-                    </p:commandButton>
-                </p:column>
             </p:dataTable>
+
         </h:form>
-
-
-
-        <p:dialog id="dlA" header="Actualizar Colaborador" showEffect="fade" hideEffect="fade"
-                  widgetVar="dlA" modal="true" resizable="false" minWidth="200">
-
-            <h:form>
-                <p:growl id="msgs" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
-                <h:panelGrid columns="2"  id="panel">
-                    <p:outputLabel value="Codigo de Departamento:" indicateRequired="true" for="codigo1"/>
-                    <p:inputText id="codigo1" required="true" requiredMessage="Ingrese un id" value="#{departamentoBean.departamento.pk_codDepartamento}"/>
-                    <p:watermark value="Codigo" for="codigo1"/>
-                    <p:message for="codigo1"/>
-
-                    <p:outputLabel value="Nombre del Departamento:" indicateRequired="true" for="nombre1"/>
-                    <p:inputText id="nombre1" required="true" requiredMessage="Ingrese un nombre" value="#{departamentoBean.departamento.nombre}"/>
-                    <p:watermark value="Nombre" for="nombre1"/>
-                    <p:message for="nombre1"/>
-
-                    <p:outputLabel value="Descripción de Departamento:" indicateRequired="true" for="descripcion1"/>
-                    <p:inputText id="descripcion1" required="true" requiredMessage="Ingrese una clave" value="#{departamentoBean.departamento.descripcion}"/>
-                    <p:watermark value="Descripción:" for="descripcion1"/>
-                    <p:message for="descripcion1"/>
-
-                </h:panelGrid>
-                <center>
-                    <p:commandButton value="Guardar" action="#{departamentoBean.create}" style="margin-right:20px;margin-top: 20px" styleClass="ui-priority-primary"/>
-                    <p:commandButton onclick="PF('dlA').hide();" value="Cancelar"/>
-
-
-                </center>
-
-            </h:form>
-        </p:dialog>
-
-
-
-
-        <p:dialog id="dlAC" header="Agregar Colaborador" showEffect="fade" hideEffect="fade"
-                  widgetVar="dlAC" modal="true" resizable="false" minWidth="200">
-
-            <h:form>
-                <p:growl id="msgs2" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
-                <h:panelGrid columns="2"  id="panel2">
-                    <p:outputLabel value="Codigo de Departamento:" indicateRequired="true" for="codigo"/>
-                    <p:inputText id="codigo" required="true" requiredMessage="Ingrese un id" value="#{departamentoBean.departamento.pk_codDepartamento}"/>
-                    <p:watermark value="Codigo" for="codigo"/>
-                    <p:message for="codigo"/>
-
-                    <p:outputLabel value="Nombre del Departamento:" indicateRequired="true" for="nombre"/>
-                    <p:inputText id="nombre" required="true" requiredMessage="Ingrese un nombre" value="#{departamentoBean.departamento.nombre}"/>
-                    <p:watermark value="Nombre" for="nombre"/>
-                    <p:message for="nombre"/>
-
-                    <p:outputLabel value="Descripción de Departamento:" indicateRequired="true" for="descripcion"/>
-                    <p:inputText id="descripcion" required="true" requiredMessage="Ingrese una clave" value="#{departamentoBean.departamento.descripcion}"/>
-                    <p:watermark value="Descripción:" for="descripcion"/>
-                    <p:message for="descripcion"/>
-
-                </h:panelGrid>
-                <center>
-                    <p:commandButton value="Guardar" id="ajax" update="msgs2,panel2, @(id$=tablaDepartamentos)" action="#{departamentoBean.create}" style="margin-right:20px;margin-top: 20px" styleClass="ui-priority-primary"
-                                     oncomplete="PF('dlAC').hide();"
-                    />
-                    <p:commandButton onclick="PF('dlAC').hide();" value="Cancelar"/>
-
-
-                </center>
-
-            </h:form>
-        </p:dialog>
-        <p:linkButton outcome="departamentoList" value="Lista de Departamentos" style="margin-right:20px;"/>
-        <p:commandButton onclick="PF('dlAC').show();" value="Agregar"/>
-
     </div>
+
+
+    <p:dialog id="dlAC" header="Agregar Departamento" showEffect="fade" hideEffect="fade"
+              widgetVar="dlAC" modal="true" resizable="false" minWidth="200">
+        <h:form id="AgregarDepartamento">
+            <p:growl id="msgs2" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
+            <h:panelGrid columns="2"  id="panel2">
+                <p:outputLabel value="Código de Departamento" indicateRequired="true" for="pk_codDepartamento"/>
+                <p:inputText id="pk_codDepartamento" required="true" requiredMessage="Ingrese un código"
+                             value="#{departamentoBean.departamento.pk_codDepartamento}"/>
+                <p:watermark value="Código" for="pk_codDepartamento"/>
+                <p:message for="pk_codDepartamento"/>
+                <p:outputLabel value="Nombre:" indicateRequired="true" for="nombre"/>
+                <p:inputText id="nombre" required="true" requiredMessage="Ingrese un nombre"  pattern="[A-Za-Z]"
+                             value="#{departamentoBean.departamento.nombre}"/>
+                <p:watermark value="Nombre" for="nombre"/>
+                <p:message for="nombre"/>
+                <p:outputLabel value="Descripción de Departamento:" indicateRequired="true" for="descripcion"/>
+                <p:inputText id="descripcion" required="true" requiredMessage="Ingrese una descripcion"
+                             value="#{departamentoBean.departamento.descripcion}"/>
+                <p:watermark value="Descripción:" for="descripcion"/>
+                <p:message for="descripcion"/>
+
+            </h:panelGrid>
+            <center>
+                <p:commandButton value="Guardar" id="ajax" update="msgs2,panel2, @(id$=tablaDepartamento)" action="#{departamentoBean.create}" style="margin-right:20px;margin-top: 20px" styleClass="ui-priority-primary" />
+                <p:commandButton value="Cancelar" onclick="PF('dlAC').hide();"/>
+
+            </center>
+        </h:form>
+    </p:dialog>
+
+
+    <p:dialog id="dlUC" header="Actualizar Departamento" showEffect="fade" hideEffect="fade"
+              widgetVar="dlUC" modal="true" resizable="false" minWidth="200">
+        <h:form id="actualizarDepartamento">
+            <p:growl id="msgs3" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
+            <h:panelGrid columns="2"  id="panel3">
+                <p:outputLabel value="Código de Departamento" indicateRequired="true" for="pk_codDepartamentoA"/>
+                <p:inputText id="pk_codDepartamentoA" required="true" requiredMessage="Ingrese un código"
+                             value="#{departamentoBean.selectDepartamento.pk_codDepartamento}"/>
+                <p:watermark value="Código" for="pk_codDepartamentoA"/>
+                <p:message for="pk_codDepartamentoA"/>
+                <p:outputLabel value="Nombre:" indicateRequired="true" for="nombreA"/>
+                <p:inputText id="nombreA" required="true" requiredMessage="Ingrese un nombre"  pattern="[A-Za-Z]"
+                             value="#{departamentoBean.selectDepartamento.nombre}"/>
+                <p:watermark value="Nombre" for="nombreA"/>
+                <p:message for="nombreA"/>
+                <p:outputLabel value="Descripción de Departamento:" indicateRequired="true" for="descripcionA"/>
+                <p:inputText id="descripcionA" required="true" requiredMessage="Ingrese una descripcion"
+                             value="#{departamentoBean.selectDepartamento.descripcion}"/>
+                <p:watermark value="Descripción:" for="descripcionA"/>
+                <p:message for="descripcionA"/>
+
+            </h:panelGrid>
+            <center>
+                <p:commandButton value="Actualizar" id="ajax2" update="msgs3,panel3, @(id$=tablaDepartamento)" action="#{departamentoBean.update}" style="margin-right:20px;margin-top: 20px" styleClass="ui-priority-primary" />
+                <p:commandButton value="Cancelar" onclick="PF('dlUC').hide();"/>
+
+            </center>
+        </h:form>
+    </p:dialog>
+    <p:linkButton outcome="departamentoList" value="Lista de Departamentos" style="margin-right:20px;"/>
+
+
     <div id="footer">
         <br/>
         © &nbsp; &nbsp; SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA
@@ -179,4 +144,3 @@
     </div>
 </h:body>
 </html>
-
