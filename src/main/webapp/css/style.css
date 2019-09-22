@@ -12,6 +12,7 @@ h1{
     font-family:GestaW01-Medium;
     color:#404041;
 }
+
 clearing {
     clear: both;
     height: 1px;
@@ -47,6 +48,11 @@ clearing {
 body
 {
     background: #f2f2f2;
+}
+
+#titulo{
+    font-family:GestaW01-Medium;
+    font-size:25px;
 }
 
 input[type=text], select {
