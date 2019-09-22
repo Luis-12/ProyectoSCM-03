@@ -24,10 +24,9 @@
             <h:form>
                 <p:sidebar widgetVar="sidebar1" baseZIndex="10000">
                     <h1 style="font-weight:normal">Menu</h1>
-                    <h:button value="Colaboradores" outcome="MantenimientoColaborador.xhtml"/>
+                    <h:button value="Mantenimiento Departamento" outcome="MantenimientoDepartamento.xhtml"/>
                 </p:sidebar>
                 <p:commandButton  icon="pi pi-arrow-right" oncomplete="PF('sidebar1').show()"/>
-
             </h:form>
         </ui:insert>
     </div>
@@ -51,17 +50,13 @@
                 <p:commandButton value="No"  styleClass="ui-confirmdialog-no"  icon="pi pi-times" style="margin-right: 20px"  onclick="PF('dlCFD').hide();"/>
             </p:dialog>
 
-            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
-                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times"/>
-            </p:confirmDialog>
 
             <p:dataTable var="colaborador" value="#{colaboradorBean.colaboradores}" id="tablaColaborador"
                          widgetVar="colaboradorTabla"
                          resizableColumns="true"
                          selectionMode="single"
                          rowKey="#{colaborador.pk_idColaborador}"
-                         paginator="true"
+                         paginator="true" 
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                          rowsPerPageTemplate="10,15,20"
                          selection="#{colaboradorBean.selectcolaborador}" scrollable="true" scrollHeight="450">
@@ -164,7 +159,7 @@
 
 
     <p:dialog id="dlUC" header="Actualizar Colaborador" showEffect="fade" hideEffect="fade"
-            widgetVar="dlUC" modal="true" resizable="false" minWidth="200">
+              widgetVar="dlUC" modal="true" resizable="false" minWidth="200">
         <h:form id="actualizarColaborador">
             <p:growl id="msgs3" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
             <h:panelGrid columns="2"  id="panel3"   >
@@ -213,7 +208,10 @@
 
             </h:panelGrid>
             <center>
-                <p:commandButton value="Actualizar" id="ajax2" update="msgs3,panel3, @(id$=tablaColaborador)" action="#{colaboradorBean.update}" style="margin-right:20px;margin-top: 20px" styleClass="ui-priority-primary" />
+                <p:commandButton value="Actualizar" id="ajax2" update="msgs3,panel3, @(id$=tablaColaborador)"
+                                 oncomplete="if (args &amp;&amp; !args.validationFailed) PF('dlUC').hide()"
+                                 action="#{colaboradorBean.update}"
+                                 style="margin-right:20px;margin-top: 20px" styleClass="ui-priority-primary" />
                 <p:commandButton value="Cancelar" onclick="PF('dlUC').hide();"/>
 
             </center>
