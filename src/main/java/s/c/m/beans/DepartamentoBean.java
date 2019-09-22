@@ -86,6 +86,7 @@ public class DepartamentoBean {
         }catch (Exception e){
         }finally {
             departamento = new Departamento();
+
         }
     }
     public void update(){
@@ -96,8 +97,11 @@ public class DepartamentoBean {
             departamentos = departamentoService.getAllDepartamentosActivos();
         }catch (Exception e){}finally {
             departamento = new Departamento();
+
         }
     }
+
+
     public void find(){
         String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("DepartamentoIdBusqueda");
         departamentos.clear();
