@@ -126,27 +126,17 @@ public class ColaboradorBean {
     }
 
     public void delete(){
-        //String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("ColaboradorId");
-        //System.out.println("El id del colaborador que se desea borrar es "+id);
-        //Colaborador miC = colaboradorService.findColaborador(id);
-        //miC.toString();
         colaboradorService.deleteColaborador(selectcolaborador);
         addMessage("Aviso", "Registro eliminado correctamente.");
         colaboradores = colaboradorService.getAllColaboradoresActivos();
+        System.out.println("Eliminado");
     }
 
     public void update(){
         try{
-            /*System.out.println("El nombre a actualizado es:"+colaborador.getNombre());
-            colaboradorService.updateColaborador(colaborador);
-            addMessage("Aviso", "Registro modificado correctamente.");*/
             System.out.println("El nombre a actualizado es:"+selectcolaborador.getNombre());
             colaboradorService.updateColaborador(selectcolaborador);
             addMessage("Aviso", "Registro modificado correctamente.");
-            /*
-             FacesMessage msg = new FacesMessage("Colaborador Editado", ((Colaborador) event.getObject()).getPk_idColaborador());
-             FacesContext.getCurrentInstance().addMessage(null, msg);
-            */
             colaboradores = colaboradorService.getAllColaboradoresActivos();
         }catch (Exception e){
         } finally {
@@ -160,11 +150,6 @@ public class ColaboradorBean {
         colaboradores.add(colaboradorService.findColaborador(id));
     }
 
-    public String carga(){//Aca se carga la persona y se redirecciona a la ventana update
-        String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("ColaboradorId");
-        colaborador=colaboradorService.findColaborador(id);
-        return "MantenimientoColaboradorV2.xhtml";
-    }
 
     public void addMessage(String summary, String detail) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);

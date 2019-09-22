@@ -1,5 +1,8 @@
 package s.c.m.beans;
 
+import org.hibernate.sql.Select;
+import org.primefaces.event.RowEditEvent;
+import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import s.c.m.entities.Departamento;
@@ -19,7 +22,7 @@ public class DepartamentoBean {
     @Autowired
     DepartamentoService departamentoService;
     private Departamento departamento = new Departamento();
-
+    private Departamento selectDepartamento = new Departamento();
     private List<Departamento> departamentos;
 
     @PostConstruct
@@ -34,6 +37,14 @@ public class DepartamentoBean {
 
     public void setDepartamento(Departamento departamento) {
         this.departamento = departamento;
+    }
+
+    public Departamento getSelectDepartamento() {
+        return selectDepartamento;
+    }
+
+    public void setSelectDepartamento(Departamento selectDepartamento) {
+        this.selectDepartamento = selectDepartamento;
     }
 
     public List<Departamento> getDepartamentos() {
@@ -57,38 +68,14 @@ public class DepartamentoBean {
         return null;
     }
 
+
+
+
     public void delete(){
-        String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("DepartamentoId");
-        Optional<Departamento> departamentoOptional=departamentoService.findDepartamentoById(id);
-        if(departamentoOptional.isPresent())
-            departamento=departamentoOptional.get();
-        departamentoService.deleteDepartamento(departamento);
-        departamentos=departamentoService.getAllDepartamentosActivos();
-        departamento = new Departamento();
-    }
-
-
-    public String buscar(){
-        String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("DepartamentoId");
-        Optional<Departamento> departamentoOptional=departamentoService.findDepartamentoById(id);
-        if(departamentoOptional.isPresent()) {
-            departamento = departamentoOptional.get();
-
-            //PrimeFaces.current().executeScript("PF('dlA').show();");
-        }
-        departamentos=departamentoService.getAllDepartamentosActivos();
-        return "MantenimientoDepartamento";
-
-    }
-
-    public void delete1(){
-        //String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("ColaboradorId");
-        //System.out.println("El id del colaborador que se desea borrar es "+id);
-        //Colaborador miC = colaboradorService.findColaborador(id);
-        //miC.toString();
-        departamentoService.deleteDepartamento(departamento);
+        departamentoService.deleteDepartamento(selectDepartamento);
         addMessage("Aviso", "Registro eliminado correctamente.");
         departamentos = departamentoService.getAllDepartamentosActivos();
+        System.out.println("Eliminado");
     }
 
     public void create(){
@@ -101,7 +88,48 @@ public class DepartamentoBean {
             departamento = new Departamento();
         }
     }
+    public void update(){
+        try{
+            System.out.println("El departamento actualizado es" +selectDepartamento.getNombre());
+            departamentoService.updateDepartamento(selectDepartamento);
+            addMessage("Aviso", "Registro modificado correctamente");
+            departamentos = departamentoService.getAllDepartamentosActivos();
+        }catch (Exception e){}finally {
+            departamento = new Departamento();
+        }
+    }
+    public void find(){
+        String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("DepartamentoIdBusqueda");
+        departamentos.clear();
+        departamentos.add(departamentoService.findDepartamento(id));
+    }
 
+    public  void onRowSelectedDepartamento(SelectEvent event){
+        FacesMessage msg = new FacesMessage("Departamento Seleccionado", ((Departamento) event.getObject()).getNombre());
+        FacesContext.getCurrentInstance().addMessage("asdasdasdasd",msg);
+    }
+
+    public void onRowUnselectColaborador(SelectEvent event){
+        FacesMessage msg = new FacesMessage("Departamento Seleccionado",((Departamento) event.getObject()).getNombre());
+        FacesContext.getCurrentInstance().addMessage("dasdasdasdas",msg);
+    }
+
+    public void onRowEdit(RowEditEvent event){
+        departamentoService.updateDepartamento(((Departamento) event.getObject()));
+        System.out.println(((Departamento) event.getObject()).getNombre());
+        FacesMessage msg = new FacesMessage("Departamento Editado", ((Departamento) event.getObject()).getPk_codDepartamento());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+    public void  onRowCancel(RowEditEvent event){
+        FacesMessage msg = new FacesMessage("Actualización Cancelada", ((Departamento) event.getObject()).getPk_codDepartamento());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+    public  void  onRowDelete(RowEditEvent event) {
+        departamentoService.deleteDepartamento((Departamento) event.getObject());
+        FacesMessage msg = new FacesMessage("Departamento eliminado", ((Departamento) event.getObject()).getPk_codDepartamento());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        departamentos = departamentoService.getAllDepartamentosActivos();
+    }
 
     public void addMessage(String summary, String detail) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
