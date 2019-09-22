@@ -5,8 +5,7 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:p="http://primefaces.org/ui">
 
 <h:head>
     <link href="css/style.css" rel="stylesheet" type="text/css" />
@@ -26,25 +25,32 @@
                 <p:sidebar widgetVar="sidebar1" baseZIndex="10000">
                     <h1 style="font-weight:normal">Menu</h1>
                     <h:button value="Colaboradores" outcome="MantenimientoColaborador.xhtml"/>
-                    <h:button value="Mantenimiento Departamento" outcome="MantenimientoDepartamento.xhtml"/>
                 </p:sidebar>
-                <p:commandButton value="≡" icon="pi pi-arrow-right" oncomplete="PF('sidebar1').show()" />
+                <p:commandButton  icon="pi pi-arrow-right" oncomplete="PF('sidebar1').show()"/>
+
             </h:form>
         </ui:insert>
     </div>
     <div>
 
         <h:form>
-            <p:growl id="msgs" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
+            <p:growl id="msgs" showDetail="true" rendered="#{not facesContext.validationFailed}"><p:autoUpdate/></p:growl>
+
             <p:contextMenu for="tablaColaborador" >
                 <p:menuitem value="Agregar" onclick="PF('dlAC').show();">
                 </p:menuitem>
-                <p:menuitem value="Actualizar" update="dlUC" oncomplete="PF('dlUC').show()"/>
-                <p:menuitem value="Eliminar" icon="ui-icon-close" update="tablaColaborador" actionListener="#{colaboradorBean.delete}">
-                    <p:confirm header="Confirmación" message="¿Está seguro de eliminar este registro?"
-                               icon="pi pi-exclamation-triangle"/>
-                </p:menuitem>
+                <p:menuitem value="Actualizar" update="dlUC"  action="#{colaboradorBean.checkSelection}"/>
+                <p:menuitem value="Eliminar" update="dlCFD" icon="ui-icon-close" action="#{colaboradorBean.showconfirm}" />
             </p:contextMenu>
+
+            <p:dialog id="dlCFD" header="Confirmación"  showEffect="fade" hideEffect="fade"
+                      widgetVar="dlCFD" modal="true" resizable="false" minWidth="300" >
+                <h6 >¿Está seguro de eliminar este registro?</h6>
+                <hr/>
+                <p:commandButton value="Sí"  styleClass="ui-confirmdialog-yes" update="tablaColaborador" actionListener="#{colaboradorBean.delete}" onclick="PF('dlCFD').hide();"  style="margin-right: 30px" />
+                <p:commandButton value="No"  styleClass="ui-confirmdialog-no"  icon="pi pi-times" style="margin-right: 20px"  onclick="PF('dlCFD').hide();"/>
+            </p:dialog>
+
             <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
                 <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
                 <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times"/>
@@ -57,8 +63,8 @@
                          rowKey="#{colaborador.pk_idColaborador}"
                          paginator="true"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         rowsPerPageTemplate="10"
-                         selection="#{colaboradorBean.selectcolaborador}">
+                         rowsPerPageTemplate="10,15,20"
+                         selection="#{colaboradorBean.selectcolaborador}" scrollable="true" scrollHeight="450">
 
 
                 <p:column headerText="Id" filterBy="#{colaborador.pk_idColaborador}">
@@ -94,12 +100,14 @@
                 </p:column>
             </p:dataTable>
 
+
+
         </h:form>
     </div>
 
 
-    <p:dialog id="dlAC" header="Agregar Colaborador" showEffect="fade" hideEffect="fade"
-              widgetVar="dlAC" modal="true" resizable="false" minWidth="200">
+    <p:dialog id="dlAC" header="Agregar Colaborador"  showEffect="fade" hideEffect="fade"
+              widgetVar="dlAC" modal="true" resizable="false" minWidth="200" >
         <h:form id="AgregarColaborador">
             <p:growl id="msgs2" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
             <h:panelGrid columns="2"  id="panel2">
@@ -149,21 +157,21 @@
             <center>
                 <p:commandButton value="Guardar" id="ajax" update="msgs2,panel2, @(id$=tablaColaborador)" action="#{colaboradorBean.create}" style="margin-right:20px;margin-top: 20px" styleClass="ui-priority-primary" />
                 <p:commandButton value="Cancelar" onclick="PF('dlAC').hide();"/>
+
             </center>
         </h:form>
     </p:dialog>
 
 
     <p:dialog id="dlUC" header="Actualizar Colaborador" showEffect="fade" hideEffect="fade"
-              widgetVar="dlUC" modal="true" minWidth="200" minimizable="true" maximizable="true" closable="true">
+            widgetVar="dlUC" modal="true" resizable="false" minWidth="200">
         <h:form id="actualizarColaborador">
             <p:growl id="msgs3" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
-            <h:panelGrid columns="2"  id="panel3">
+            <h:panelGrid columns="2"  id="panel3"   >
                 <p:outputLabel value="Cédula:" indicateRequired="true" for="pk_idColaboradorA"/>
-                <p:inputText id="pk_idColaboradorA" disabled="true" requiredMessage="Ingrese un id" pattern="[0-9]"
+                <p:inputText id="pk_idColaboradorA" required="true" requiredMessage="Ingrese un id" pattern="[0-9]"
                              validatorMessage=" La cédula debe ingresar tener mínimo 9 caracteres numericos" value="#{colaboradorBean.selectcolaborador.pk_idColaborador}"/>
-                <p:watermark value="ID" for="pk_idColaboradorA"/>
-                <p:message for="pk_idColaboradorA"/>
+
 
                 <p:outputLabel  value="Departamento:"  />
                 <p:selectOneMenu value="#{colaboradorBean.selectcolaborador.departamento}" converter="departamentoConverter">
@@ -181,63 +189,38 @@
 
                 <p:outputLabel value="Nombre:" indicateRequired="true" for="nombreA"/>
                 <p:inputText id="nombreA" required="true" requiredMessage="Ingrese un nombre"  pattern="[A-Za-Z]" value="#{colaboradorBean.selectcolaborador.nombre}"/>
-                <p:watermark value="Nombre" for="nombreA"/>
-                <p:message for="nombreA"/>
+
 
                 <p:outputLabel value="Clave:" indicateRequired="true" for="claveA"/>
                 <p:inputText id="claveA" required="true" requiredMessage="Ingrese una clave" value="#{colaboradorBean.selectcolaborador.clave}"/>
-                <p:watermark value="Clave:" for="claveA"/>
-                <p:message for="claveA"/>
+
 
                 <p:outputLabel value="Telefono" indicateRequired="true" for="telefonoA"/>
                 <p:inputText id="telefonoA" required="true" requiredMessage="Ingrese un teléfono"
                              value="#{colaboradorBean.selectcolaborador.telefono}">
                 </p:inputText>
-                <p:watermark value="Telefono" for="telefonoA"/>
-                <p:message for="telefonoA"/>
 
 
                 <p:outputLabel value="Correo:" indicateRequired="true" for="correoA"/>
                 <p:inputText id="correoA" required="true"  label="email" requiredMessage="Ingrese un correo" value="#{colaboradorBean.selectcolaborador.correo}">
                     <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                 </p:inputText>
-                <p:watermark value="ejemplo@gmail.com" for="correoA"/>
-                <p:message for="correoA"/>
 
 
                 <p:outputLabel value="Fecha de inicio laboral" indicateRequired="true" for="fechaInicioLaboralA"/>
                 <p:calendar id="fechaInicioLaboralA" required="true" requiredMessage="Ingrese la Fecha" value="#{colaboradorBean.selectcolaborador.fechaInicioLaboral}" pattern="yyyy-MM-dd"/>
-                <p:watermark value="Fecha" for="fechaInicioLaboralA"/>
-                <p:message for="fechaInicioLaboralA"/>
+
 
             </h:panelGrid>
             <center>
-                <p:commandButton value="Actualizar" id="ajax2" ajax="true" update="msgs3,panel3, @(id$=tablaColaborador)" action="#{colaboradorBean.update}"
-                                 style="margin-right:20px;margin-top: 20px;" styleClass="ui-priority-primary" oncomplete="PF('dlUC').show();"/>
+                <p:commandButton value="Actualizar" id="ajax2" update="msgs3,panel3, @(id$=tablaColaborador)" action="#{colaboradorBean.update}" style="margin-right:20px;margin-top: 20px" styleClass="ui-priority-primary" />
                 <p:commandButton value="Cancelar" onclick="PF('dlUC').hide();"/>
+
             </center>
         </h:form>
     </p:dialog>
-    <p:linkButton outcome="departamentoList" value="Lista de Departamentos" style="margin-right:20px;"/>
-    <script type="text/javascript">
-        elementoId=document.getElementById("pk_idColaboradorA");
-        elementoNombre=document.getElementById("nombreA");
-        function validarIdC() {
+    <p:linkButton outcome="departamentoList"  value="Lista de Departamentos" style="margin-right:20px;"/>
 
-            if(elementoId.value().length() &lt;= 8){
-                alert("Ingreso un Menos de la cantidad necesaria");
-                document.getElementById("mId").value = "Debe ingresar al menos 9 caracteres numericos para el id ejemplo:101110111";
-
-            }
-        }
-            function validarNombre() {
-                if(elementoNombre.value().length() &lt;= 8){
-                    alert("Ingrese al menos 8 digitos");
-                    document.getElementById("mN").value = "Debe ingresar el nombre completo: Juan Pérez Cruz";
-                }
-        }
-        elementoNombre.focusout(validarNombre());
-    </script>
 
     <div id="footer">
         <br/>
