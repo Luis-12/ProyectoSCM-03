@@ -36,7 +36,7 @@
         <h:form>
             <p:growl id="msgs" showDetail="true" rendered="#{not facesContext.validationFailed}"><p:autoUpdate/></p:growl>
 
-            <p:contextMenu for="tablaColaborador"  >
+            <p:contextMenu for="tablaColaborador" >
                 <p:menuitem value="Agregar" onclick="PF('dlAC').show();">
                 </p:menuitem>
                 <p:menuitem value="Actualizar" update="dlUC"  action="#{colaboradorBean.checkSelection}"/>
