@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-        <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
@@ -233,11 +233,11 @@
 
                 <f:facet name="footer">
                     <center>
-                    <p:commandButton value="Agregar" update="tabla1, form:tablaColaborador"
-                                     oncomplete="validacionActualizacion(xhr, status, args)" action="#{colaboradorBean.update}" />
-                    <p:commandButton value="Cancel" update="growl1" onclick="PF('dlUC').hide();">
-                        <f:ajax  resetValues="true" render="@form"/>
-                    </p:commandButton>
+                        <p:commandButton value="Agregar" update="tabla1, form:tablaColaborador"
+                                         oncomplete="validacionActualizacion(xhr, status, args)" action="#{colaboradorBean.update}" />
+                        <p:commandButton value="Cancel" update="growl1" onclick="PF('dlUC').hide();">
+                            <f:ajax  resetValues="true" render="@form"/>
+                        </p:commandButton>
                     </center>
                 </f:facet>
             </h:panelGrid>
@@ -286,4 +286,3 @@
 
 </h:body>
 </html>
-
