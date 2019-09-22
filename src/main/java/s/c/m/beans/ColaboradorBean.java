@@ -77,6 +77,22 @@ public class ColaboradorBean {
     }
 
     public void create() {
+        /*String id = colaborador.getPk_idColaborador();
+        boolean existeColaborador = false;
+        if(colaboradorService.findColaborador(id).getPk_idColaborador().equals(colaborador.getPk_idColaborador())){
+            existeColaborador = true;
+            addMessage("Aviso", "Ya existe un colaborador con esa identificación.");
+        }else {
+            existeColaborador = false;
+            try{
+                colaboradorService.createColaborador(colaborador);
+                addMessage("Aviso", "Registro insertado correctamente.");
+                colaboradores = colaboradorService.getAllColaboradoresActivos();
+            }catch (Exception e){
+            } finally {
+                colaborador = new Colaborador();
+            }
+        }*/
         try{
             colaboradorService.createColaborador(colaborador);
             addMessage("Aviso", "Registro insertado correctamente.");

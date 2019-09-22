@@ -11,6 +11,7 @@
 h1{
     font-family:GestaW01-Medium;
 }
+
 clearing {
     clear: both;
     height: 1px;
@@ -35,11 +36,11 @@ clearing {
 
 }
 
-.ui-datatable {
+.ui-datatable table{
     border-collapse:collapse;
     text-align: center;
-    margin-right: 30px;
-    margin-top: 25px;
+    margin-right: 60px;
+    margin-top: 75px;
     font-family:GestaW01-Medium;
 
 }
@@ -48,9 +49,14 @@ body
     background: #f2f2f2;
 }
 
-.ui-inputtext {
+#titulo{
+    font-family:GestaW01-Medium;
+    font-size:25px;
+}
+
+input[type=text], select {
     width: 100%;
-    height: 30px;
+    padding: 12px 20px;
     margin: 8px 0;
     display: inline-block;
     border: 1px solid #ccc;

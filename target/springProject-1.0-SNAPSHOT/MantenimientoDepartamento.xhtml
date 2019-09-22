@@ -5,7 +5,9 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
 
 <h:head>
     <link href="css/style.css" rel="stylesheet" type="text/css" />
@@ -24,7 +26,7 @@
             <h:form>
                 <p:sidebar widgetVar="sidebar1" baseZIndex="10000">
                     <h1 style="font-weight:normal">Menu</h1>
-                    <h:button value="Departamento" outcome="MantenimientoDepartamento.xhtml"/>
+                    <h:button value="Mantenimiento Colaborador" outcome="MantenimientoColaborador.xhtml"/>
                 </p:sidebar>
                 <p:commandButton value="≡" icon="pi pi-arrow-right" oncomplete="PF('sidebar1').show()" />
             </h:form>
@@ -33,6 +35,7 @@
     <div>
 
         <h:form>
+            <h1 id="titulo">Mantenimiento Departamentos</h1>
             <p:growl id="msgs1" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
             <p:contextMenu for="tablaDepartamento" >
                 <p:menuitem value="Agregar" onclick="PF('dlAC').show();">
@@ -120,9 +123,7 @@
 
                 </h:panelGrid>
                 <center>
-                    <p:commandButton value="Guardar" action="#{departamentoBean.create}" style="margin-right:20px;margin-top: 20px" styleClass="ui-priority-primary"
-                                     oncomplete="PF('dlAC').hide();"
-                    />
+                    <p:commandButton value="Guardar" action="#{departamentoBean.create}" style="margin-right:20px;margin-top: 20px" styleClass="ui-priority-primary"/>
                     <p:commandButton onclick="PF('dlA').hide();" value="Cancelar"/>
 
 
