@@ -41,7 +41,6 @@ public class ColaboradorService {
         colaborador.toString();
         colaborador.setEstado("Inactivo");
         colaboradorRepository.save(colaborador);
-        //colaboradorRepository.delete(colaborador);
     }
 
     public Colaborador findColaborador(String id){

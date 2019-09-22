@@ -40,8 +40,7 @@ clearing {
 .ui-datatable table{
     border-collapse:collapse;
     text-align: center;
-    margin-right: 60px;
-    margin-top: 75px;
+    margin-top: 20px;
     font-family:GestaW01-Medium;
 
 }
@@ -55,15 +54,29 @@ body
     font-size:25px;
 }
 
-input[type=text], select {
+input[type=text] {
     width: 100%;
-    padding: 12px 20px;
+    height: 30px;
     margin: 8px 0;
     display: inline-block;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
 }
+
+.ui-dialog .ui-dialog-title {
+    position: relative;
+    font-family:GestaW01-Medium;
+    left: 28%;
+    color: #109EB8;
+}
+.ui-dialog .ui-dialog-titlebar-close
+{
+    position: relative;
+    right: 6%;
+    background-color: darkred;
+}
+
 
 .ui-commandbutton  {
     width: 10%;
