@@ -26,23 +26,31 @@
                     <h1 style="font-weight:normal">Menu</h1>
                     <h:button value="Colaboradores" outcome="MantenimientoColaborador.xhtml"/>
                 </p:sidebar>
-                <p:commandButton value="≡" icon="pi pi-arrow-right" oncomplete="PF('sidebar1').show()" />
+                <p:commandButton  icon="pi pi-arrow-right" oncomplete="PF('sidebar1').show()"/>
+
             </h:form>
         </ui:insert>
     </div>
     <div>
 
         <h:form>
-            <p:growl id="msgs" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
+            <p:growl id="msgs" showDetail="true" rendered="#{not facesContext.validationFailed}"><p:autoUpdate/></p:growl>
+
             <p:contextMenu for="tablaColaborador" >
                 <p:menuitem value="Agregar" onclick="PF('dlAC').show();">
                 </p:menuitem>
-                <p:menuitem value="Actualizar" update="dlUC" oncomplete="PF('dlUC').show()"/>
-                <p:menuitem value="Eliminar" icon="ui-icon-close" update="tablaColaborador" actionListener="#{colaboradorBean.delete}">
-                    <p:confirm header="Confirmación" message="¿Está seguro de eliminar este registro?"
-                               icon="pi pi-exclamation-triangle"/>
-                </p:menuitem>
+                <p:menuitem value="Actualizar" update="dlUC"  action="#{colaboradorBean.checkSelection}"/>
+                <p:menuitem value="Eliminar" update="dlCFD" icon="ui-icon-close" action="#{colaboradorBean.showconfirm}" />
             </p:contextMenu>
+
+            <p:dialog id="dlCFD" header="Confirmación"  showEffect="fade" hideEffect="fade"
+                      widgetVar="dlCFD" modal="true" resizable="false" minWidth="300" >
+                <h6 >¿Está seguro de eliminar este registro?</h6>
+                <hr/>
+                <p:commandButton value="Sí"  styleClass="ui-confirmdialog-yes" update="tablaColaborador" actionListener="#{colaboradorBean.delete}" onclick="PF('dlCFD').hide();"  style="margin-right: 30px" />
+                <p:commandButton value="No"  styleClass="ui-confirmdialog-no"  icon="pi pi-times" style="margin-right: 20px"  onclick="PF('dlCFD').hide();"/>
+            </p:dialog>
+
             <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
                 <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
                 <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times"/>
@@ -55,8 +63,8 @@
                          rowKey="#{colaborador.pk_idColaborador}"
                          paginator="true"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         rowsPerPageTemplate="10"
-                         selection="#{colaboradorBean.selectcolaborador}">
+                         rowsPerPageTemplate="10,15,20"
+                         selection="#{colaboradorBean.selectcolaborador}" scrollable="true" scrollHeight="450">
 
 
                 <p:column headerText="Id" filterBy="#{colaborador.pk_idColaborador}">
@@ -98,8 +106,8 @@
     </div>
 
 
-    <p:dialog id="dlAC" header="Agregar Colaborador" showEffect="fade" hideEffect="fade"
-              widgetVar="dlAC" modal="true" resizable="false" minWidth="200">
+    <p:dialog id="dlAC" header="Agregar Colaborador"  showEffect="fade" hideEffect="fade"
+              widgetVar="dlAC" modal="true" resizable="false" minWidth="200" >
         <h:form id="AgregarColaborador">
             <p:growl id="msgs2" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
             <h:panelGrid columns="2"  id="panel2">
@@ -156,10 +164,10 @@
 
 
     <p:dialog id="dlUC" header="Actualizar Colaborador" showEffect="fade" hideEffect="fade"
-              widgetVar="dlUC" modal="true" resizable="false" minWidth="200">
+            widgetVar="dlUC" modal="true" resizable="false" minWidth="200">
         <h:form id="actualizarColaborador">
             <p:growl id="msgs3" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
-            <h:panelGrid columns="2"  id="panel3">
+            <h:panelGrid columns="2"  id="panel3"   >
                 <p:outputLabel value="Cédula:" indicateRequired="true" for="pk_idColaboradorA"/>
                 <p:inputText id="pk_idColaboradorA" required="true" requiredMessage="Ingrese un id" pattern="[0-9]"
                              validatorMessage=" La cédula debe ingresar tener mínimo 9 caracteres numericos" value="#{colaboradorBean.selectcolaborador.pk_idColaborador}"/>
@@ -211,7 +219,7 @@
             </center>
         </h:form>
     </p:dialog>
-    <p:linkButton outcome="departamentoList" value="Lista de Departamentos" style="margin-right:20px;"/>
+    <p:linkButton outcome="departamentoList"  value="Lista de Departamentos" style="margin-right:20px;"/>
 
 
     <div id="footer">

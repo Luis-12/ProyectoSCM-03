@@ -1,14 +1,15 @@
 package s.c.m.beans;
 
+
+import org.primefaces.PrimeFaces;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import s.c.m.entities.Colaborador;
 import s.c.m.entities.Departamento;
 import s.c.m.entities.Puesto;
 import s.c.m.services.ColaboradorService;
-import s.c.m.services.DepartamentoService;
+
 
 import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
@@ -26,6 +27,7 @@ public class ColaboradorBean {
     private Departamento departamento = new Departamento();
     private Puesto puesto = new Puesto();
     private List<Colaborador> colaboradores;
+    private  boolean disable;
 
 
     @PostConstruct
@@ -83,6 +85,28 @@ public class ColaboradorBean {
         } finally {
             colaborador = new Colaborador();
         }
+    }
+
+    public void checkSelection() { //para verifiacar si el objeto selectcoalborador esta vacio
+        PrimeFaces current = PrimeFaces.current();
+
+        if (selectcolaborador==null) {
+            addMessage("Aviso", "Debe Seleccionar un Colaborador."); //si esta vacio muetra este mensaje
+        } else {
+            current.executeScript("PF('dlUC').show();"); //si no esta vacio muestra el dialogo
+        }
+    }
+
+    public  void showconfirm()
+    {
+        PrimeFaces current = PrimeFaces.current();
+
+        if (selectcolaborador==null) {
+            addMessage("Aviso", "Debe Seleccionar un Colaborador."); //si esta vacio muetra este mensaje
+        } else {
+            current.executeScript("PF('dlCFD').show();"); //si no esta vacio muestra el dialogo
+        }
+
     }
 
     public void delete(){
