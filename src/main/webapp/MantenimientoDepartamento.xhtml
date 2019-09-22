@@ -24,7 +24,7 @@
             <h:form>
                 <p:sidebar widgetVar="sidebar1" baseZIndex="10000">
                     <h1 style="font-weight:normal">Menu</h1>
-                    <h:button value="Departamentos" outcome="MantenimientoDepartamento.xhtml"/>
+                    <h:button value="Colaboradores" outcome="MantenimientoColaborador.xhtml"/>
                 </p:sidebar>
                 <p:commandButton value="≡" icon="pi pi-arrow-right" oncomplete="PF('sidebar1').show()" />
             </h:form>
@@ -101,7 +101,7 @@
 
             </h:panelGrid>
             <center>
-                <p:commandButton value="Guardar"  oncomplete="if (args &amp;&amp; !args.validationFailed) PF('dlAC').hide()"
+                <p:commandButton value="Guardar"  oncomplete="handleCrearRequest(xhr, status, args)"
                                  action="#{departamentoBean.create}" style="margin-right:20px;margin-top: 20px" styleClass="ui-priority-primary" />
             </center>
         </h:form>
@@ -146,5 +146,15 @@
         © &nbsp; &nbsp; SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA
 
     </div>
+    <script type="text/javascript">
+        function handleCrearRequest(xhr, status, args) {
+            if(args.validationFailed || !args.existeDepartamento) {
+                //PF('dlAC').hide();
+            }
+            else {
+                PF('dlAC').jq.effect("shake", {times:2}, 100);
+            }
+        }
+    </script>
 </h:body>
 </html>

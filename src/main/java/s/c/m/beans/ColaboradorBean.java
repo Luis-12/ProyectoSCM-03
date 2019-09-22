@@ -77,14 +77,35 @@ public class ColaboradorBean {
     }
 
     public void create() {
-        try{
-            colaboradorService.createColaborador(colaborador);
-            addMessage("Aviso", "Registro insertado correctamente.");
-            colaboradores = colaboradorService.getAllColaboradoresActivos();
-        }catch (Exception e){
-        } finally {
-            colaborador = new Colaborador();
+        FacesMessage mensaje= null;
+        boolean existeColaborador = false;
+        //System.out.println(colaborador.getPk_idColaborador());
+        for(Colaborador c: colaboradores){
+            if(colaborador.getPk_idColaborador().equals(c.getPk_idColaborador())){
+                existeColaborador = true;
+                break;
+            }else{
+                existeColaborador = false;
+            }
         }
+        if(!existeColaborador){
+            try{
+                System.out.println("No existe el colaborador");
+                colaboradorService.createColaborador(colaborador);
+                mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Colaborador insertado correctamente.");
+                //addMessage("Aviso", "Registro insertado correctamente.");
+                colaboradores = colaboradorService.getAllColaboradoresActivos();
+            }catch (Exception e){
+            } finally {
+                colaborador = new Colaborador();
+            }
+        }else if(existeColaborador) {
+            System.out.println("Si existe el colaborador con ese id");
+            mensaje = new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "Ya existe un colaborador con ese id pruebe nuevamente.");
+            //addMessage("Aviso", "Ya existe un colaborador con ese id pruebe nuevamente.");
+        }
+        FacesContext.getCurrentInstance().addMessage(null, mensaje);
+        PrimeFaces.current().ajax().addCallbackParam("existeColaborador", existeColaborador);
     }
 
     public void checkSelection() { //para verifiacar si el objeto selectcolaborador esta vacio

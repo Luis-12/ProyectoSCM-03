@@ -98,9 +98,6 @@
                     <h:outputText value="#{colaborador.departamento.nombre}" />
                 </p:column>
             </p:dataTable>
-
-
-
         </h:form>
     </div>
 
@@ -160,7 +157,7 @@
 
             </h:panelGrid>
             <center>
-                <p:commandButton value="Guardar"  oncomplete="if (args &amp;&amp; !args.validationFailed) PF('dlAC').hide()"
+                <p:commandButton value="Guardar"  oncomplete="handleCrearRequest(xhr, status, args)"
                                  action="#{colaboradorBean.create}" style="margin-right:20px;margin-top: 20px" styleClass="ui-priority-primary" />
             </center>
         </h:form>
@@ -240,5 +237,15 @@
         © &nbsp; &nbsp; SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA
 
     </div>
+    <script type="text/javascript">
+        function handleCrearRequest(xhr, status, args) {
+            if(args.validationFailed || !args.existeColaborador) {
+                //PF('dlAC').hide();
+            }
+            else {
+                PF('dlAC').jq.effect("shake", {times:2}, 100);
+            }
+        }
+    </script>
 </h:body>
 </html>

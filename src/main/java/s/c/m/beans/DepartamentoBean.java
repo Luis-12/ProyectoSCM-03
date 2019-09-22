@@ -101,7 +101,7 @@ public class DepartamentoBean {
         System.out.println("Eliminado");
     }
 
-    public void create(){
+    /*public void create(){
         try{
             departamentoService.createDepartamento(departamento);
             addMessage("Aviso", "Departamento creado correctamente!");
@@ -111,7 +111,36 @@ public class DepartamentoBean {
             departamento = new Departamento();
 
         }
+    }*/
+    public void create() {
+        FacesMessage mensaje= null;
+        boolean existeDepartamento = false;
+        for(Departamento d: departamentos){
+            if(departamento.getPk_codDepartamento().equals(d.getPk_codDepartamento())){
+                existeDepartamento = true;
+                break;
+            }else{
+                existeDepartamento = false;
+            }
+        }
+        if(!existeDepartamento){
+            try{
+                System.out.println("No existe el departamento");
+                departamentoService.createDepartamento(departamento);
+                mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Departamento guardado correctamente.");
+                departamentos = departamentoService.getAllDepartamentosActivos();
+            }catch (Exception e){
+            } finally {
+                departamento = new Departamento();
+            }
+        }else if(existeDepartamento) {
+            System.out.println("Si existe el departamento con ese cod");
+            mensaje = new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "Ya existe un departamento con ese codigo pruebe nuevamente.");
+        }
+        FacesContext.getCurrentInstance().addMessage(null, mensaje);
+        PrimeFaces.current().ajax().addCallbackParam("existeDepartamento", existeDepartamento);
     }
+
     public void update(){
         try{
             System.out.println("El departamento actualizado es" +selectDepartamento.getNombre());
