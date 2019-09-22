@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
@@ -13,7 +13,6 @@
     <title>Mantenimiento de Colaboradores</title>
 
 </h:head>
-
 <h:body >
     <div id="header">
         <div id="logo"></div>
@@ -31,8 +30,9 @@
         </ui:insert>
     </div>
     <div>
+        <p:growl widgetVar="growlWV" />
 
-        <h:form>
+        <h:form id="form">
             <p:growl id="msgs" showDetail="true" rendered="#{not facesContext.validationFailed}"><p:autoUpdate/></p:growl>
 
             <p:contextMenu for="tablaColaborador" >
@@ -101,13 +101,16 @@
     </div>
 
 
-    <p:dialog id="dlAC" header="Agregar Colaborador"  showEffect="fade" hideEffect="fade"
-              widgetVar="dlAC" modal="true" resizable="false" minWidth="200" >
-        <h:form id="AgregarColaborador">
-            <p:growl id="msgs2" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
-            <h:panelGrid columns="2"  id="panel2">
+
+
+
+    <h:form>
+        <p:growl id="growl" sticky="true" showDetail="true" life="3000" rendered="#{not facesContext.validationFailed}"/>
+
+        <p:dialog header="Agregar Colaborador" widgetVar="dlAC" resizable="false">
+            <h:panelGrid id="tabla" columns="2">
                 <p:outputLabel value="Cédula:" indicateRequired="true" for="pk_idColaborador"/>
-                <p:inputText id="pk_idColaborador" required="true" requiredMessage="Ingrese un id" pattern="[0-9]"
+                <p:inputText maxlength="20" id="pk_idColaborador" required="true" requiredMessage="Ingrese un id" pattern="[0-9]"
                              validatorMessage=" La cédula debe ingresar tener mínimo 9 caracteres numericos" value="#{colaboradorBean.colaborador.pk_idColaborador}"/>
                 <p:watermark value="ID" for="pk_idColaborador"/>
                 <p:message for="pk_idColaborador"/>
@@ -124,21 +127,23 @@
                                    itemLabel="#{puesto.descripcion}"/>
                 </p:selectOneMenu>
                 <p:outputLabel value="Nombre:" indicateRequired="true" for="nombre"/>
-                <p:inputText id="nombre" required="true" requiredMessage="Ingrese un nombre"  pattern="[A-Za-Z]" value="#{colaboradorBean.colaborador.nombre}"/>
+                <p:inputText maxlength="100" id="nombre" required="true" requiredMessage="Ingrese un nombre"  pattern="[A-Za-Z]" value="#{colaboradorBean.colaborador.nombre}"/>
                 <p:watermark value="Nombre" for="nombre"/>
                 <p:message for="nombre"/>
                 <p:outputLabel value="Clave:" indicateRequired="true" for="clave"/>
-                <p:inputText id="clave" required="true" requiredMessage="Ingrese una clave" value="#{colaboradorBean.colaborador.clave}"/>
+                <p:inputText id="clave" maxlength="20" required="true" requiredMessage="Ingrese una clave" value="#{colaboradorBean.colaborador.clave}">
+                    <f:validateLength minimum="8"/>
+                </p:inputText>
                 <p:watermark value="Clave:" for="clave"/>
                 <p:message for="clave"/>
                 <p:outputLabel value="Telefono" indicateRequired="true" for="telefono"/>
-                <p:inputText id="telefono" required="true" requiredMessage="Ingrese un teléfono"
-                             value="#{colaboradorBean.colaborador.telefono}">
+                <p:inputText maxlength="9" id="telefono" required="true" converterMessage="Ingrese solo numeros" requiredMessage="Ingrese un teléfono" value="#{colaboradorBean.colaborador.telefono}">
+                    <f:validateLength minimum="8"/>
                 </p:inputText>
                 <p:watermark value="Telefono" for="telefono"/>
                 <p:message for="telefono"/>
                 <p:outputLabel value="Correo:" indicateRequired="true" for="correo"/>
-                <p:inputText id="correo" required="true"  label="email" requiredMessage="Ingrese un correo" value="#{colaboradorBean.colaborador.correo}">
+                <p:inputText id="correo" maxlength="50" required="true"  label="email" validatorMessage="Formato incorrecto ej. nombre@gmail.com" requiredMessage="Ingrese un correo" value="#{colaboradorBean.colaborador.correo}">
                     <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                 </p:inputText>
                 <p:watermark value="ejemplo@gmail.com" for="correo"/>
@@ -148,25 +153,33 @@
                 <p:watermark value="Fecha" for="fechaInicioLaboral"/>
                 <p:message for="fechaInicioLaboral"/>
 
+
+                <f:facet name="footer">
+                    <center>
+                        <p:commandButton value="Agregar" update="tabla, form:tablaColaborador"
+                                         oncomplete="validacionAgregar(xhr, status, args)" action="#{colaboradorBean.create}" />
+                        <p:commandButton  value="Cancel"  onclick="PF('dlUC').hide();">
+                            <f:ajax  resetValues="true" render="@form"/>
+                        </p:commandButton>
+                    </center>
+                </f:facet>
             </h:panelGrid>
-            <center>
-                <p:commandButton value="Guardar" id="ajax" update="msgs2,panel2, @(id$=tablaColaborador)" action="#{colaboradorBean.create}" style="margin-right:20px;margin-top: 20px" styleClass="ui-priority-primary" />
-                <p:commandButton value="Cancelar" onclick="PF('dlAC').hide();"/>
-
-            </center>
-        </h:form>
-    </p:dialog>
+        </p:dialog>
 
 
-    <p:dialog id="dlUC" header="Actualizar Colaborador" showEffect="fade" hideEffect="fade"
-              widgetVar="dlUC" modal="true" resizable="false" minWidth="200">
-        <h:form id="actualizarColaborador">
-            <p:growl id="msgs3" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
-            <h:panelGrid columns="2"  id="panel3"   >
+    </h:form>
+
+
+    <h:form id="dlUC">
+        <p:growl id="growl1" sticky="true" showDetail="true" life="3000" rendered="#{not facesContext.validationFailed}"/>
+
+        <p:dialog header="Actualizar Colaborador" widgetVar="dlUC" resizable="false">
+            <h:panelGrid id="tabla1" columns="2">
                 <p:outputLabel value="Cédula:" indicateRequired="true" for="pk_idColaboradorA"/>
-                <p:inputText id="pk_idColaboradorA" required="true" requiredMessage="Ingrese un id" pattern="[0-9]"
+                <p:inputText maxlength="20" id="pk_idColaboradorA" required="true" requiredMessage="Ingrese un id" pattern="[0-9]"
                              validatorMessage=" La cédula debe ingresar tener mínimo 9 caracteres numericos" value="#{colaboradorBean.selectcolaborador.pk_idColaborador}"/>
-
+                <p:watermark value="ID" for="pk_idColaboradorA"/>
+                <p:message for="pk_idColaboradorA"/>
 
                 <p:outputLabel  value="Departamento:"  />
                 <p:selectOneMenu value="#{colaboradorBean.selectcolaborador.departamento}" converter="departamentoConverter">
@@ -183,40 +196,55 @@
                 </p:selectOneMenu>
 
                 <p:outputLabel value="Nombre:" indicateRequired="true" for="nombreA"/>
-                <p:inputText id="nombreA" required="true" requiredMessage="Ingrese un nombre"  pattern="[A-Za-Z]" value="#{colaboradorBean.selectcolaborador.nombre}"/>
-
+                <p:inputText maxlength="100" id="nombreA" required="true" requiredMessage="Ingrese un nombre"  pattern="[A-Za-Z]" value="#{colaboradorBean.selectcolaborador.nombre}"/>
+                <p:watermark value="Nombre" for="nombreA"/>
+                <p:message for="nombreA"/>
 
                 <p:outputLabel value="Clave:" indicateRequired="true" for="claveA"/>
-                <p:inputText id="claveA" required="true" requiredMessage="Ingrese una clave" value="#{colaboradorBean.selectcolaborador.clave}"/>
-
+                <p:inputText id="claveA" maxlength="20" required="true" requiredMessage="Ingrese una clave" value="#{colaboradorBean.selectcolaborador.clave}">
+                    <f:validateLength minimum="8"/>
+                </p:inputText>
+                <p:watermark value="Clave:" for="claveA"/>
+                <p:message for="claveA"/>
 
                 <p:outputLabel value="Telefono" indicateRequired="true" for="telefonoA"/>
-                <p:inputText id="telefonoA" required="true" requiredMessage="Ingrese un teléfono"
+                <p:inputText id="telefonoA"  maxlength="9" converterMessage="Ingrese solo numeros" required="true" requiredMessage="Ingrese un teléfono"
                              value="#{colaboradorBean.selectcolaborador.telefono}">
+                    <f:validateLength minimum="8"/>
                 </p:inputText>
-
+                <p:watermark value="Telefono" for="telefonoA"/>
+                <p:message for="telefonoA"/>
 
                 <p:outputLabel value="Correo:" indicateRequired="true" for="correoA"/>
-                <p:inputText id="correoA" required="true"  label="email" requiredMessage="Ingrese un correo" value="#{colaboradorBean.selectcolaborador.correo}">
+                <p:inputText maxlength="50" id="correoA" required="true"  label="email" validatorMessage="Formato incorrecto ej. nombre@gmail.com" requiredMessage="Ingrese un correo" value="#{colaboradorBean.selectcolaborador.correo}">
                     <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                 </p:inputText>
+                <p:watermark value="ejemplo@gmail.com" for="correoA"/>
+                <p:message for="correoA"/>
 
 
                 <p:outputLabel value="Fecha de inicio laboral" indicateRequired="true" for="fechaInicioLaboralA"/>
-                <p:calendar id="fechaInicioLaboralA" required="true" requiredMessage="Ingrese la Fecha" value="#{colaboradorBean.selectcolaborador.fechaInicioLaboral}" pattern="yyyy-MM-dd"/>
+                <p:calendar id="fechaInicioLaboralA" required="true" requiredMessage="Ingrese la Fecha"  value="#{colaboradorBean.selectcolaborador.fechaInicioLaboral}" pattern="yyyy-MM-dd"/>
+                <p:watermark value="Fecha" for="fechaInicioLaboralA"/>
+                <p:message for="fechaInicioLaboralA"/>
 
 
+
+
+                <f:facet name="footer">
+                    <center>
+                    <p:commandButton value="Agregar" update="tabla1, form:tablaColaborador"
+                                     oncomplete="validacionActualizacion(xhr, status, args)" action="#{colaboradorBean.update}" />
+                    <p:commandButton value="Cancel" update="growl1" onclick="PF('dlUC').hide();">
+                        <f:ajax  resetValues="true" render="@form"/>
+                    </p:commandButton>
+                    </center>
+                </f:facet>
             </h:panelGrid>
-            <center>
-                <p:commandButton value="Actualizar" id="ajax2" update="msgs3,panel3, @(id$=tablaColaborador)"
-                                 oncomplete="if (args &amp;&amp; !args.validationFailed) PF('dlUC').hide()"
-                                 action="#{colaboradorBean.update}"
-                                 style="margin-right:20px;margin-top: 20px" styleClass="ui-priority-primary" />
-                <p:commandButton value="Cancelar" onclick="PF('dlUC').hide();"/>
+        </p:dialog>
 
-            </center>
-        </h:form>
-    </p:dialog>
+
+    </h:form>
     <p:linkButton outcome="departamentoList"  value="Lista de Departamentos" style="margin-right:20px;"/>
 
 
@@ -225,5 +253,37 @@
         © &nbsp; &nbsp; SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA
 
     </div>
+
+
+    <script type="text/javascript">
+        function validacionAgregar(xhr, status, args) {
+            if(args.validationFailed) {
+                PF('growlWV').renderMessage({"summary":"Aviso",
+                    "detail":"Debe completar todos los campos",
+                    "severity":"warn"});
+            }
+            else {
+                PF('dlAC').hide();
+
+            }
+        }
+    </script>
+
+
+    <script type="text/javascript">
+        function validacionActualizacion(xhr, status, args) {
+            if(args.validationFailed) {
+                PF('growlWV').renderMessage({"summary":"Aviso",
+                    "detail":"Debe completar todos los campos",
+                    "severity":"warn"});
+            }
+            else {
+                PF('dlUC').hide();
+
+            }
+        }
+    </script>
+
 </h:body>
 </html>
+
