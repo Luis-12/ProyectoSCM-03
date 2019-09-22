@@ -162,7 +162,7 @@ public class ColaboradorBean {
     }
 
     public void onRowUnselectColaborador(SelectEvent event){
-        FacesMessage msg = new FacesMessage("Colaborador deselecionada",((Colaborador) event.getObject()).getNombre());
+        FacesMessage msg = new FacesMessage("Colaborador selecionado",((Colaborador) event.getObject()).getNombre());
         FacesContext.getCurrentInstance().addMessage("dasdasdasdas",msg);
     }
 

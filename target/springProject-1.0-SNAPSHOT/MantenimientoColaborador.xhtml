@@ -69,7 +69,7 @@
                          selection="#{colaboradorBean.selectcolaborador}" scrollable="true" scrollHeight="450">
                 <p:autoUpdate />
 
-                <p:column headerText="Id" filterBy="#{colaborador.pk_idColaborador}">
+                <p:column headerText="Cédula" filterBy="#{colaborador.pk_idColaborador}">
                     <h:outputText value="#{colaborador.pk_idColaborador}" />
                 </p:column>
 
@@ -77,7 +77,7 @@
                     <h:outputText value="#{colaborador.nombre}" />
                 </p:column>
 
-                <p:column headerText="Telefono" filterBy="#{colaborador.telefono}">
+                <p:column headerText="Teléfono" filterBy="#{colaborador.telefono}">
                     <h:outputText value="#{colaborador.telefono}" />
                 </p:column>
 
@@ -85,11 +85,8 @@
                     <h:outputText value="#{colaborador.correo}" />
                 </p:column>
 
-                <p:column headerText="Clave" >
-                    <h:outputText value="#{colaborador.clave}" />
-                </p:column>
 
-                <p:column headerText="Fecha de inicio laboral" filterBy="#{colaborador.fechaInicioLaboral}">
+                <p:column headerText="Fecha de Inicio Laboral" filterBy="#{colaborador.fechaInicioLaboral}">
                     <h:outputText value="#{colaborador.fechaInicioLaboral}" />
                 </p:column>
 
@@ -97,7 +94,7 @@
                     <h:outputText value="#{colaborador.puesto.descripcion}" />
                 </p:column>
 
-                <p:column headerText="Departamento al que pertenece" filterBy="#{colaborador.departamento.nombre}">
+                <p:column headerText="Departamento al que Pertenece" filterBy="#{colaborador.departamento.nombre}">
                     <h:outputText value="#{colaborador.departamento.nombre}" />
                 </p:column>
             </p:dataTable>
@@ -176,10 +173,7 @@
             <p:growl id="msgs3" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
             <h:panelGrid columns="2"  id="panel3"   >
                 <p:outputLabel value="Cédula:" indicateRequired="true" for="pk_idColaboradorA"/>
-                <p:inputText maxlength="20" id="pk_idColaboradorA" required="true" requiredMessage="Ingrese un id" pattern="[0-9]"
-                             validatorMessage=" La cédula debe ingresar tener mínimo 9 caracteres numericos" value="#{colaboradorBean.selectcolaborador.pk_idColaborador}">
-                <f:validateLength minimum="8"/>
-                </p:inputText>
+                <p:inputText id="pk_idColaboradorA" disabled="true" value="#{colaboradorBean.selectcolaborador.pk_idColaborador}"/>
                 <p:watermark value="ID" for="pk_idColaboradorA"/>
                 <p:message for="pk_idColaboradorA"/>
 
