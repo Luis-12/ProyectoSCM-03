@@ -3,6 +3,8 @@ package s.c.m.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import s.c.m.entities.Colaborador;
+import s.c.m.entities.Departamento;
+import s.c.m.entities.Puesto;
 import s.c.m.repositories.ColaboradorRepository;
 
 import java.util.ArrayList;
@@ -53,5 +55,8 @@ public class ColaboradorService {
     }
 
 
+    public Colaborador findColaboradorEncargado(Departamento idD, Puesto idP){
+        return colaboradorRepository.findByDepartamentoAndPuesto(idD,idP);
+    }
 
 }
