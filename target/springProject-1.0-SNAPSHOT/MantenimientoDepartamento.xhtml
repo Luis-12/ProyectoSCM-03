@@ -64,9 +64,9 @@
                          selectionMode="single"
                          rowKey="#{departamento.pk_codDepartamento}"
                          paginator="true"
-                         paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                          rowsPerPageTemplate="10"
-                         selection="#{departamentoBean.selectDepartamento}">
+                         selection="#{departamentoBean.selectDepartamento}" style="margin-top: 20px">
                 <p:autoUpdate />
                 <p:column headerText="Código" filterBy="#{departamento.pk_codDepartamento}">
                     <h:outputText value="#{departamento.pk_codDepartamento}" />
