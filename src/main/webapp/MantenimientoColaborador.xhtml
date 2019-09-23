@@ -152,7 +152,7 @@
                 <p:watermark value="ejemplo@gmail.com" for="correo"/>
                 <p:message for="correo"/>
                 <p:outputLabel value="Fecha de Inicio Laboral" indicateRequired="true" for="fechaInicioLaboral"/>
-                <p:calendar id="fechaInicioLaboral" required="true" requiredMessage="Ingrese la Fecha" value="#{colaboradorBean.colaborador.fechaInicioLaboral}" pattern="yyyy-MM-dd"/>
+                <p:calendar maxdate="#{colaboradorBean.fecha}" id="fechaInicioLaboral" required="true" requiredMessage="Ingrese la Fecha" value="#{colaboradorBean.colaborador.fechaInicioLaboral}" pattern="yyyy-MM-dd"/>
                 <p:watermark value="Fecha" for="fechaInicioLaboral"/>
                 <p:message for="fechaInicioLaboral"/>
 
@@ -220,7 +220,7 @@
 
 
                 <p:outputLabel value="Fecha de Inicio Laboral" indicateRequired="true" for="fechaInicioLaboralA"/>
-                <p:calendar id="fechaInicioLaboralA" required="true" requiredMessage="Ingrese la Fecha"  value="#{colaboradorBean.selectcolaborador.fechaInicioLaboral}" pattern="yyyy-MM-dd"/>
+                <p:calendar maxdate="#{colaboradorBean.fecha}" id="fechaInicioLaboralA" required="true" requiredMessage="Ingrese la Fecha"  value="#{colaboradorBean.selectcolaborador.fechaInicioLaboral}" pattern="yyyy-MM-dd"/>
                 <p:watermark value="Fecha" for="fechaInicioLaboralA"/>
                 <p:message for="fechaInicioLaboralA"/>
 

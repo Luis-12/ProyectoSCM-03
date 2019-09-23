@@ -18,6 +18,8 @@ import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,6 +35,7 @@ public class ColaboradorBean {
     private Puesto puesto = new Puesto();
     private List<Colaborador> colaboradores;
     private  boolean disable;
+    private Date fecha;
 
 
     @PostConstruct
@@ -40,6 +43,17 @@ public class ColaboradorBean {
         colaboradores = colaboradorService.getAllColaboradoresActivos();
         return "colaboradorList.xhtml";
     }
+
+
+    public Date getFecha() {
+        Calendar c = Calendar.getInstance();
+        return c.getTime();
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
 
     public Colaborador getColaborador() {
         return colaborador;
@@ -152,6 +166,8 @@ public class ColaboradorBean {
             colaborador = new Colaborador();
         }
     }
+
+
 
     public void find(){
         String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("ColaboradorIdBusqueda");
