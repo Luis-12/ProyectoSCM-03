@@ -97,7 +97,7 @@
                 <p:outputLabel value="Nombre:" indicateRequired="true" for="nombre"/>
                 <p:inputText maxlength="50"  id="nombre" required="true" requiredMessage="Ingrese un nombre" validatorMessage="Solo letras"
                              value="#{departamentoBean.departamento.nombre}">
-                    <f:validateRegex pattern="^[a-zA-Z-,]+(\s{0,1}[a-zA-Z-, ])*$" />
+                    <f:validateRegex pattern="^[a-zA-Z-ÑñáéíóúÁÉÍÓÚ,]+(\s{0,1}[a-zA-Z-ÑñáéíóúÁÉÍÓÚ, ])*$"/>
                 </p:inputText>
                 <p:watermark value="Nombre" for="nombre"/>
                 <p:message for="nombre"/>
@@ -122,8 +122,10 @@
                 <p:watermark value="Código" for="pk_codDepartamentoA"/>
                 <p:message for="pk_codDepartamentoA"/>
                 <p:outputLabel value="Nombre:" indicateRequired="true" for="nombreA"/>
-                <p:inputText maxlength="50" id="nombreA" required="true" requiredMessage="Ingrese un nombre"  pattern="[A-Za-Z]"
-                             value="#{departamentoBean.selectDepartamento.nombre}"/>
+                <p:inputText maxlength="50" id="nombreA" required="true" requiredMessage="Ingrese un nombre" validatorMessage="Solo letras"
+                             value="#{departamentoBean.selectDepartamento.nombre}">
+                <f:validateRegex pattern="^[a-zA-Z-ÑñáéíóúÁÉÍÓÚ,]+(\s{0,1}[a-zA-Z-ÑñáéíóúÁÉÍÓÚ, ])*$"/>
+                </p:inputText>
                 <p:watermark value="Nombre" for="nombreA"/>
                 <p:message for="nombreA"/>
             </h:panelGrid>

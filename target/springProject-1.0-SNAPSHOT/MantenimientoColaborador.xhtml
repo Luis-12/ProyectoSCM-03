@@ -123,14 +123,14 @@
                                    itemLabel="#{departamento.nombre}"/>
                 </p:selectOneMenu>
                 <p:outputLabel  value="Puesto:" />
-                <p:selectOneMenu value="#{colaboradorBean.colaborador.puesto}" converter="puestoConverter">
+                <p:selectOneMenu autoWidth="false" value="#{colaboradorBean.colaborador.puesto}" converter="puestoConverter">
                     <f:selectItems value="#{puestoBean.puestos}" var="puesto"
                                    itemValue="#{puesto}"
                                    itemLabel="#{puesto.descripcion}"/>
                 </p:selectOneMenu>
                 <p:outputLabel value="Nombre:" indicateRequired="true" for="nombre"/>
                 <p:inputText maxlength="100" id="nombre" required="true" validatorMessage="Solo letras" requiredMessage="Ingrese un nombre" value="#{colaboradorBean.colaborador.nombre}">
-                    <f:validateRegex pattern="^[a-zA-Z-,]+(\s{0,1}[a-zA-Z-, ])*$" />
+                    <f:validateRegex  pattern="^[a-zA-Z-ÑñáéíóúÁÉÍÓÚ,]+(\s{0,1}[a-zA-Z-ÑñáéíóúÁÉÍÓÚ, ])*$" />
                 </p:inputText>
                 <p:watermark value="Nombre" for="nombre"/>
                 <p:message for="nombre"/>
@@ -153,7 +153,7 @@
                 <p:watermark value="ejemplo@gmail.com" for="correo"/>
                 <p:message for="correo"/>
                 <p:outputLabel value="Fecha de Inicio Laboral" indicateRequired="true" for="fechaInicioLaboral"/>
-                <p:calendar maxdate="#{colaboradorBean.fecha}" id="fechaInicioLaboral" required="true" requiredMessage="Ingrese la Fecha" value="#{colaboradorBean.colaborador.fechaInicioLaboral}" pattern="yyyy-MM-dd"/>
+                <p:calendar autocomplete="off"  maxdate="#{colaboradorBean.fecha}" id="fechaInicioLaboral" required="true" requiredMessage="Ingrese la Fecha" value="#{colaboradorBean.colaborador.fechaInicioLaboral}" pattern="yyyy-MM-dd"/>
                 <p:watermark value="Fecha" for="fechaInicioLaboral"/>
                 <p:message for="fechaInicioLaboral"/>
 
@@ -179,8 +179,8 @@
                 <p:message for="pk_idColaboradorA"/>
 
                 <p:outputLabel  value="Departamento:"  />
-                <p:selectOneMenu value="#{colaboradorBean.selectcolaborador.departamento}" converter="departamentoConverter">
-                    <f:selectItems value="#{departamentoBean.departamentos}" var="departamento"
+                <p:selectOneMenu  value="#{colaboradorBean.selectcolaborador.departamento}" converter="departamentoConverter">
+                    <f:selectItems  value="#{departamentoBean.departamentos}" var="departamento"
                                    itemValue="#{departamento}"
                                    itemLabel="#{departamento.nombre}"/>
                 </p:selectOneMenu>
@@ -193,7 +193,9 @@
                 </p:selectOneMenu>
 
                 <p:outputLabel value="Nombre:" indicateRequired="true" for="nombreA"/>
-                <p:inputText maxlength="100" id="nombreA" required="true" requiredMessage="Ingrese un nombre"  pattern="[A-Za-Z]" value="#{colaboradorBean.selectcolaborador.nombre}"/>
+                <p:inputText maxlength="100" id="nombreA" required="true" requiredMessage="Ingrese un nombre" validatorMessage="Solo letras" value="#{colaboradorBean.selectcolaborador.nombre}">
+                <f:validateRegex  pattern="^[a-zA-Z-ÑñáéíóúÁÉÍÓÚ,]+(\s{0,1}[a-zA-Z-ÑñáéíóúÁÉÍÓÚ, ])*$" />
+                </p:inputText>
                 <p:watermark value="Nombre" for="nombreA"/>
                 <p:message for="nombreA"/>
 
@@ -221,7 +223,7 @@
 
 
                 <p:outputLabel value="Fecha de Inicio Laboral" indicateRequired="true" for="fechaInicioLaboralA"/>
-                <p:calendar maxdate="#{colaboradorBean.fecha}" id="fechaInicioLaboralA" required="true" requiredMessage="Ingrese la Fecha"  value="#{colaboradorBean.selectcolaborador.fechaInicioLaboral}" pattern="yyyy-MM-dd"/>
+                <p:calendar autocomplete="off" maxdate="#{colaboradorBean.fecha}" id="fechaInicioLaboralA" required="true" requiredMessage="Ingrese la Fecha"  value="#{colaboradorBean.selectcolaborador.fechaInicioLaboral}" pattern="yyyy-MM-dd"/>
                 <p:watermark value="Fecha" for="fechaInicioLaboralA"/>
                 <p:message for="fechaInicioLaboralA"/>
 
