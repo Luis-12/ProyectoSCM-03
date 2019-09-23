@@ -21,7 +21,7 @@
     </div>
     <div id="top">
         <h:form>
-            <p:commandButton id="dynaButton" value="Menu" type="button"  icon="ui-icon-home"/>
+            <p:commandButton id="dynaButton" value="Menú" type="button"  icon="ui-icon-home"/>
             <p:menu toggleable="true" overlay="true" trigger="dynaButton" my="left top" at="left bottom">
                 <p:submenu label="Colaborador">
                     <p:menuitem value="Incorporar Colaborador" onclick="PF('dlAC').show();" icon="ui-icon-plus"/>
@@ -29,8 +29,8 @@
                 <p:submenu label="Departamento">
                     <p:menuitem value="Mantenimiento Departamento" outcome="MantenimientoDepartamento.xhtml" icon="ui-icon-wrench"/>
                 </p:submenu>
-                <p:submenu label="Informes">
-                    <p:menuitem value="Reporte X" icon="ui-icon-mail-closed"/>
+                <p:submenu label="Informes" disabled="true">
+                    <p:menuitem  disabled="true" value="Reporte X" icon="ui-icon-mail-closed"/>
                 </p:submenu>
             </p:menu></h:form>
     </div>

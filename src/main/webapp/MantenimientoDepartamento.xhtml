@@ -21,15 +21,15 @@
     </div>
     <div id="top">
         <h:form>
-            <p:commandButton id="dynaButton" value="Menu" type="button"  icon="ui-icon-home"/>
+            <p:commandButton id="dynaButton" value="Menú" type="button"  icon="ui-icon-home"/>
             <p:menu toggleable="true" overlay="true" trigger="dynaButton" my="left top" at="left bottom">
-                <p:submenu label="Colaborador">
-                    <p:menuitem value="Mantenimiento Colaborador" outcome="MantenimientoColaborador.xhtml" icon="ui-icon-plus"/>
-                </p:submenu>
                 <p:submenu label="Departamento">
                     <p:menuitem value="Incorporar Departamento" onclick="PF('dlAC').show();" icon="ui-icon-wrench"/>
                 </p:submenu>
-                <p:submenu label="Informes">
+                <p:submenu label="Colaborador">
+                    <p:menuitem value="Mantenimiento Colaborador" outcome="MantenimientoColaborador.xhtml" icon="ui-icon-plus"/>
+                </p:submenu>
+                <p:submenu label="Informes" disabled="true">
                     <p:menuitem value="Reporte X" icon="ui-icon-mail-closed"/>
                 </p:submenu>
             </p:menu></h:form>
@@ -91,8 +91,8 @@
             <h:panelGrid columns="2"  id="panel2">
                 <p:outputLabel value="Código de Departamento" indicateRequired="true" for="pk_codDepartamento"/>
                 <p:inputText maxlength="6" id="pk_codDepartamento" required="true" requiredMessage="Ingrese un código"
-                             validatorMessage="No se permiten números" value="#{departamentoBean.departamento.pk_codDepartamento}">
-                    <f:validateRegex pattern="[a-zA]+" />
+                             validatorMessage="Solo se aceptan mayúsculas y no se permiten números" value="#{departamentoBean.departamento.pk_codDepartamento}">
+                    <f:validateRegex pattern="[A-Z]+" />
                 </p:inputText>
                 <p:watermark value="Código" for="pk_codDepartamento"/>
                 <p:message for="pk_codDepartamento"/>
@@ -104,7 +104,7 @@
                 <p:watermark value="Nombre" for="nombre"/>
                 <p:message for="nombre"/>
                 <p:outputLabel value="Descripción de Departamento:" indicateRequired="true" for="descripcion"/>
-                <p:inputText maxlength="200" id="descripcion" required="true" requiredMessage="Ingrese una descripcion"
+                <p:inputText maxlength="200" id="descripcion" required="true" requiredMessage="Ingrese una descripción"
                              value="#{departamentoBean.departamento.descripcion}"/>
                 <p:watermark value="Descripción:" for="descripcion"/>
                 <p:message for="descripcion"/>
