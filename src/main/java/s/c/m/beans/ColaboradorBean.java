@@ -5,6 +5,7 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import s.c.m.entities.Colaborador;
 import s.c.m.entities.Departamento;
 import s.c.m.entities.Puesto;
@@ -14,10 +15,14 @@ import s.c.m.services.ColaboradorService;
 import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.validator.ValidatorException;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-//@Component
+
 @ManagedBean
 public class ColaboradorBean {
     @Autowired
@@ -93,7 +98,6 @@ public class ColaboradorBean {
                 System.out.println("No existe el colaborador");
                 colaboradorService.createColaborador(colaborador);
                 mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Colaborador insertado correctamente.");
-                //addMessage("Aviso", "Registro insertado correctamente.");
                 colaboradores = colaboradorService.getAllColaboradoresActivos();
             }catch (Exception e){
             } finally {
@@ -102,7 +106,7 @@ public class ColaboradorBean {
         }else if(existeColaborador) {
             System.out.println("Si existe el colaborador con ese id");
             mensaje = new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "Ya existe un colaborador con ese id pruebe nuevamente.");
-            //addMessage("Aviso", "Ya existe un colaborador con ese id pruebe nuevamente.");
+            colaborador = new Colaborador();
         }
         FacesContext.getCurrentInstance().addMessage(null, mensaje);
         PrimeFaces.current().ajax().addCallbackParam("existeColaborador", existeColaborador);
@@ -155,6 +159,9 @@ public class ColaboradorBean {
         colaboradores.add(colaboradorService.findColaborador(id));
     }
 
+    public void close(){
+        colaborador = new Colaborador();
+    }
 
     public void addMessage(String summary, String detail) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
