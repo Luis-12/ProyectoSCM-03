@@ -19,7 +19,7 @@
         <div id="logo"></div>
 
     </div>
-    <div id="top">
+  <div id="top">
         <h:form>
             <p:commandButton id="dynaButton" value="Menú" type="button"  icon="ui-icon-home"/>
             <p:menu toggleable="true" overlay="true" trigger="dynaButton" my="left top" at="left bottom">
@@ -34,6 +34,7 @@
                 </p:submenu>
             </p:menu></h:form>
     </div>
+    <h1 id="h1Centro">Listado de Colaboradores</h1>
     <div>
 
         <h:form>
@@ -63,7 +64,7 @@
                          selectionMode="single"
                          rowKey="#{colaborador.pk_idColaborador}"
                          paginator="true"
-                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                          rowsPerPageTemplate="10,15,20"
                          selection="#{colaboradorBean.selectcolaborador}" scrollable="true" scrollHeight="450">
                 <p:autoUpdate />
