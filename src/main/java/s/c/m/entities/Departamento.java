@@ -11,7 +11,6 @@ public class Departamento implements Serializable {
     @Id
     private String pk_codDepartamento;
     private String nombre;
-    private  String descripcion;
     private String estado;
     @OneToMany(mappedBy = "departamento")
     private Set<Colaborador> colaboradores;
@@ -32,14 +31,6 @@ public class Departamento implements Serializable {
         this.nombre = nombre;
     }
 
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
     public String getEstado() {
         return estado;
     }
@@ -56,7 +47,6 @@ public class Departamento implements Serializable {
         return "Departamento{" +
                 "pk_coddepartamento='" + pk_codDepartamento + '\'' +
                 ", nombre='" + nombre + '\'' +
-                ", descripcion='" + descripcion + '\'' +
                 ", estado='" + estado + '\'' +
                 '}';
     }

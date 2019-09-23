@@ -74,10 +74,6 @@
                 <p:column headerText="Nombre" filterBy="#{departamento.nombre}">
                     <h:outputText value="#{departamento.nombre}" />
                 </p:column>
-                <p:column headerText="Descripción" filterBy="#{departamento.descripcion}">
-                    <h:outputText value="#{departamento.descripcion}" />
-                </p:column>
-
             </p:dataTable>
 
         </h:form>
@@ -105,11 +101,6 @@
                 </p:inputText>
                 <p:watermark value="Nombre" for="nombre"/>
                 <p:message for="nombre"/>
-                <p:outputLabel value="Descripción de Departamento:" indicateRequired="true" for="descripcion"/>
-                <p:inputText maxlength="200" id="descripcion" required="true" requiredMessage="Ingrese una descripción"
-                             value="#{departamentoBean.departamento.descripcion}"/>
-                <p:watermark value="Descripción:" for="descripcion"/>
-                <p:message for="descripcion"/>
 
             </h:panelGrid>
             <center>
@@ -135,12 +126,6 @@
                              value="#{departamentoBean.selectDepartamento.nombre}"/>
                 <p:watermark value="Nombre" for="nombreA"/>
                 <p:message for="nombreA"/>
-                <p:outputLabel value="Descripción de Departamento:" indicateRequired="true" for="descripcionA"/>
-                <p:inputText maxlength="200" id="descripcionA" required="true" requiredMessage="Ingrese una descripcion"
-                             value="#{departamentoBean.selectDepartamento.descripcion}"/>
-                <p:watermark value="Descripción:" for="descripcionA"/>
-                <p:message for="descripcionA"/>
-
             </h:panelGrid>
             <center>
                 <p:commandButton value="Actualizar" id="ajax2" update="msgs3,panel3"
