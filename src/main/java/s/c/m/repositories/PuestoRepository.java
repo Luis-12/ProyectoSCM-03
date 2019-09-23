@@ -6,4 +6,5 @@ import s.c.m.entities.Puesto;
 
 @Repository
 public interface PuestoRepository extends CrudRepository<Puesto, Integer> {
+    Puesto findByDescripcion(String descripcion);
 }

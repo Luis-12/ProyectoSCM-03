@@ -18,4 +18,9 @@ public class PuestoService {
         puestoRepository.findAll().forEach(e -> list.add(e));
         return list;
     }
+
+
+    public Puesto findIdPuesto(String descripcion){
+        return puestoRepository.findByDescripcion(descripcion);
+    }
 }

@@ -5,6 +5,7 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import s.c.m.entities.Colaborador;
 import s.c.m.entities.Departamento;
 import s.c.m.entities.Puesto;
@@ -14,10 +15,14 @@ import s.c.m.services.ColaboradorService;
 import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.validator.ValidatorException;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-//@Component
+
 @ManagedBean
 public class ColaboradorBean {
     @Autowired
@@ -77,33 +82,37 @@ public class ColaboradorBean {
     }
 
     public void create() {
-        /*String id = colaborador.getPk_idColaborador();
+        FacesMessage mensaje= null;
         boolean existeColaborador = false;
-        if(colaboradorService.findColaborador(id).getPk_idColaborador().equals(colaborador.getPk_idColaborador())){
-            existeColaborador = true;
-            addMessage("Aviso", "Ya existe un colaborador con esa identificación.");
-        }else {
-            existeColaborador = false;
+        //System.out.println(colaborador.getPk_idColaborador());
+        for(Colaborador c: colaboradores){
+            if(colaborador.getPk_idColaborador().equals(c.getPk_idColaborador())){
+                existeColaborador = true;
+                break;
+            }else{
+                existeColaborador = false;
+            }
+        }
+        if(!existeColaborador){
             try{
+                System.out.println("No existe el colaborador");
                 colaboradorService.createColaborador(colaborador);
-                addMessage("Aviso", "Registro insertado correctamente.");
+                mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Colaborador insertado correctamente.");
                 colaboradores = colaboradorService.getAllColaboradoresActivos();
             }catch (Exception e){
             } finally {
                 colaborador = new Colaborador();
             }
-        }*/
-        try{
-            colaboradorService.createColaborador(colaborador);
-            addMessage("Aviso", "Registro insertado correctamente.");
-            colaboradores = colaboradorService.getAllColaboradoresActivos();
-        }catch (Exception e){
-        } finally {
+        }else if(existeColaborador) {
+            System.out.println("Si existe el colaborador con ese id");
+            mensaje = new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "Ya existe un colaborador con ese id pruebe nuevamente.");
             colaborador = new Colaborador();
         }
+        FacesContext.getCurrentInstance().addMessage(null, mensaje);
+        PrimeFaces.current().ajax().addCallbackParam("existeColaborador", existeColaborador);
     }
 
-    public void checkSelection() { //para verifiacar si el objeto selectcoalborador esta vacio
+    public void checkSelection() { //para verifiacar si el objeto selectcolaborador esta vacio
         PrimeFaces current = PrimeFaces.current();
 
         if (selectcolaborador==null) {
@@ -150,6 +159,9 @@ public class ColaboradorBean {
         colaboradores.add(colaboradorService.findColaborador(id));
     }
 
+    public void close(){
+        colaborador = new Colaborador();
+    }
 
     public void addMessage(String summary, String detail) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
@@ -162,7 +174,7 @@ public class ColaboradorBean {
     }
 
     public void onRowUnselectColaborador(SelectEvent event){
-        FacesMessage msg = new FacesMessage("Colaborador deselecionada",((Colaborador) event.getObject()).getNombre());
+        FacesMessage msg = new FacesMessage("Colaborador selecionado",((Colaborador) event.getObject()).getNombre());
         FacesContext.getCurrentInstance().addMessage("dasdasdasdas",msg);
     }
 
