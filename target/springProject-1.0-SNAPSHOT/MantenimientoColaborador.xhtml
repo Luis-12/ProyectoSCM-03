@@ -24,7 +24,7 @@
             <p:commandButton id="dynaButton" value="Menú" type="button"  icon="ui-icon-home"/>
             <p:menu toggleable="true" overlay="true" trigger="dynaButton" my="left top" at="left bottom">
                 <p:submenu label="Colaborador">
-                    <p:menuitem value="Incorporar Colaborador" onclick="PF('dlAC').show();" icon="ui-icon-plus"/>
+                    <p:menuitem value="Incorporar Colaborador" action="#{colaboradorBean.checkDepartamento}" icon="ui-icon-plus"/>
                 </p:submenu>
                 <p:submenu label="Departamento">
                     <p:menuitem value="Mantenimiento Departamento" outcome="MantenimientoDepartamento.xhtml" icon="ui-icon-wrench"/>
@@ -41,7 +41,7 @@
             <p:growl id="msgs" showDetail="true" life="3000" rendered="#{not facesContext.validationFailed}"><p:autoUpdate/></p:growl>
 
             <p:contextMenu for="tablaColaborador" >
-                <p:menuitem value="Agregar" onclick="PF('dlAC').show();">
+                <p:menuitem value="Agregar" action="#{colaboradorBean.checkDepartamento}">
                 </p:menuitem>
                 <p:menuitem value="Actualizar" update="dlUC"  action="#{colaboradorBean.checkSelection}"/>
                 <p:menuitem value="Eliminar"  update="dlCFD" action="#{colaboradorBean.showconfirm}" icon="ui-icon-close"  />

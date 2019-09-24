@@ -10,6 +10,7 @@ import s.c.m.entities.Colaborador;
 import s.c.m.entities.Departamento;
 import s.c.m.entities.Puesto;
 import s.c.m.services.ColaboradorService;
+import s.c.m.services.DepartamentoService;
 
 
 import javax.annotation.ManagedBean;
@@ -35,6 +36,8 @@ public class ColaboradorBean {
     private Puesto puesto = new Puesto();
     private List<Colaborador> colaboradores;
     private  boolean disable;
+    @Autowired
+    DepartamentoService departamentoService;
     private Date fecha;
 
 
@@ -141,6 +144,17 @@ public class ColaboradorBean {
         PrimeFaces.current().ajax().addCallbackParam("existeColaborador", existeColaborador);
     }
 
+    public void checkDepartamento()
+    {
+        PrimeFaces current = PrimeFaces.current();
+
+        if (departamentoService.getAllDepartamentosActivos().size()!=0) {
+            current.executeScript("PF('dlAC').show();"); //si no esta vacio muestra el dialogo
+            //onclick="PF('dlAC').show();"
+        } else {
+            addMessage("Aviso", "No puede agregar colaboradores si no existe al menos un departamento."); //si esta vacio muetra este mensaje
+        }
+    }
     public void checkSelection()
     { //para verifiacar si el objeto selectcolaborador esta vacio
         PrimeFaces current = PrimeFaces.current();
