@@ -13,6 +13,10 @@ h1{
     font-family:GestaW01-Medium;
     color:#404041;
 }
+
+.ui-selectonemenu-panel{
+    width: 15%;
+}
 #h1Centro{
     font-family:GestaW01-Medium;
     color:#404041;

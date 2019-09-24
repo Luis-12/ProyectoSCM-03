@@ -13,14 +13,16 @@ public class PuestoService {
     @Autowired
     private PuestoRepository puestoRepository;
 
-    public List<Puesto> getAllPuestos() {
+    public List<Puesto> getAllPuestos()
+    {
         List<Puesto> list = new ArrayList<Puesto>();
         puestoRepository.findAll().forEach(e -> list.add(e));
         return list;
     }
 
 
-    public Puesto findIdPuesto(String descripcion){
+    public Puesto findIdPuesto(String descripcion)
+    {
         return puestoRepository.findByDescripcion(descripcion);
     }
 }

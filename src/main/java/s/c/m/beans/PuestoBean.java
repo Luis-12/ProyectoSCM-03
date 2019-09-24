@@ -21,24 +21,29 @@ public class PuestoBean {
     private List<Puesto> puestos;
 
     @PostConstruct
-    public String init() {
+    public String init()
+    {
         puestos = puestoService.getAllPuestos();
         return "puestoList.xhtml";
     }
 
-    public Puesto getPuesto() {
+    public Puesto getPuesto()
+    {
         return puesto;
     }
 
-    public void setPuesto(Puesto puesto) {
+    public void setPuesto(Puesto puesto)
+    {
         this.puesto = puesto;
     }
 
-    public List<Puesto> getPuestos() {
+    public List<Puesto> getPuestos()
+    {
         return puestos;
     }
 
-    public void setPuestos(List<Puesto> puestos) {
+    public void setPuestos(List<Puesto> puestos)
+    {
         this.puestos = puestos;
     }
 

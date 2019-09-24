@@ -39,63 +39,77 @@ public class ColaboradorBean {
 
 
     @PostConstruct
-    public String init() {
+    public String init()
+    {
         colaboradores = colaboradorService.getAllColaboradoresActivos();
         return "colaboradorList.xhtml";
     }
 
 
-    public Date getFecha() {
+    public Date getFecha()
+    {
         Calendar c = Calendar.getInstance();
         return c.getTime();
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(Date fecha)
+    {
         this.fecha = fecha;
     }
 
 
-    public Colaborador getColaborador() {
+    public Colaborador getColaborador()
+    {
         return colaborador;
     }
 
-    public void setColaborador(Colaborador colaborador) {
+    public void setColaborador(Colaborador colaborador)
+    {
         this.colaborador = colaborador;
     }
 
-    public Colaborador getSelectcolaborador() {
+    public Colaborador getSelectcolaborador()
+    {
         return selectcolaborador;
     }
 
-    public void setSelectcolaborador(Colaborador selectcolaborador) {
+    public void setSelectcolaborador(Colaborador selectcolaborador)
+    {
         this.selectcolaborador = selectcolaborador;
     }
 
-    public Departamento getDepartamento() {
+    public Departamento getDepartamento()
+    {
         return departamento;
     }
 
-    public void setDepartamento(Departamento departamento) {
+    public void setDepartamento(Departamento departamento)
+    {
         this.departamento = departamento;
     }
 
-    public Puesto getPuesto() {
+    public Puesto getPuesto()
+    {
         return puesto;
     }
 
-    public void setPuesto(Puesto puesto) {
+    public void setPuesto(Puesto puesto)
+    {
         this.puesto = puesto;
     }
 
-    public List<Colaborador> getColaboradores() {
+    public List<Colaborador> getColaboradores()
+    {
         return colaboradores;
     }
 
-    public void setColaboradores(List<Colaborador> colaboradores) {
+    public void setColaboradores(List<Colaborador> colaboradores)
+    {
         this.colaboradores = colaboradores;
     }
 
-    public void create() {
+    public void create()
+    {
         FacesMessage mensaje= null;
         boolean existeColaborador = false;
         //System.out.println(colaborador.getPk_idColaborador());
@@ -126,7 +140,8 @@ public class ColaboradorBean {
         PrimeFaces.current().ajax().addCallbackParam("existeColaborador", existeColaborador);
     }
 
-    public void checkSelection() { //para verifiacar si el objeto selectcolaborador esta vacio
+    public void checkSelection()
+    { //para verifiacar si el objeto selectcolaborador esta vacio
         PrimeFaces current = PrimeFaces.current();
 
         if (selectcolaborador==null) {
@@ -148,14 +163,16 @@ public class ColaboradorBean {
 
     }
 
-    public void delete(){
+    public void delete()
+    {
         colaboradorService.deleteColaborador(selectcolaborador);
         addMessage("Aviso", "Registro eliminado correctamente.");
         colaboradores = colaboradorService.getAllColaboradoresActivos();
         System.out.println("Eliminado");
     }
 
-    public void update(){
+    public void update()
+    {
         try{
             System.out.println("El nombre a actualizado es:"+selectcolaborador.getNombre());
             colaboradorService.updateColaborador(selectcolaborador);
@@ -169,45 +186,53 @@ public class ColaboradorBean {
 
 
 
-    public void find(){
+    public void find()
+    {
         String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("ColaboradorIdBusqueda");
         colaboradores.clear();
         colaboradores.add(colaboradorService.findColaborador(id));
     }
 
-    public void close(){
+    public void close()
+    {
         colaborador = new Colaborador();
     }
 
-    public void addMessage(String summary, String detail) {
+    public void addMessage(String summary, String detail)
+    {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
-    public void onRowSelectedColaborador(SelectEvent event){
+    public void onRowSelectedColaborador(SelectEvent event)
+    {
         FacesMessage msg = new FacesMessage("Colaborador Seleccionado",((Colaborador) event.getObject()).getNombre());
         FacesContext.getCurrentInstance().addMessage("asdasdasdasd",msg);
     }
 
-    public void onRowUnselectColaborador(SelectEvent event){
+    public void onRowUnselectColaborador(SelectEvent event)
+    {
         FacesMessage msg = new FacesMessage("Colaborador selecionado",((Colaborador) event.getObject()).getNombre());
         FacesContext.getCurrentInstance().addMessage("dasdasdasdas",msg);
     }
 
 
-    public void onRowEdit(RowEditEvent event) {
+    public void onRowEdit(RowEditEvent event)
+    {
         colaboradorService.updateColaborador(((Colaborador) event.getObject()));
         System.out.println(((Colaborador) event.getObject()).getNombre());
         FacesMessage msg = new FacesMessage("Colaborador Editado", ((Colaborador) event.getObject()).getPk_idColaborador());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
-    public void onRowCancel(RowEditEvent event) {
+    public void onRowCancel(RowEditEvent event)
+    {
         FacesMessage msg = new FacesMessage("Actualización Cancelada", ((Colaborador) event.getObject()).getPk_idColaborador());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
-    public void onRowDelete(RowEditEvent event) {
+    public void onRowDelete(RowEditEvent event)
+    {
         colaboradorService.deleteColaborador((Colaborador) event.getObject());
         FacesMessage msg = new FacesMessage("Colaborador eliminado", ((Colaborador) event.getObject()).getPk_idColaborador());
         FacesContext.getCurrentInstance().addMessage(null, msg);

@@ -14,13 +14,15 @@ public class DepartamentoService {
 
     @Autowired
     private DepartamentoRepository departamentoRepository;
-    public List<Departamento> getAllDepartamentos() {
+    public List<Departamento> getAllDepartamentos()
+    {
         List<Departamento> list = new ArrayList<Departamento>();
         departamentoRepository.findAll().forEach(e -> list.add(e));
         return list;
     }
 
-    public List<Departamento> getAllDepartamentosActivos() {
+    public List<Departamento> getAllDepartamentosActivos()
+    {
         List<Departamento> list = new ArrayList<Departamento>();
         List<Departamento> listA = new ArrayList<Departamento>();
         departamentoRepository.findAll().forEach(e -> list.add(e));
@@ -32,23 +34,27 @@ public class DepartamentoService {
         return listA;
     }
 
-    public void createDepartamento(Departamento departamento){
+    public void createDepartamento(Departamento departamento)
+    {
         departamento.setEstado("Activo");
         departamentoRepository.save(departamento);
     }
 
-    public void deleteDepartamento(Departamento departamento){
+    public void deleteDepartamento(Departamento departamento)
+    {
         departamento.toString();
         departamento.setEstado("Inactivo");
         departamentoRepository.save(departamento);
     }
 
-    public Departamento findDepartamento(String id){
+    public Departamento findDepartamento(String id)
+    {
 
         return departamentoRepository.findById(id).get();
     }
 
-    public void updateDepartamento(Departamento departamento){
+    public void updateDepartamento(Departamento departamento)
+    {
         departamento.setEstado("Activo");
         departamentoRepository.save(departamento);
     }

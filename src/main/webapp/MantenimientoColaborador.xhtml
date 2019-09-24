@@ -38,7 +38,7 @@
     <div>
 
         <h:form>
-            <p:growl id="msgs" showDetail="true" rendered="#{not facesContext.validationFailed}"><p:autoUpdate/></p:growl>
+            <p:growl id="msgs" showDetail="true" life="2000" rendered="#{not facesContext.validationFailed}"><p:autoUpdate/></p:growl>
 
             <p:contextMenu for="tablaColaborador" >
                 <p:menuitem value="Agregar" onclick="PF('dlAC').show();">
@@ -123,11 +123,11 @@
                                    itemLabel="#{departamento.nombre}"/>
                 </p:selectOneMenu>
                 <p:outputLabel  value="Puesto:" />
-                <p:selectOneMenu value="#{colaboradorBean.colaborador.puesto}" converter="puestoConverter">
-                    <f:selectItems value="#{puestoBean.puestos}" var="puesto"
+                <p:selectOneMenu value="#{colaboradorBean.colaborador.puesto}" converter="puestoConverter" >
+                    <f:selectItems  value="#{puestoBean.puestos}" var="puesto"
                                    itemValue="#{puesto}"
                                    itemLabel="#{puesto.descripcion}"/>
-                </p:selectOneMenu>
+                </p:selectOneMenu >
                 <p:outputLabel value="Nombre:" indicateRequired="true" for="nombre"/>
                 <p:inputText maxlength="100" id="nombre" required="true" validatorMessage="Solo letras" requiredMessage="Ingrese un nombre" value="#{colaboradorBean.colaborador.nombre}">
                     <f:validateRegex  pattern="^[a-zA-Z-ÑñáéíóúÁÉÍÓÚ,]+(\s{0,1}[a-zA-Z-ÑñáéíóúÁÉÍÓÚ, ])*$" />

@@ -16,13 +16,15 @@ public class ColaboradorService {
     @Autowired
     private ColaboradorRepository colaboradorRepository;
 
-    public List<Colaborador> getAllColaboradores() {
+    public List<Colaborador> getAllColaboradores()
+    {
         List<Colaborador> list = new ArrayList<Colaborador>();
         colaboradorRepository.findAll().forEach(e -> list.add(e));
         return list;
     }
 
-    public List<Colaborador> getAllColaboradoresActivos() {
+    public List<Colaborador> getAllColaboradoresActivos()
+    {
         List<Colaborador> list = new ArrayList<Colaborador>();
         List<Colaborador> listA = new ArrayList<Colaborador>();
         colaboradorRepository.findAll().forEach(e -> list.add(e));
@@ -34,28 +36,33 @@ public class ColaboradorService {
         return listA;
     }
 
-    public void createColaborador(Colaborador colaborador){
+    public void createColaborador(Colaborador colaborador)
+    {
         colaborador.setEstado("Activo");
         colaboradorRepository.save(colaborador);
     }
 
-    public void deleteColaborador(Colaborador colaborador){
+    public void deleteColaborador(Colaborador colaborador)
+    {
         colaborador.toString();
         colaborador.setEstado("Inactivo");
         colaboradorRepository.save(colaborador);
     }
 
-    public Colaborador findColaborador(String id){
+    public Colaborador findColaborador(String id)
+    {
         return colaboradorRepository.findById(id).get();
     }
 
-    public void updateColaborador(Colaborador colaborador){
+    public void updateColaborador(Colaborador colaborador)
+    {
         colaborador.setEstado("Activo");
         colaboradorRepository.save(colaborador);
     }
 
 
-    public Colaborador findColaboradorEncargado(Departamento idD, Puesto idP){
+    public Colaborador findColaboradorEncargado(Departamento idD, Puesto idP)
+    {
         return colaboradorRepository.findByDepartamentoAndPuesto(idD,idP);
     }
 

@@ -16,30 +16,37 @@ public class Puesto implements Serializable {
     @OneToMany(mappedBy = "puesto")
     private Set<Colaborador> colaboradores;
 
-    public int getPk_idPuesto() {
+    public int getPk_idPuesto()
+    {
         return pk_idPuesto;
     }
 
-    public void setPk_idPuesto(int pk_idPuesto) {
+    public void setPk_idPuesto(int pk_idPuesto)
+    {
         this.pk_idPuesto = pk_idPuesto;
     }
 
-    public String getDescripcion() {
+    public String getDescripcion()
+    {
         return descripcion;
     }
 
-    public void setDescripcion(String descripcion) {
+    public void setDescripcion(String descripcion)
+    {
         this.descripcion = descripcion;
     }
 
-    public Set<Colaborador> getColaboradores() {
+    public Set<Colaborador> getColaboradores()
+    {
         return colaboradores;
     }
 
-    public void setColaboradores(Set<Colaborador> colaboradores) {
+    public void setColaboradores(Set<Colaborador> colaboradores)
+    {
         this.colaboradores = colaboradores;
     }
 
-    public Puesto() {
+    public Puesto()
+    {
     }
 }

@@ -15,35 +15,43 @@ public class Departamento implements Serializable {
     @OneToMany(mappedBy = "departamento")
     private Set<Colaborador> colaboradores;
 
-    public String getPk_codDepartamento() {
+    public String getPk_codDepartamento()
+    {
         return pk_codDepartamento;
     }
 
-    public void setPk_codDepartamento(String pk_codDepartamento) {
+    public void setPk_codDepartamento(String pk_codDepartamento)
+    {
         this.pk_codDepartamento = pk_codDepartamento;
     }
 
-    public String getNombre() {
+    public String getNombre()
+    {
         return nombre;
     }
 
-    public void setNombre(String nombre) {
+    public void setNombre(String nombre)
+    {
         this.nombre = nombre;
     }
 
-    public String getEstado() {
+    public String getEstado()
+    {
         return estado;
     }
 
-    public void setEstado(String estado) {
+    public void setEstado(String estado)
+    {
         this.estado = estado;
     }
 
-    public Departamento() {
+    public Departamento()
+    {
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "Departamento{" +
                 "pk_coddepartamento='" + pk_codDepartamento + '\'' +
                 ", nombre='" + nombre + '\'' +
