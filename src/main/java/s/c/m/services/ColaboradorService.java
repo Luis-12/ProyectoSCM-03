@@ -25,6 +25,7 @@ public class ColaboradorService {
 
     public List<Colaborador> getAllColaboradoresActivos()
     {
+        Colaborador miC=new Colaborador();
         List<Colaborador> list = new ArrayList<Colaborador>();
         List<Colaborador> listA = new ArrayList<Colaborador>();
         colaboradorRepository.findAll().forEach(e -> list.add(e));

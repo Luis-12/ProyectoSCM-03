@@ -41,6 +41,7 @@ public class ColaboradorBean {
     @PostConstruct
     public String init()
     {
+        Colaborador miC = new Colaborador();
         colaboradores = colaboradorService.getAllColaboradoresActivos();
         return "colaboradorList.xhtml";
     }
