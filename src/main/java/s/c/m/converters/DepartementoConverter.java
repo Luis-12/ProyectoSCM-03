@@ -24,7 +24,7 @@ public class DepartementoConverter implements Converter {
 
     @Override
     public String getAsString(FacesContext facesContext, UIComponent uiComponent, Object departamento) {
-        String idD = ((Departamento)departamento).getPk_codDepartamento();
+        String idD = ((Departamento)departamento).getPk_idDepartamento();
         return idD;//.toString();
     }
 }

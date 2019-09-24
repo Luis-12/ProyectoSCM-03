@@ -9,20 +9,26 @@ import java.util.Set;
 public class Departamento implements Serializable {
 
     @Id
-    private String pk_codDepartamento;
+    private String pk_idDepartamento;
     private String nombre;
     private String estado;
     @OneToMany(mappedBy = "departamento")
     private Set<Colaborador> colaboradores;
 
-    public String getPk_codDepartamento()
-    {
-        return pk_codDepartamento;
+    public String getPk_idDepartamento() {
+        return pk_idDepartamento;
     }
 
-    public void setPk_codDepartamento(String pk_codDepartamento)
-    {
-        this.pk_codDepartamento = pk_codDepartamento;
+    public void setPk_idDepartamento(String pk_idDepartamento) {
+        this.pk_idDepartamento = pk_idDepartamento;
+    }
+
+    public Set<Colaborador> getColaboradores() {
+        return colaboradores;
+    }
+
+    public void setColaboradores(Set<Colaborador> colaboradores) {
+        this.colaboradores = colaboradores;
     }
 
     public String getNombre()
@@ -53,7 +59,7 @@ public class Departamento implements Serializable {
     public String toString()
     {
         return "Departamento{" +
-                "pk_coddepartamento='" + pk_codDepartamento + '\'' +
+                "pk_coddepartamento='" + pk_idDepartamento + '\'' +
                 ", nombre='" + nombre + '\'' +
                 ", estado='" + estado + '\'' +
                 '}';

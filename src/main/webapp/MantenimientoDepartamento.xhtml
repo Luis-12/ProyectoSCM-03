@@ -63,14 +63,14 @@
                          widgetVar="departamentoTabla"
                          resizableColumns="true"
                          selectionMode="single"
-                         rowKey="#{departamento.pk_codDepartamento}"
+                         rowKey="#{departamento.pk_idDepartamento}"
                          paginator="true"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                          rowsPerPageTemplate="10"
                          selection="#{departamentoBean.selectDepartamento}" style="margin-top: 20px">
                 <p:autoUpdate />
-                <p:column headerText="Código" filterBy="#{departamento.pk_codDepartamento}">
-                    <h:outputText value="#{departamento.pk_codDepartamento}" />
+                <p:column headerText="Código" filterBy="#{departamento.pk_idDepartamento}">
+                    <h:outputText value="#{departamento.pk_idDepartamento}" />
                 </p:column>
                 <p:column headerText="Nombre" filterBy="#{departamento.nombre}">
                     <h:outputText value="#{departamento.nombre}" />
@@ -90,7 +90,7 @@
             <h:panelGrid columns="2"  id="panel2">
                 <p:outputLabel value="Código de Departamento" indicateRequired="true" for="pk_codDepartamento"/>
                 <p:inputText maxlength="6" id="pk_codDepartamento" required="true" requiredMessage="Ingrese un código"
-                             validatorMessage="Solo se aceptan mayúsculas y no se permiten números" value="#{departamentoBean.departamento.pk_codDepartamento}">
+                             validatorMessage="Solo se aceptan mayúsculas y no se permiten números" value="#{departamentoBean.departamento.pk_idDepartamento}">
                     <f:validateRegex pattern="[A-Z]+" />
                 </p:inputText>
                 <p:watermark value="Código" for="pk_codDepartamento"/>
@@ -119,7 +119,7 @@
             <h:panelGrid columns="2"  id="panel3">
                 <p:outputLabel value="Código de Departamento" indicateRequired="true" for="pk_codDepartamentoA"/>
                 <p:inputText id="pk_codDepartamentoA" disabled="true"
-                             value="#{departamentoBean.selectDepartamento.pk_codDepartamento}"/>
+                             value="#{departamentoBean.selectDepartamento.pk_idDepartamento}"/>
                 <p:watermark value="Código" for="pk_codDepartamentoA"/>
                 <p:message for="pk_codDepartamentoA"/>
                 <p:outputLabel value="Nombre:" indicateRequired="true" for="nombreA"/>

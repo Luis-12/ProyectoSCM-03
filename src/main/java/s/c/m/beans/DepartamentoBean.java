@@ -88,7 +88,7 @@ public class DepartamentoBean {
             throw new IllegalArgumentException("no se provee el id");
         }
         for (Departamento d : departamentos) {
-            if (id.equals(d.getPk_codDepartamento())) {
+            if (id.equals(d.getPk_idDepartamento())) {
                 return d;
             }
         }
@@ -121,11 +121,9 @@ public class DepartamentoBean {
     public void buscaEncargado()
     {
 
-        String idDepSelc = selectDepartamento.getPk_codDepartamento();//Saco id dept
+        String idDepSelc = selectDepartamento.getPk_idDepartamento();//Saco id dept
         int idPuesto = puestoService.findIdPuesto("Jefe de Departamento").getPk_idPuesto();//saco id puesto
         Puesto puesto = puestoService.findIdPuesto("Jefe de Departamento");
-        //System.out.println(colaboradorService.findColaboradorEncargado(selectDepartamento,puesto).getNombre());
-        //System.out.println( "id de puesto:" + idPuesto);
         if (colaboradorService.findColaboradorEncargado(selectDepartamento, puesto) != null) {
             colaborador = colaboradorService.findColaboradorEncargado(selectDepartamento, puesto);
         } else {
@@ -166,7 +164,7 @@ public class DepartamentoBean {
         FacesMessage mensaje = null;
         boolean existeDepartamento = false;
         for (Departamento d : departamentos) {
-            if (departamento.getPk_codDepartamento().equals(d.getPk_codDepartamento())) {
+            if (departamento.getPk_idDepartamento().equals(d.getPk_idDepartamento())) {
                 existeDepartamento = true;
                 break;
             } else {
@@ -228,20 +226,20 @@ public class DepartamentoBean {
     {
         departamentoService.updateDepartamento(((Departamento) event.getObject()));
         System.out.println(((Departamento) event.getObject()).getNombre());
-        FacesMessage msg = new FacesMessage("Departamento Editado", ((Departamento) event.getObject()).getPk_codDepartamento());
+        FacesMessage msg = new FacesMessage("Departamento Editado", ((Departamento) event.getObject()).getPk_idDepartamento());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public void onRowCancel(RowEditEvent event)
     {
-        FacesMessage msg = new FacesMessage("Actualización Cancelada", ((Departamento) event.getObject()).getPk_codDepartamento());
+        FacesMessage msg = new FacesMessage("Actualización Cancelada", ((Departamento) event.getObject()).getPk_idDepartamento());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public void onRowDelete(RowEditEvent event)
     {
         departamentoService.deleteDepartamento((Departamento) event.getObject());
-        FacesMessage msg = new FacesMessage("Departamento eliminado", ((Departamento) event.getObject()).getPk_codDepartamento());
+        FacesMessage msg = new FacesMessage("Departamento eliminado", ((Departamento) event.getObject()).getPk_idDepartamento());
         FacesContext.getCurrentInstance().addMessage(null, msg);
         departamentos = departamentoService.getAllDepartamentosActivos();
     }

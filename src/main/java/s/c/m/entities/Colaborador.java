@@ -11,7 +11,7 @@ public class Colaborador implements Serializable {
     @Id
     private String pk_idColaborador;
     @OneToOne
-    @JoinColumn(name = "fk_codDepartamento",nullable = false)
+    @JoinColumn(name = "fk_idDepartamento",nullable = false)
     private Departamento departamento;
     @OneToOne
     @JoinColumn(name = "fk_idPuesto",nullable = false)
