@@ -14,7 +14,33 @@ h1{
     color:#404041;
 }
 
-.ui-selectonemenu-panel{
+
+.ui-button .ui-button-text {
+
+    display: block;
+    line-height: normal;
+    font-family: GestaW01-Medium;
+
+}
+
+
+.ui-widget .ui-widget {
+    font-size: 1em;
+    font-family: GestaW01-Medium;
+}
+.ui-widget {
+
+    font-size: 1.1em;
+    font-family: GestaW01-Medium;
+
+}
+
+.ui-selectonemenu {
+    cursor: pointer;
+    display: block;
+}
+
+.ui-selectonemenu-panel {
     width: 15%;
 }
 #h1Centro{
@@ -182,6 +208,8 @@ div {
     margin-top: 75px;
     position: fixed;
     bottom: 0;
+    font-family: GestaW01-Medium;
+
 
 }
 

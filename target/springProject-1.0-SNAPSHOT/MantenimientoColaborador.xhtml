@@ -38,7 +38,7 @@
     <div>
 
         <h:form>
-            <p:growl id="msgs" showDetail="true" life="2000" rendered="#{not facesContext.validationFailed}"><p:autoUpdate/></p:growl>
+            <p:growl id="msgs" showDetail="true" life="3000" rendered="#{not facesContext.validationFailed}"><p:autoUpdate/></p:growl>
 
             <p:contextMenu for="tablaColaborador" >
                 <p:menuitem value="Agregar" onclick="PF('dlAC').show();">
@@ -142,7 +142,7 @@
                 <p:watermark value="Clave:" for="clave"/>
                 <p:message for="clave"/>
                 <p:outputLabel value="Teléfono" indicateRequired="true" for="telefono"/>
-                <p:inputText maxlength="9" id="telefono" required="true" requiredMessage="Ingrese un teléfono" value="#{colaboradorBean.colaborador.telefono}">
+                <p:inputText maxlength="9" id="telefono" required="true"  requiredMessage="Ingrese un teléfono" value="#{colaboradorBean.colaborador.telefono}">
                     <f:validateLength minimum="8"/>
                 </p:inputText>
                 <p:watermark value="Teléfono" for="telefono"/>
