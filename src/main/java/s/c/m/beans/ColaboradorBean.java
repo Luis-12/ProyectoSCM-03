@@ -159,7 +159,7 @@ public class ColaboradorBean {
         if (selectcolaborador==null) {
             addMessage("Aviso", "Debe Seleccionar un Colaborador."); //si esta vacio muetra este mensaje
         } else {
-            current.executeScript("PF('dlCFD').show();"); //si no esta vacio muestra el dialogo
+            current.executeScript("PF('dlEC').show();"); //si no esta vacio muestra el dialogo
         }
 
     }

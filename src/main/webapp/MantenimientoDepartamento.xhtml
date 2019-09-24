@@ -46,18 +46,10 @@
                 </p:menuitem>
                 <p:menuitem value="Actualizar" update="dlUC"  action="#{departamentoBean.checkSelection}"/>
                 <p:menuitem value="Consultar datos de encargado" update="dE"  action="#{departamentoBean.checkSelectionD}"/>
-                <p:menuitem value="Eliminar" update="dlCFD" icon="ui-icon-close" action="#{departamentoBean.showconfirm}" />
+                <p:menuitem value="Eliminar" update="dlCFD" action="#{departamentoBean.showconfirm}" icon="ui-icon-close"/>
             </p:contextMenu>
 
-            <p:dialog id="dlCFD" header="Confirmación"  showEffect="fade" hideEffect="fade"
-                      widgetVar="dlCFD" modal="true" resizable="false" minWidth="300">
-                <h6 >¿Está seguro de eliminar este registro?</h6>
-                <hr/>
-                <center>
-                    <p:commandButton value="Sí"  styleClass="ui-confirmdialog-yes"  actionListener="#{departamentoBean.delete}" onclick="PF('dlCFD').hide();"  style="margin-right: 30px" />
-                    <p:commandButton value="No"  styleClass="ui-confirmdialog-no"  style="margin-right: 20px"  onclick="PF('dlCFD').hide();"/>
-                </center>
-            </p:dialog>
+
             <p:dataTable var="departamento" value="#{departamentoBean.departamentos}" id="tablaDepartamento"
                          emptyMessage="No se han encontrado departamentos"
                          widgetVar="departamentoTabla"
@@ -153,7 +145,38 @@
         </p:panelGrid>
     </p:dialog>
 
-
+    <p:dialog id="dlED" header="Eliminar Departamento"  showEffect="fade" hideEffect="fade"
+              widgetVar="dlED" modal="true" resizable="false" minWidth="450"  >
+        <p:ajax event="close" update="dlED" listener="#{departamentoBean.close}" />
+        <h:form id="EliminarDepartamento">
+            <p:autoUpdate/>
+            <p:growl id="msgs5" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
+            <h:panelGrid columns="2"  id="panel5">
+                <p:outputLabel value="Justificación:" indicateRequired="true" for="justificacion"/>
+                <p:inputTextarea rows="1" cols="33" id="justificacion" required="true" validatorMessage="Solo letras"
+                                 requiredMessage="Ingrese una justificación"
+                                 value="#{departamentoBean.selectDepartamento.justificacion}">
+                    <f:validateRegex  pattern="^[a-zA-Z-ÑñáéíóúÁÉÍÓÚ,]+(\s{0,1}[a-zA-Z-ÑñáéíóúÁÉÍÓÚ, ])*$" />
+                </p:inputTextarea>
+                <p:watermark value="Ingrese una justificación de por que se elimino el departamento" for="justificacion"/>
+            </h:panelGrid>
+            <center>
+                <p:commandButton value="Eliminar"
+                                 onclick="PF('dlCFD').show();"
+                                 style="margin-right:20px;margin-top: 20px"
+                                 styleClass="ui-priority-primary" />
+            </center>
+        </h:form>
+    </p:dialog>
+    <p:dialog id="dlCFD" header="Confirmación"  showEffect="fade" hideEffect="fade"
+              widgetVar="dlCFD" modal="true" resizable="false" minWidth="300">
+        <h6 >¿Está seguro de eliminar este registro?</h6>
+        <hr/>
+        <center>
+            <p:commandButton value="Sí"  styleClass="ui-confirmdialog-yes"  actionListener="#{departamentoBean.delete}" onclick="ocultaEliminar()"  style="margin-right: 30px" />
+            <p:commandButton value="No"  styleClass="ui-confirmdialog-no"  style="margin-right: 20px"  onclick="ocultaEliminar()"/>
+        </center>
+    </p:dialog>
 
     <div id="footer">
         <br/>
@@ -168,6 +191,11 @@
             else {
                 PF('dlAC').jq.effect("shake", {times:1500}, 100);
             }
+        }
+
+        function ocultaEliminar(){
+            PF('dlCFD').hide();
+            PF('dlED').hide();
         }
     </script>
 </h:body>

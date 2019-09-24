@@ -141,7 +141,11 @@ public class DepartamentoBean {
         if (selectDepartamento == null) {
             addMessage("Aviso", "Debe Seleccionar un Departamento."); //si esta vacio muetra este mensaje
         } else {
-            current.executeScript("PF('dlCFD').show();"); //si no esta vacio muestra el dialogo
+            if(colaboradorService.findColaboradorDepartamento(selectDepartamento).size() != 0){
+                addMessage("Aviso", "No puede desactivar un departamento con colaboradores asignados."); //si esta vacio muetra este mensaje
+            }else{
+            current.executeScript("PF('dlED').show();"); //si no esta vacio muestra el dialogo
+            }
         }
 
     }

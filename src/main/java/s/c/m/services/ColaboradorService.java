@@ -40,6 +40,7 @@ public class ColaboradorService {
     public void createColaborador(Colaborador colaborador)
     {
         colaborador.setEstado("Activo");
+        colaborador.setJustificacion("NA");
         colaboradorRepository.save(colaborador);
     }
 
@@ -64,7 +65,18 @@ public class ColaboradorService {
 
     public Colaborador findColaboradorEncargado(Departamento idD, Puesto idP)
     {
-        return colaboradorRepository.findByDepartamentoAndPuesto(idD,idP);
+        return colaboradorRepository.findByDepartamentoAndPuestoAndEstado(idD,idP,"Activo");
     }
 
+    public List<Colaborador> findColaboradorDepartamento(Departamento idD){
+        List<Colaborador> list = new ArrayList<Colaborador>();
+        List<Colaborador> listA = new ArrayList<Colaborador>();
+        colaboradorRepository.findByDepartamento(idD).forEach(e -> list.add(e));
+        for(Colaborador c: list){
+            if(c.getEstado().equals("Activo")){
+                listA.add(c);
+            }
+        }
+        return listA;
+    }
 }

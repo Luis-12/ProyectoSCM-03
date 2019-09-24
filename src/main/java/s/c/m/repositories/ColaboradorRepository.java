@@ -14,5 +14,6 @@ import java.util.List;
 
 @Repository
 public interface ColaboradorRepository extends CrudRepository<Colaborador, String> {
-    Colaborador findByDepartamentoAndPuesto(Departamento idD,Puesto idP);
+    Colaborador findByDepartamentoAndPuestoAndEstado(Departamento idD,Puesto idP,String estado);
+    List<Colaborador> findByDepartamento(Departamento idD);
 }

@@ -22,6 +22,7 @@ public class Colaborador implements Serializable {
     private String correo;
     private Date fechaInicioLaboral;
     private String estado;
+    private String justificacion;
 
     public String getPk_idColaborador()
     {
@@ -112,6 +113,10 @@ public class Colaborador implements Serializable {
     {
         this.estado = estado;
     }
+
+    public String getJustificacion() { return justificacion; }
+
+    public void setJustificacion(String justificacion) { this.justificacion = justificacion; }
 
     public Colaborador()
     {
