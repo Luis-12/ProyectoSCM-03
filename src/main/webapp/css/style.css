@@ -8,6 +8,15 @@
     font-weight: normal;
     font-style: normal;
 }
+
+.required:before { content:"* ";color: red; }
+
+.ui-datatable-empty-message
+{
+    color: darkred;
+}
+
+
 h1{
 
     font-family:GestaW01-Medium;

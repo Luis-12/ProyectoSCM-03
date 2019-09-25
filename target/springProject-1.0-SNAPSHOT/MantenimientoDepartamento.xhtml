@@ -75,25 +75,27 @@
 
     <p:dialog id="dlAC" header="Agregar Departamento" showEffect="fade" hideEffect="fade"
               widgetVar="dlAC" modal="true" resizable="false" minWidth="200">
-        <p:ajax event="close" update="dlAC" listener="#{departamentoBean.close}" />
+        <p:ajax event="close" update="dlAC" resetValues="true" listener="#{departamentoBean.close}" />
         <h:form id="AgregarDepartamento">
-            <p:autoUpdate/>
             <p:growl id="msgs2" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
             <h:panelGrid columns="2"  id="panel2">
-                <p:outputLabel value="Código de Departamento" indicateRequired="true" for="pk_codDepartamento"/>
+                <p:outputLabel value="Código de Departamento" styleClass="required" indicateRequired="false" for="pk_codDepartamento"/>
                 <p:inputText maxlength="6" id="pk_codDepartamento" required="true" requiredMessage="Ingrese un código"
                              validatorMessage="Solo se aceptan mayúsculas y no se permiten números" value="#{departamentoBean.departamento.pk_idDepartamento}">
                     <f:validateRegex pattern="[A-Z]+" />
+                    <f:ajax event="blur" execute="@this" render="Codmessage" />
                 </p:inputText>
                 <p:watermark value="Código" for="pk_codDepartamento"/>
-                <p:message for="pk_codDepartamento"/>
-                <p:outputLabel value="Nombre:" indicateRequired="true" for="nombre"/>
+                <p:message id="Codmessage" for="pk_codDepartamento"/>
+
+                <p:outputLabel value="Nombre:" styleClass="required" indicateRequired="false" for="nombre"/>
                 <p:inputText maxlength="50"  id="nombre" required="true" requiredMessage="Ingrese un nombre" validatorMessage="Solo letras"
                              value="#{departamentoBean.departamento.nombre}">
                     <f:validateRegex pattern="^[a-zA-Z-ÑñáéíóúÁÉÍÓÚ,]+(\s{0,1}[a-zA-Z-ÑñáéíóúÁÉÍÓÚ, ])*$"/>
+                    <f:ajax event="blur" execute="@this" render="Nomessage" />
                 </p:inputText>
                 <p:watermark value="Nombre" for="nombre"/>
-                <p:message for="nombre"/>
+                <p:message id="Nomessage" for="nombre"/>
 
             </h:panelGrid>
             <center>
@@ -109,18 +111,20 @@
         <h:form id="actualizarDepartamento">
             <p:growl id="msgs3" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
             <h:panelGrid columns="2"  id="panel3">
-                <p:outputLabel value="Código de Departamento" indicateRequired="true" for="pk_codDepartamentoA"/>
+                <p:outputLabel value="Código de Departamento" styleClass="required" indicateRequired="false" for="pk_codDepartamentoA"/>
                 <p:inputText id="pk_codDepartamentoA" disabled="true"
                              value="#{departamentoBean.selectDepartamento.pk_idDepartamento}"/>
                 <p:watermark value="Código" for="pk_codDepartamentoA"/>
-                <p:message for="pk_codDepartamentoA"/>
-                <p:outputLabel value="Nombre:" indicateRequired="true" for="nombreA"/>
+                <p:message ID="Cmessage" for="pk_codDepartamentoA"/>
+
+                <p:outputLabel value="Nombre:" styleClass="required" indicateRequired="false" for="nombreA"/>
                 <p:inputText maxlength="50" id="nombreA" required="true" requiredMessage="Ingrese un nombre" validatorMessage="Solo letras"
                              value="#{departamentoBean.selectDepartamento.nombre}">
                 <f:validateRegex pattern="^[a-zA-Z-ÑñáéíóúÁÉÍÓÚ,]+(\s{0,1}[a-zA-Z-ÑñáéíóúÁÉÍÓÚ, ])*$"/>
+                    <f:ajax event="blur" execute="@this" render="Nmessage" />
                 </p:inputText>
                 <p:watermark value="Nombre" for="nombreA"/>
-                <p:message for="nombreA"/>
+                <p:message id="Nmessage" for="nombreA"/>
             </h:panelGrid>
             <center>
                 <p:commandButton value="Actualizar" id="ajax2" update="msgs3,panel3"
