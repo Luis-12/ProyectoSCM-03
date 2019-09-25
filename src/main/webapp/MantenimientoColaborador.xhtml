@@ -142,7 +142,7 @@
                 <p:message id="Clmessage" for="clave"/>
 
                 <p:outputLabel value="Teléfono" styleClass="required" indicateRequired="false" for="telefono"/>
-                <p:inputText maxlength="9" id="telefono" required="true" validatorMessage="Solo números de 8 dígitos" requiredMessage="Ingrese un teléfono"  value="#{colaboradorBean.colaborador.telefono}">
+                <p:inputText maxlength="9" id="telefono" required="true" converterMessage="Ingrese solo números"  validatorMessage="Minimo 8 dígitos" requiredMessage="Ingrese un teléfono"  value="#{colaboradorBean.colaborador.telefono}">
                     <f:validateLength minimum="8"/>
                     <f:ajax event="blur" execute="@this" render="Telmessage" />
                 </p:inputText>
@@ -215,7 +215,7 @@
                 <p:message id="Clamessage" for="claveA"/>
 
                 <p:outputLabel value="Teléfono" styleClass="required" indicateRequired="false" for="telefonoA"/>
-                <p:inputText id="telefonoA"  maxlength="9" converterMessage="Ingrese solo números" required="true" requiredMessage="Ingrese un teléfono"
+                <p:inputText id="telefonoA"  maxlength="9" converterMessage="Ingrese solo números" validatorMessage="Minimo 8 dígitos"  required="true" requiredMessage="Ingrese un teléfono"
                              value="#{colaboradorBean.selectcolaborador.telefono}">
                     <f:ajax event="blur" execute="@this" render="Telemessage" />
                     <f:validateLength minimum="8"/>

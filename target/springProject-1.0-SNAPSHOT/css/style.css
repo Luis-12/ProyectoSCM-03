@@ -32,6 +32,19 @@ h1{
 
 }
 
+.ui-messages-error, .ui-message-error {
+    color: #b94a48;
+    color: #b94a48;
+    color: #b94a48;
+    width: -moz-fit-content;
+    display: table-caption;
+    position: static;
+}
+
+.ui-inputfield, .ui-widget-content .ui-inputfield{
+
+    width: 100%;
+}
 
 .ui-widget .ui-widget {
     font-size: 1em;
@@ -44,9 +57,11 @@ h1{
 
 }
 
+
 .ui-selectonemenu {
     cursor: pointer;
-    display: block;
+    display: inline-grid;
+    width: -moz-available;
 }
 
 .ui-selectonemenu-panel {
