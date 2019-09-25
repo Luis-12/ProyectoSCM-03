@@ -40,7 +40,6 @@ public class ColaboradorService {
     public void createColaborador(Colaborador colaborador)
     {
         colaborador.setEstado("Activo");
-        colaborador.setJustificacion("NA");
         colaboradorRepository.save(colaborador);
     }
 
