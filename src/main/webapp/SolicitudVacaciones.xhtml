@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
+    <link href="//db.onlinewebfonts.com/c/f977213040abc486420980aae60e0db3?family=GestaW01-Medium" rel="stylesheet" type="text/css"/>
+    <title>Solicitud de Vacaciones</title>
+
+</h:head>
+
+<h:body >
+<div id="header">
+    <div id="logo"></div>
+</div>
+
+    <div id="top">
+        <h:form>
+            <p:commandButton id="dynaButton" value="Menú" type="button"  icon="ui-icon-home"/>
+            <p:menu toggleable="true" overlay="true" trigger="dynaButton" my="left top" at="left bottom">
+
+                <p:submenu label="Colaborador">
+                    <p:menuitem value="Incorporar Colaborador" action="#{colaboradorBean.checkDepartamento}" icon="ui-icon-plus"/>
+                </p:submenu>
+                <p:submenu label="Departamento">
+                    <p:menuitem value="Mantenimiento Departamento" outcome="MantenimientoDepartamento.xhtml" icon="ui-icon-wrench"/>
+                </p:submenu>
+                <p:submenu label="Informes" disabled="true">
+                    <p:menuitem  disabled="true" value="Reporte X" icon="ui-icon-clipboard"/>
+                </p:submenu>
+                <p:submenu label="Vacaciones" >
+                    <p:menuitem  value="Solicitud Vacaciones" outcome="SolicitudVacaciones.xhtml" icon="ui-icon-mail-closed"/>
+                    <p:menuitem  value="Lista Solicitudes"  outcome="listaSolicitud.xhtml" icon="ui-icon-clipboard"/>
+                </p:submenu>
+
+            </p:menu></h:form>
+    </div>
+
+    <h1 id="h1Centro">Solicitud de Vacaciones</h1>
+
+
+    <div id="solicitud">
+    <br/>
+        <p:outputLabel value="Fecha de Inicio Vacaciones: "  styleClass="required"  indicateRequired="false" for="fechaVacaciones"/>
+        <p:calendar autocomplete="off"  id="fechaVacaciones" required="true" requiredMessage="Ingrese la Fecha" value="" pattern="yyyy-MM-dd">
+        </p:calendar>
+        <p:watermark value="Fecha de Inicio Vacaciones" for="fechaVacaciones"/>
+        <p:message for="fechaVacaciones"/>
+
+
+        <p:outputLabel value="Fecha Fin Vacaciones:       "  styleClass="required"  indicateRequired="false" for="fechaFinal"/>
+        <p:calendar autocomplete="off"  id="fechaFinal" required="true" requiredMessage="Ingrese la Fecha" value="" pattern="yyyy-MM-dd">
+        </p:calendar>
+        <p:watermark value="Fecha Fin Vacaciones" for="fechaFinal"/>
+        <p:message for="fechaFinal"/>
+
+        <p:commandButton value="Enviar" styleClass="envia" />
+        <br/>
+    </div>
+
+
+
+    <div id="footer">
+        <br/>
+        © &nbsp; &nbsp; SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA
+    </div>
+
+</h:body>
+</html>
