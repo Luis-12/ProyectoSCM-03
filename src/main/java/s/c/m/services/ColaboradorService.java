@@ -9,6 +9,7 @@ import s.c.m.repositories.ColaboradorRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ColaboradorService {
@@ -50,10 +51,12 @@ public class ColaboradorService {
         colaboradorRepository.save(colaborador);
     }
 
-    public Colaborador findColaborador(String id)
+    public Optional<Colaborador> findColaborador(String id)
     {
-        return colaboradorRepository.findById(id).get();
+        return colaboradorRepository.findById(id);
     }
+
+
 
     public void updateColaborador(Colaborador colaborador)
     {

@@ -123,6 +123,7 @@ public class DepartamentoBean {
 
         String idDepSelc = selectDepartamento.getPk_idDepartamento();//Saco id dept
         int idPuesto = puestoService.findIdPuesto("Jefe de Departamento").getPk_idPuesto();//saco id puesto
+        //colaborador=colaboradorService.findColaborador2("asdasdass");
         Puesto puesto = puestoService.findIdPuesto("Jefe de Departamento");
         if (colaboradorService.findColaboradorEncargado(selectDepartamento, puesto) != null) {
             colaborador = colaboradorService.findColaboradorEncargado(selectDepartamento, puesto);
