@@ -16,12 +16,9 @@ import s.c.m.services.DepartamentoService;
 import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
-import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -32,25 +29,19 @@ import java.util.regex.Pattern;
 
 @ManagedBean
 @Scope("session")
-public class ColaboradorBean implements Serializable {
-
-    private static final long serialVersionUID = 7765876811740798583L;
+public class ColaboradorBean {
     @Autowired
     ColaboradorService colaboradorService;
     private Colaborador colaborador = new Colaborador();
     private Colaborador colaborador1 = new Colaborador();
-    private boolean loggedIn;
-
     private Colaborador selectcolaborador=new Colaborador();
     private Departamento departamento = new Departamento();
     private Puesto puesto = new Puesto();
     private List<Colaborador> colaboradores;
-    private  boolean disable;
+    private  boolean loggedIn;
     @Autowired
     DepartamentoService departamentoService;
     private Date fecha;
-
-
 
 
     @PostConstruct
@@ -66,14 +57,6 @@ public class ColaboradorBean implements Serializable {
     {
         Calendar c = Calendar.getInstance();
         return c.getTime();
-    }
-
-    public boolean isLoggedIn() {
-        return loggedIn;
-    }
-
-    public void setLoggedIn(boolean loggedIn) {
-        this.loggedIn = loggedIn;
     }
 
     public void setFecha(Date fecha)
@@ -131,6 +114,48 @@ public class ColaboradorBean implements Serializable {
     {
         this.colaboradores = colaboradores;
     }
+
+    public boolean isLoggedIn() {
+        return loggedIn;
+    }
+
+    public void setLoggedIn(boolean loggedIn) {
+        this.loggedIn = loggedIn;
+    }
+
+    public String doLogin() {
+
+        colaborador1 = colaboradorService.findColaborador(colaborador.getPk_idColaborador());
+        String dbUsername = colaborador1.getPk_idColaborador();
+        String dbPassword = colaborador1.getClave();
+        if (colaborador.getPk_idColaborador().equals(dbUsername) && colaborador.getClave().equals(dbPassword)) {
+            colaborador.setNombre(colaborador1.getNombre());
+            loggedIn = true;
+            return "/administracion/MantenimientoColaborador.xhtml?faces-redirect=true";
+        }
+
+        FacesMessage msg = new FacesMessage("Login error!", "ERROR MSG");
+        msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+
+        return "/login.xhtml";
+
+    }
+
+
+
+    public String doLogout() {
+        // Set the paremeter indicating that user is logged in to false
+        loggedIn = false;
+
+        FacesMessage msg = new FacesMessage("Salio", "INFO");
+        msg.setSeverity(FacesMessage.SEVERITY_INFO);
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        //  return navigationBean.redirectToLogin();
+        return "/login.xhtml?faces-redirect=true";
+    }
+
+
 
     public void create()
     {
@@ -221,48 +246,12 @@ public class ColaboradorBean implements Serializable {
 
 
 
-    public String doLogin() {
-        Optional<Colaborador> colaboradorOptional = colaboradorService.findColaborador(colaborador.getPk_idColaborador());
-        if (colaboradorOptional.isPresent())
-            colaborador1 = colaboradorOptional.get();
-        String dbUsername = colaborador1.getPk_idColaborador();
-        String dbPassword = colaborador1.getClave();
-        if (colaborador.getPk_idColaborador().equals(dbUsername) && colaborador.getClave().equals(dbPassword)) {
-            colaborador.setNombre(colaborador1.getNombre());
-            loggedIn = true;
-            return "/administracion/MantenimientoColaborador.xhtml?faces-redirect=true";
-        		}
-
-        FacesMessage msg = new FacesMessage("Login error!", "ERROR MSG");
-        msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-
-        return "/login.xhtml";
-
-    }
-
-
-
-    public String doLogout() {
-        // Set the paremeter indicating that user is logged in to false
-        loggedIn = false;
-
-        FacesMessage msg = new FacesMessage("Salio", "INFO");
-        msg.setSeverity(FacesMessage.SEVERITY_INFO);
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-      //  return navigationBean.redirectToLogin();
-        return "/login.xhtml?faces-redirect=true";
-    }
-
-
-
-
-    /*public void find()
+    public void find()
     {
         String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("ColaboradorIdBusqueda");
         colaboradores.clear();
         colaboradores.add(colaboradorService.findColaborador(id));
-    }*/
+    }
 
     public void close()
     {
