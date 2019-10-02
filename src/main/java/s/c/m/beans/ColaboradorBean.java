@@ -128,6 +128,7 @@ public class ColaboradorBean {
         colaborador1 = colaboradorService.findColaborador(colaborador.getPk_idColaborador());
         String dbUsername = colaborador1.getPk_idColaborador();
         String dbPassword = colaborador1.getClave();
+
         if (colaborador.getPk_idColaborador().equals(dbUsername) && colaborador.getClave().equals(dbPassword)) {
             colaborador.setNombre(colaborador1.getNombre());
             loggedIn = true;

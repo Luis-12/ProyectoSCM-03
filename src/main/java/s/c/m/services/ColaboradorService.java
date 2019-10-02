@@ -51,9 +51,9 @@ public class ColaboradorService {
         colaboradorRepository.save(colaborador);
     }
 
-    public Optional<Colaborador> findColaborador(String id)
+    public Colaborador findColaborador(String id)
     {
-        return colaboradorRepository.findById(id);
+        return colaboradorRepository.findById(id).get();
     }
 
 
