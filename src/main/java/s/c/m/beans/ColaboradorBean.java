@@ -22,20 +22,23 @@ import javax.faces.validator.ValidatorException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
 @ManagedBean
+@Scope("session")
 public class ColaboradorBean {
     @Autowired
     ColaboradorService colaboradorService;
     private Colaborador colaborador = new Colaborador();
+    private Colaborador colaborador1 = new Colaborador();
     private Colaborador selectcolaborador=new Colaborador();
     private Departamento departamento = new Departamento();
     private Puesto puesto = new Puesto();
     private List<Colaborador> colaboradores;
-    private  boolean disable;
+    private  boolean loggedIn;
     @Autowired
     DepartamentoService departamentoService;
     private Date fecha;
@@ -111,6 +114,48 @@ public class ColaboradorBean {
     {
         this.colaboradores = colaboradores;
     }
+
+    public boolean isLoggedIn() {
+        return loggedIn;
+    }
+
+    public void setLoggedIn(boolean loggedIn) {
+        this.loggedIn = loggedIn;
+    }
+
+    public String doLogin() {
+
+        colaborador1 = colaboradorService.findColaborador(colaborador.getPk_idColaborador());
+        String dbUsername = colaborador1.getPk_idColaborador();
+        String dbPassword = colaborador1.getClave();
+        if (colaborador.getPk_idColaborador().equals(dbUsername) && colaborador.getClave().equals(dbPassword)) {
+            colaborador.setNombre(colaborador1.getNombre());
+            loggedIn = true;
+            return "/administracion/MantenimientoColaborador.xhtml?faces-redirect=true";
+        }
+
+        FacesMessage msg = new FacesMessage("Login error!", "ERROR MSG");
+        msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+
+        return "/login.xhtml";
+
+    }
+
+
+
+    public String doLogout() {
+        // Set the paremeter indicating that user is logged in to false
+        loggedIn = false;
+
+        FacesMessage msg = new FacesMessage("Salio", "INFO");
+        msg.setSeverity(FacesMessage.SEVERITY_INFO);
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        //  return navigationBean.redirectToLogin();
+        return "/login.xhtml?faces-redirect=true";
+    }
+
+
 
     public void create()
     {
