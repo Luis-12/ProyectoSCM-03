@@ -41,7 +41,7 @@
 
             <p:commandButton style='float: right;'  id="dynaButton1" value="Salir" type="button"  icon="ui-icon-person"/>
             <p:menu style='float: right;'  overlay="true" trigger="dynaButton1" my="left top" at="left bottom">
-                <p:submenu label="#{colaboradorBean.colaborador.nombre}">
+                <p:submenu label="#{colaboradorBean.colaboradorlogueado.nombre}">
                     <p:menuitem value="Salir" action="#{colaboradorBean.doLogout}" icon="ui-icon-person" />
                 </p:submenu>
             </p:menu>
@@ -198,7 +198,7 @@
 
     <div id="footer">
         <br/>
-        <a href="http://localhost:8090/ProyectoSCM_03_war/acerca.xhtml"> ©</a> SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA
+        <a href="http://localhost:8080/ProyectoSCM_03_war/acerca.xhtml"> ©</a> SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA
 
     </div>
     <script type="text/javascript">

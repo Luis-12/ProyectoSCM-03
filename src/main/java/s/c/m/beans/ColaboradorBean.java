@@ -34,6 +34,7 @@ public class ColaboradorBean {
     ColaboradorService colaboradorService;
     private Colaborador colaborador = new Colaborador();
     private Colaborador colaborador1 = new Colaborador();
+    private Colaborador colaboradorlogueado = new Colaborador();
     private Colaborador selectcolaborador=new Colaborador();
     private Departamento departamento = new Departamento();
     private Puesto puesto = new Puesto();
@@ -123,15 +124,21 @@ public class ColaboradorBean {
         this.loggedIn = loggedIn;
     }
 
-    public String doLogin() {
+    public Colaborador getColaboradorlogueado() {
+        return colaboradorlogueado;
+    }
 
-        try {
-            colaborador1 = colaboradorService.findColaborador(colaborador.getPk_idColaborador());
+    public void setColaboradorlogueado(Colaborador colaboradorlogueado) {
+        this.colaboradorlogueado = colaboradorlogueado;
+    }
+
+    public String doLogin() {
+            colaborador1 = colaboradorService.findColaborador(colaboradorlogueado.getPk_idColaborador());
             String dbUsername = colaborador1.getPk_idColaborador();
             String dbPassword = colaborador1.getClave();
 
-            if (colaborador.getPk_idColaborador().equals(dbUsername) && colaborador.getClave().equals(dbPassword)) {
-                colaborador.setNombre(colaborador1.getNombre());
+            if (colaboradorlogueado.getPk_idColaborador().equals(dbUsername) && colaboradorlogueado.getClave().equals(dbPassword)) {
+                colaboradorlogueado.setNombre(colaborador1.getNombre());
                 loggedIn = true;
                 return "/administracion/MantenimientoColaborador.xhtml?faces-redirect=true";
             }
@@ -141,11 +148,6 @@ public class ColaboradorBean {
             FacesContext.getCurrentInstance().addMessage(null, msg);
 
             return "/login.xhtml";
-        }catch (Exception e){
-            return null;
-        }finally {
-            colaborador = new Colaborador();
-        }
     }
 
 
