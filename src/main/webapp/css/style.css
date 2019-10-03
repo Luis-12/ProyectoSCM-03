@@ -9,10 +9,17 @@
     font-style: normal;
 }
 
+#page2 {
+    width: 100%;
+    background-color: #3DBBD3;
+}
+#bod2 {
+    background-color: #3DBBD3;
+}
+
 .ui-commandant2  {
-    background-color: darkred;
+    background-color: #E5B368;
     font-size:12px;
-    color: white;
     border-radius: 4px;
 }
 
@@ -25,12 +32,12 @@
 
 }
 #camara{
-    background-color: #D3D3D3;
+    background-color: #AEB6BF;
     margin-top:10px;
-    margin-left: 185px;
+    margin-left: 180px;
     margin-right: 110px;
     height: 400px;
-    width: 960px;
+    width: 930px;
     -webkit-border-radius:4px;
     -ms-border-radius:4px;
     -o-border-radius:4px;
@@ -39,21 +46,18 @@
 
 #solicitud{
     background-color: #AEB6BF;
-    width: 60%;
-    margin-top:10px;
-    margin-left: 250px;
-    heigth:270px;
+    width:55%;
+    margin-top:20px;
+    margin-left:250px;
+    height:200px;
 
 }
-#envia{
-   margin-right:100px;
+.envia{
+    margin-right: 150px;
     margin-top:30px;
-    background-color:#3498DB;
+    background-color:#E5B368;
 }
 
-#cantidad{
-   margin-rigth:20px;
-}
 
 .required:before { content:"* ";color: red; }
 
@@ -236,6 +240,21 @@ div {
     background: url('imagen/logo.jpg') no-repeat;
     background-size: 40% 55px;
     background-position: 10px 10px ;
+}
+
+#logo2{
+    width: 40%;
+    height: 65px;
+    background: url('imagen/logo.jpg') no-repeat;
+    background-size: 45% 65px;
+    background-position: 10px 10px ;
+}
+
+#una{
+    width: 50%;
+    height: 75px;
+    background-size: 50% 75px;
+    //background: url("imagen/una1.png") no-repeat 10px 10px;
 }
 
 #header {

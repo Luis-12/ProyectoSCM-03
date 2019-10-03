@@ -46,29 +46,37 @@
 
 
     <div id="solicitud">
-    <br/>
-        <p:outputLabel value="Fecha de Inicio Vacaciones: "  styleClass="required"  indicateRequired="false" for="fechaVacaciones"/>
-        <p:calendar autocomplete="off"  id="fechaVacaciones" required="true" requiredMessage="Ingrese la Fecha" value="" pattern="yyyy-MM-dd">
-        </p:calendar>
-        <p:watermark value="Fecha de Inicio Vacaciones" for="fechaVacaciones"/>
-        <p:message for="fechaVacaciones"/>
+        <h:form>
+
+            <br/>
+            <p:outputLabel value="Fecha de Inicio Vacaciones: "   indicateRequired="false" for="fechaVacaciones"/>
+            <p:calendar autocomplete="off"  id="fechaVacaciones" required="true" requiredMessage="Ingrese la Fecha" value="" pattern="yyyy-MM-dd">
+            </p:calendar>
+            <p:watermark value="Ingrese la fecha " for="fechaVacaciones"/>
+            <p:message for="fechaVacaciones"/>
 
 
-        <p:outputLabel value="Fecha Fin Vacaciones:       "  styleClass="required"  indicateRequired="false" for="fechaFinal"/>
-        <p:calendar autocomplete="off"  id="fechaFinal" required="true" requiredMessage="Ingrese la Fecha" value="" pattern="yyyy-MM-dd">
-        </p:calendar>
-        <p:watermark value="Fecha Fin Vacaciones" for="fechaFinal"/>
-        <p:message for="fechaFinal"/>
+            <p:outputLabel value="Fecha Final de Vacaciones:  "   indicateRequired="false" for="fechaFinal"/>
+            <p:calendar autocomplete="off"  id="fechaFinal" required="true" requiredMessage="Ingrese la Fecha" value="" pattern="yyyy-MM-dd">
+            </p:calendar>
+            <p:watermark value="Ingrese la fecha " for="fechaFinal"/>
+            <p:message for="fechaFinal"/>
 
-        <p:commandButton value="Enviar" styleClass="envia" />
-        <br/>
+
+            <p:commandButton value="Guardar"
+                             style="margin-right:20px;margin-top: 20px"
+                             styleClass="ui-priority-primary" />
+            <br/>
+
+        </h:form>
+
     </div>
 
 
 
     <div id="footer">
         <br/>
-        © &nbsp; &nbsp; SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA
+       <a href="acerca.xhtml"> ©</a>  SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA
     </div>
 
 </h:body>

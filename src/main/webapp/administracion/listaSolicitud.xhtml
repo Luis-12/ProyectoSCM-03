@@ -46,43 +46,54 @@
 
         <h1 id="h1Centro">Listado de Solicitudes Vacaciones</h1>
 
-        <p:dataTable var="solicitudes"  style="margin-top: 15px"
-                     emptyMessage="No se han encontrado solicitudes"
-                     resizableColumns="true"
-                     selectionMode="single"
-                     paginator="true"
-                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                     rowsPerPageTemplate="10,15,20"
-                     scrollable="true" scrollHeight="450">
-            <p:autoUpdate />
+        <div>
+            <h:form>
 
-            <p:column headerText="Cédula Solicitante" filterBy="#">
-                <h:outputText value="#" />
-            </p:column>
+                <p:contextMenu >
+                    <p:menuitem value="Convertir a Excel" icon="ui-icon-transfer-e-w">
+                    </p:menuitem>
+                    <p:menuitem value="Mostrar Información" icon="ui-icon-document"/>
 
-            <p:column headerText="Fecha Inicio Vacaciones" filterBy="#">
-                <h:outputText value="" />
-            </p:column>
-            <p:column headerText="Fecha Final Vacaciones" filterBy="#">
-                <h:outputText value="" />
-            </p:column>
+                </p:contextMenu>
 
-            <p:column headerText="Días Disponibles" filterBy="#">
-                <h:outputText value="" />
-            </p:column>
+                <p:dataTable var="solicitudes"  style="margin-top: 15px"
+                             emptyMessage="No se han encontrado solicitudes"
+                             resizableColumns="true"
+                             selectionMode="single"
+                             paginator="true"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="10,15,20"
+                             scrollable="true" scrollHeight="450">
+                    <p:autoUpdate />
+
+                    <p:column headerText="Cédula Solicitante" filterBy="#">
+                        <h:outputText value="#" />
+                    </p:column>
+
+                    <p:column headerText="Fecha Inicio Vacaciones" filterBy="#">
+                        <h:outputText value="" />
+                    </p:column>
+                    <p:column headerText="Fecha Final Vacaciones" filterBy="#">
+                        <h:outputText value="" />
+                    </p:column>
+
+                    <p:column headerText="Días Disponibles" filterBy="#">
+                        <h:outputText value="" />
+                    </p:column>
 
 
-        </p:dataTable>
+                </p:dataTable>
+
+
+            </h:form>
+        </div>
 
 
 
-
-
-
-    <div id="footer">
-        <br/>
-        © &nbsp; &nbsp; SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA
-    </div>
+        <div id="footer">
+            <br/>
+            <a href="acerca.xhtml"> ©</a>  SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA
+        </div>
 
 </h:body>
 </html>
