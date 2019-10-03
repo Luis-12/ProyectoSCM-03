@@ -125,22 +125,27 @@ public class ColaboradorBean {
 
     public String doLogin() {
 
-        colaborador1 = colaboradorService.findColaborador(colaborador.getPk_idColaborador());
-        String dbUsername = colaborador1.getPk_idColaborador();
-        String dbPassword = colaborador1.getClave();
+        try {
+            colaborador1 = colaboradorService.findColaborador(colaborador.getPk_idColaborador());
+            String dbUsername = colaborador1.getPk_idColaborador();
+            String dbPassword = colaborador1.getClave();
 
-        if (colaborador.getPk_idColaborador().equals(dbUsername) && colaborador.getClave().equals(dbPassword)) {
-            colaborador.setNombre(colaborador1.getNombre());
-            loggedIn = true;
-            return "/administracion/MantenimientoColaborador.xhtml?faces-redirect=true";
+            if (colaborador.getPk_idColaborador().equals(dbUsername) && colaborador.getClave().equals(dbPassword)) {
+                colaborador.setNombre(colaborador1.getNombre());
+                loggedIn = true;
+                return "/administracion/MantenimientoColaborador.xhtml?faces-redirect=true";
+            }
+
+            FacesMessage msg = new FacesMessage("Login error!", "ERROR MSG");
+            msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+
+            return "/login.xhtml";
+        }catch (Exception e){
+            return null;
+        }finally {
+            colaborador = new Colaborador();
         }
-
-        FacesMessage msg = new FacesMessage("Login error!", "ERROR MSG");
-        msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-
-        return "/login.xhtml";
-
     }
 
 
