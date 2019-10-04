@@ -181,6 +181,7 @@ public class ColaboradorBean {
         if(!existeColaborador){
             try{
                 System.out.println("No existe el colaborador");
+                colaborador.setJustificacion("NA");
                 colaboradorService.createColaborador(colaborador);
                 mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Colaborador insertado correctamente.");
                 colaboradores = colaboradorService.getAllColaboradoresActivos();
