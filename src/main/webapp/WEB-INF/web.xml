@@ -24,16 +24,7 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>/WEB-INF/applicationContext.xml</param-value>
     </context-param>
-    <filter>
-        <filter-name>LoginFilter</filter-name>
-        <filter-class>s.c.m.filters.LoginFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>LoginFilter</filter-name>
-        <url-pattern>/administracion/*</url-pattern>
-        <url-pattern>/colaboradores/*</url-pattern>
 
-    </filter-mapping>
 
 
 

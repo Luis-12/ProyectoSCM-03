@@ -50,9 +50,9 @@ div.camara{
 
 #solicitud{
     background-color: #AEB6BF;
-    width:55%;
-    margin-top:20px;
-    margin-left:250px;
+    width:40%;
+    margin-top:40px;
+    margin-left:380px;
     height:200px;
 
 }
@@ -99,10 +99,6 @@ h1{
     position: static;
 }
 
-.ui-inputfield, .ui-widget-content .ui-inputfield{
-
-    width: 100%;
-}
 
 .ui-widget .ui-widget {
     font-size: 1em;
@@ -209,7 +205,7 @@ body
     font-size:25px;
 }
 
-input[type=text] {
+.ui-inputfield-text {
     width: 106%;
     height: 30px;
     margin: 8px 0;
@@ -218,6 +214,8 @@ input[type=text] {
     border-radius: 4px;
     box-sizing: border-box;
 }
+
+
 
 .ui-outputlabel{
     margin-top:10px;
