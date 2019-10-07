@@ -14,7 +14,7 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
     <c:choose>
-    <c:when test="${colaboradorBean.colaboradorlogueado.puesto.descripcion=='Jefe de Departamento' and colaboradorBean.colaboradorlogueado.departamento.nombre=='Recursos Humanos'}">
+    <c:when test="${colaboradorBean.colaboradorlogueado.puesto.descripcion=='Jefatura' and colaboradorBean.colaboradorlogueado.departamento.nombre=='Recursos Humanos'}">
 
 
 <h:head>
@@ -157,14 +157,6 @@
                 <p:watermark value="Nombre" for="nombre"/>
                 <p:message id="Nmessage" for="nombre"/>
 
-                <p:outputLabel value="Clave:" styleClass="required" indicateRequired="false" for="clave"/>
-                <p:inputText id="clave" maxlength="20"  required="true" requiredMessage="Ingrese una clave" value="#{colaboradorBean.colaborador.clave}">
-                    <f:validateLength minimum="8"/>
-                    <f:ajax event="blur" execute="@this" render="Clmessage" />
-                </p:inputText>
-                <p:watermark value="Clave:" for="clave"/>
-                <p:message id="Clmessage" for="clave"/>
-
                 <p:outputLabel value="Teléfono" styleClass="required" indicateRequired="false" for="telefono"/>
                 <p:inputText maxlength="9" id="telefono" required="true" converterMessage="Ingrese solo números"  validatorMessage="Minimo 8 dígitos" requiredMessage="Ingrese un teléfono"  value="#{colaboradorBean.colaborador.telefono}">
                     <f:validateLength minimum="8"/>
@@ -229,14 +221,6 @@
                 </p:inputText>
                 <p:watermark value="Nombre" for="nombreA"/>
                 <p:message id="Nomessage"  for="nombreA"/>
-
-                <p:outputLabel value="Clave:" styleClass="required" indicateRequired="false" for="claveA"/>
-                <p:inputText id="claveA" maxlength="20" required="true" requiredMessage="Ingrese una clave" value="#{colaboradorBean.selectcolaborador.clave}">
-                    <f:validateLength minimum="8"/>
-                    <f:ajax event="blur" execute="@this" render="Clamessage" />
-                </p:inputText>
-                <p:watermark value="Clave:" for="claveA"/>
-                <p:message id="Clamessage" for="claveA"/>
 
                 <p:outputLabel value="Teléfono" styleClass="required" indicateRequired="false" for="telefonoA"/>
                 <p:inputText id="telefonoA"  maxlength="9" converterMessage="Ingrese solo números" validatorMessage="Minimo 8 dígitos"  required="true" requiredMessage="Ingrese un teléfono"

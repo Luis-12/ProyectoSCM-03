@@ -23,6 +23,7 @@ public class Colaborador implements Serializable {
     private Date fechaInicioLaboral;
     private String estado;
     private String justificacion;
+    private Date fechaVencimiento;
 
     public String getPk_idColaborador()
     {
@@ -117,6 +118,14 @@ public class Colaborador implements Serializable {
     public String getJustificacion() { return justificacion; }
 
     public void setJustificacion(String justificacion) { this.justificacion = justificacion; }
+
+    public Date getFechaVencimiento() {
+        return fechaVencimiento;
+    }
+
+    public void setFechaVencimiento(Date fechaVencimiento) {
+        this.fechaVencimiento = fechaVencimiento;
+    }
 
     public Colaborador()
     {

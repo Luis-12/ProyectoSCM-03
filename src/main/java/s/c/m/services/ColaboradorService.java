@@ -7,9 +7,10 @@ import s.c.m.entities.Departamento;
 import s.c.m.entities.Puesto;
 import s.c.m.repositories.ColaboradorRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.sql.DatabaseMetaData;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class ColaboradorService {
@@ -38,9 +39,41 @@ public class ColaboradorService {
         return listA;
     }
 
-    public void createColaborador(Colaborador colaborador)
-    {
+    public void createColaborador(Colaborador colaborador) throws ParseException {
+        int mes;
+        int dia;
+        int year;
+        String dia2 = null;
+        String mes2 = null;
+        Date horaActual = new Date();
+        Date fechaDeVencimiento = new Date();
+       mes= horaActual.getMonth() + 1;//MES
+       dia= horaActual.getDate();//DIA
+       year = horaActual.getYear() + 1900;//
+
+        System.out.println("El mes de hoy es " + mes);
+       System.out.println("El dia de hoy es " + dia);
+       System.out.println("El year de hoy es " + year);
+       if(mes==10 || mes==11 || mes==12){
+           year = year +1;
+           mes=1;
+       }
+
+        if (mes < 10) {
+            mes2 = "0" + mes;
+        }
+
+        if (dia < 10) {
+            dia2 = "0" + dia;
+        }
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String fVencimiento = year +"-"+ mes2+"-"+dia2;
+        System.out.println("La fecha de venciamiento de clave calculada antes de convertirlo: "+ fVencimiento);
+        fechaDeVencimiento = formatter.parse(fVencimiento);
+        System.out.println("La fecha de venciamiento de clave calculada es : "+ fechaDeVencimiento);
+
         colaborador.setEstado("Activo");
+        colaborador.setClave(colaborador.getPk_idColaborador());//Aca pongo de clave el mismo id del colaborador agregado
         colaboradorRepository.save(colaborador);
     }
 
