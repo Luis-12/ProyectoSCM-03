@@ -19,6 +19,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -132,31 +133,44 @@ public class ColaboradorBean {
         this.colaboradorlogueado = colaboradorlogueado;
     }
 
-    public String doLogin() {
+    public String doLogin() throws IOException {
             colaborador1 = colaboradorService.findColaborador(colaboradorlogueado.getPk_idColaborador());
             String dbUsername = colaborador1.getPk_idColaborador();
             String dbPassword = colaborador1.getClave();
+        FacesContext context = FacesContext.getCurrentInstance();
 
-            if (colaboradorlogueado.getPk_idColaborador().equals(dbUsername) && colaboradorlogueado.getClave().equals(dbPassword)) {
+
+        if (colaboradorlogueado.getPk_idColaborador().equals(dbUsername)
+                    && colaboradorlogueado.getClave().equals(dbPassword)
+                    && colaborador1.getPuesto().getDescripcion().equals("Jefe de Departamento")
+                    &&colaborador1.getDepartamento().getNombre().equals("Recursos Humanos")) {
                 colaboradorlogueado.setNombre(colaborador1.getNombre());
+                colaboradorlogueado.setPuesto(colaborador1.getPuesto());
+                colaboradorlogueado.setDepartamento(colaborador1.getDepartamento());
                 loggedIn = true;
-                return "/administracion/MantenimientoColaborador.xhtml?faces-redirect=true";
-            }
+           return "/administracion/MantenimientoColaborador.xhtml?faces-redirect=true";
+            }if (colaboradorlogueado.getPk_idColaborador().equals(dbUsername) && colaboradorlogueado.getClave().equals(dbPassword)&& colaborador1.getPuesto().getDescripcion().equals("Colaborador")) {
+            colaboradorlogueado.setNombre(colaborador1.getNombre());
+            colaboradorlogueado.setPuesto(colaborador1.getPuesto());
+            colaboradorlogueado.setDepartamento(colaborador1.getDepartamento());
+            loggedIn = true;
+           return "/colaboradores/SolicitudVacaciones.xhtml?faces-redirect=true";
+        }
 
-            FacesMessage msg = new FacesMessage("Login error!", "ERROR MSG");
-            msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-
-            return "/login.xhtml";
+        FacesMessage msg = new FacesMessage("Aviso", "El usuario o contraseña son incorrectos");
+        msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        return null;
     }
 
-
+    public String error() {
+        return "/login.xhtml";
+    }
 
     public String doLogout() {
-        // Set the paremeter indicating that user is logged in to false
         loggedIn = false;
 
-        FacesMessage msg = new FacesMessage("Salio", "INFO");
+        FacesMessage msg = new FacesMessage("Salio", "Ha salido con exito");
         msg.setSeverity(FacesMessage.SEVERITY_INFO);
         FacesContext.getCurrentInstance().addMessage(null, msg);
         //  return navigationBean.redirectToLogin();

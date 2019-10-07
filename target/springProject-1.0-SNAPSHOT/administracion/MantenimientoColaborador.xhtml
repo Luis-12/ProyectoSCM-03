@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+
+>
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <c:choose>
+    <c:when test="${colaboradorBean.colaboradorlogueado.puesto.descripcion=='Jefe de Departamento' and colaboradorBean.colaboradorlogueado.departamento.nombre=='Recursos Humanos'}">
+
 
 <h:head>
     <link href="../css/style.css" rel="stylesheet" type="text/css" />
@@ -316,4 +326,21 @@
         }
     </script>
 </h:body>
+    </c:when>
+        <c:otherwise>
+        <h:head>
+            <link href="../css/style.css" rel="stylesheet" type="text/css" />
+            <link href="//db.onlinewebfonts.com/c/f977213040abc486420980aae60e0db3?family=GestaW01-Medium" rel="stylesheet" type="text/css"/>
+            <title>Acceso denegado</title>
+
+        </h:head>
+
+        <h:body >
+            <div class="error">
+                Acceso denegado
+            </div>
+        </h:body>
+    </c:otherwise>
+    </c:choose>
+</ui:composition>
 </html>

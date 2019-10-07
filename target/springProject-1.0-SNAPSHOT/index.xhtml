@@ -22,37 +22,39 @@
         </div>
         <div id="top">
             <h:form>
-                <p:commandButton style='float: right;' id="dynaButton" value="Menú" type="button"  icon="ui-icon-home"/>
-                <p:menu toggleable="true" overlay="true" trigger="dynaButton" my="left top" at="left bottom">
+                <p:commandButton action="login.xhtml?faces-redirect=true" style='float: right;' id="dynaButton" value="Login"  icon="ui-icon-home"/>
+            </h:form>
+        </div>
+        <center>
+        <div class="camara">
+            <h:form >
 
-                    <p:submenu label="Login">
-                        <p:menuitem value="Login" outcome="login.xhtml" icon="pi pi-save" />
-                    </p:submenu>
-                </p:menu>
 
+                    <h:panelGrid columns="3" cellpadding="5">
 
+                        <p:photoCam/>
+                        <p:outputPanel >
+                            <p:graphicImage/>
+                        </p:outputPanel>
+
+                    </h:panelGrid>
 
             </h:form>
         </div>
-        <div  id="camara">
-            <h:form >
+        </center>
+
+        <div>
+            <center>
                 <h:panelGrid columns="3" cellpadding="5">
-                    <p:photoCam styleClass="image"/>
-                    <p:outputPanel >
-                        <p:graphicImage styleClass="image" />
-                    </p:outputPanel>
                     <p:commandButton styleClass="ui-commandant2" value="Entrada"/>
                     <p:commandButton styleClass="ui-commandant2" value="Descanso"/>
-                    <p:commandButton styleClass="ui-commandant2" value="Salida"/>
-                </h:panelGrid>
-            </h:form>
+                    <p:commandButton styleClass="ui-commandant2" value="Salida"/></h:panelGrid>
+            </center>
         </div>
-
-
 
 
         <div id="footer">
-            <a href="http://localhost:8090/ProyectoSCM_03_war/acerca.xhtml"> ©</a>  SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA
+            <p> SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA</p>
         </div>
 
     </h:body>

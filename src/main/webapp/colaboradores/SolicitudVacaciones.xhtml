@@ -22,21 +22,14 @@
 
     <div id="top">
         <h:form>
-            <p:commandButton id="dynaButton" value="Menú" type="button"  icon="ui-icon-home"/>
-            <p:menu toggleable="true" overlay="true" trigger="dynaButton" my="left top" at="left bottom">
-
-                <p:submenu label="Colaborador">
-                    <p:menuitem value="Incorporar Colaborador" action="#{colaboradorBean.checkDepartamento}" icon="ui-icon-plus"/>
+            <p:commandButton style='float: right;'  id="dynaButton1" value="Salir" type="button"  icon="ui-icon-person"/>
+            <p:menu style='float: right;'  overlay="true" trigger="dynaButton1" my="left top" at="left bottom">
+                <p:submenu label="#{colaboradorBean.colaboradorlogueado.nombre}">
+                    <p:menuitem value="Salir" action="#{colaboradorBean.doLogout}" icon="ui-icon-person" />
                 </p:submenu>
-                <p:submenu label="Departamento">
-                    <p:menuitem value="Mantenimiento Departamento" outcome="MantenimientoDepartamento.xhtml" icon="ui-icon-wrench"/>
-                </p:submenu>
-                <p:submenu label="Informes" disabled="true">
-                    <p:menuitem  disabled="true" value="Reporte X" icon="ui-icon-clipboard"/>
-                </p:submenu>
+            </p:menu>
 
-
-            </p:menu></h:form>
+        </h:form>
     </div>
 
     <h1 id="h1Centro">Solicitud de Vacaciones</h1>

@@ -20,14 +20,17 @@
 
 	</div>
 
-	<p:messages id="mensajes" showDetails="false" autoUpdate="true" />
+	<div id="top">
+		<h:form>
+			<p:commandButton action="index.xhtml?faces-redirect=true" style='float: left;' id="dynaButton" value="Regresar"  icon="ui-icon-home"/>
+		</h:form>
+	</div>
 
-	<div>
+<center>
+	<div class="login">
 	<center>
 	<h:form id="AgregarColaborador">
-
-
-		<p:growl id="msgs2" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
+		<p:growl id="msgs" showDetail="true" life="3000" ><p:autoUpdate/></p:growl>
 
 		<h:panelGrid columns="2"  id="panel2">
 
@@ -49,14 +52,15 @@
 		</h:panelGrid>
 		<center>
 			<p:commandButton value="login"  action="#{colaboradorBean.doLogin}" style="margin-right:20px;margin-top: 20px"
-							 styleClass="ui-priority-primary" />
+							 styleClass="loginButton" />
 		</center>
 	</h:form>
 	</center>
 	</div>
+</center>
 	<div id="footer">
 		<br/>
-		<a href="http://localhost:8090/ProyectoSCM_03_war/acerca.xhtml"> ©</a>  SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA
+		<a href="http://localhost:8080/ProyectoSCM_03_war/acerca.xhtml"> ©</a>  SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA
 
 	</div>
 </h:body>
