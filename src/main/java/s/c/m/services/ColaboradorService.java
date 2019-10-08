@@ -40,7 +40,8 @@ public class ColaboradorService {
         return listA;
     }
 
-    public void createColaborador(Colaborador colaborador) throws ParseException {
+
+    public Date calculaVencimiento() throws ParseException {
         int mes;
         int dia;
         int year;
@@ -48,24 +49,21 @@ public class ColaboradorService {
         String mes2 = null;
         Date horaActual = new Date();
         mes= horaActual.getMonth() + 1;//MES
-        //mes=1;
-       dia= horaActual.getDate();//DIA
-        //dia=28;
-       year = horaActual.getYear() + 1900;//
+        dia= horaActual.getDate();//DIA
+        year = horaActual.getYear() + 1900;//
 
         System.out.println("El mes de hoy es " + mes);
-       System.out.println("El dia de hoy es " + dia);
-       System.out.println("El year de hoy es " + year);
-       if(dia==28 || dia==30||dia == 31){
-           dia2="0"+1;
-           //mes=mes+3;
-       }
-       if(mes==10 || mes==11 || mes==12){
-           year = year +1;
-           mes=1;
-       }else {
-           mes=mes+3;
-       }
+        System.out.println("El dia de hoy es " + dia);
+        System.out.println("El year de hoy es " + year);
+        if(dia==28 || dia==30||dia == 31){
+            dia2="0"+1;
+        }
+        if(mes==10 || mes==11 || mes==12){
+            year = year +1;
+            mes=1;
+        }else {
+            mes=mes+3;
+        }
 
         if (mes < 10) {
             mes2 = "0" + mes;
@@ -84,9 +82,17 @@ public class ColaboradorService {
         Date fechaDeVencimiento =null;
         fechaDeVencimiento = formato.parse(fVencimiento);
         System.out.println("La fecha de venciamiento de clave calculada es : "+ formato.format(fechaDeVencimiento));
+        return fechaDeVencimiento;
 
+    }
+    public void actualizaClave(Colaborador c) throws ParseException {
+        c.setFechaVencimiento(calculaVencimiento());//Cuando se cambia la clave se vuelve a calcula la nueva fecha de vencimiento
+        colaboradorRepository.save(c);
+    }
+
+    public void createColaborador(Colaborador colaborador) throws ParseException {
         colaborador.setEstado("Activo");
-        colaborador.setFechaVencimiento(fechaDeVencimiento);
+        colaborador.setFechaVencimiento(calculaVencimiento());
         colaborador.setClave(colaborador.getPk_idColaborador());//Aca pongo de clave el mismo id del colaborador agregado
         colaboradorRepository.save(colaborador);
     }

@@ -20,6 +20,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -37,6 +38,8 @@ public class ColaboradorBean {
     private Colaborador colaborador1 = new Colaborador();
     private Colaborador colaboradorlogueado = new Colaborador();
     private Colaborador selectcolaborador=new Colaborador();
+    private Colaborador colaboradorClave = new Colaborador();
+    private String nuevaClave;
     private Departamento departamento = new Departamento();
     private Puesto puesto = new Puesto();
     private List<Colaborador> colaboradores;
@@ -133,7 +136,95 @@ public class ColaboradorBean {
         this.colaboradorlogueado = colaboradorlogueado;
     }
 
+    public Colaborador getColaborador1() {
+        return colaborador1;
+    }
+
+    public void setColaborador1(Colaborador colaborador1) {
+        this.colaborador1 = colaborador1;
+    }
+
+    public Colaborador getColaboradorClave() {
+        return colaboradorClave;
+    }
+
+    public void setColaboradorClave(Colaborador colaboradorClave) {
+        this.colaboradorClave = colaboradorClave;
+    }
+
+
+    public boolean validaVence(Date f){
+        Date fechaVence = f;
+        Date fechaActual = new Date();
+        String fechaVenceString = null;
+        String fechaActualString = null;
+
+        int fechaV=0;
+        int fechaA=0;
+
+        int mesA;
+        String mesA2 = null;
+        int mesV;
+        String mesV2 = null;
+
+        int diaA;
+        String diaA2 = null;
+        int diaV;
+        String diaV2 = null;
+
+
+        int yearA;
+        int yearV;
+        Boolean vencio = false;
+
+        mesV=fechaVence.getMonth() +1;
+        diaV=fechaVence.getDate();
+        yearV=fechaVence.getYear()+1900;
+        if(mesV<10){
+            mesV2 = "0"+ mesV;
+        }else{
+            mesV2 =""+mesV;
+        }
+        if(diaV<10){
+            diaV2 = "0"+ diaV;
+        }else{
+            diaV2 =""+ diaV;
+        }
+        fechaVenceString = yearV+""+mesV2+""+diaV2;
+        fechaV = Integer.parseInt(fechaVenceString);
+        System.out.println("FECHA DE VENCIMIENTO"+fechaV);
+
+        mesA=fechaActual.getMonth()+1;
+        diaA=fechaActual.getDate();
+        yearA=fechaActual.getYear()+1900;
+        if(mesA<10){
+            mesA2 = "0"+ mesA;
+        }else{
+            mesA2 =""+mesA;
+        }
+        if(diaA<10){
+            diaA2 = "0"+ diaA;
+        }else{
+            diaA2 =""+ diaA;
+        }
+        fechaActualString = yearA+""+mesA2+""+diaA2;
+        fechaA = Integer.parseInt(fechaActualString);
+        System.out.println("FECHA ACTUAL:"+fechaA);
+
+        if(fechaA >= fechaV){
+            vencio = true;
+            System.out.println("AL USUARIO SE LE VENCIO LA CONTRASEÑA");
+            addMessage("Aviso","La contraseña vencio cambiela");
+        }else {
+            vencio = false;
+            System.out.println("AL USUARIO SE LE SIGUE VIGENTE LA CONTRASEÑA");
+        }
+        return vencio;//Si es true quiere decir que vencio
+    }
+
+
     public String doLogin() throws IOException {
+        PrimeFaces current = PrimeFaces.current();
             colaborador1 = colaboradorService.findColaborador(colaboradorlogueado.getPk_idColaborador());
             String dbUsername = colaborador1.getPk_idColaborador();
             String dbPassword = colaborador1.getClave();
@@ -147,20 +238,42 @@ public class ColaboradorBean {
                 colaboradorlogueado.setNombre(colaborador1.getNombre());
                 colaboradorlogueado.setPuesto(colaborador1.getPuesto());
                 colaboradorlogueado.setDepartamento(colaborador1.getDepartamento());
-                loggedIn = true;
-           return "/administracion/MantenimientoColaborador.xhtml?faces-redirect=true";
-            }if (colaboradorlogueado.getPk_idColaborador().equals(dbUsername) && colaboradorlogueado.getClave().equals(dbPassword)&& colaborador1.getPuesto().getDescripcion().equals("Colaborador")) {
+                if(validaVence(colaborador1.getFechaVencimiento())){
+                    //addMessage("AVISO","Cambie la constraseña");
+                    current.executeScript("PF('dlCC').show();");
+                }else{
+                    loggedIn = true;
+                    return "/administracion/MantenimientoColaborador.xhtml?faces-redirect=true";
+                }
+
+            }
+        if (colaboradorlogueado.getPk_idColaborador().equals(dbUsername) && colaboradorlogueado.getClave().equals(dbPassword)&& colaborador1.getPuesto().getDescripcion().equals("Colaborador")) {
             colaboradorlogueado.setNombre(colaborador1.getNombre());
             colaboradorlogueado.setPuesto(colaborador1.getPuesto());
             colaboradorlogueado.setDepartamento(colaborador1.getDepartamento());
+            if(validaVence(colaborador1.getFechaVencimiento())){
+                //addMessage("AVISO","Cambie la constraseña");
+                current.executeScript("PF('dlCC').show();");
+            }else{
             loggedIn = true;
-           return "/colaboradores/SolicitudVacaciones.xhtml?faces-redirect=true";
+                return "/colaboradores/SolicitudVacaciones.xhtml?faces-redirect=true";
+            }
         }
 
         FacesMessage msg = new FacesMessage("Aviso", "El usuario o contraseña son incorrectos");
         msg.setSeverity(FacesMessage.SEVERITY_ERROR);
         FacesContext.getCurrentInstance().addMessage(null, msg);
         return null;
+    }
+
+    public String cambioClave() throws ParseException, IOException {
+        colaborador1.setClave(colaboradorlogueado.getClave());
+        //colaborador1.setClave(colaboradorlogueado.getClave());
+        System.out.println("NUEVA CLAVE:" + colaborador1.getClave());
+        colaboradorService.actualizaClave(colaborador1);//Aca le paso el colaborador ya con la nueva clave para que en el service con esta funcion lo updatee en la base con la nueva clave
+        Colaborador c = colaboradorService.findColaborador(colaborador1.getPk_idColaborador());
+        System.out.println("La nueva clave es"+c.getClave());
+        return doLogin();
     }
 
     public String error() {
@@ -176,7 +289,6 @@ public class ColaboradorBean {
         //  return navigationBean.redirectToLogin();
         return "/login.xhtml?faces-redirect=true";
     }
-
 
 
     public void create()
