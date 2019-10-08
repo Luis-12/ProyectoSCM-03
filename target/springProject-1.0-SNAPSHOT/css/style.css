@@ -155,12 +155,12 @@ clearing {
 }
 
 div.login {
-    background-color: #3DBBD3;
+    background-color: #AEB6BF;
     margin-top: 90px;
     margin-left: 273px;
     margin-right: 297px;
     width: 375px;
-    height: 170px;
+    height: 300px;
     -webkit-border-radius: 4px;}
 
  .loginButton{
@@ -262,6 +262,19 @@ body
 div {
     border-radius: 5px;
     width: 100%;
+}
+
+.loginI{
+    width: 70%;
+    height: 75px;
+    background: url("imagen/th.jpg") no-repeat;
+    background-size: 70% 75px;
+}
+
+.botton2
+{
+    margin-left: 30px;
+    display: block;
 }
 
 
