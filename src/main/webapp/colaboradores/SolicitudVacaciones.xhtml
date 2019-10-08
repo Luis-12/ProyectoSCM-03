@@ -22,7 +22,7 @@
 
     <div id="top">
         <h:form>
-            <p:commandButton style='float: right;'  id="dynaButton1" value="Salir" type="button"  icon="ui-icon-person"/>
+            <p:commandButton   id="dynaButton1" value="Menu" type="button"  icon="ui-icon-person"/>
             <p:menu style='float: right;'  overlay="true" trigger="dynaButton1" my="left top" at="left bottom">
                 <p:submenu label="#{colaboradorBean.colaboradorlogueado.nombre}">
                     <p:menuitem value="Salir" action="#{colaboradorBean.doLogout}" icon="ui-icon-person" />
@@ -32,30 +32,32 @@
         </h:form>
     </div>
 
-    <h1 id="h1Centro">Solicitud de Vacaciones</h1>
+    <h1 style="text-align: center">Solicitud de Vacaciones</h1>
 
 
     <div id="solicitud">
         <h:form>
 
-            <br/>
+            <center>
+                <br/>
+                <br/>
             <p:outputLabel value="Fecha de Inicio Vacaciones: "   indicateRequired="false" for="fechaVacaciones"/>
             <p:calendar autocomplete="off"  id="fechaVacaciones" required="true" requiredMessage="Ingrese la Fecha" value="" pattern="yyyy-MM-dd">
             </p:calendar>
             <p:watermark value="Ingrese la fecha " for="fechaVacaciones"/>
             <p:message for="fechaVacaciones"/>
-
-
-            <p:outputLabel value="Fecha Final de Vacaciones:  "   indicateRequired="false" for="fechaFinal"/>
-            <p:calendar autocomplete="off"  id="fechaFinal" required="true" requiredMessage="Ingrese la Fecha" value="" pattern="yyyy-MM-dd">
+                <br/>
+            <p:outputLabel value="Fecha Final de Vacaciones:  "    indicateRequired="false" for="fechaFinal"/>
+            <p:calendar autocomplete="off"  id="fechaFinal"  required="true" requiredMessage="Ingrese la Fecha" value="" pattern="yyyy-MM-dd">
             </p:calendar>
             <p:watermark value="Ingrese la fecha " for="fechaFinal"/>
             <p:message for="fechaFinal"/>
 
+                <p:commandButton value="Enviar"
+                                 style="margin-right:20px;margin-top: 20px"
+                                 styleClass="ui-priority-primary" />
+            </center>
 
-            <p:commandButton value="Guardar"
-                             style="margin-right:20px;margin-top: 20px"
-                             styleClass="ui-priority-primary" />
             <br/>
 
         </h:form>
