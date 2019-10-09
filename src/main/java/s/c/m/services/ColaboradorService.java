@@ -91,8 +91,14 @@ public class ColaboradorService {
     }
 
     public void createColaborador(Colaborador colaborador) throws ParseException {
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+        Date fechaA = new Date();
+
+        formato.format(fechaA);
+        System.out.println("FECHA DE HOY: " + formato.format(fechaA));
         colaborador.setEstado("Activo");
-        colaborador.setFechaVencimiento(calculaVencimiento());
+        colaborador.setFechaVencimiento(fechaA);
+        //colaborador.setFechaVencimiento(calculaVencimiento());
         colaborador.setClave(colaborador.getPk_idColaborador());//Aca pongo de clave el mismo id del colaborador agregado
         colaboradorRepository.save(colaborador);
     }
