@@ -200,7 +200,7 @@
         <hr/>
         <center>
             <p:commandButton value="Sí"  styleClass="ui-confirmdialog-yes"  actionListener="#{departamentoBean.delete}" onclick="ocultaEliminar()"  style="margin-right: 30px" />
-            <p:commandButton value="No"  styleClass="ui-confirmdialog-no"  style="margin-right: 20px"  onclick="ocultaEliminar()"/>
+            <p:commandButton value="No"  styleClass="ui-confirmdialog-no"  style="margin-right: 20px"  onclick="ocultaConfirm()"/>
         </center>
     </p:dialog>
 
@@ -217,6 +217,9 @@
             else {
                 PF('dlAC').jq.effect("shake", {times:1500}, 100);
             }
+        }
+        function ocultaConfirm(){
+            PF('dlCFD').hide();
         }
 
         function ocultaEliminar(){

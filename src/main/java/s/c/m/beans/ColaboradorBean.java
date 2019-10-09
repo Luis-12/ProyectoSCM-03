@@ -1,6 +1,7 @@
 package s.c.m.beans;
 
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
@@ -39,7 +40,6 @@ public class ColaboradorBean {
     private Colaborador colaboradorlogueado = new Colaborador();
     private Colaborador selectcolaborador=new Colaborador();
     private Colaborador colaboradorClave = new Colaborador();
-    private String nuevaClave;
     private Departamento departamento = new Departamento();
     private Puesto puesto = new Puesto();
     private List<Colaborador> colaboradores;
@@ -192,7 +192,7 @@ public class ColaboradorBean {
         }
         fechaVenceString = yearV+""+mesV2+""+diaV2;
         fechaV = Integer.parseInt(fechaVenceString);
-        System.out.println("FECHA DE VENCIMIENTO"+fechaV);
+        //System.out.println("FECHA DE VENCIMIENTO"+fechaV);
 
         mesA=fechaActual.getMonth()+1;
         diaA=fechaActual.getDate();
@@ -209,7 +209,7 @@ public class ColaboradorBean {
         }
         fechaActualString = yearA+""+mesA2+""+diaA2;
         fechaA = Integer.parseInt(fechaActualString);
-        System.out.println("FECHA ACTUAL:"+fechaA);
+        //System.out.println("FECHA ACTUAL:"+fechaA);
 
         if(fechaA >= fechaV){
             vencio = true;
@@ -222,24 +222,33 @@ public class ColaboradorBean {
         return vencio;//Si es true quiere decir que vencio
     }
 
+    /*public String encryptaClave(String clave){
+        String claveEncryptada = DigestUtils.sha1Hex(clave);
+        return claveEncryptada;
+    }*/
 
     public String doLogin() throws IOException {
         PrimeFaces current = PrimeFaces.current();
             colaborador1 = colaboradorService.findColaborador(colaboradorlogueado.getPk_idColaborador());
             String dbUsername = colaborador1.getPk_idColaborador();
             String dbPassword = colaborador1.getClave();
+            //String claveEncryptada = DigestUtils.sha1Hex(colaboradorlogueado.getClave());//Clave encryptada ingresada por el usario
+            //String dbPassword= encryptaClave(colaborador1.getClave());//Clave encryptada de la base
+
+            //System.out.println("Clave encryptada de insersion: "+ claveEncryptada);
+            //System.out.println("Clave encryptada de base de datos: "+ dbPassword);
         FacesContext context = FacesContext.getCurrentInstance();
 
 
         if (colaboradorlogueado.getPk_idColaborador().equals(dbUsername)
                     && colaboradorlogueado.getClave().equals(dbPassword)
+                    //&& dbPassword.equals(claveEncryptada)
                     && colaborador1.getPuesto().getDescripcion().equals("Jefatura")
                     &&colaborador1.getDepartamento().getNombre().equals("Recursos Humanos")) {
                 colaboradorlogueado.setNombre(colaborador1.getNombre());
                 colaboradorlogueado.setPuesto(colaborador1.getPuesto());
                 colaboradorlogueado.setDepartamento(colaborador1.getDepartamento());
                 if(validaVence(colaborador1.getFechaVencimiento())){
-                    //addMessage("AVISO","Cambie la constraseña");
                     current.executeScript("PF('dlCC').show();");
                 }else{
                     loggedIn = true;
