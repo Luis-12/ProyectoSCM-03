@@ -276,14 +276,29 @@ public class ColaboradorBean {
         return diferente;//Si es true quiere decir que son diferentes por lo tanto pueden hacer el cambio
     }
 
+
+    public boolean validarContrasena(String usuario,String contrasena)
+    { for(int i=0;(i+2)<contrasena.length();i++)
+        if(contrasena.indexOf(usuario.substring(i,i+4))!=-1)
+            return false;
+        return true;
+    }
     public String cambioClave() throws ParseException, IOException {
+
         if(validaClave()){//Si validaClave retorna true se puede cambiar la clave
-            colaborador1.setClave(colaboradorlogueado.getClave());
-            System.out.println("NUEVA CLAVE:" + colaborador1.getClave());
-            colaboradorService.actualizaClave(colaborador1);//Aca le paso el colaborador ya con la nueva clave para que en el service con esta funcion lo updatee en la base con la nueva clave
-            Colaborador c = colaboradorService.findColaborador(colaborador1.getPk_idColaborador());
-            System.out.println("La nueva clave es"+c.getClave());
-            return doLogin();
+            if (validarContrasena(colaborador1.getNombre(), colaboradorlogueado.getClave())==true) {
+
+                colaborador1.setClave(colaboradorlogueado.getClave());
+                System.out.println("NUEVA CLAVE:" + colaborador1.getClave());
+                colaboradorService.actualizaClave(colaborador1);//Aca le paso el colaborador ya con la nueva clave para que en el service con esta funcion lo updatee en la base con la nueva clave
+                Colaborador c = colaboradorService.findColaborador(colaborador1.getPk_idColaborador());
+                System.out.println("La nueva clave es" + c.getClave());
+                return doLogin();
+            }
+            else {
+                FacesContext.getCurrentInstance().addMessage("contraseñaCC", new FacesMessage("No puede incuir su nombre"));
+                return null;
+            }
         }else{
             return null;
         }
