@@ -278,8 +278,11 @@ public class ColaboradorBean {
 
 
     public boolean validarContrasena(String usuario,String contrasena)
-    { for(int i=0;(i+2)<contrasena.length();i++)
-        if(contrasena.indexOf(usuario.substring(i,i+4))!=-1)
+    {
+        usuario.toLowerCase();
+        contrasena.toLowerCase();
+        for(int i=0;(i+2)<contrasena.length();i++)
+        if(contrasena.indexOf(usuario.substring(i,i+3))!=-1)
             return false;
         return true;
     }
