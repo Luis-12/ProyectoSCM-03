@@ -222,27 +222,18 @@ public class ColaboradorBean {
         return vencio;//Si es true quiere decir que vencio
     }
 
-    /*public String encryptaClave(String clave){
-        String claveEncryptada = DigestUtils.sha1Hex(clave);
-        return claveEncryptada;
-    }*/
-
     public String doLogin() throws IOException {
         PrimeFaces current = PrimeFaces.current();
             colaborador1 = colaboradorService.findColaborador(colaboradorlogueado.getPk_idColaborador());
             String dbUsername = colaborador1.getPk_idColaborador();
             String dbPassword = colaborador1.getClave();
-            //String claveEncryptada = DigestUtils.sha1Hex(colaboradorlogueado.getClave());//Clave encryptada ingresada por el usario
-            //String dbPassword= encryptaClave(colaborador1.getClave());//Clave encryptada de la base
-
-            //System.out.println("Clave encryptada de insersion: "+ claveEncryptada);
-            //System.out.println("Clave encryptada de base de datos: "+ dbPassword);
         FacesContext context = FacesContext.getCurrentInstance();
+        colaboradorClave.setPk_idColaborador(colaboradorlogueado.getPk_idColaborador());
+        colaboradorClave.setClave(colaboradorlogueado.getClave());
 
 
         if (colaboradorlogueado.getPk_idColaborador().equals(dbUsername)
                     && colaboradorlogueado.getClave().equals(dbPassword)
-                    //&& dbPassword.equals(claveEncryptada)
                     && colaborador1.getPuesto().getDescripcion().equals("Jefatura")
                     &&colaborador1.getDepartamento().getNombre().equals("Recursos Humanos")) {
                 colaboradorlogueado.setNombre(colaborador1.getNombre());
@@ -274,15 +265,28 @@ public class ColaboradorBean {
         FacesContext.getCurrentInstance().addMessage(null, msg);
         return null;
     }
+    public boolean validaClave(){
+        boolean diferente = false;
+        if(colaborador1.getClave().equals(colaboradorlogueado.getClave())){//Si son iguales retorna false por ende no puede cambiar la clave
+            addMessage("Aviso","La nueva clave no puede ser igual a la anterior");
+            diferente = false;
+        }else{
+            diferente = true;
+        }
+        return diferente;//Si es true quiere decir que son diferentes por lo tanto pueden hacer el cambio
+    }
 
     public String cambioClave() throws ParseException, IOException {
-        colaborador1.setClave(colaboradorlogueado.getClave());
-        //colaborador1.setClave(colaboradorlogueado.getClave());
-        System.out.println("NUEVA CLAVE:" + colaborador1.getClave());
-        colaboradorService.actualizaClave(colaborador1);//Aca le paso el colaborador ya con la nueva clave para que en el service con esta funcion lo updatee en la base con la nueva clave
-        Colaborador c = colaboradorService.findColaborador(colaborador1.getPk_idColaborador());
-        System.out.println("La nueva clave es"+c.getClave());
-        return doLogin();
+        if(validaClave()){//Si validaClave retorna true se puede cambiar la clave
+            colaborador1.setClave(colaboradorlogueado.getClave());
+            System.out.println("NUEVA CLAVE:" + colaborador1.getClave());
+            colaboradorService.actualizaClave(colaborador1);//Aca le paso el colaborador ya con la nueva clave para que en el service con esta funcion lo updatee en la base con la nueva clave
+            Colaborador c = colaboradorService.findColaborador(colaborador1.getPk_idColaborador());
+            System.out.println("La nueva clave es"+c.getClave());
+            return doLogin();
+        }else{
+            return null;
+        }
     }
 
     public String error() {
