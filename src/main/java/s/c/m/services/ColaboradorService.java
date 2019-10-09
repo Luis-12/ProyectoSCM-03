@@ -1,6 +1,9 @@
 package s.c.m.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.stereotype.Service;
 import s.c.m.entities.Colaborador;
 import s.c.m.entities.Departamento;
@@ -103,6 +106,10 @@ public class ColaboradorService {
         colaboradorRepository.save(colaborador);
     }
 
+
+
+
+
     public void deleteColaborador(Colaborador colaborador)
     {
         colaborador.toString();
@@ -141,4 +148,6 @@ public class ColaboradorService {
         }
         return listA;
     }
+
+
 }

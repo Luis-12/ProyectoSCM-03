@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html
-        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml"
@@ -8,6 +7,7 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
+
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
@@ -15,21 +15,18 @@
 <c:when test="${colaboradorBean.colaboradorlogueado.puesto.descripcion=='Jefatura' and colaboradorBean.colaboradorlogueado.departamento.nombre=='Recursos Humanos'}">
 
 
-
-
 <h:head>
     <link href="../css/style.css" rel="stylesheet" type="text/css" />
     <link href="//db.onlinewebfonts.com/c/f977213040abc486420980aae60e0db3?family=GestaW01-Medium" rel="stylesheet" type="text/css"/>
-    <title>Lista de solicitudes de Vacaciones</title>
+    <title>Informe detallado de Colaborador por Departamento </title>
+</h:head>
 
-    </h:head>
+<div id="page">
 
-
-    <h:body >
-    <div id="header">
-    <div id="logo"></div>
-    </div>
-
+    <h:body>
+        <div id="header">
+            <div id="logo"></div>
+        </div>
         <div id="top">
             <h:form>
                 <p:commandButton id="dynaButton" value="Menú" type="button"  icon="ui-icon-home"/>
@@ -65,39 +62,24 @@
             </h:form>
 
         </div>
-
-
-
-        <h1 id="h1Centro">Listado de Solicitudes Vacaciones</h1>
-
-        <div style="margin-left: -40%;">
-            <h:form >
-                <center>
-                    <h:panelGrid columns="3" >
-                        <p:outputLabel value="Estado:"/>
-                        <p:selectOneMenu id="estado" style="width:100px">
-                            <f:selectItem itemLabel="Pendientes" itemValue="" />
-                            <f:selectItem itemLabel="Aprobadas"  />
-                            <f:selectItem itemLabel="Rechazadas" />/>
-                        </p:selectOneMenu>
-                        <p:commandButton value="Buscar" style=" margin-right:20px;margin-top: 20px" ajax="false"  />
-                    </h:panelGrid>
-                </center>
-            </h:form>
-        </div>
+        <h1 id="h1Centro">Informe detallado de Colaborador por Departamento</h1>
+        <p:outputLabel value="Cedula: " styleClass="required"  indicateRequired="cedula" for="cedula"/>
+        <p:inputText autocomplete="off" required="true" requiredMessage="Ingrese la Cedula"  id="cedula"/>
+        <p:commandButton value="Buscar"
+                         style="margin-right:20px;margin-top: 20px"
+                         styleClass="ui-priority-primary" />
 
         <div>
             <h:form>
 
-                <p:contextMenu >
+                <p:contextMenu>
                     <p:menuitem value="Convertir a Excel" icon="ui-icon-transfer-e-w">
                     </p:menuitem>
-                    <p:menuitem value="Mostrar Información" icon="ui-icon-document"/>
 
                 </p:contextMenu>
 
-                <p:dataTable var="solicitudes"  style="margin-top: 15px"
-                             emptyMessage="No se han encontrado solicitudes"
+                <p:dataTable var="informe"  style="margin-top: 25px"
+                             emptyMessage="No se han encontrado datos"
                              resizableColumns="true"
                              selectionMode="single"
                              paginator="true"
@@ -106,21 +88,33 @@
                              scrollable="true" scrollHeight="450">
                     <p:autoUpdate />
 
-                    <p:column headerText="Cédula Solicitante" filterBy="#">
-                        <h:outputText value="#" />
-                    </p:column>
-
-                    <p:column headerText="Fecha Inicio Vacaciones" filterBy="#">
-                        <h:outputText value="" />
-                    </p:column>
-                    <p:column headerText="Fecha Final Vacaciones" filterBy="#">
+                    <p:column headerText="Cédula" filterBy="#">
                         <h:outputText value="" />
                     </p:column>
 
-                    <p:column headerText="Días Disponibles" filterBy="#">
+                    <p:column headerText="Nombre" filterBy="#">
                         <h:outputText value="" />
                     </p:column>
 
+                    <p:column headerText="Tipo Jornada" filterBy="#">
+                        <h:outputText value="" />
+                    </p:column>
+
+                    <p:column headerText="Horario" filterBy="#">
+                        <h:outputText value="" />
+                    </p:column>
+
+                    <p:column headerText="Horas marcadas" filterBy="#">
+                        <h:outputText value="" />
+                    </p:column>
+
+                    <p:column headerText="Llegadas Tardías" filterBy="#">
+                        <h:outputText value="" />
+                    </p:column>
+
+                    <p:column headerText="Días de vacaciones" filterBy="#">
+                        <h:outputText value="" />
+                    </p:column>
 
                 </p:dataTable>
 
@@ -128,14 +122,15 @@
             </h:form>
         </div>
 
-
-
         <div id="footer">
             <br/>
-            <a href="http://localhost:8080/ProyectoSCM_03_war/acerca.xhtml"> ©</a>  SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA
+            <a href="http://localhost:8090/ProyectoSCM_03_war/acerca.xhtml"> ©</a>  SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA
         </div>
 
-</h:body>
+    </h:body>
+
+</div>
+
 </c:when>
     <c:otherwise>
         <h:head>
@@ -153,5 +148,4 @@
     </c:otherwise>
 </c:choose>
 </ui:composition>
-
 </html>

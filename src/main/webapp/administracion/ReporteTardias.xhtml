@@ -7,8 +7,16 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<c:choose>
+<c:when test="${colaboradorBean.colaboradorlogueado.puesto.descripcion=='Jefatura' and colaboradorBean.colaboradorlogueado.departamento.nombre=='Recursos Humanos'}">
+
+
 <h:head>
-    <link href="css/style.css" rel="stylesheet" type="text/css" />
+    <link href="../css/style.css" rel="stylesheet" type="text/css" />
     <link href="//db.onlinewebfonts.com/c/f977213040abc486420980aae60e0db3?family=GestaW01-Medium" rel="stylesheet" type="text/css"/>
     <title>Reporte llegadas tardías</title>
 </h:head>
@@ -21,12 +29,38 @@
         </div>
         <div id="top">
             <h:form>
-                <p:commandButton   id="dynaButton1" value="Menu" type="button"  icon="ui-icon-person"/>
-                <p:menu style='float: right;'  overlay="true" trigger="dynaButton1" my="left top" at="left bottom">
+                <p:commandButton id="dynaButton" value="Menú" type="button"  icon="ui-icon-home"/>
+                <p:menu style="width: 17%;" toggleable="true" overlay="true" trigger="dynaButton" my="left top" at="left bottom">
+                    <p:submenu label="Colaborador">
+                        <p:menuitem value="Incorporar Colaborador" outcome="MantenimientoColaborador.xhtml" icon="ui-icon-plus"/>
+                    </p:submenu>
+                    <p:submenu label="Departamento">
+                        <p:menuitem value="Mantenimiento Departamento" outcome="MantenimientoDepartamento.xhtml" icon="ui-icon-wrench"/>
+                    </p:submenu>
+                    <p:submenu label="Informes">
+                        <p:menuitem value="Cantidad Laborando" outcome="CantidadLaborando.xhtml" icon="ui-icon-clipboard"/>
+                        <p:menuitem value="Colaboradores laborando en un lapso de tiempo" outcome="ColaboradorLapso.xhtml" icon="ui-icon-clipboard"/>
+                        <p:menuitem value="Colaborador Detallado" outcome="InformeColaborador.xhtml" icon="ui-icon-clipboard"/>
+                        <p:menuitem value="Colaborador por Departamento" outcome="InformeColaDepartamento.xhtml" icon="ui-icon-clipboard"/>
+                        <p:menuitem value="Reporte Horarios" outcome="ReporteHorarios.xhtml" icon="ui-icon-clipboard"/>
+                        <p:menuitem value="Reporte Tardias" outcome="ReporteTardias.xhtml" icon="ui-icon-clipboard"/>
 
+                    </p:submenu>
+                    <p:submenu label="Vacaciones" >
+
+                        <p:menuitem  value="Lista Solicitudes"  outcome="ListaSolicitud.xhtml" icon="ui-icon-clipboard"/>
+                    </p:submenu>
+                </p:menu>
+
+                <p:commandButton style='float: right;'  id="dynaButton1" value="Salir" type="button"  icon="ui-icon-person"/>
+                <p:menu style='float: right;'  overlay="true" trigger="dynaButton1" my="left top" at="left bottom">
+                    <p:submenu label="#{colaboradorBean.colaboradorlogueado.nombre}">
+                        <p:menuitem value="Salir" action="#{colaboradorBean.doLogout}" icon="ui-icon-person" />
+                    </p:submenu>
                 </p:menu>
 
             </h:form>
+
         </div>
         <h1 id="h1Centro">Reporte llegadas tardías</h1>
         <p:outputLabel value="Desde: " styleClass="required"  indicateRequired="false" for="fecha1"/>
@@ -109,4 +143,21 @@
 
 </div>
 
+</c:when>
+    <c:otherwise>
+        <h:head>
+            <link href="../css/style.css" rel="stylesheet" type="text/css" />
+            <link href="//db.onlinewebfonts.com/c/f977213040abc486420980aae60e0db3?family=GestaW01-Medium" rel="stylesheet" type="text/css"/>
+            <title>Acceso denegado</title>
+
+        </h:head>
+
+        <h:body >
+            <div class="error">
+                Acceso denegado
+            </div>
+        </h:body>
+    </c:otherwise>
+</c:choose>
+</ui:composition>
 </html>

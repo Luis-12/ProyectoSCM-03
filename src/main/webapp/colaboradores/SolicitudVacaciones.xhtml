@@ -35,13 +35,24 @@
     <h1 style="text-align: center">Solicitud de Vacaciones</h1>
 
 
+    <div id="fecha">
+        <p:dataTable style="width: 53%"  emptyMessage="3">
+            <p:column headerText="Días disponibles">
+                <h:outputText value="#3" />
+            </p:column>
+
+        </p:dataTable>
+    </div>
     <div id="solicitud">
+
+
         <h:form>
 
             <center>
                 <br/>
                 <br/>
-            <p:outputLabel value="Fecha de Inicio Vacaciones: "   indicateRequired="false" for="fechaVacaciones"/>
+
+                <p:outputLabel value="Fecha de Inicio Vacaciones: "   indicateRequired="false" for="fechaVacaciones"/>
             <p:calendar autocomplete="off"  id="fechaVacaciones" required="true" requiredMessage="Ingrese la Fecha" value="" pattern="yyyy-MM-dd">
             </p:calendar>
             <p:watermark value="Ingrese la fecha " for="fechaVacaciones"/>

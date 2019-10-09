@@ -39,7 +39,7 @@ div.error {
 
 }
 div.camara{
-    background-color: #3DBBD3;
+    background-color: #AEB6BF;
     margin-top: 10px;
     margin-left: 273px;
     margin-right: 297px;
@@ -48,11 +48,15 @@ div.camara{
     -webkit-border-radius: 4px;
 }
 
+
+
+#fecha{background: #f2f2f2; width: 16%; margin-left: 10%;}
+
 #solicitud{
     background-color: #AEB6BF;
     width:40%;
-    margin-top:40px;
-    margin-left:380px;
+    margin-top:-78px;
+    margin-left:440px;
     height:200px;
 
 }

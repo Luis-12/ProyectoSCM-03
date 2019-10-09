@@ -1,12 +1,18 @@
 package s.c.m.entities;
 
+import org.springframework.data.jpa.repository.query.Procedure;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "colaboradores")
+
+
 public class Colaborador implements Serializable {
+
+
 
     @Id
     private String pk_idColaborador;
@@ -24,6 +30,9 @@ public class Colaborador implements Serializable {
     private String estado;
     private String justificacion;
     private Date fechaVencimiento;
+
+
+
 
     public String getPk_idColaborador()
     {
