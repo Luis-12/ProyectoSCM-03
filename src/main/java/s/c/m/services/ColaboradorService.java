@@ -124,7 +124,12 @@ public class ColaboradorService {
 
     public Colaborador findColaborador(String id)
     {
-        return colaboradorRepository.findById(id).get();
+        if(colaboradorRepository.findById(id).get()==null){//if que valida que si no encuentra nada retorne null
+            System.out.println("ENTRO EN IF DOND NO EXISTE EL OBJETO");
+            return null;
+        }else{
+            return colaboradorRepository.findById(id).get();//Si no retorna null quiere decir que lo encontro por ello retorne el objeto colaborador
+        }
     }
 
 

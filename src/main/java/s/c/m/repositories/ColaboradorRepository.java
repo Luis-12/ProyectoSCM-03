@@ -21,7 +21,6 @@ public interface ColaboradorRepository extends CrudRepository<Colaborador, Strin
     Colaborador findByDepartamentoAndPuestoAndEstado(Departamento idD,Puesto idP,String estado);
     List<Colaborador> findByDepartamento(Departamento idD);
 
-
 }
 
 

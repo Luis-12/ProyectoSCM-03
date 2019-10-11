@@ -5,8 +5,10 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.model.menu.MenuModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import s.c.m.components.MenuView;
 import s.c.m.entities.Colaborador;
 import s.c.m.entities.Departamento;
 import s.c.m.entities.Puesto;
@@ -44,6 +46,9 @@ public class ColaboradorBean {
     private Puesto puesto = new Puesto();
     private List<Colaborador> colaboradores;
     private  boolean loggedIn;
+    private MenuView generaMenu = new MenuView();
+    private MenuModel model;
+
     @Autowired
     DepartamentoService departamentoService;
     private Date fecha;
@@ -152,6 +157,21 @@ public class ColaboradorBean {
         this.colaboradorClave = colaboradorClave;
     }
 
+    public MenuView getGeneraMenu() {
+        return generaMenu;
+    }
+
+    public void setGeneraMenu(MenuView generaMenu) {
+        this.generaMenu = generaMenu;
+    }
+
+    public MenuModel getModel() {
+        return model;
+    }
+
+    public void setModel(MenuModel model) {
+        this.model = model;
+    }
 
     public boolean validaVence(Date f){
         Date fechaVence = f;
@@ -222,49 +242,77 @@ public class ColaboradorBean {
         return vencio;//Si es true quiere decir que vencio
     }
 
+    public void construyeMenuDinamico(String rol,String nombreDept){
+        model=generaMenu.construyeMenuPorRol(rol,nombreDept);
+    }
+
     public String doLogin() throws IOException {
         PrimeFaces current = PrimeFaces.current();
-            colaborador1 = colaboradorService.findColaborador(colaboradorlogueado.getPk_idColaborador());
+        colaborador1 = colaboradorService.findColaborador(colaboradorlogueado.getPk_idColaborador());
+
+        if (colaborador1 != null) {//IF que valida que el usuario ingresado existe o no
             String dbUsername = colaborador1.getPk_idColaborador();
             String dbPassword = colaborador1.getClave();
-        FacesContext context = FacesContext.getCurrentInstance();
-        colaboradorClave.setPk_idColaborador(colaboradorlogueado.getPk_idColaborador());
-        colaboradorClave.setClave(colaboradorlogueado.getClave());
+            FacesContext context = FacesContext.getCurrentInstance();
+            colaboradorClave.setPk_idColaborador(colaboradorlogueado.getPk_idColaborador());
+            colaboradorClave.setClave(colaboradorlogueado.getClave());
 
-
-        if (colaboradorlogueado.getPk_idColaborador().equals(dbUsername)
+            if (colaboradorlogueado.getPk_idColaborador().equals(dbUsername)
                     && colaboradorlogueado.getClave().equals(dbPassword)
                     && colaborador1.getPuesto().getDescripcion().equals("Jefatura")
-                    &&colaborador1.getDepartamento().getNombre().equals("Recursos Humanos")) {
+                    && colaborador1.getDepartamento().getNombre().equals("Recursos Humanos")) {
                 colaboradorlogueado.setNombre(colaborador1.getNombre());
                 colaboradorlogueado.setPuesto(colaborador1.getPuesto());
                 colaboradorlogueado.setDepartamento(colaborador1.getDepartamento());
-                if(validaVence(colaborador1.getFechaVencimiento())){
+                if (validaVence(colaborador1.getFechaVencimiento())) {
                     current.executeScript("PF('dlCC').show();");
-                }else{
+                } else {
+                    construyeMenuDinamico(colaborador1.getPuesto().getDescripcion(), colaborador1.getDepartamento().getNombre());
                     loggedIn = true;
                     return "/administracion/MantenimientoColaborador.xhtml?faces-redirect=true";
                 }
 
             }
-        if (colaboradorlogueado.getPk_idColaborador().equals(dbUsername) && colaboradorlogueado.getClave().equals(dbPassword)&& colaborador1.getPuesto().getDescripcion().equals("Colaborador")) {
-            colaboradorlogueado.setNombre(colaborador1.getNombre());
-            colaboradorlogueado.setPuesto(colaborador1.getPuesto());
-            colaboradorlogueado.setDepartamento(colaborador1.getDepartamento());
-            if(validaVence(colaborador1.getFechaVencimiento())){
-                //addMessage("AVISO","Cambie la constraseña");
-                current.executeScript("PF('dlCC').show();");
-            }else{
-            loggedIn = true;
-                return "/colaboradores/SolicitudVacaciones.xhtml?faces-redirect=true";
-            }
-        }
+            if (colaboradorlogueado.getPk_idColaborador().equals(dbUsername)
+                        && colaboradorlogueado.getClave().equals(dbPassword)
+                        && colaborador1.getPuesto().getDescripcion().equals("Jefatura")
+                        && (!colaborador1.getDepartamento().getNombre().equals("Recursos Humanos"))) {//IF DE CUANDO ES JEFE PERO NO DE RH
+                    colaboradorlogueado.setNombre(colaborador1.getNombre());
+                    colaboradorlogueado.setPuesto(colaborador1.getPuesto());
+                    colaboradorlogueado.setDepartamento(colaborador1.getDepartamento());
+                    if (validaVence(colaborador1.getFechaVencimiento())) {
+                        current.executeScript("PF('dlCC').show();");
+                    } else {
+                        construyeMenuDinamico(colaborador1.getPuesto().getDescripcion(), colaborador1.getDepartamento().getNombre());
+                        loggedIn = true;
+                        return "/administracion/ListaSolicitud.xhtml?faces-redirect=true";
+                    }
 
-        FacesMessage msg = new FacesMessage("Aviso", "El usuario o contraseña son incorrectos");
-        msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-        return null;
+                }
+            if (colaboradorlogueado.getPk_idColaborador().equals(dbUsername) && colaboradorlogueado.getClave().equals(dbPassword) && colaborador1.getPuesto().getDescripcion().equals("Colaborador")) {
+                colaboradorlogueado.setNombre(colaborador1.getNombre());
+                colaboradorlogueado.setPuesto(colaborador1.getPuesto());
+                colaboradorlogueado.setDepartamento(colaborador1.getDepartamento());
+                if (validaVence(colaborador1.getFechaVencimiento())) {
+                    //addMessage("AVISO","Cambie la constraseña");
+                    current.executeScript("PF('dlCC').show();");
+                } else {
+                    loggedIn = true;
+                    return "/colaboradores/SolicitudVacaciones.xhtml?faces-redirect=true";
+                }
+            }
+
+            FacesMessage msg = new FacesMessage("Aviso", "El usuario o contraseña son incorrectos");
+            msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return null;
+        }else {
+            addMessage("Aviso", "El usuario ingresado no se encuetra registrado en el sistema");
+            return null;
+        }
     }
+
+
     public boolean validaClave(){
         boolean diferente = false;
         if(colaborador1.getClave().equals(colaboradorlogueado.getClave())){//Si son iguales retorna false por ende no puede cambiar la clave
