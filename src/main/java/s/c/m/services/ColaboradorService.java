@@ -45,12 +45,17 @@ public class ColaboradorService {
 
 
     public Date calculaVencimiento() throws ParseException {
+
+        Date fechaDeVencimiento =null;
+        Date horaActual = new Date();
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+        /*
         int mes;
         int dia;
         int year;
         String dia2 = null;
         String mes2 = null;
-        Date horaActual = new Date();
+
         mes= horaActual.getMonth() + 1;//MES
         dia= horaActual.getDate();//DIA
         year = horaActual.getYear() + 1900;//
@@ -77,16 +82,17 @@ public class ColaboradorService {
         if (dia < 10) {
             dia2 = "0" + dia;
         }else{
-            dia2 = ""+dia2;
+            dia2 = ""+dia;
         }
-        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
         String fVencimiento = year +"-"+mes2+"-"+dia2;
         System.out.println("La fecha de venciamiento de clave calculada antes de convertirlo: "+ fVencimiento);
-        Date fechaDeVencimiento =null;
-        fechaDeVencimiento = formato.parse(fVencimiento);
-        System.out.println("La fecha de venciamiento de clave calculada es : "+ formato.format(fechaDeVencimiento));
-        return fechaDeVencimiento;
 
+        fechaDeVencimiento = formato.parse(fVencimiento);
+        System.out.println("La fecha de venciamiento de clave calculada es : "+ formato.format(fechaDeVencimiento));*/
+        horaActual.setMonth((horaActual.getMonth()-1+3)%12 +1);
+        fechaDeVencimiento= formato.parse(formato.format(horaActual));
+        System.out.println("Fecha calculada Pablo:" + fechaDeVencimiento);//formato.format(horaActual));
+        return fechaDeVencimiento;
     }
     public void actualizaClave(Colaborador c) throws ParseException {
         c.setFechaVencimiento(calculaVencimiento());//Cuando se cambia la clave se vuelve a calcula la nueva fecha de vencimiento
@@ -101,7 +107,6 @@ public class ColaboradorService {
         System.out.println("FECHA DE HOY: " + formato.format(fechaA));
         colaborador.setEstado("Activo");
         colaborador.setFechaVencimiento(fechaA);
-        //colaborador.setFechaVencimiento(calculaVencimiento());
         colaborador.setClave(colaborador.getPk_idColaborador());//Aca pongo de clave el mismo id del colaborador agregado
         colaboradorRepository.save(colaborador);
     }
