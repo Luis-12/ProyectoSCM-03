@@ -82,7 +82,7 @@ public MenuModel construyeMenuPorRol(String rol,String nombreDept){
 
     //First submenu
     DefaultSubMenu firstSubmenu = new DefaultSubMenu("Colaborador");
-    DefaultMenuItem item = new DefaultMenuItem("Incorporar Colaborador");
+    DefaultMenuItem item = new DefaultMenuItem("Mantenimiento Colaborador");
     item.setUrl("MantenimientoColaborador.xhtml");
     item.setIcon("ui-icon-plus");
     firstSubmenu.addElement(item);

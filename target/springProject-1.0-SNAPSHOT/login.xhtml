@@ -73,7 +73,7 @@
 					<f:validateLength minimum="8"/>
 				</p:password>
 				<p:watermark value="Contraseña" for="contraseñaCC"/>
-				<p:message id="NmessageCC" for="contraseñaCC"/>
+				<p:messages for="contraseñaCC"/>
 
 				<p:outputLabel value="Confirmar contraseña:" styleClass="required" indicateRequired="true" for="contraseñaCCC"/>
 				<p:password id="contraseñaCCC" required="true" requiredMessage="Confirme la nueva contraseña" value="#{colaboradorBean.colaboradorlogueado.clave}"
@@ -81,7 +81,7 @@
 					<f:validateLength minimum="8"/>
 				</p:password>
 				<p:watermark value="Contraseña" for="contraseñaCCC"/>
-				<p:message id="NmessageCCC" for="contraseñaCCC"/>
+				<p:messages for="contraseñaCCC"/>
 			</h:panelGrid>
 			<center>
 				<p:commandButton value="Cambiar"
