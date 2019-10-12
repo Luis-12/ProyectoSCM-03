@@ -131,16 +131,16 @@
             <h:panelGrid columns="2"  id="panel2">
 
                 <p:outputLabel value="Cédula:" styleClass="required" indicateRequired="false" for="pk_idColaborador"/>
-                <p:inputText maxlength="20" id="pk_idColaborador" required="true"   requiredMessage="Ingrese una cédula"
+                <p:inputText  maxlength="20" id="pk_idColaborador" required="true"   requiredMessage="Ingrese una cédula"
                              validatorMessage=" La cédula debe tener mínimo 9 caracteres numéricos" value="#{colaboradorBean.colaborador.pk_idColaborador}">
-                    <f:ajax event="blur" execute="@this" render="idmessage" />
+                    <p:ajax event="blur"  execute="@this" render="idmessage" />
                     <f:validateRegex pattern="[0-9]{9,20}" />
                 </p:inputText>
                 <p:watermark value="ID" for="pk_idColaborador"/>
                 <p:message id="idmessage" for="pk_idColaborador"/>
 
                 <p:outputLabel  value="Departamento:" />
-                <p:selectOneMenu value="#{colaboradorBean.colaborador.departamento}" converter="departamentoConverter">
+                <p:selectOneMenu  value="#{colaboradorBean.colaborador.departamento}" converter="departamentoConverter">
                     <f:selectItems value="#{departamentoBean.departamentos}" var="departamento"
                                    itemValue="#{departamento}"
                                    itemLabel="#{departamento.nombre}"/>

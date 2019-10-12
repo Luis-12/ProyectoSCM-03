@@ -316,7 +316,9 @@ public class ColaboradorBean {
     public boolean validaClave(){
         boolean diferente = false;
         if(colaborador1.getClave().equals(colaboradorlogueado.getClave())){//Si son iguales retorna false por ende no puede cambiar la clave
-            addMessage("Aviso","La nueva clave no puede ser igual a la anterior");
+            FacesContext.getCurrentInstance().addMessage("contraseñaCCC",
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "La nueva clave no puede ser igual a la anterior","La nueva clave no puede ser igual a la anterior"));
+
             diferente = false;
         }else{
             diferente = true;
@@ -327,10 +329,10 @@ public class ColaboradorBean {
 
     public boolean validarContrasena(String usuario,String contrasena)
     {
-
-        for(int i=0;(i+2)<contrasena.length();i++)
-        if(contrasena.indexOf(usuario.substring(i,i+3))!=-1)
+        for(int i=0;(i+2)<usuario.length();i++)
+        if(contrasena.indexOf(usuario.substring(i,i+3))!=-1) {
             return false;
+        }
         return true;
     }
     public String cambioClave() throws ParseException, IOException {
