@@ -13,7 +13,11 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
     <c:choose>
-        <c:when test="${colaboradorBean.colaboradorlogueado.puesto.descripcion=='Jefatura'}">
+        <c:when test="${colaboradorBean.colaboradorlogueado.puesto.descripcion=='Jefatura'
+or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Direccion'
+ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Gerencia'
+ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Supervisor'
+ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Analista' }">
 
 <h:head>
     <link href="../css/style.css" rel="stylesheet" type="text/css" />

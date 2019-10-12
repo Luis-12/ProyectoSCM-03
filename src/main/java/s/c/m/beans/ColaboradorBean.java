@@ -273,10 +273,10 @@ public class ColaboradorBean {
                 }
 
             }
-            if (colaboradorlogueado.getPk_idColaborador().equals(dbUsername)
+            if ((colaboradorlogueado.getPk_idColaborador().equals(dbUsername)
                         && colaboradorlogueado.getClave().equals(dbPassword)
                         && colaborador1.getPuesto().getDescripcion().equals("Jefatura")
-                        && (!colaborador1.getDepartamento().getNombre().equals("Recursos Humanos"))) {//IF DE CUANDO ES JEFE PERO NO DE RH
+                        && (!colaborador1.getDepartamento().getNombre().equals("Recursos Humanos")))) {//IF DE CUANDO ES JEFE PERO NO DE RH
                     colaboradorlogueado.setNombre(colaborador1.getNombre());
                     colaboradorlogueado.setPuesto(colaborador1.getPuesto());
                     colaboradorlogueado.setDepartamento(colaborador1.getDepartamento());
@@ -301,7 +301,23 @@ public class ColaboradorBean {
                     return "/colaboradores/SolicitudVacaciones.xhtml?faces-redirect=true";
                 }
             }
-
+            if (colaboradorlogueado.getPk_idColaborador().equals(dbUsername) && colaboradorlogueado.getClave().equals(dbPassword)
+                    && (colaborador1.getPuesto().getDescripcion().equals("Direccion")
+                    ||colaborador1.getPuesto().getDescripcion().equals("Gerencia")
+                    ||colaborador1.getPuesto().getDescripcion().equals("Supervisor")
+                    ||colaborador1.getPuesto().getDescripcion().equals("Analista"))) {
+                colaboradorlogueado.setNombre(colaborador1.getNombre());
+                colaboradorlogueado.setPuesto(colaborador1.getPuesto());
+                colaboradorlogueado.setDepartamento(colaborador1.getDepartamento());
+                if (validaVence(colaborador1.getFechaVencimiento())) {
+                    //addMessage("AVISO","Cambie la constraseña");
+                    current.executeScript("PF('dlCC').show();");
+                } else {
+                    construyeMenuDinamico(colaborador1.getPuesto().getDescripcion(), colaborador1.getDepartamento().getNombre());
+                    loggedIn = true;
+                    return "/administracion/ListaSolicitud.xhtml?faces-redirect=true";
+                }
+            }
             FacesMessage msg = new FacesMessage("Aviso", "El usuario o contraseña son incorrectos");
             msg.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage(null, msg);

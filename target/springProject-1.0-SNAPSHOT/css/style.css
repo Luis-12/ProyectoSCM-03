@@ -98,6 +98,14 @@ h1{
     font-size: small;
 }
 
+
+.ui-messages-error, .ui-message-error {
+    color: #b94a48;
+    background-color: #f2dede;
+    border-color: #eed3d7;
+    display: table-caption;
+}
+
 .ui-messages-info, .ui-messages-warn, .ui-messages-error, .ui-messages-fatal {
     display: table-caption; font-size: small; margin: inherit; padding: revert;
 }

@@ -147,6 +147,10 @@ public MenuModel construyeMenuPorRol(String rol,String nombreDept){
         model.addElement(tercerSubmenu);
         model.addElement(cuartoSubmenu);
     }
+    else if(rol.equals("Direccion") || rol.equals("Gerencia")||rol.equals("Supervisor")||rol.equals("Analista")){
+        model.addElement(tercerSubmenu);
+        model.addElement(cuartoSubmenu);
+    }
     return model;
 }
     public MenuModel getModel() {
