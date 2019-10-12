@@ -68,10 +68,10 @@
             <p:growl id="msgs" showDetail="true" life="3000" rendered="#{not facesContext.validationFailed}"><p:autoUpdate/></p:growl>
 
             <p:contextMenu for="tablaColaborador" >
-                <p:menuitem value="Incorporar colaborador" action="#{colaboradorBean.checkDepartamento}">
+                <p:menuitem value="Incorporar Colaborador" action="#{colaboradorBean.checkDepartamento}">
                 </p:menuitem>
-                <p:menuitem value="Actualizar" update="dlUC"  action="#{colaboradorBean.checkSelection}"/>
-                <p:menuitem value="Eliminar"  update="dlCFD" action="#{colaboradorBean.showconfirm}" icon="ui-icon-close"  />
+                <p:menuitem value="Actualizar Colaborador" update="dlUC"  action="#{colaboradorBean.checkSelection}"/>
+                <p:menuitem value="Eliminar Colaborador"  update="dlCFD" action="#{colaboradorBean.showconfirm}" icon="ui-icon-close"  />
             </p:contextMenu>
 
 
@@ -122,7 +122,7 @@
     </div>
 
 
-    <p:dialog id="dlAC" header="Agregar Colaborador"  showEffect="fade" hideEffect="fade"
+    <p:dialog id="dlAC" header="Incorporar Colaborador"  showEffect="fade" hideEffect="fade"
               widgetVar="dlAC" modal="true" resizable="false" minWidth="200"  >
         <p:ajax event="close" update="dlAC" resetValues="true" listener="#{colaboradorBean.close}" />
         <h:form id="AgregarColaborador">
@@ -233,7 +233,7 @@
                 <p:watermark value="Teléfono" for="telefonoA"/>
                 <p:message id="Telemessage" for="telefonoA"/>
 
-                <p:outputLabel value="Correo:" indicateRequired="true" for="correoA"/>
+                <p:outputLabel value="Correo:" styleClass="required" indicateRequired="false" for="correoA"/>
                 <p:inputText maxlength="50" id="correoA" required="true"  label="email" validatorMessage="Formato incorrecto ej. nombre@gmail.com" requiredMessage="Ingrese un correo" value="#{colaboradorBean.selectcolaborador.correo}">
                     <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                     <f:ajax event="blur" execute="@this" render="Coremessage" />
@@ -271,7 +271,7 @@
                              value="#{colaboradorBean.selectcolaborador.justificacion}">
                     <f:validateRegex  pattern="^[a-zA-Z-ÑñáéíóúÁÉÍÓÚ,]+(\s{0,1}[a-zA-Z-ÑñáéíóúÁÉÍÓÚ, ])*$" />
                 </p:inputTextarea>
-                <p:watermark value="Ingrese una justificación del porque de la desvinculación del colaborador" for="justificacion"/>
+                <p:watermark value="Justifique por qué la desvinculación" for="justificacion"/>
             </h:panelGrid>
             <center>
                 <p:commandButton value="Eliminar"

@@ -188,7 +188,7 @@ public class DepartamentoBean {
             }
         } else if (existeDepartamento) {
             System.out.println("Si existe el departamento con ese cod");
-            mensaje = new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "Ya existe un departamento con ese codigo pruebe nuevamente.");
+            mensaje = new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "Ya existe un departamento con ese codigo, pruebe nuevamente.");
             departamento = new Departamento();
         }
         FacesContext.getCurrentInstance().addMessage(null, mensaje);

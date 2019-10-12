@@ -233,8 +233,8 @@ public class ColaboradorBean {
 
         if(fechaA >= fechaV){
             vencio = true;
-            System.out.println("AL USUARIO SE LE VENCIO LA CONTRASEÑA");
-            addMessage("Aviso","La contraseña vencio cambiela");
+            System.out.println("AL USUARIO SE LE VENCIÓ LA CONTRASEÑA");
+            addMessage("Aviso","La contraseña venció, ¡debe cambiarla!");
         }else {
             vencio = false;
             System.out.println("AL USUARIO SE LE SIGUE VIGENTE LA CONTRASEÑA");
@@ -294,7 +294,6 @@ public class ColaboradorBean {
                 colaboradorlogueado.setPuesto(colaborador1.getPuesto());
                 colaboradorlogueado.setDepartamento(colaborador1.getDepartamento());
                 if (validaVence(colaborador1.getFechaVencimiento())) {
-                    //addMessage("AVISO","Cambie la constraseña");
                     current.executeScript("PF('dlCC').show();");
                 } else {
                     loggedIn = true;
@@ -310,7 +309,6 @@ public class ColaboradorBean {
                 colaboradorlogueado.setPuesto(colaborador1.getPuesto());
                 colaboradorlogueado.setDepartamento(colaborador1.getDepartamento());
                 if (validaVence(colaborador1.getFechaVencimiento())) {
-                    //addMessage("AVISO","Cambie la constraseña");
                     current.executeScript("PF('dlCC').show();");
                 } else {
                     construyeMenuDinamico(colaborador1.getPuesto().getDescripcion(), colaborador1.getDepartamento().getNombre());
@@ -346,8 +344,7 @@ public class ColaboradorBean {
     public boolean validarContrasena(String usuario,String contrasena)
     {
         for(int i=0;(i+2)<usuario.length();i++)
-        if(contrasena.indexOf(usuario.substring(i,i+3))!=-1) {
-            return false;
+        if(contrasena.indexOf(usuario.substring(i,i+3))!=-1) { return false;
         }
         return true;
     }
@@ -380,10 +377,9 @@ public class ColaboradorBean {
     public String doLogout() {
         loggedIn = false;
 
-        FacesMessage msg = new FacesMessage("Salio", "Ha salido con exito");
+        FacesMessage msg = new FacesMessage("Salió", "Ha salido con éxito");
         msg.setSeverity(FacesMessage.SEVERITY_INFO);
         FacesContext.getCurrentInstance().addMessage(null, msg);
-        //  return navigationBean.redirectToLogin();
         return "/login.xhtml?faces-redirect=true";
     }
 
@@ -413,8 +409,8 @@ public class ColaboradorBean {
                 colaborador = new Colaborador();
             }
         }else if(existeColaborador) {
-            System.out.println("Si existe el colaborador con ese id");
-            mensaje = new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "Ya existe un colaborador con ese id pruebe nuevamente.");
+            System.out.println("Si existe el colaborador con esa cédula");
+            mensaje = new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "Ya existe un colaborador con esa cédula, pruebe nuevamente.");
             colaborador = new Colaborador();
         }
         FacesContext.getCurrentInstance().addMessage(null, mensaje);
@@ -466,7 +462,7 @@ public class ColaboradorBean {
     public void update()
     {
         try{
-            System.out.println("El nombre a actualizado es:"+selectcolaborador.getNombre());
+            System.out.println("El nombre actualizado es:"+selectcolaborador.getNombre());
             colaboradorService.updateColaborador(selectcolaborador);
             addMessage("Aviso", "Registro modificado correctamente.");
             colaboradores = colaboradorService.getAllColaboradoresActivos();
