@@ -68,7 +68,7 @@
             <p:growl id="msgs" showDetail="true" life="3000" rendered="#{not facesContext.validationFailed}"><p:autoUpdate/></p:growl>
 
             <p:contextMenu for="tablaColaborador" >
-                <p:menuitem value="Agregar" action="#{colaboradorBean.checkDepartamento}">
+                <p:menuitem value="Incorporar colaborador" action="#{colaboradorBean.checkDepartamento}">
                 </p:menuitem>
                 <p:menuitem value="Actualizar" update="dlUC"  action="#{colaboradorBean.checkSelection}"/>
                 <p:menuitem value="Eliminar"  update="dlCFD" action="#{colaboradorBean.showconfirm}" icon="ui-icon-close"  />
@@ -126,14 +126,13 @@
               widgetVar="dlAC" modal="true" resizable="false" minWidth="200"  >
         <p:ajax event="close" update="dlAC" resetValues="true" listener="#{colaboradorBean.close}" />
         <h:form id="AgregarColaborador">
-            <p:autoUpdate/>
             <p:growl id="msgs2" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
             <h:panelGrid columns="2"  id="panel2">
 
                 <p:outputLabel value="Cédula:" styleClass="required" indicateRequired="false" for="pk_idColaborador"/>
                 <p:inputText  maxlength="20" id="pk_idColaborador" required="true"   requiredMessage="Ingrese una cédula"
                              validatorMessage=" La cédula debe tener mínimo 9 caracteres numéricos" value="#{colaboradorBean.colaborador.pk_idColaborador}">
-                    <p:ajax event="blur" update="msgs2"/>
+                    <f:ajax event="blur"  execute="@this" render="idmessage" />
                     <f:validateRegex pattern="[0-9]{9,20}" />
                 </p:inputText>
                 <p:watermark value="ID" for="pk_idColaborador"/>

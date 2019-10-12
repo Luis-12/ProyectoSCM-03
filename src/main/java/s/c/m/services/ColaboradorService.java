@@ -136,8 +136,6 @@ public class ColaboradorService {
 
     public void updateColaborador(Colaborador colaborador)
     {
-        colaborador.setEstado("Activo");
-        colaborador.setClave(colaborador.getPk_idColaborador());//Aca pongo de clave el mismo id del colaborador agregado
         colaboradorRepository.save(colaborador);
     }
 
