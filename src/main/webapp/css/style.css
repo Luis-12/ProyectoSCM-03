@@ -94,15 +94,13 @@ h1{
 
 }
 
-.ui-messages-error, .ui-message-error {
-    color: #b94a48;
-    color: #b94a48;
-    color: #b94a48;
-    width: -moz-fit-content;
-    display: table-caption;
-    position: static;
+.ui-messages-error .ui-widget {
+    font-size: small;
 }
 
+.ui-messages-info, .ui-messages-warn, .ui-messages-error, .ui-messages-fatal {
+    display: table-caption; font-size: small; margin: inherit; padding: revert;
+}
 
 .ui-widget .ui-widget {
     font-size: 1em;

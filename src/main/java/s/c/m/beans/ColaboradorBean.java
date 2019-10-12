@@ -327,8 +327,7 @@ public class ColaboradorBean {
 
     public boolean validarContrasena(String usuario,String contrasena)
     {
-        usuario.toLowerCase();
-        contrasena.toLowerCase();
+
         for(int i=0;(i+2)<contrasena.length();i++)
         if(contrasena.indexOf(usuario.substring(i,i+3))!=-1)
             return false;
@@ -337,8 +336,8 @@ public class ColaboradorBean {
     public String cambioClave() throws ParseException, IOException {
 
         if(validaClave()){//Si validaClave retorna true se puede cambiar la clave
-            //if (validarContrasena(colaborador1.getNombre(), colaboradorlogueado.getClave())==true) {
-            if (true) {
+            if (validarContrasena(colaborador1.getNombre(), colaboradorlogueado.getClave())==true) {
+
                 colaborador1.setClave(colaboradorlogueado.getClave());
                 System.out.println("NUEVA CLAVE:" + colaborador1.getClave());
                 colaboradorService.actualizaClave(colaborador1);//Aca le paso el colaborador ya con la nueva clave para que en el service con esta funcion lo updatee en la base con la nueva clave
@@ -347,7 +346,8 @@ public class ColaboradorBean {
                 return doLogin();
             }
             else {
-                FacesContext.getCurrentInstance().addMessage("contraseñaCC", new FacesMessage("No puede incuir su nombre"));
+                FacesContext.getCurrentInstance().addMessage("contraseñaCCC",
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "No puede usar su nombre o apellidos","No puede usar su nombre o apellidos"));
                 return null;
             }
         }else{
