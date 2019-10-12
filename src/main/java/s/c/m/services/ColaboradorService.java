@@ -21,6 +21,7 @@ public class ColaboradorService {
 
     @Autowired
     private ColaboradorRepository colaboradorRepository;
+    private  Colaborador colaborador;
 
     public List<Colaborador> getAllColaboradores()
     {
@@ -122,14 +123,22 @@ public class ColaboradorService {
         colaboradorRepository.save(colaborador);
     }
 
-    public Colaborador findColaborador(String id)
+    public Colaborador findColaborador(String id) throws Exception
     {
-        if(colaboradorRepository.findById(id).get()==null){//if que valida que si no encuentra nada retorne null
+        try
+        {
+            colaborador=colaboradorRepository.findById(id).get();
+        }catch (Exception ex)
+        {
+            colaborador=null;
+        }
+        return colaborador;
+       /* if(colaboradorRepository.findById(id).get()==null){//if que valida que si no encuentra nada retorne null
             System.out.println("ENTRO EN IF DOND NO EXISTE EL OBJETO");
             return null;
         }else{
             return colaboradorRepository.findById(id).get();//Si no retorna null quiere decir que lo encontro por ello retorne el objeto colaborador
-        }
+        }*/
     }
 
 

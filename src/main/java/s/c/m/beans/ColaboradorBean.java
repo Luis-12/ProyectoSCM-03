@@ -246,11 +246,11 @@ public class ColaboradorBean {
         model=generaMenu.construyeMenuPorRol(rol,nombreDept);
     }
 
-    public String doLogin() throws IOException {
+    public String doLogin() throws Exception {
         PrimeFaces current = PrimeFaces.current();
         colaborador1 = colaboradorService.findColaborador(colaboradorlogueado.getPk_idColaborador());
 
-        if (colaborador1 != null) {//IF que valida que el usuario ingresado existe o no
+        if (colaborador1 != null && colaborador1.getEstado().equals("Activo")) {//IF que valida que el usuario ingresado existe o no
             String dbUsername = colaborador1.getPk_idColaborador();
             String dbPassword = colaborador1.getClave();
             FacesContext context = FacesContext.getCurrentInstance();
@@ -348,7 +348,7 @@ public class ColaboradorBean {
         }
         return true;
     }
-    public String cambioClave() throws ParseException, IOException {
+    public String cambioClave() throws Exception {
 
         if(validaClave()){//Si validaClave retorna true se puede cambiar la clave
             if (validarContrasena(colaborador1.getNombre(), colaboradorlogueado.getClave())==true) {
@@ -474,8 +474,7 @@ public class ColaboradorBean {
 
 
 
-    public void find()
-    {
+    public void find() throws Exception {
         String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("ColaboradorIdBusqueda");
         colaboradores.clear();
         colaboradores.add(colaboradorService.findColaborador(id));

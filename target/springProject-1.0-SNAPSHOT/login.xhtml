@@ -11,7 +11,7 @@
 
 	<link href="css/style.css" rel="stylesheet" type="text/css" />
 	<link href="//db.onlinewebfonts.com/c/f977213040abc486420980aae60e0db3?family=GestaW01-Medium" rel="stylesheet" type="text/css"/>
-	<title>Login</title>
+	<title>Ingresar</title>
 
 </h:head>
 
@@ -52,14 +52,14 @@
 			<p:message id="Nmessage" for="contraseña"/>
 		</h:panelGrid>
 		<center>
-			<p:commandButton value="login" action="#{colaboradorBean.doLogin}" style="margin-right:20px;margin-top: 20px"
+			<p:commandButton value="Ingresar" action="#{colaboradorBean.doLogin}" style="margin-right:20px;margin-top: 20px"
 							 styleClass="loginButton" />
 		</center>
 	</h:form>
 	</center>
 	</div>
 </center>
-	<p:dialog id="dlCC" header="Actualizar clave de Usuario"  showEffect="fade" hideEffect="fade"
+	<p:dialog id="dlCC" header="Actualizar Clave de Usuario"  showEffect="fade" hideEffect="fade"
 			  widgetVar="dlCC" modal="true" resizable="false" minWidth="450"  >
 		<h:form id="ActualizarClave">
 			<p:growl id="msgs5" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
