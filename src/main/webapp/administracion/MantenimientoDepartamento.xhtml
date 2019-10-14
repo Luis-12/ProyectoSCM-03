@@ -124,7 +124,8 @@
             </h:panelGrid>
             <center>
                 <p:commandButton value="Guardar"  oncomplete="if (args &amp;&amp; !args.validationFailed) PF('dlAC').hide(),handleCrearRequest(xhr, status, args)"
-                                 action="#{departamentoBean.create}" style="margin-right:20px;margin-top: 20px" styleClass="ui-priority-primary" />
+                                 action="#{departamentoBean.create}" style="margin-right:20px;margin-top: 20px"
+                                 styleClass="ui-priority-primary" ajax="false"/>
             </center>
         </h:form>
     </p:dialog>

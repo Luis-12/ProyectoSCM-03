@@ -14,6 +14,7 @@ import s.c.m.entities.Departamento;
 import s.c.m.entities.Puesto;
 import s.c.m.services.ColaboradorService;
 import s.c.m.services.DepartamentoService;
+import s.c.m.services.PuestoService;
 
 
 import javax.annotation.ManagedBean;
@@ -44,6 +45,9 @@ public class ColaboradorBean {
     private Colaborador colaboradorClave = new Colaborador();
     private Departamento departamento = new Departamento();
     private Puesto puesto = new Puesto();
+
+    @Autowired
+    private PuestoService puestoService;
     private List<Colaborador> colaboradores;
     private  boolean loggedIn;
     private MenuView generaMenu = new MenuView();
@@ -398,7 +402,9 @@ public class ColaboradorBean {
             }
         }
         if(!existeColaborador){
-            if(colaboradorService.findColaboradorEncargado(colaborador.getDepartamento(), colaborador.getPuesto())==null){
+            //if(colaboradorService.findColaboradorEncargado(colaborador.getDepartamento(), colaborador.getPuesto())==null){
+            if((colaboradorService.findColaboradorEncargado(colaborador.getDepartamento(), puestoService.findIdPuesto("Jefatura"))==null)||
+            (!colaborador.getPuesto().getDescripcion().equals("Jefatura"))){
             try{
                 //if(colaboradorService.findColaboradorEncargado(colaborador.getDepartamento(), colaborador.getPuesto())==null){
                 System.out.println("No existe el colaborador");
