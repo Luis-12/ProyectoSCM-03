@@ -388,7 +388,7 @@ public class ColaboradorBean {
     {
         FacesMessage mensaje= null;
         boolean existeColaborador = false;
-        //System.out.println(colaborador.getPk_idColaborador());
+
         for(Colaborador c: colaboradores){
             if(colaborador.getPk_idColaborador().equals(c.getPk_idColaborador())){
                 existeColaborador = true;
@@ -398,22 +398,31 @@ public class ColaboradorBean {
             }
         }
         if(!existeColaborador){
+            if(colaboradorService.findColaboradorEncargado(colaborador.getDepartamento(), colaborador.getPuesto())==null){
             try{
+                //if(colaboradorService.findColaboradorEncargado(colaborador.getDepartamento(), colaborador.getPuesto())==null){
                 System.out.println("No existe el colaborador");
                 colaborador.setJustificacion("NA");
                 colaboradorService.createColaborador(colaborador);
                 mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Colaborador insertado correctamente.");
                 colaboradores = colaboradorService.getAllColaboradoresActivos();
+                /*/}else{
+                    addMessage("Aviso","El departamento " + colaborador.getDepartamento().getNombre() +" ya tiene un Jefe asignado");
+                }*/
             }catch (Exception e){
             } finally {
                 colaborador = new Colaborador();
+            }
+            }else{
+                mensaje = new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "El departamento " + colaborador.getDepartamento().getNombre() +" ya tiene un Jefe asignado");
+                System.out.println("Ya existe un JEFE PARA ESTE DEPARTEMENTO");
             }
         }else if(existeColaborador) {
             System.out.println("Si existe el colaborador con esa cédula");
             mensaje = new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "Ya existe un colaborador con esa cédula, pruebe nuevamente.");
             colaborador = new Colaborador();
         }
-        FacesContext.getCurrentInstance().addMessage(null, mensaje);
+        FacesContext.getCurrentInstance().addMessage(null, mensaje); //CON MI VALIDACION DE QUE NO SE ASIGNE DOS JEFES A UN DEPT , SE ME CAE POR ESTA LINEA NO SE NI LO QUE HACE
         PrimeFaces.current().ajax().addCallbackParam("existeColaborador", existeColaborador);
     }
 
