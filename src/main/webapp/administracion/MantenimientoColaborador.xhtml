@@ -51,6 +51,9 @@
                 <p:submenu label="Vacaciones" >
                     <p:menuitem value="Lista Solicitudes" outcome="ListaSolicitud.xhtml" icon="ui-icon-clipboard"/>
                 </p:submenu>
+                <p:submenu label="Solicitud de Vaciones" >
+                    <p:menuitem value="Formulario de Solicitud" outcome="/colaboradores/SolicitudVacaciones.xhtml" icon="ui-icon-clipboard"/>
+                </p:submenu>
             </p:menu>
 
             <p:commandButton style='float: right;'  id="dynaButton1" value="Salir" type="button"  icon="ui-icon-person"/>
@@ -71,7 +74,7 @@
                 <p:menuitem value="Incorporar Colaborador" action="#{colaboradorBean.checkDepartamento}">
                 </p:menuitem>
                 <p:menuitem value="Actualizar Colaborador" update="dlUC"  action="#{colaboradorBean.checkSelection}"/>
-                <p:menuitem value="Eliminar Colaborador"  update="dlCFD" action="#{colaboradorBean.showconfirm}" icon="ui-icon-close"  />
+                <p:menuitem value="Desactivar Colaborador"  update="dlCFD" action="#{colaboradorBean.showconfirm}" icon="ui-icon-close"  />
             </p:contextMenu>
 
 
@@ -131,11 +134,11 @@
 
                 <p:outputLabel value="Cédula:" styleClass="required" indicateRequired="false" for="pk_idColaborador"/>
                 <p:inputText  maxlength="20" id="pk_idColaborador" required="true"   requiredMessage="Ingrese una cédula"
-                             validatorMessage=" La cédula debe tener mínimo 9 caracteres numéricos" value="#{colaboradorBean.colaborador.pk_idColaborador}">
+                             validatorMessage=" La cédula debe tener mínimo 9 caracteres numéricos, y sin guiones" value="#{colaboradorBean.colaborador.pk_idColaborador}">
                     <f:ajax event="blur"  execute="@this" render="idmessage" />
                     <f:validateRegex pattern="[0-9]{9,20}" />
                 </p:inputText>
-                <p:watermark value="ID" for="pk_idColaborador"/>
+                <p:watermark value="201230432" for="pk_idColaborador"/>
                 <p:message id="idmessage" for="pk_idColaborador"/>
 
                 <p:outputLabel  value="Departamento:" />
@@ -151,7 +154,7 @@
                                    itemLabel="#{puesto.descripcion}"/>
                 </p:selectOneMenu >
 
-                <p:outputLabel value="Nombre:" styleClass="required" indicateRequired="false" for="nombre"/>
+                <p:outputLabel value="Nombre completo:" styleClass="required" indicateRequired="false" for="nombre"/>
                 <p:inputText maxlength="100" id="nombre" validatorMessage="Solo letras" required="true" requiredMessage="Ingrese un nombre" value="#{colaboradorBean.colaborador.nombre}">
                     <f:validateRegex  pattern="^[a-zA-Z-ÑñáéíóúÁÉÍÓÚ,]+(\s{0,1}[a-zA-Z-ÑñáéíóúÁÉÍÓÚ, ])*$" />
                     <f:ajax event="blur" execute="@this" render="Nmessage" />
@@ -159,12 +162,12 @@
                 <p:watermark value="Nombre" for="nombre"/>
                 <p:message id="Nmessage" for="nombre"/>
 
-                <p:outputLabel value="Teléfono" styleClass="required" indicateRequired="false" for="telefono"/>
-                <p:inputText maxlength="9" id="telefono" required="true" converterMessage="Ingrese solo números"  validatorMessage="Minimo 8 dígitos" requiredMessage="Ingrese un teléfono"  value="#{colaboradorBean.colaborador.telefono}">
-                    <f:validateLength minimum="8"/>
+                <p:outputLabel value="Teléfono:" styleClass="required" indicateRequired="false" for="telefono"/>
+                <p:inputText maxlength="9" id="telefono" required="true" converterMessage="Ingrese solo números"  validatorMessage="Minimo y máximo 8 dígitos" requiredMessage="Ingrese un teléfono"  value="#{colaboradorBean.colaborador.telefono}">
+                    <f:validateLength minimum="8" maximum="8"/>
                     <f:ajax event="blur" execute="@this" render="Telmessage" />
                 </p:inputText>
-                <p:watermark value="Teléfono" for="telefono"/>
+                <p:watermark value="12345678" for="telefono"/>
                 <p:message id="Telmessage" for="telefono"/>
 
                 <p:outputLabel value="Correo:" styleClass="required" indicateRequired="false" for="correo"/>
@@ -216,7 +219,7 @@
                                    itemLabel="#{puesto.descripcion}"/>
                 </p:selectOneMenu>
 
-                <p:outputLabel value="Nombre:" styleClass="required" indicateRequired="false" for="nombreA"/>
+                <p:outputLabel value="Nombre completo:" styleClass="required" indicateRequired="false" for="nombreA"/>
                 <p:inputText maxlength="100" id="nombreA" required="true" requiredMessage="Ingrese un nombre" validatorMessage="Solo letras" value="#{colaboradorBean.selectcolaborador.nombre}">
                     <f:ajax event="blur" execute="@this" render="Nomessage" />
                 <f:validateRegex  pattern="^[a-zA-Z-ÑñáéíóúÁÉÍÓÚ,]+(\s{0,1}[a-zA-Z-ÑñáéíóúÁÉÍÓÚ, ])*$" />
@@ -224,11 +227,11 @@
                 <p:watermark value="Nombre" for="nombreA"/>
                 <p:message id="Nomessage"  for="nombreA"/>
 
-                <p:outputLabel value="Teléfono" styleClass="required" indicateRequired="false" for="telefonoA"/>
-                <p:inputText id="telefonoA"  maxlength="9" converterMessage="Ingrese solo números" validatorMessage="Minimo 8 dígitos"  required="true" requiredMessage="Ingrese un teléfono"
+                <p:outputLabel value="Teléfono:" styleClass="required" indicateRequired="false" for="telefonoA"/>
+                <p:inputText id="telefonoA"  maxlength="9" converterMessage="Ingrese solo números" validatorMessage="Minimo y máximo 8 dígitos"  required="true" requiredMessage="Ingrese un teléfono"
                              value="#{colaboradorBean.selectcolaborador.telefono}">
                     <f:ajax event="blur" execute="@this" render="Telemessage" />
-                    <f:validateLength minimum="8"/>
+                    <f:validateLength minimum="8" maximum="8"/>
                 </p:inputText>
                 <p:watermark value="Teléfono" for="telefonoA"/>
                 <p:message id="Telemessage" for="telefonoA"/>
@@ -243,7 +246,7 @@
 
 
                 <p:outputLabel value="Fecha de Inicio Laboral" styleClass="required" indicateRequired="false" for="fechaInicioLaboralA"/>
-                <p:calendar autocomplete="off" maxdate="#{colaboradorBean.fecha}" id="fechaInicioLaboralA" required="true" requiredMessage="Ingrese la Fecha"  value="#{colaboradorBean.selectcolaborador.fechaInicioLaboral}" pattern="yyyy-MM-dd"/>
+                <p:calendar autocomplete="off" maxdate="#{colaboradorBean.fecha}" id="fechaInicioLaboralA" required="true" requiredMessage="Ingrese la Fecha"  value="#{colaboradorBean.selectcolaborador.fechaInicioLaboral}" pattern="yyyy-MM-dd" disabled="true"/>
                 <p:watermark value="Fecha" for="fechaInicioLaboralA"/>
                 <p:message for="fechaInicioLaboralA"/>
 
@@ -266,18 +269,17 @@
             <p:growl id="msgs4" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
             <h:panelGrid columns="2"  id="panel4">
                 <p:outputLabel value="Justificación:" indicateRequired="true" for="justificacion"/>
-                <p:inputTextarea rows="1" cols="33" id="justificacion" required="true" validatorMessage="Solo letras"
+                <p:inputText rows="1" cols="33" id="justificacion" required="true"
                              requiredMessage="Ingrese una justificación"
                              value="#{colaboradorBean.selectcolaborador.justificacion}">
-                    <f:validateRegex  pattern="^[a-zA-Z-ÑñáéíóúÁÉÍÓÚ,]+(\s{0,1}[a-zA-Z-ÑñáéíóúÁÉÍÓÚ, ])*$" />
-                </p:inputTextarea>
+                </p:inputText>
                 <p:watermark value="Justifique por qué la desvinculación" for="justificacion"/>
             </h:panelGrid>
             <center>
                 <p:commandButton value="Eliminar"
                                  onclick="PF('dlCFD').show();"
                                  style="margin-right:20px;margin-top: 20px"
-                                 styleClass="ui-priority-primary" />
+                                 styleClass="ui-priority-primary" update="msgs4"/>
             </center>
         </h:form>
     </p:dialog>

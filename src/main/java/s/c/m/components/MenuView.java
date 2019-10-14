@@ -74,19 +74,26 @@ public MenuModel construyeMenuPorRol(String rol,String nombreDept){
     cuartoSubmenu.addElement(item);
     //model.addElement(cuartoSubmenu);
 
-    if(rol.equals("Jefatura") && nombreDept.equals("Recursos Humanos")) {
+    DefaultSubMenu quintoSubmenu = new DefaultSubMenu("Solicitud de Vaciones");
+    item = new DefaultMenuItem("Formulario de Solicitud");
+    item.setIcon("ui-icon-clipboard");
+    item.setCommand("/colaboradores/SolicitudVacaciones.xhtml");
+    quintoSubmenu.addElement(item);
+
+    if((rol.equals("Jefatura") && nombreDept.equals("Recursos Humanos")) || (rol.equals("Jefatura") && nombreDept.equals("Tecnología de Infomación")) || rol.equals("Dirección Corporativa") || rol.equals("Supervisor") || rol.equals("Analista")) {
         model.addElement(firstSubmenu);
         model.addElement(secondSubmenu);
         model.addElement(tercerSubmenu);
         model.addElement(cuartoSubmenu);
-    }else if(rol.equals("Jefatura") && (!nombreDept.equals("Recursos Humanos"))){
+        model.addElement(quintoSubmenu);
+    }else if(rol.equals("Jefatura") && ((!nombreDept.equals("Recursos Humanos")) && (!nombreDept.equals("Tecnología de Infomación")) && (!rol.equals("Dirección Corporativa")) && (!rol.equals("Supervisor")) &&  (!rol.equals("Analista")))){//MENU DE JEFES QUE NO SON RECURSOS HUMANOS NI TI
+        model.addElement(cuartoSubmenu);
+        model.addElement(quintoSubmenu);
+    }
+    /*else if(rol.equals("Direccion") || rol.equals("Gerencia")||rol.equals("Supervisor")||rol.equals("Analista")){
         model.addElement(tercerSubmenu);
         model.addElement(cuartoSubmenu);
-    }
-    else if(rol.equals("Direccion") || rol.equals("Gerencia")||rol.equals("Supervisor")||rol.equals("Analista")){
-        model.addElement(tercerSubmenu);
-        model.addElement(cuartoSubmenu);
-    }
+    }*/
     return model;
 }
     public MenuModel getModel() {
