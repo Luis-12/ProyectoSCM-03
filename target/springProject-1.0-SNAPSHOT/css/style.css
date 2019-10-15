@@ -24,7 +24,7 @@ div.error {
 }
 
 .ui-commandant2  {
-    background-color: #E5B368;
+    background-color: #7accf0;
     font-size:12px;
     border-radius: 4px;
 }
@@ -63,7 +63,7 @@ div.camara{
 .envia{
     margin-right: 150px;
     margin-top:30px;
-    background-color:#E5B368;
+
 }
 
 
@@ -250,7 +250,6 @@ body
 
 .ui-commandbutton  {
     width: 10%;
-    background-color:#1DB386  ;
     font-family:GestaW01-Medium;
     font-size:15px;
     color: white;
@@ -348,7 +347,7 @@ div {
 
 
 .ui-datatable tbody > tr.ui-widget-content.ui-state-highlight {
-    background-color: #e5b368;
+    background-color: #7accf0;
     color: #000000
 }
 

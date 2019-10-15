@@ -35,6 +35,7 @@
             <p:commandButton id="dynaButton" value="Menú" type="button"  icon="ui-icon-home"/>
             <p:menu style="width: 17%;" toggleable="true" overlay="true" trigger="dynaButton" my="left top" at="left bottom">
                 <p:submenu label="Colaborador">
+                    <p:menuitem value="Asignar Horario" outcome="asignacionHorario.xhtml" icon="ui-icon-wrench"/>
                     <p:menuitem value="Incorporar Colaborador" onclick="PF('dlAC').show();" icon="ui-icon-plus"/>
                 </p:submenu>
                 <p:submenu label="Departamento">
@@ -155,7 +156,7 @@
                                    itemLabel="#{puesto.descripcion}"/>
                 </p:selectOneMenu >
 
-                <p:outputLabel value="Nombre completo:" styleClass="required" indicateRequired="false" for="nombre"/>
+                <p:outputLabel value="Nombre Completo:" styleClass="required" indicateRequired="false" for="nombre"/>
                 <p:inputText maxlength="100" id="nombre" validatorMessage="Solo letras" required="true" requiredMessage="Ingrese un nombre" value="#{colaboradorBean.colaborador.nombre}">
                     <f:validateRegex  pattern="^[a-zA-Z-ÑñáéíóúÁÉÍÓÚ,]+(\s{0,1}[a-zA-Z-ÑñáéíóúÁÉÍÓÚ, ])*$" />
                     <f:ajax event="blur" execute="@this" render="Nmessage" />
@@ -220,7 +221,7 @@
                                    itemLabel="#{puesto.descripcion}"/>
                 </p:selectOneMenu>
 
-                <p:outputLabel value="Nombre completo:" styleClass="required" indicateRequired="false" for="nombreA"/>
+                <p:outputLabel value="Nombre Completo:" styleClass="required" indicateRequired="false" for="nombreA"/>
                 <p:inputText maxlength="100" id="nombreA" required="true" requiredMessage="Ingrese un nombre" validatorMessage="Solo letras" value="#{colaboradorBean.selectcolaborador.nombre}">
                     <f:ajax event="blur" execute="@this" render="Nomessage" />
                 <f:validateRegex  pattern="^[a-zA-Z-ÑñáéíóúÁÉÍÓÚ,]+(\s{0,1}[a-zA-Z-ÑñáéíóúÁÉÍÓÚ, ])*$" />

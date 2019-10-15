@@ -36,7 +36,7 @@
 
 		<h:panelGrid columns="2"  id="panel2">
 
-			<p:outputLabel value="Usuario:" styleClass="required" indicateRequired="true" for="usuario"/>
+			<p:outputLabel value="Usuario:" styleClass="required" indicateRequired="false" for="usuario"/>
 			<p:inputText id="usuario" required="true"   requiredMessage="Ingrese su usuario" value="#{colaboradorBean.colaboradorlogueado.pk_idColaborador}">
 				<f:ajax event="blur" execute="@this" render="idmessage" />
 			</p:inputText>
@@ -44,7 +44,7 @@
 			<p:message id="idmessage" for="usuario"/>
 
 
-			<p:outputLabel value="Contraseña:" styleClass="required" indicateRequired="true" for="contraseña"/>
+			<p:outputLabel value="Contraseña:" styleClass="required" indicateRequired="false" for="contraseña"/>
 			<p:password id="contraseña" required="true" requiredMessage="Ingrese la contraseña" value="#{colaboradorBean.colaboradorlogueado.clave}">
 				<f:ajax event="blur" execute="@this" render="Nmessage" />
 			</p:password>
