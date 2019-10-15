@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <c:choose>
+        <c:when test="${colaboradorBean.colaboradorlogueado.puesto.descripcion=='Jefatura'
+or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporativa'
+ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Gerencia'
+ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Supervisor'
+ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Analista' }">
+
+
+
+        <h:head>
+                <link href="../css/style.css" rel="stylesheet" type="text/css" />
+                <link href="//db.onlinewebfonts.com/c/f977213040abc486420980aae60e0db3?family=GestaW01-Medium" rel="stylesheet" type="text/css"/>
+                <title>Asignar Horarios</title>
+            </h:head>
+
+            <div id="page">
+
+                <h:body>
+                    <div id="header">
+                        <div id="logo"></div>
+                    </div>
+                    <div id="top">
+                        <h:form>
+                            <p:commandButton id="dynaButton" value="Menú" type="button"  icon="ui-icon-home"/>
+                            <p:menu toggleable="true" style="width: 17%;" overlay="true" trigger="dynaButton" my="left top" at="left bottom" model="#{colaboradorBean.model}"/>
+                            <p:commandButton style='float: right;'  id="dynaButton1" value="Salir" type="button"  icon="ui-icon-person"/>
+                            <p:menu style='float: right;'  overlay="true" trigger="dynaButton1" my="left top" at="left bottom">
+                                <p:submenu label="#{colaboradorBean.colaboradorlogueado.nombre}">
+                                    <p:menuitem value="Salir" action="#{colaboradorBean.doLogout}" icon="ui-icon-person" />
+                                </p:submenu>
+                            </p:menu>
+                        </h:form>
+                    </div>
+
+                    <h1 id="h1Centro">Asignar Horarios</h1>
+                    <p:outputLabel value="Cedula: " styleClass="required"  indicateRequired="cedula" for="cedula"/>
+                    <p:inputText autocomplete="off" required="true" requiredMessage="Ingrese la Cedula"  id="cedula"/>
+                    <p:commandButton value="Buscar"
+                                     style="margin-right:20px;margin-top: 20px"
+                                     styleClass="ui-priority-primary" />
+
+                    <div>
+                        <h:form>
+
+                            <p:dataTable var="colaborador" value="#{colaboradorBean.colaboradores}" style="margin-top: 15px" id="tablaColaborador"
+                                         emptyMessage="No se han encontrado colaboradores"
+                                         widgetVar="colaboradorTabla"
+                                         resizableColumns="true"
+                                         selectionMode="single"
+                                         rowKey="#{colaborador.pk_idColaborador}"
+                                         paginator="true"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         rowsPerPageTemplate="10,15,20"
+                                         selection="#{colaboradorBean.selectcolaborador}" scrollable="true" scrollHeight="450">
+                            <p:autoUpdate />
+
+                            <p:column headerText="Cédula" >
+                                <h:outputText value="#{colaborador.pk_idColaborador}" />
+                            </p:column>
+
+                            <p:column headerText="Nombre" >
+                                <h:outputText value="#{colaborador.nombre}" />
+                            </p:column>
+
+                            </p:dataTable>
+
+                        </h:form>
+                    </div>
+
+
+                    <p:dialog id="datos" header="Asignar Horario"  showEffect="fade" hideEffect="fade"
+                              widgetVar="datos" modal="true" resizable="false" minWidth="300"  >
+                        <p:ajax event="close" update="datos" />
+                        <h:form id="horaio">
+                        <p:growl id="msgs2" showDetail="true" />
+                        <h:panelGrid columns="2"  id="panel2">
+                        <p:outputLabel  value="Horario:" />
+                            <p:selectOneMenu id="horario" style="width:100px">
+                                <f:selectItem itemLabel="Diurno"  />
+                                <f:selectItem itemLabel="Mixto"  />
+                                <f:selectItem itemLabel="Nocturno" />
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+
+                        <center>
+                            <p:commandButton value="Guardar"
+                                              style="margin-right:20px;margin-top: 20px"
+                                             styleClass="ui-priority-primary" ajax="false"/>
+                        </center>
+                        </h:form>
+
+
+                    </p:dialog>
+
+
+
+                    <div id="footer">
+                        <br/>
+                        <a href="../acerca.xhtml"> ©</a> &nbsp; SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA
+                    </div>
+                </h:body>
+
+            </div>
+
+        </c:when>
+        <c:otherwise>
+            <h:head>
+                <link href="../css/style.css" rel="stylesheet" type="text/css" />
+                <link href="//db.onlinewebfonts.com/c/f977213040abc486420980aae60e0db3?family=GestaW01-Medium" rel="stylesheet" type="text/css"/>
+                <title>Acceso denegado</title>
+
+            </h:head>
+
+            <h:body >
+                <div class="error">
+                    Acceso denegado
+                </div>
+            </h:body>
+        </c:otherwise>
+    </c:choose>
+</ui:composition>
+</html>
