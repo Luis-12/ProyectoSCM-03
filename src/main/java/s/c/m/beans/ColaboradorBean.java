@@ -392,6 +392,7 @@ public class ColaboradorBean {
 
     public void create()
     {
+        PrimeFaces current = PrimeFaces.current();
         FacesMessage mensaje= null;
         boolean existeColaborador = false;
 
@@ -405,13 +406,14 @@ public class ColaboradorBean {
         }
         if(!existeColaborador){
             //if(colaboradorService.findColaboradorEncargado(colaborador.getDepartamento(), colaborador.getPuesto())==null){
-            if((colaboradorService.findColaboradorEncargado(colaborador.getDepartamento(), puestoService.findIdPuesto("Jefatura"))==null)||
-            (!colaborador.getPuesto().getDescripcion().equals("Jefatura"))){
+            if((colaboradorService.findColaboradorEncargado(colaborador.getDepartamento(), puestoService.findIdPuesto("Gerencia"))==null)||
+            (!colaborador.getPuesto().getDescripcion().equals("Gerencia"))){
             try{
                 //if(colaboradorService.findColaboradorEncargado(colaborador.getDepartamento(), colaborador.getPuesto())==null){
                 System.out.println("No existe el colaborador");
                 colaborador.setJustificacion("NA");
                 colaboradorService.createColaborador(colaborador);
+                current.executeScript("PF('dlAC').show();");
                 mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Colaborador insertado correctamente.");
                 colaboradores = colaboradorService.getAllColaboradoresActivos();
                 /*/}else{
@@ -422,7 +424,7 @@ public class ColaboradorBean {
                 colaborador = new Colaborador();
             }
             }else{
-                mensaje = new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "El departamento " + colaborador.getDepartamento().getNombre() +" ya tiene un Jefe asignado");
+                mensaje = new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "El departamento " + colaborador.getDepartamento().getNombre() +" ya tiene un Gerente asignado");
                 System.out.println("Ya existe un JEFE PARA ESTE DEPARTEMENTO");
             }
         }else if(existeColaborador) {

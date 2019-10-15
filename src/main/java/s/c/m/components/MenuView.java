@@ -91,7 +91,8 @@ public class MenuView {
         sextoSubmenu.addElement(item);
 
 
-        if(((rol.equals("Dirección Corporativa") && nombreDept.equals("Recursos Humanos")) || rol.equals("Analista") || (rol.equals("Dirección Corporativa") && nombreDept.equals("Tecnología de Infomación")) || rol.equals("Dirección Corporativa") || rol.equals("Gerencia"))) {//
+
+       if(((rol.equals("Dirección Corporativa") && nombreDept.equals("Recursos Humanos")) || rol.equals("Analista") || (rol.equals("Dirección Corporativa") && nombreDept.equals("Tecnología de Infomación")) || rol.equals("Dirección Corporativa") || rol.equals("Gerencia"))) {//
             model.addElement(firstSubmenu);//SUBMENU MANTENIMIENTO COLABORADOR
             model.addElement(secondSubmenu);//SUBMENU MANTENIMIENTO DEPARTAMENTO
             model.addElement(tercerSubmenu);//SUBMENU DE REPORTES
@@ -105,13 +106,8 @@ public class MenuView {
         }
         else if((rol.equals("Colaborador"))){
             model.addElement(quintoSubmenu);//SUBMENU SOLICITUD DE VACACIONES
-
-
         }
-    /*else if(rol.equals("Direccion") || rol.equals("Gerencia")||rol.equals("Supervisor")||rol.equals("Analista")){
-        model.addElement(tercerSubmenu);
-        model.addElement(cuartoSubmenu);
-    }*/
+
         return model;
     }
     public MenuModel getModel() {

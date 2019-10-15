@@ -35,30 +35,8 @@
     <div id="top">
         <h:form>
             <p:commandButton id="dynaButton" value="Menú" type="button"  icon="ui-icon-home"/>
-            <p:menu style="width: 17%;" toggleable="true" overlay="true" trigger="dynaButton" my="left top" at="left bottom">
-                <p:submenu label="Colaborador">
-                    <p:menuitem value="Asignar Horario" outcome="asignacionHorario.xhtml" icon="ui-icon-wrench"/>
-                    <p:menuitem value="Incorporar Colaborador" onclick="PF('dlAC').show();" icon="ui-icon-plus"/>
-                </p:submenu>
-                <p:submenu label="Departamento">
-                    <p:menuitem value="Mantenimiento Departamento" outcome="MantenimientoDepartamento.xhtml" icon="ui-icon-wrench"/>
-                </p:submenu>
-                <p:submenu label="Informes">
-                    <p:menuitem value="Cantidad Laborando" outcome="CantidadLaborando.xhtml" icon="ui-icon-clipboard"/>
-                    <p:menuitem value="Colaboradores laborando en un lapso de tiempo" outcome="ColaboradorLapso.xhtml" icon="ui-icon-clipboard"/>
-                    <p:menuitem value="Colaborador Detallado" outcome="InformeColaborador.xhtml" icon="ui-icon-clipboard"/>
-                    <p:menuitem value="Colaborador por Departamento" outcome="InformeColaDepartamento.xhtml" icon="ui-icon-clipboard"/>
-                    <p:menuitem value="Reporte Horarios" outcome="ReporteHorarios.xhtml" icon="ui-icon-clipboard"/>
-                    <p:menuitem value="Reporte Tardias" outcome="ReporteTardias.xhtml" icon="ui-icon-clipboard"/>
+            <p:menu style="width: 17%;" toggleable="true" overlay="true" model="#{colaboradorBean.model}" trigger="dynaButton" my="left top" at="left bottom"/>
 
-                </p:submenu>
-                <p:submenu label="Vacaciones" >
-                    <p:menuitem value="Lista Solicitudes" outcome="ListaSolicitud.xhtml" icon="ui-icon-clipboard"/>
-                </p:submenu>
-                <p:submenu label="Solicitud de Vaciones" >
-                    <p:menuitem value="Formulario de Solicitud" outcome="SolicitudVacaciones.xhtml" icon="ui-icon-clipboard"/>
-                </p:submenu>
-            </p:menu>
 
             <p:commandButton style='float: right;'  id="dynaButton1" value="Salir" type="button"  icon="ui-icon-person"/>
             <p:menu style='float: right;'  overlay="true" trigger="dynaButton1" my="left top" at="left bottom">
@@ -136,17 +114,18 @@
             <p:growl id="msgs2" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
             <h:panelGrid columns="2"  id="panel2">
 
-                <p:outputLabel value="Cédula:" styleClass="required" indicateRequired="false" for="pk_idColaborador"/>
+                <p:outputLabel value="Cédula:" styleClass="required" indicateRequired="false" id="ced" for="pk_idColaborador"/>
                 <p:inputText  maxlength="20" id="pk_idColaborador" required="true"   requiredMessage="Ingrese una cédula"
                              validatorMessage=" La cédula debe tener mínimo 9 caracteres numéricos, y sin guiones" value="#{colaboradorBean.colaborador.pk_idColaborador}">
-                    <f:ajax event="blur"  execute="@this" render="idmessage" />
+                    <f:ajax event="blur"  execute="@this" render="@this idmessage" />
+                    <p:ajax update="ced"/>
                     <f:validateRegex pattern="[0-9]{9,20}" />
                 </p:inputText>
                 <p:watermark value="201230432" for="pk_idColaborador"/>
                 <p:message id="idmessage" for="pk_idColaborador"/>
 
                 <p:outputLabel  value="Departamento:" />
-                <p:selectOneMenu  value="#{colaboradorBean.colaborador.departamento}" converter="departamentoConverter">
+                <p:selectOneMenu style="min-width: 195px" value="#{colaboradorBean.colaborador.departamento}" converter="departamentoConverter">
                     <f:selectItems value="#{departamentoBean.departamentos}" var="departamento"
                                    itemValue="#{departamento}"
                                    itemLabel="#{departamento.nombre}"/>
@@ -158,40 +137,45 @@
                                    itemLabel="#{puesto.descripcion}"/>
                 </p:selectOneMenu >
 
-                <p:outputLabel value="Nombre Completo:" styleClass="required" indicateRequired="false" for="nombre"/>
+                <p:outputLabel value="Nombre Completo:" styleClass="required" id="nom" indicateRequired="false" for="nombre"/>
                 <p:inputText maxlength="100" id="nombre" validatorMessage="Solo letras" required="true" requiredMessage="Ingrese un nombre" value="#{colaboradorBean.colaborador.nombre}">
                     <f:validateRegex  pattern="^[a-zA-Z-ÑñáéíóúÁÉÍÓÚ,]+(\s{0,1}[a-zA-Z-ÑñáéíóúÁÉÍÓÚ, ])*$" />
-                    <f:ajax event="blur" execute="@this" render="Nmessage" />
+                    <f:ajax event="blur" execute="@this" render="@this Nmessage" />
+                    <p:ajax update="nom"/>
                 </p:inputText>
                 <p:watermark value="Nombre" for="nombre"/>
                 <p:message id="Nmessage" for="nombre"/>
 
-                <p:outputLabel value="Teléfono:" styleClass="required" indicateRequired="false" for="telefono"/>
+                <p:outputLabel value="Teléfono:" styleClass="required" id="tel" indicateRequired="false" for="telefono"/>
                 <p:inputText maxlength="9" id="telefono" required="true" converterMessage="Ingrese solo números"  validatorMessage="Minimo y máximo 8 dígitos" requiredMessage="Ingrese un teléfono"  value="#{colaboradorBean.colaborador.telefono}">
                     <f:validateLength minimum="8" maximum="8"/>
-                    <f:ajax event="blur" execute="@this" render="Telmessage" />
+                    <f:ajax event="blur" execute="@this" render="@this Telmessage" />
+                    <p:ajax update="tel"/>
                 </p:inputText>
                 <p:watermark value="12345678" for="telefono"/>
                 <p:message id="Telmessage" for="telefono"/>
 
-                <p:outputLabel value="Correo:" styleClass="required" indicateRequired="false" for="correo"/>
+                <p:outputLabel value="Correo:" styleClass="required" id="cor" indicateRequired="false" for="correo"/>
                 <p:inputText id="correo" maxlength="50" required="true"  label="email" validatorMessage="Formato incorrecto ej. nombre@gmail.com" requiredMessage="Ingrese un correo" value="#{colaboradorBean.colaborador.correo}">
                     <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
-                    <f:ajax event="blur" execute="@this" render="Comessage" />
+                    <f:ajax event="blur" execute="@this" render="@this Comessage" />
+                    <p:ajax update="cor"/>
                 </p:inputText>
                 <p:watermark value="ejemplo@gmail.com" for="correo"/>
                 <p:message id="Comessage" for="correo"/>
 
-                <p:outputLabel value="Fecha de Inicio Laboral" styleClass="required"  indicateRequired="false" for="fechaInicioLaboral"/>
+                <p:outputLabel value="Fecha de Inicio Laboral" styleClass="required" id="fecha" indicateRequired="false" for="fechaInicioLaboral"/>
                 <p:calendar autocomplete="off"  maxdate="#{colaboradorBean.fecha}" id="fechaInicioLaboral" required="true" requiredMessage="Ingrese la Fecha" value="#{colaboradorBean.colaborador.fechaInicioLaboral}" pattern="yyyy-MM-dd">
+                    <f:ajax event="dateSelect" execute="@this" render="@this fechamessage"/>
+                    <p:ajax update="fecha"/>
                 </p:calendar>
                 <p:watermark value="Fecha" for="fechaInicioLaboral"/>
-                <p:message for="fechaInicioLaboral"/>
+                <p:message id="fechamessage" for="fechaInicioLaboral"/>
 
 
             </h:panelGrid>
             <center>
-                <p:commandButton  value="Guardar" update="form:msgs, AgregarColaborador" oncomplete="if (args &amp;&amp; !args.validationFailed) PF('dlAC').hide(),handleCrearRequest(xhr, status, args)"
+                <p:commandButton  value="Guardar" update="form:msgs, AgregarColaborador"
                                  action="#{colaboradorBean.create}" style="margin-right:20px;margin-top: 20px"
                                  styleClass="ui-priority-primary" >
                     <p:resetInput target="AgregarColaborador"  />
