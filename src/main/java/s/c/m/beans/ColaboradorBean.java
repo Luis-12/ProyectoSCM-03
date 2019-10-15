@@ -263,7 +263,8 @@ public class ColaboradorBean {
 
             if (colaboradorlogueado.getPk_idColaborador().equals(dbUsername)
                     && colaboradorlogueado.getClave().equals(dbPassword)
-                    && colaborador1.getPuesto().getDescripcion().equals("Jefatura")
+                    && (colaborador1.getPuesto().getDescripcion().equals("Jefatura") ||
+                    colaborador1.getPuesto().getDescripcion().equals("Dirección Corporativa"))
                     && colaborador1.getDepartamento().getNombre().equals("Recursos Humanos")) {
                 colaboradorlogueado.setNombre(colaborador1.getNombre());
                 colaboradorlogueado.setPuesto(colaborador1.getPuesto());

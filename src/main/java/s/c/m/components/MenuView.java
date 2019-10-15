@@ -63,14 +63,13 @@ public MenuModel construyeMenuPorRol(String rol,String nombreDept){
     item.setIcon("ui-icon-clipboard");
     item.setCommand("ReporteTardias.xhtml");
     tercerSubmenu.addElement(item);
-
     //model.addElement(tercerSubmenu);
 
     //Cuarto submenu
     DefaultSubMenu cuartoSubmenu = new DefaultSubMenu("Vacaciones");
     item = new DefaultMenuItem("Lista Solicitudes");
     item.setIcon("ui-icon-clipboard");
-    item.setCommand("ListaSolicitud.xhtml");
+    item.setCommand("/administracion/ListaSolicitud.xhtml");
     cuartoSubmenu.addElement(item);
     //model.addElement(cuartoSubmenu);
 
@@ -80,15 +79,23 @@ public MenuModel construyeMenuPorRol(String rol,String nombreDept){
     item.setCommand("/colaboradores/SolicitudVacaciones.xhtml");
     quintoSubmenu.addElement(item);
 
-    if((rol.equals("Jefatura") && nombreDept.equals("Recursos Humanos")) || (rol.equals("Jefatura") && nombreDept.equals("Tecnología de Infomación")) || rol.equals("Dirección Corporativa") || rol.equals("Supervisor") || rol.equals("Analista")) {
-        model.addElement(firstSubmenu);
-        model.addElement(secondSubmenu);
-        model.addElement(tercerSubmenu);
-        model.addElement(cuartoSubmenu);
-        model.addElement(quintoSubmenu);
-    }else if(rol.equals("Jefatura") && ((!nombreDept.equals("Recursos Humanos")) && (!nombreDept.equals("Tecnología de Infomación")) && (!rol.equals("Dirección Corporativa")) && (!rol.equals("Supervisor")) &&  (!rol.equals("Analista")))){//MENU DE JEFES QUE NO SON RECURSOS HUMANOS NI TI
-        model.addElement(cuartoSubmenu);
-        model.addElement(quintoSubmenu);
+    if(((rol.equals("Jefatura") && nombreDept.equals("Recursos Humanos")) || (rol.equals("Jefatura") && nombreDept.equals("Tecnología de Infomación")) || rol.equals("Dirección Corporativa") || rol.equals("Gerencia")) && (!rol.equals("Colaborador"))) {//
+        model.addElement(firstSubmenu);//SUBMENU MANTENIMIENTO COLABORADOR
+        model.addElement(secondSubmenu);//SUBMENU MANTENIMIENTO DEPARTAMENTO
+        model.addElement(tercerSubmenu);//SUBMENU DE REPORTES
+        model.addElement(cuartoSubmenu);//SUBMENU LISTA DE VACACIONES
+        model.addElement(quintoSubmenu);//SUBMENU SOLICITUD DE VACACIONES
+    }else if(rol.equals("Analista") && (!rol.equals("Colaborador"))){
+        model.addElement(tercerSubmenu);//SUBMENU DE REPORTES
+        model.addElement(cuartoSubmenu);//SUBMENU LISTA DE VACACIONES
+        model.addElement(quintoSubmenu);//SUBMENU SOLICITUD DE VACACIONES
+    }else if(rol.equals("Jefatura") && (!nombreDept.equals("Recursos Humanos")) && (!nombreDept.equals("Tecnología de Infomación")) && (!rol.equals("Dirección Corporativa")) && (!rol.equals("Supervisor")) &&  (!rol.equals("Analista")) && (!rol.equals("Colaborador"))){//MENU DE JEFES QUE NO SON RECURSOS HUMANOS NI TI
+        model.addElement(cuartoSubmenu);//SUBMENU LISTA DE VACACIONES
+        model.addElement(quintoSubmenu);//SUBMENU SOLICITUD DE VACACIONES
+        //FALTA ASIGNACION DE HORARIOS
+    }else if(rol.equals("Supervisor") && (!rol.equals("Colaborador"))){
+        model.addElement(cuartoSubmenu);//SUBMENU LISTA DE VACACIONES
+        model.addElement(quintoSubmenu);//SUBMENU SOLICITUD DE VACACIONES
     }
     /*else if(rol.equals("Direccion") || rol.equals("Gerencia")||rol.equals("Supervisor")||rol.equals("Analista")){
         model.addElement(tercerSubmenu);
