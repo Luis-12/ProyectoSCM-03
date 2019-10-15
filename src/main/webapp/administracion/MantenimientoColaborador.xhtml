@@ -56,7 +56,7 @@
                     <p:menuitem value="Lista Solicitudes" outcome="ListaSolicitud.xhtml" icon="ui-icon-clipboard"/>
                 </p:submenu>
                 <p:submenu label="Solicitud de Vaciones" >
-                    <p:menuitem value="Formulario de Solicitud" outcome="/colaboradores/SolicitudVacaciones.xhtml" icon="ui-icon-clipboard"/>
+                    <p:menuitem value="Formulario de Solicitud" outcome="SolicitudVacaciones.xhtml" icon="ui-icon-clipboard"/>
                 </p:submenu>
             </p:menu>
 
@@ -71,8 +71,8 @@
     <h1 id="h1Centro">Listado de Colaboradores</h1>
     <div>
 
-        <h:form>
-            <p:growl id="msgs" showDetail="true" life="3000" rendered="#{not facesContext.validationFailed}"><p:autoUpdate/></p:growl>
+        <h:form id="form">
+            <p:growl id="msgs" showDetail="true" life="5000" rendered="#{not facesContext.validationFailed}"/>
 
             <p:contextMenu for="tablaColaborador" >
                 <p:menuitem value="Incorporar Colaborador" action="#{colaboradorBean.checkDepartamento}">
@@ -191,7 +191,7 @@
 
             </h:panelGrid>
             <center>
-                <p:commandButton value="Guardar" update="AgregarColaborador" oncomplete="if (args &amp;&amp; !args.validationFailed) PF('dlAC').hide(),handleCrearRequest(xhr, status, args)"
+                <p:commandButton  value="Guardar" update="form:msgs, AgregarColaborador" oncomplete="if (args &amp;&amp; !args.validationFailed) PF('dlAC').hide(),handleCrearRequest(xhr, status, args)"
                                  action="#{colaboradorBean.create}" style="margin-right:20px;margin-top: 20px"
                                  styleClass="ui-priority-primary" >
                     <p:resetInput target="AgregarColaborador"  />
@@ -262,7 +262,7 @@
             <center>
                 <p:commandButton value="Actualizar" id="ajax2"
                                  oncomplete="if (args &amp;&amp; !args.validationFailed) PF('dlUC').hide()"
-                                 action="#{colaboradorBean.update}" update="actualizarColaborador"
+                                 action="#{colaboradorBean.update}"  update="form:msgs, actualizarColaborador"
                                  style="margin-right:20px;margin-top: 20px" styleClass="ui-priority-primary" >
                     <p:resetInput target="actualizarColaborador"  />
 
@@ -305,7 +305,7 @@
     </p:dialog>
     <div id="footer">
         <br/>
-        <a href="http://localhost:8080/ProyectoSCM_03_war/acerca.xhtml"> ©</a> &nbsp; SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA
+        <a href="../acerca.xhtml"> ©</a> &nbsp; SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA
 
     </div>
     <script type="text/javascript">

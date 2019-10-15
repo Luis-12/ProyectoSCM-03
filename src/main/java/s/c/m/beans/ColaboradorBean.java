@@ -300,8 +300,9 @@ public class ColaboradorBean {
                 if (validaVence(colaborador1.getFechaVencimiento())) {
                     current.executeScript("PF('dlCC').show();");
                 } else {
+                    construyeMenuDinamico(colaborador1.getPuesto().getDescripcion(), colaborador1.getDepartamento().getNombre());
                     loggedIn = true;
-                    return "/colaboradores/SolicitudVacaciones.xhtml?faces-redirect=true";
+                    return "/administracion/SolicitudVacaciones.xhtml?faces-redirect=true";
                 }
             }
             if (colaboradorlogueado.getPk_idColaborador().equals(dbUsername) && colaboradorlogueado.getClave().equals(dbPassword)

@@ -74,14 +74,14 @@ public class MenuView {
         DefaultSubMenu cuartoSubmenu = new DefaultSubMenu("Vacaciones");
         item = new DefaultMenuItem("Lista Solicitudes");
         item.setIcon("ui-icon-clipboard");
-        item.setCommand("/administracion/ListaSolicitud.xhtml");
+        item.setCommand("ListaSolicitud.xhtml");
         cuartoSubmenu.addElement(item);
         //model.addElement(cuartoSubmenu);
 
         DefaultSubMenu quintoSubmenu = new DefaultSubMenu("Solicitud de Vaciones");
         item = new DefaultMenuItem("Formulario de Solicitud");
         item.setIcon("ui-icon-clipboard");
-        item.setCommand("/colaboradores/SolicitudVacaciones.xhtml");
+        item.setCommand("SolicitudVacaciones.xhtml");
         quintoSubmenu.addElement(item);
 
         DefaultSubMenu sextoSubmenu = new DefaultSubMenu("Colaborador");
@@ -97,15 +97,16 @@ public class MenuView {
             model.addElement(tercerSubmenu);//SUBMENU DE REPORTES
             model.addElement(cuartoSubmenu);//SUBMENU LISTA DE VACACIONES
             model.addElement(quintoSubmenu);//SUBMENU SOLICITUD DE VACACIONES
-        }else if(rol.equals("Jefatura")){//MENU DE JEFES QUE NO SON RECURSOS HUMANOS NI TI
+        }else if(rol.equals("Jefatura")||rol.equals("Supervisor")){//MENU DE JEFES QUE NO SON RECURSOS HUMANOS NI TI
             model.addElement(sextoSubmenu);
             model.addElement(cuartoSubmenu);//SUBMENU LISTA DE VACACIONES
             model.addElement(quintoSubmenu);//SUBMENU SOLICITUD DE VACACIONES
             //FALTA ASIGNACION DE HORARIOS
-        }else if(rol.equals("Supervisor") && (!rol.equals("Colaborador"))){
-            model.addElement(sextoSubmenu);
-            model.addElement(cuartoSubmenu);//SUBMENU LISTA DE VACACIONES
+        }
+        else if((rol.equals("Colaborador"))){
             model.addElement(quintoSubmenu);//SUBMENU SOLICITUD DE VACACIONES
+
+
         }
     /*else if(rol.equals("Direccion") || rol.equals("Gerencia")||rol.equals("Supervisor")||rol.equals("Analista")){
         model.addElement(tercerSubmenu);

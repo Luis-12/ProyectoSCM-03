@@ -54,7 +54,7 @@
                 <p:menuitem value="Lista Solicitudes" outcome="ListaSolicitud.xhtml" icon="ui-icon-clipboard"/>
             </p:submenu>
             <p:submenu label="Solicitud de Vaciones" >
-                <p:menuitem value="Formulario de Solicitud" outcome="/colaboradores/SolicitudVacaciones.xhtml" icon="ui-icon-clipboard"/>
+                <p:menuitem value="Formulario de Solicitud" outcome="SolicitudVacaciones.xhtml" icon="ui-icon-clipboard"/>
             </p:submenu>
         </p:menu>
 
@@ -70,8 +70,8 @@
     <h1 id="h1Centro">Listado de Departamentos</h1>
     <div>
 
-        <h:form>
-            <p:growl id="msgs" showDetail="true" life="3000" rendered="#{not facesContext.validationFailed}"><p:autoUpdate/></p:growl>
+        <h:form id="form">
+            <p:growl id="msgs" showDetail="true" life="6000" rendered="#{not facesContext.validationFailed}"><p:autoUpdate/></p:growl>
 
             <p:contextMenu for="tablaDepartamento" >
                 <p:menuitem value="Incorporar Departamento" onclick="PF('dlAC').show();">
@@ -130,9 +130,12 @@
 
             </h:panelGrid>
             <center>
-                <p:commandButton value="Guardar"  oncomplete="if (args &amp;&amp; !args.validationFailed) PF('dlAC').hide(),handleCrearRequest(xhr, status, args)"
+                <p:commandButton value="Guardar" update="form:msgs, AgregarDepartamento"  oncomplete="if (args &amp;&amp; !args.validationFailed) PF('dlAC').hide(),handleCrearRequest(xhr, status, args)"
                                  action="#{departamentoBean.create}" style="margin-right:20px;margin-top: 20px"
-                                 styleClass="ui-priority-primary" ajax="false"/>
+                                 styleClass="ui-priority-primary" >
+                    <p:resetInput target="AgregarDepartamento"  />
+
+                </p:commandButton>
             </center>
         </h:form>
     </p:dialog>
@@ -159,10 +162,13 @@
                 <p:message id="Nmessage" for="nombreA"/>
             </h:panelGrid>
             <center>
-                <p:commandButton value="Actualizar" id="ajax2" update="msgs3,panel3"
+                <p:commandButton value="Actualizar" id="ajax2" update="form:msgs, actualizarDepartamento"
                                  oncomplete="if (args &amp;&amp; !args.validationFailed) PF('dlUC').hide()"
                                  action="#{departamentoBean.update}"
-                                 style="margin-right:20px;margin-top: 20px" styleClass="ui-priority-primary" />
+                                 style="margin-right:20px;margin-top: 20px" styleClass="ui-priority-primary" >
+                    <p:resetInput target="actualizarDepartamento"  />
+
+                </p:commandButton>
             </center>
         </h:form>
     </p:dialog>
@@ -215,7 +221,7 @@
 
     <div id="footer">
         <br/>
-        <a href="http://localhost:8080/ProyectoSCM_03_war/acerca.xhtml"> ©</a> SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA
+        <a href="../acerca.xhtml"> ©</a> &nbsp; SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA
 
     </div>
     <script type="text/javascript">
