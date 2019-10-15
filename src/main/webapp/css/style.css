@@ -13,7 +13,10 @@
     width: 100%;
     background-color: #3DBBD3;
 }
-
+.ui-widget-header .ui-inputfield, .ui-widget-content .ui-inputfield {
+    font-weight: normal;
+    width: -moz-available;
+}
 div.error {
     font-weight: normal;
     font-style: normal;

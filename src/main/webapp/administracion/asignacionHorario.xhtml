@@ -13,17 +13,17 @@
 
     <c:choose>
         <c:when test="${colaboradorBean.colaboradorlogueado.puesto.descripcion=='Jefatura'
-
-or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Direccion'
+or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporativa'
  or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Gerencia'
  or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Supervisor'
  or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Analista' }">
 
 
-            <h:head>
+
+        <h:head>
                 <link href="../css/style.css" rel="stylesheet" type="text/css" />
                 <link href="//db.onlinewebfonts.com/c/f977213040abc486420980aae60e0db3?family=GestaW01-Medium" rel="stylesheet" type="text/css"/>
-                <title>Asignar Horario</title>
+                <title>Asignar Horarios</title>
             </h:head>
 
             <div id="page">
@@ -54,11 +54,6 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Direccion'
 
                     <div>
                         <h:form>
-
-                            <p:contextMenu>
-                                <p:menuitem value="Asignar Horario" oncomplete="PF('datos').show()" icon="ui-icon-document"/>
-
-                            </p:contextMenu>
 
                             <p:dataTable var="colaborador" value="#{colaboradorBean.colaboradores}" style="margin-top: 15px" id="tablaColaborador"
                                          emptyMessage="No se han encontrado colaboradores"

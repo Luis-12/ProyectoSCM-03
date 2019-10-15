@@ -14,9 +14,11 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
     <c:choose>
-    <c:when test="${(colaboradorBean.colaboradorlogueado.puesto.descripcion=='Jefatura' and colaboradorBean.colaboradorlogueado.departamento.nombre=='Recursos Humanos')
-    or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporativa'}">
-
+        <c:when test="${(colaboradorBean.colaboradorlogueado.puesto.descripcion=='Gerencia'
+    and colaboradorBean.colaboradorlogueado.departamento.nombre=='Recursos Humanos')
+    or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporativa'
+    or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Analista'
+}">
 
 <h:head>
     <link href="../css/style.css" rel="stylesheet" type="text/css" />
@@ -189,9 +191,12 @@
 
             </h:panelGrid>
             <center>
-                <p:commandButton value="Guardar"  oncomplete="if (args &amp;&amp; !args.validationFailed) PF('dlAC').hide(),handleCrearRequest(xhr, status, args)"
+                <p:commandButton value="Guardar" update="AgregarColaborador" oncomplete="if (args &amp;&amp; !args.validationFailed) PF('dlAC').hide(),handleCrearRequest(xhr, status, args)"
                                  action="#{colaboradorBean.create}" style="margin-right:20px;margin-top: 20px"
-                                 styleClass="ui-priority-primary" ajax="false"/>
+                                 styleClass="ui-priority-primary" >
+                    <p:resetInput target="AgregarColaborador"  />
+
+                </p:commandButton>
             </center>
         </h:form>
     </p:dialog>
@@ -255,10 +260,13 @@
 
             </h:panelGrid>
             <center>
-                <p:commandButton value="Actualizar" id="ajax2" update="msgs3,panel3"
+                <p:commandButton value="Actualizar" id="ajax2"
                                  oncomplete="if (args &amp;&amp; !args.validationFailed) PF('dlUC').hide()"
-                                 action="#{colaboradorBean.update}"
-                                 style="margin-right:20px;margin-top: 20px" styleClass="ui-priority-primary" />
+                                 action="#{colaboradorBean.update}" update="actualizarColaborador"
+                                 style="margin-right:20px;margin-top: 20px" styleClass="ui-priority-primary" >
+                    <p:resetInput target="actualizarColaborador"  />
+
+                </p:commandButton>
             </center>
         </h:form>
     </p:dialog>

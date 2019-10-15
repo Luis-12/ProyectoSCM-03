@@ -263,8 +263,7 @@ public class ColaboradorBean {
 
             if (colaboradorlogueado.getPk_idColaborador().equals(dbUsername)
                     && colaboradorlogueado.getClave().equals(dbPassword)
-                    && (colaborador1.getPuesto().getDescripcion().equals("Jefatura") ||
-                    colaborador1.getPuesto().getDescripcion().equals("Dirección Corporativa"))
+                    && colaborador1.getPuesto().getDescripcion().equals("Gerencia")
                     && colaborador1.getDepartamento().getNombre().equals("Recursos Humanos")) {
                 colaboradorlogueado.setNombre(colaborador1.getNombre());
                 colaboradorlogueado.setPuesto(colaborador1.getPuesto());
@@ -279,21 +278,21 @@ public class ColaboradorBean {
 
             }
             if ((colaboradorlogueado.getPk_idColaborador().equals(dbUsername)
-                        && colaboradorlogueado.getClave().equals(dbPassword)
-                        && colaborador1.getPuesto().getDescripcion().equals("Jefatura")
-                        && (!colaborador1.getDepartamento().getNombre().equals("Recursos Humanos")))) {//IF DE CUANDO ES JEFE PERO NO DE RH
-                    colaboradorlogueado.setNombre(colaborador1.getNombre());
-                    colaboradorlogueado.setPuesto(colaborador1.getPuesto());
-                    colaboradorlogueado.setDepartamento(colaborador1.getDepartamento());
-                    if (validaVence(colaborador1.getFechaVencimiento())) {
-                        current.executeScript("PF('dlCC').show();");
-                    } else {
-                        construyeMenuDinamico(colaborador1.getPuesto().getDescripcion(), colaborador1.getDepartamento().getNombre());
-                        loggedIn = true;
-                        return "/administracion/ListaSolicitud.xhtml?faces-redirect=true";
-                    }
-
+                    && colaboradorlogueado.getClave().equals(dbPassword)
+                    && colaborador1.getPuesto().getDescripcion().equals("Gerencia")
+                    && (!colaborador1.getDepartamento().getNombre().equals("Recursos Humanos")))) {//IF DE CUANDO ES JEFE PERO NO DE RH
+                colaboradorlogueado.setNombre(colaborador1.getNombre());
+                colaboradorlogueado.setPuesto(colaborador1.getPuesto());
+                colaboradorlogueado.setDepartamento(colaborador1.getDepartamento());
+                if (validaVence(colaborador1.getFechaVencimiento())) {
+                    current.executeScript("PF('dlCC').show();");
+                } else {
+                    construyeMenuDinamico(colaborador1.getPuesto().getDescripcion(), colaborador1.getDepartamento().getNombre());
+                    loggedIn = true;
+                    return "/administracion/ListaSolicitud.xhtml?faces-redirect=true";
                 }
+
+            }
             if (colaboradorlogueado.getPk_idColaborador().equals(dbUsername) && colaboradorlogueado.getClave().equals(dbPassword) && colaborador1.getPuesto().getDescripcion().equals("Colaborador")) {
                 colaboradorlogueado.setNombre(colaborador1.getNombre());
                 colaboradorlogueado.setPuesto(colaborador1.getPuesto());
@@ -306,8 +305,8 @@ public class ColaboradorBean {
                 }
             }
             if (colaboradorlogueado.getPk_idColaborador().equals(dbUsername) && colaboradorlogueado.getClave().equals(dbPassword)
-                    && (colaborador1.getPuesto().getDescripcion().equals("Direccion")
-                    ||colaborador1.getPuesto().getDescripcion().equals("Gerencia")
+                    && (colaborador1.getPuesto().getDescripcion().equals("Dirección Corporativa")
+                    ||colaborador1.getPuesto().getDescripcion().equals("Jefatura")
                     ||colaborador1.getPuesto().getDescripcion().equals("Supervisor")
                     ||colaborador1.getPuesto().getDescripcion().equals("Analista"))) {
                 colaboradorlogueado.setNombre(colaborador1.getNombre());
@@ -330,6 +329,7 @@ public class ColaboradorBean {
             return null;
         }
     }
+
 
 
     public boolean validaClave(){

@@ -12,14 +12,13 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
 <c:choose>
-<c:when test="${colaboradorBean.colaboradorlogueado.puesto.descripcion=='Jefatura'
-or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Direccion'
- or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Gerencia'
- or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Supervisor'
+    <c:when test="${colaboradorBean.colaboradorlogueado.puesto.descripcion=='Gerencia'
+ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporativa'
  or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Analista' }">
 
 
-<h:head>
+
+    <h:head>
     <link href="../css/style.css" rel="stylesheet" type="text/css" />
     <link href="//db.onlinewebfonts.com/c/f977213040abc486420980aae60e0db3?family=GestaW01-Medium" rel="stylesheet" type="text/css"/>
     <title>Reporte de Horarios por Colaborador </title>
