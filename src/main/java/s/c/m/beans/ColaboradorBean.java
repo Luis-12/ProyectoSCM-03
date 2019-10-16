@@ -413,7 +413,7 @@ public class ColaboradorBean {
                 System.out.println("No existe el colaborador");
                 colaborador.setJustificacion("NA");
                 colaboradorService.createColaborador(colaborador);
-                current.executeScript("PF('dlAC').show();");
+                current.executeScript("PF('dlAC').hide();");
                 mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Colaborador insertado correctamente.");
                 colaboradores = colaboradorService.getAllColaboradoresActivos();
                 /*/}else{
