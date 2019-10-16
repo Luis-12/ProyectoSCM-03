@@ -37,7 +37,6 @@ public class DepartamentoService {
     public void createDepartamento(Departamento departamento)
     {
         departamento.setEstado("Activo");
-        departamento.setJustificacion("NA");
         departamentoRepository.save(departamento);
     }
 

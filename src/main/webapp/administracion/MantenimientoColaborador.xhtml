@@ -209,7 +209,9 @@
 
 
     <p:dialog id="dlUC" header="Actualizar Colaborador" showEffect="fade" hideEffect="fade"
-              widgetVar="dlUC" modal="true" resizable="false" minWidth="200">
+              widgetVar="dlUC"  modal="true" resizable="false" minWidth="200">
+        <p:ajax event="close" update="dlUC" resetValues="true" listener="#{colaboradorBean.close}" />
+
         <h:form id="actualizarColaborador" >
             <p:growl id="msgs3" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
             <h:panelGrid columns="2"  id="panel3"   >
@@ -232,27 +234,30 @@
                                    itemLabel="#{puesto.descripcion}"/>
                 </p:selectOneMenu>
 
-                <p:outputLabel value="Nombre Completo:" styleClass="required" indicateRequired="false" for="nombreA"/>
+                <p:outputLabel id="nombr" value="Nombre Completo:" styleClass="required" indicateRequired="false" for="nombreA"/>
                 <p:inputText maxlength="100" id="nombreA" required="true" requiredMessage="Ingrese un nombre" validatorMessage="Solo letras" value="#{colaboradorBean.selectcolaborador.nombre}">
-                    <f:ajax event="blur" execute="@this" render="Nomessage" />
-                <f:validateRegex  pattern="^[a-zA-Z-ÑñáéíóúÁÉÍÓÚ,]+(\s{0,1}[a-zA-Z-ÑñáéíóúÁÉÍÓÚ, ])*$" />
+                    <f:ajax event="blur" execute="@this" render="@this Nomessage" />
+                    <p:ajax update="nombr"/>
+                    <f:validateRegex  pattern="^[a-zA-Z-ÑñáéíóúÁÉÍÓÚ,]+(\s{0,1}[a-zA-Z-ÑñáéíóúÁÉÍÓÚ, ])*$" />
                 </p:inputText>
                 <p:watermark value="Nombre" for="nombreA"/>
                 <p:message id="Nomessage"  for="nombreA"/>
 
-                <p:outputLabel value="Teléfono:" styleClass="required" indicateRequired="false" for="telefonoA"/>
+                <p:outputLabel id="telefon" value="Teléfono:" styleClass="required" indicateRequired="false" for="telefonoA"/>
                 <p:inputText id="telefonoA"  maxlength="9" converterMessage="Ingrese solo números" validatorMessage="Minimo y máximo 8 dígitos"  required="true" requiredMessage="Ingrese un teléfono"
                              value="#{colaboradorBean.selectcolaborador.telefono}">
-                    <f:ajax event="blur" execute="@this" render="Telemessage" />
+                    <f:ajax event="blur" execute="@this" render="@this Telemessage" />
+                    <p:ajax update="telefon"/>
                     <f:validateLength minimum="8" maximum="8"/>
                 </p:inputText>
                 <p:watermark value="Teléfono" for="telefonoA"/>
                 <p:message id="Telemessage" for="telefonoA"/>
 
-                <p:outputLabel value="Correo:" styleClass="required" indicateRequired="false" for="correoA"/>
+                <p:outputLabel id="corre" value="Correo:" styleClass="required" indicateRequired="false" for="correoA"/>
                 <p:inputText maxlength="50" id="correoA" required="true"  label="email" validatorMessage="Formato incorrecto ej. nombre@gmail.com" requiredMessage="Ingrese un correo" value="#{colaboradorBean.selectcolaborador.correo}">
                     <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
-                    <f:ajax event="blur" execute="@this" render="Coremessage" />
+                    <f:ajax event="blur" execute="@this" render="@this Coremessage" />
+                    <p:ajax update="corre"/>
                 </p:inputText>
                 <p:watermark value="ejemplo@gmail.com" for="correoA"/>
                 <p:message id="Coremessage" for="correoA"/>
@@ -279,23 +284,32 @@
 
     <p:dialog id="dlEC" header="Eliminar Colaborador"  showEffect="fade" hideEffect="fade"
               widgetVar="dlEC" modal="true" resizable="false" minWidth="450"  >
-        <p:ajax event="close" update="dlEC" listener="#{colaboradorBean.close}" />
+        <p:ajax event="close" update="dlEC" resetValues="true"  listener="#{colaboradorBean.close}" />
         <h:form id="EliminarColaborador">
             <p:autoUpdate/>
             <p:growl id="msgs4" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
             <h:panelGrid columns="2"  id="panel4">
-                <p:outputLabel value="Justificación:" indicateRequired="true" for="justificacion"/>
-                <p:inputText rows="1" cols="33" id="justificacion" required="true"
+                <p:outputLabel id="just" value="Justificación:" indicateRequired="true" for="justificacion"/>
+                <p:inputText validatorMessage="Solo letras" rows="1" cols="33" id="justificacion" required="true"
                              requiredMessage="Ingrese una justificación"
                              value="#{colaboradorBean.selectcolaborador.justificacion}">
+                    <f:validateRegex  pattern="^[a-zA-Z0-9-ÑñáéíóúÁÉÍÓÚ,]+(\s{0,1}[a-zA-Z0-9-ÑñáéíóúÁÉÍÓÚ, ])*$" />
+                    <f:ajax event="blur" execute="@this" render="@this justificacio" />
+                    <p:ajax update="just"/>
                 </p:inputText>
                 <p:watermark value="Justifique por qué la desvinculación" for="justificacion"/>
+                <p:message id="justificacio" for="justificacion"/>
+
             </h:panelGrid>
             <center>
-                <p:commandButton value="Eliminar"
-                                 onclick="PF('dlCFD').show();"
+
+                <p:commandButton value="Eliminar" id="ajax3"
+                                 oncomplete="if (args &amp;&amp; !args.validationFailed) PF('dlCFD').show()"
                                  style="margin-right:20px;margin-top: 20px"
-                                 styleClass="ui-priority-primary" update="msgs4"/>
+                                 styleClass="ui-priority-primary" update="form:msgs, EliminarColaborador">
+                    <p:resetInput target="EliminarColaborador"  />
+
+                </p:commandButton>
             </center>
         </h:form>
     </p:dialog>
@@ -305,8 +319,8 @@
         <h6 >¿Está seguro de eliminar este registro?</h6>
         <hr/>
         <center>
-            <p:commandButton value="Sí"  styleClass="ui-confirmdialog-yes"  actionListener="#{colaboradorBean.delete}"  onclick="ocultaEliminar()" style="margin-right: 30px" />
-            <p:commandButton value="No"  styleClass="ui-confirmdialog-no"  style="margin-right: 20px"  onclick="ocultaConfirm()"/>
+            <p:commandButton update="form:msgs" value="Sí"  styleClass="ui-confirmdialog-yes"  actionListener="#{colaboradorBean.delete}"  onclick="ocultaEliminar()" style="margin-right: 30px" />
+            <p:commandButton update="form:msgs" value="No"  styleClass="ui-confirmdialog-no"  style="margin-right: 20px"  onclick="ocultaConfirm()"/>
         </center>
     </p:dialog>
     <div id="footer">

@@ -411,7 +411,6 @@ public class ColaboradorBean {
             try{
                 //if(colaboradorService.findColaboradorEncargado(colaborador.getDepartamento(), colaborador.getPuesto())==null){
                 System.out.println("No existe el colaborador");
-                colaborador.setJustificacion("NA");
                 colaboradorService.createColaborador(colaborador);
                 current.executeScript("PF('dlAC').hide();");
                 mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Colaborador insertado correctamente.");
