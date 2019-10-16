@@ -129,9 +129,9 @@ public class DepartamentoBean {
             colaborador = colaboradorService.findColaboradorEncargado(selectDepartamento, puesto);
         } else {
             colaborador.setPk_idColaborador("No hay un encargado asignado");
-            colaborador.setNombre("Vacio");
+            colaborador.setNombre("Vacío");
             colaborador.setTelefono(0);
-            colaborador.setCorreo("Vacio");
+            colaborador.setCorreo("Vacío");
         }
     }
 
@@ -159,7 +159,7 @@ public class DepartamentoBean {
     public void delete()
     {
         departamentoService.deleteDepartamento(selectDepartamento);
-        addMessage("Aviso", "Registro eliminado correctamente.");
+        addMessage("Aviso", "Departamento desactivado correctamente.");
         departamentos = departamentoService.getAllDepartamentosActivos();
         System.out.println("Eliminado");
     }
@@ -188,7 +188,7 @@ public class DepartamentoBean {
             }
         } else if (existeDepartamento) {
             System.out.println("Si existe el departamento con ese cod");
-            mensaje = new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "Ya existe un departamento con ese codigo, pruebe nuevamente.");
+            mensaje = new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "Ya existe un departamento con ese código, pruebe nuevamente.");
             departamento = new Departamento();
         }
         FacesContext.getCurrentInstance().addMessage(null, mensaje);
@@ -200,7 +200,7 @@ public class DepartamentoBean {
         try {
             System.out.println("El departamento actualizado es" + selectDepartamento.getNombre());
             departamentoService.updateDepartamento(selectDepartamento);
-            addMessage("Aviso", "Registro modificado correctamente");
+            addMessage("Aviso", "Departamento actualizado correctamente");
             departamentos = departamentoService.getAllDepartamentosActivos();
         } catch (Exception e) {
         } finally {

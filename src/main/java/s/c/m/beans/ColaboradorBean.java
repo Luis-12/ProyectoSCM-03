@@ -424,7 +424,7 @@ public class ColaboradorBean {
             }
             }else{
                 mensaje = new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "El departamento " + colaborador.getDepartamento().getNombre() +" ya tiene un Gerente asignado");
-                System.out.println("Ya existe un JEFE PARA ESTE DEPARTEMENTO");
+                System.out.println("Ya existe un JEFE PARA ESTE DEPARTAMENTO");
             }
         }else if(existeColaborador) {
             System.out.println("Si existe el colaborador con esa cédula");
@@ -472,7 +472,7 @@ public class ColaboradorBean {
     public void delete()
     {
         colaboradorService.deleteColaborador(selectcolaborador);
-        addMessage("Aviso", "Registro eliminado correctamente.");
+        addMessage("Aviso", "Colaborador desactivado correctamente.");
         colaboradores = colaboradorService.getAllColaboradoresActivos();
         System.out.println("Eliminado");
     }
@@ -482,7 +482,7 @@ public class ColaboradorBean {
         try{
             System.out.println("El nombre actualizado es:"+selectcolaborador.getNombre());
             colaboradorService.updateColaborador(selectcolaborador);
-            addMessage("Aviso", "Registro modificado correctamente.");
+            addMessage("Aviso", "Colaborador actualizado correctamente.");
             colaboradores = colaboradorService.getAllColaboradoresActivos();
         }catch (Exception e){
         } finally {

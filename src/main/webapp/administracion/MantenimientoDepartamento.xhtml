@@ -145,7 +145,7 @@
 
     <p:dialog id="dlUC" header="Actualizar Departamento" showEffect="fade" hideEffect="fade"
               widgetVar="dlUC" modal="true" resizable="false" minWidth="200">
-        <p:ajax event="close" update="dlUC" resetValues="true" listener="#{colaboradorBean.close}" />
+        <p:ajax event="close" update="dlUC" resetValues="true" listener="#{departamentoBean.close}" />
 
         <h:form id="actualizarDepartamento">
             <p:growl id="msgs3" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
