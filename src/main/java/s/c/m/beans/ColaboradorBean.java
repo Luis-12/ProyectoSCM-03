@@ -478,10 +478,13 @@ public class ColaboradorBean {
         System.out.println("Eliminado");
     }
 
-    public void update()
-    {
+    public void update() throws Exception {
+        Colaborador colaboradorEvalua = colaboradorService.findColaborador(selectcolaborador.getPk_idColaborador());
         PrimeFaces current = PrimeFaces.current();
         FacesMessage mensaje= null;
+        if((!colaboradorEvalua.getPuesto().getDescripcion().equals(selectcolaborador.getPuesto().getDescripcion()))//Si es diferente el puesto o el departamento
+                || (!colaboradorEvalua.getDepartamento().getNombre().equals(selectcolaborador.getDepartamento().getNombre()))){
+
         if(     ((colaboradorService.findColaboradorEncargado(selectcolaborador.getDepartamento(), puestoService.findIdPuesto("Gerencia"))==null)
                 && //Si no encuetra un gerente Gerencia
                 (colaboradorService.findColaboradorEncargado(selectcolaborador.getDepartamento(), puestoService.findIdPuesto("Jefatura"))==null))//Y si no encuentra un jefe pasa directo a agregar Jefatura
@@ -505,6 +508,13 @@ public class ColaboradorBean {
             //mensaje = new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "El departamento " + selectcolaborador.getDepartamento().getNombre() +" ya tiene un Gerente o Jefe Asignado");
             System.out.println("Ya existe un JEFE PARA ESTE DEPARTAMENTO");
         }
+    }else{
+            System.out.println("El nombre actualizado es:"+selectcolaborador.getNombre());
+            colaboradorService.updateColaborador(selectcolaborador);
+            current.executeScript("PF('dlUC').hide();");
+            addMessage("Aviso", "Colaborador actualizado correctamente.");
+            colaboradores = colaboradorService.getAllColaboradoresActivos();
+    }
     }
 
 
