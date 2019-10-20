@@ -123,8 +123,8 @@ public class DepartamentoBean {
 
         String idDepSelc = selectDepartamento.getPk_idDepartamento();//Saco id dept
         int idPuesto = puestoService.findIdPuesto("Jefatura").getPk_idPuesto();//saco id puesto
-        //colaborador=colaboradorService.findColaborador2("asdasdass");
         Puesto puesto = puestoService.findIdPuesto("Jefatura");
+        Puesto puesto1 = puestoService.findIdPuesto("Gerencia");
         if (colaboradorService.findColaboradorEncargado(selectDepartamento, puesto) != null) {
             colaborador = colaboradorService.findColaboradorEncargado(selectDepartamento, puesto);
         } else {
@@ -132,6 +132,8 @@ public class DepartamentoBean {
             colaborador.setNombre("Vacío");
             colaborador.setTelefono(0);
             colaborador.setCorreo("Vacío");
+        }if(colaboradorService.findColaboradorEncargado(selectDepartamento, puesto1) != null){
+            colaborador = colaboradorService.findColaboradorEncargado(selectDepartamento, puesto1);
         }
     }
 
