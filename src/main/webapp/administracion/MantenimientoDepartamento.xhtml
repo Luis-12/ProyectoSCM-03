@@ -132,7 +132,7 @@
 
             </h:panelGrid>
             <center>
-                <p:commandButton value="Guardar" update="form:msgs, AgregarDepartamento"  oncomplete="if (args &amp;&amp; !args.validationFailed) PF('dlAC').hide(),handleCrearRequest(xhr, status, args)"
+                <p:commandButton value="Guardar" update="form:msgs, AgregarDepartamento"
                                  action="#{departamentoBean.create}" style="margin-right:20px;margin-top: 20px"
                                  styleClass="ui-priority-primary" >
                     <p:resetInput target="AgregarDepartamento"  />
