@@ -424,7 +424,7 @@ public class ColaboradorBean {
                 colaborador = new Colaborador();
             }
             }else{
-                mensaje = new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "El departamento " + colaborador.getDepartamento().getNombre() +" ya tiene un Gerente o Jefe asignado");
+                mensaje = new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "El departamento " + colaborador.getDepartamento().getNombre() +" ya tiene un Gerente o Jefe Asignado");
                 System.out.println("Ya existe un JEFE PARA ESTE DEPARTAMENTO");
             }
         }else if(existeColaborador) {
@@ -480,14 +480,30 @@ public class ColaboradorBean {
 
     public void update()
     {
-        try{
-            System.out.println("El nombre actualizado es:"+selectcolaborador.getNombre());
-            colaboradorService.updateColaborador(selectcolaborador);
-            addMessage("Aviso", "Colaborador actualizado correctamente.");
-            colaboradores = colaboradorService.getAllColaboradoresActivos();
-        }catch (Exception e){
-        } finally {
-            colaborador = new Colaborador();
+        PrimeFaces current = PrimeFaces.current();
+        FacesMessage mensaje= null;
+        if(     ((colaboradorService.findColaboradorEncargado(selectcolaborador.getDepartamento(), puestoService.findIdPuesto("Gerencia"))==null)
+                && //Si no encuetra un gerente Gerencia
+                (colaboradorService.findColaboradorEncargado(selectcolaborador.getDepartamento(), puestoService.findIdPuesto("Jefatura"))==null))//Y si no encuentra un jefe pasa directo a agregar Jefatura
+                ||
+                ((!selectcolaborador.getPuesto().getDescripcion().equals("Gerencia"))//Si el puesto es distinto de Gerencia
+                        && (!selectcolaborador.getPuesto().getDescripcion().equals("Jefatura")))//Y si el puesto es distinto de Jefatura pasa directo a agregar
+        )
+        {
+            try{
+                System.out.println("El nombre actualizado es:"+selectcolaborador.getNombre());
+                colaboradorService.updateColaborador(selectcolaborador);
+                current.executeScript("PF('dlUC').hide();");
+                addMessage("Aviso", "Colaborador actualizado correctamente.");
+                colaboradores = colaboradorService.getAllColaboradoresActivos();
+            }catch (Exception e){
+            } finally {
+                selectcolaborador = new Colaborador();
+            }
+        }else{
+            addMessage("Aviso","El departamento " + selectcolaborador.getDepartamento().getNombre() +" ya tiene un Gerente o Jefe Asignado");
+            //mensaje = new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "El departamento " + selectcolaborador.getDepartamento().getNombre() +" ya tiene un Gerente o Jefe Asignado");
+            System.out.println("Ya existe un JEFE PARA ESTE DEPARTAMENTO");
         }
     }
 
@@ -502,6 +518,11 @@ public class ColaboradorBean {
     public void close()
     {
         colaborador = new Colaborador();
+    }
+
+    public void close2()
+    {
+        selectcolaborador = new Colaborador();
     }
 
     public void addMessage(String summary, String detail)
