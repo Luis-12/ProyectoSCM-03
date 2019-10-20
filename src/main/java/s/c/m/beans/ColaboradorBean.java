@@ -417,6 +417,7 @@ public class ColaboradorBean {
                 System.out.println("No existe el colaborador");
                 colaboradorService.createColaborador(colaborador);
                 current.executeScript("PF('dlAC').hide();");
+                current.ajax().update("form:tablaColaborador");
                 mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Colaborador insertado correctamente.");
                 colaboradores = colaboradorService.getAllColaboradoresActivos();
             }catch (Exception e){
@@ -497,6 +498,7 @@ public class ColaboradorBean {
                 System.out.println("El nombre actualizado es:"+selectcolaborador.getNombre());
                 colaboradorService.updateColaborador(selectcolaborador);
                 current.executeScript("PF('dlUC').hide();");
+                current.ajax().update("form:tablaColaborador");
                 addMessage("Aviso", "Colaborador actualizado correctamente.");
                 colaboradores = colaboradorService.getAllColaboradoresActivos();
             }catch (Exception e){
