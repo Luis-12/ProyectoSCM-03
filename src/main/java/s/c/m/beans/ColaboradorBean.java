@@ -405,25 +405,26 @@ public class ColaboradorBean {
             }
         }
         if(!existeColaborador){
-            //if(colaboradorService.findColaboradorEncargado(colaborador.getDepartamento(), colaborador.getPuesto())==null){
-            if((colaboradorService.findColaboradorEncargado(colaborador.getDepartamento(), puestoService.findIdPuesto("Gerencia"))==null)||
-            (!colaborador.getPuesto().getDescripcion().equals("Gerencia"))){
+            if(     ((colaboradorService.findColaboradorEncargado(colaborador.getDepartamento(), puestoService.findIdPuesto("Gerencia"))==null)
+                    && //Si no encuetra un gerente Gerencia
+                    (colaboradorService.findColaboradorEncargado(colaborador.getDepartamento(), puestoService.findIdPuesto("Jefatura"))==null))//Y si no encuentra un jefe pasa directo a agregar Jefatura
+                    ||
+                    ((!colaborador.getPuesto().getDescripcion().equals("Gerencia"))//Si el puesto es distinto de Gerencia
+                    &&
+                    (!colaborador.getPuesto().getDescripcion().equals("Jefatura")))//Y si el puesto es distinto de Jefatura pasa directo a agregar
+               ){
             try{
-                //if(colaboradorService.findColaboradorEncargado(colaborador.getDepartamento(), colaborador.getPuesto())==null){
                 System.out.println("No existe el colaborador");
                 colaboradorService.createColaborador(colaborador);
                 current.executeScript("PF('dlAC').hide();");
                 mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Colaborador insertado correctamente.");
                 colaboradores = colaboradorService.getAllColaboradoresActivos();
-                /*/}else{
-                    addMessage("Aviso","El departamento " + colaborador.getDepartamento().getNombre() +" ya tiene un Jefe asignado");
-                }*/
             }catch (Exception e){
             } finally {
                 colaborador = new Colaborador();
             }
             }else{
-                mensaje = new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "El departamento " + colaborador.getDepartamento().getNombre() +" ya tiene un Gerente asignado");
+                mensaje = new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "El departamento " + colaborador.getDepartamento().getNombre() +" ya tiene un Gerente o Jefe asignado");
                 System.out.println("Ya existe un JEFE PARA ESTE DEPARTAMENTO");
             }
         }else if(existeColaborador) {

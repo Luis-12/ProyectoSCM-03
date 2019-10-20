@@ -151,6 +151,11 @@ public class ColaboradorService {
 
     public Colaborador findColaboradorEncargado(Departamento idD, Puesto idP)
     {
+        if(colaboradorRepository.findByDepartamentoAndPuestoAndEstado(idD,idP,"Activo")==null){
+            System.out.println("No se encontro el encargado con rol " + idP.getDescripcion());
+        }else{
+            System.out.println("Si encontro el encargado con rol " + idP.getDescripcion());
+        }
         return colaboradorRepository.findByDepartamentoAndPuestoAndEstado(idD,idP,"Activo");
     }
 
