@@ -7,8 +7,6 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:o="http://omnifaces.org/ui"
-      xmlns:of="http://omnifaces.org/functions"
 
 >
 
@@ -222,7 +220,7 @@
                 <p:selectOneMenu value="#{colaboradorBean.selectcolaborador.departamento}" converter="departamentoConverter">
                     <f:selectItem itemLabel="--#{colaboradorBean.selectcolaborador.departamento.nombre}--" itemValue="#{colaboradorBean.selectcolaborador.departamento}" />
                     <f:selectItems  value="#{departamentoBean.departamentos}" var="departamento"
-                                   itemValue="#{departamento}"
+
                                    itemLabel="#{departamento.nombre}"/>
                 </p:selectOneMenu>
 
@@ -281,7 +279,7 @@
         </h:form>
     </p:dialog>
 
-    <p:dialog id="dlEC" header="Eliminar Colaborador"  showEffect="fade" hideEffect="fade"
+    <p:dialog id="dlEC" header="DesactualizarColaborador"  showEffect="fade" hideEffect="fade"
               widgetVar="dlEC" modal="true" resizable="false" minWidth="450"  >
         <p:ajax event="close" update="dlEC" resetValues="true"  listener="#{colaboradorBean.close}" />
         <h:form id="EliminarColaborador">

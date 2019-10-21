@@ -43,12 +43,22 @@
             </h:form>
         </div>
 
-        <h1 id="h1Centro">Reporte de horarios por colaborador </h1>
-        <p:outputLabel value="Cedula: " styleClass="required"  indicateRequired="cedula" for="cedula"/>
-        <p:inputText autocomplete="off" required="true" requiredMessage="Ingrese la Cedula"  id="cedula"/>
-        <p:commandButton value="Buscar"
-                         style="margin-right:20px;margin-top: 20px"
-                         styleClass="ui-priority-primary" />
+        <h1 id="h1Centro">Reporte de Horarios por Colaborador </h1>
+        <h:form >
+            <center>
+                <h:panelGrid columns="5" >
+                    <p:outputLabel value="Cédula: " styleClass="required"  indicateRequired="cedula" for="cedula"/>
+                    <p:inputText autocomplete="off" required="true" requiredMessage="Ingrese la Cedula"  id="cedula"/>
+                    <p:outputLabel value="Departamento:"/>
+                    <p:selectOneMenu id="departamento" style="width:110px; height: 27px;">
+                        <f:selectItem itemLabel="RHH" itemValue="" />
+                        <f:selectItem itemLabel="Limpieza"  />
+                        <f:selectItem itemLabel="Informatica" />
+                    </p:selectOneMenu>
+                </h:panelGrid>
+                <p:commandButton value="Buscar" style="margin-right:20px;margin-top: 20px" ajax="false"  />
+            </center>
+        </h:form>
 
         <div>
             <h:form>
@@ -56,7 +66,6 @@
                 <p:contextMenu>
                     <p:menuitem value="Convertir a Excel" icon="ui-icon-transfer-e-w">
                     </p:menuitem>
-                    <p:menuitem value="Mostrar Datos" oncomplete="PF('datos').show()" icon="ui-icon-document"/>
 
                 </p:contextMenu>
 
@@ -70,17 +79,9 @@
                              scrollable="true" scrollHeight="450">
                     <p:autoUpdate />
 
-                    <p:column headerText="Cédula" filterBy="#">
-                        <h:outputText value="" />
-                    </p:column>
-
                     <p:column headerText="Nombre" filterBy="#">
                     <h:outputText value="" />
                 </p:column>
-
-                    <p:column headerText="Departamento" filterBy="#">
-                        <h:outputText value="" />
-                    </p:column>
 
                     <p:column headerText="Horario" filterBy="#">
                         <h:outputText value="" />

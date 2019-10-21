@@ -45,19 +45,19 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
             </h:form>
         </div>
 
-        <h1 id="h1Centro">Listado de Solicitudes Vacaciones</h1>
+        <h1 id="h1Centro">Listado de Solicitudes de Vacaciones</h1>
 
         <div style="margin-left: -40%;">
             <h:form >
                 <center>
                     <h:panelGrid columns="3" >
                         <p:outputLabel value="Estado:"/>
-                        <p:selectOneMenu id="estado" style="width:100px">
+                        <p:selectOneMenu id="estado" style="width:110px; height: 31px;">
                             <f:selectItem itemLabel="Pendientes" itemValue="" />
                             <f:selectItem itemLabel="Aprobadas"  />
-                            <f:selectItem itemLabel="Rechazadas" />/>
+                            <f:selectItem itemLabel="Rechazadas" />
                         </p:selectOneMenu>
-                        <p:commandButton value="Buscar" style=" margin-right:20px;margin-top: 20px" ajax="false"  />
+                        <p:commandButton value="Buscar" style=" margin-right:20px;margin-top: 1px" ajax="false"  />
                     </h:panelGrid>
                 </center>
             </h:form>
@@ -69,7 +69,8 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                 <p:contextMenu >
                     <p:menuitem value="Convertir a Excel" icon="ui-icon-transfer-e-w">
                     </p:menuitem>
-                    <p:menuitem value="Mostrar Información" icon="ui-icon-document"/>
+                    <p:menuitem value="Procesar Solicitud" oncomplete="PF('datos').show()" icon="ui-icon-document"/>
+
 
                 </p:contextMenu>
 
@@ -105,6 +106,34 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
             </h:form>
         </div>
 
+        <p:dialog id="datos" header="Solicitud de Vacaciones"  showEffect="fade" hideEffect="fade"
+                  widgetVar="datos" modal="true" resizable="false" minWidth="200" style="width: 250px;"  >
+            <p:ajax event="close" update="datos" />
+            <h:form id="horaio">
+                <p:growl id="msgs2" showDetail="true" />
+                <h:panelGrid columns="2"  id="panel2">
+                    <p:outputLabel  value="Nombre:" />
+                    <p:inputText maxlength="50" disabled="true" id="nombre" required="true">
+
+                    </p:inputText>
+                    <p:outputLabel  value="Justificación:" />
+                    <p:inputText maxlength="50"  id="justificacion" required="true" style="height: 60px;"/>
+
+                </h:panelGrid>
+
+                    <p:commandButton value="Aceptar"
+                                     style="margin-left:35px;margin-top: 20px"
+                                     styleClass="ui-priority-primary" ajax="false"/>
+
+
+                    <p:commandButton value="Rechazar"
+                                     style="margin-left:30px;margin-top: 20px"
+                                     styleClass="ui-priority-primary" ajax="false"/>
+
+            </h:form>
+
+
+        </p:dialog>
 
 
         <div id="footer">

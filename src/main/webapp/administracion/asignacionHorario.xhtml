@@ -46,7 +46,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                     </div>
 
                     <h1 id="h1Centro">Asignar Horarios</h1>
-                    <p:outputLabel value="Cedula: " styleClass="required"  indicateRequired="cedula" for="cedula"/>
+                    <p:outputLabel value="Cédula: " styleClass="required"  indicateRequired="cedula" for="cedula"/>
                     <p:inputText autocomplete="off" required="true" requiredMessage="Ingrese la Cedula"  id="cedula"/>
                     <p:commandButton value="Buscar"
                                      style="margin-right:20px;margin-top: 20px"
@@ -54,6 +54,11 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
 
                     <div>
                         <h:form>
+
+                            <p:contextMenu >
+                                <p:menuitem value="Asignar Horario" oncomplete="PF('datos').show()" icon="ui-icon-document"/>
+
+                            </p:contextMenu>
 
                             <p:dataTable var="colaborador" value="#{colaboradorBean.colaboradores}" style="margin-top: 15px" id="tablaColaborador"
                                          emptyMessage="No se han encontrado colaboradores"
@@ -82,13 +87,13 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
 
 
                     <p:dialog id="datos" header="Asignar Horario"  showEffect="fade" hideEffect="fade"
-                              widgetVar="datos" modal="true" resizable="false" minWidth="300"  >
+                              widgetVar="datos" modal="true" minWidth="200"  style="width:360px;" >
                         <p:ajax event="close" update="datos" />
                         <h:form id="horaio">
                         <p:growl id="msgs2" showDetail="true" />
                         <h:panelGrid columns="2"  id="panel2">
-                        <p:outputLabel  value="Horario:" />
-                            <p:selectOneMenu id="horario" style="width:100px">
+                        <p:outputLabel  value="  Horario:  " />
+                            <p:selectOneMenu id="horario" style="width:170px">
                                 <f:selectItem itemLabel="Diurno"  />
                                 <f:selectItem itemLabel="Mixto"  />
                                 <f:selectItem itemLabel="Nocturno" />
