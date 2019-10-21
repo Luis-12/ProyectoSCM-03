@@ -42,7 +42,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Analista' }">
             </h:form>
         </div>
 
-        <h1 id="h1Centro">Reporte Llegadas Tardías</h1>
+        <h1 id="h1Centro">Reporte de Llegadas Tardías</h1>
         <p:outputLabel value="Desde: " styleClass="required"  indicateRequired="false" for="fecha1"/>
         <p:calendar autocomplete="off" required="true" requiredMessage="Ingrese la Fecha"  id="fecha1" pattern="yyyy-MM-dd" >
         </p:calendar>
@@ -78,6 +78,9 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Analista' }">
                     </p:column>
 
                     <p:column headerText="Nombre" filterBy="#">
+                    <h:outputText value="" />
+                </p:column>
+                    <p:column headerText="Marca Tardía" filterBy="#">
                         <h:outputText value="" />
                     </p:column>
 

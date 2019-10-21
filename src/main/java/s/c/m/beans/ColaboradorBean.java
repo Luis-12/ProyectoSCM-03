@@ -475,7 +475,9 @@ public class ColaboradorBean {
 
     public void delete()
     {
+        PrimeFaces current = PrimeFaces.current();
         colaboradorService.deleteColaborador(selectcolaborador);
+        current.ajax().update("form:tablaColaborador");
         addMessage("Aviso", "Colaborador desactivado correctamente.");
         colaboradores = colaboradorService.getAllColaboradoresActivos();
         System.out.println("Eliminado");
