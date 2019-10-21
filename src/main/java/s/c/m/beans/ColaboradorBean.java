@@ -510,13 +510,14 @@ public class ColaboradorBean {
             //mensaje = new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "El departamento " + selectcolaborador.getDepartamento().getNombre() +" ya tiene un Gerente o Jefe Asignado");
             System.out.println("Ya existe un JEFE PARA ESTE DEPARTAMENTO");
         }
-    }else{
-            System.out.println("El nombre actualizado es:"+selectcolaborador.getNombre());
+    }else {
+            System.out.println("El nombre actualizado es:" + selectcolaborador.getNombre());
             colaboradorService.updateColaborador(selectcolaborador);
             current.executeScript("PF('dlUC').hide();");
+            current.ajax().update("form:tablaColaborador");
             addMessage("Aviso", "Colaborador actualizado correctamente.");
             colaboradores = colaboradorService.getAllColaboradoresActivos();
-    }
+        }
     }
 
 
@@ -535,6 +536,8 @@ public class ColaboradorBean {
     public void close2()
     {
         selectcolaborador = new Colaborador();
+        colaboradores = colaboradorService.getAllColaboradoresActivos();
+
     }
 
     public void addMessage(String summary, String detail)
@@ -554,7 +557,6 @@ public class ColaboradorBean {
         FacesMessage msg = new FacesMessage("Colaborador selecionado",((Colaborador) event.getObject()).getNombre());
         FacesContext.getCurrentInstance().addMessage("dasdasdasdas",msg);
     }
-
 
     public void onRowEdit(RowEditEvent event)
     {
