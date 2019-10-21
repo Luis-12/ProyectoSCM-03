@@ -7,6 +7,8 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:of="http://omnifaces.org/functions"
 
 >
 
@@ -217,14 +219,16 @@
                 <p:message for="pk_idColaboradorA"/>
 
                 <p:outputLabel  value="Departamento:"  />
-                <p:selectOneMenu  value="#{colaboradorBean.selectcolaborador.departamento}" converter="departamentoConverter">
+                <p:selectOneMenu value="#{colaboradorBean.selectcolaborador.departamento}" converter="departamentoConverter">
+                    <f:selectItem itemLabel="--#{colaboradorBean.selectcolaborador.departamento.nombre}--" itemValue="#{colaboradorBean.selectcolaborador.departamento}" />
                     <f:selectItems  value="#{departamentoBean.departamentos}" var="departamento"
                                    itemValue="#{departamento}"
                                    itemLabel="#{departamento.nombre}"/>
                 </p:selectOneMenu>
 
                 <p:outputLabel  value="Puesto:" />
-                <p:selectOneMenu value="#{colaboradorBean.selectcolaborador.puesto}" converter="puestoConverter">
+                <p:selectOneMenu value="#{colaboradorBean.selectcolaborador.puesto}"  converter="puestoConverter">
+                    <f:selectItem itemLabel="--#{colaboradorBean.selectcolaborador.puesto.descripcion}--" itemValue="#{colaboradorBean.selectcolaborador.puesto}" />
                     <f:selectItems value="#{puestoBean.puestos}" var="puesto"
                                    itemValue="#{puesto}"
                                    itemLabel="#{puesto.descripcion}"/>

@@ -10,6 +10,8 @@ import javax.annotation.PostConstruct;
 import java.time.Period;
 import java.util.List;
 
+
+
 @Component
 @ManagedBean
 public class PuestoBean {

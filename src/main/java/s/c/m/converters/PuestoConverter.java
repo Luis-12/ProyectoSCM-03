@@ -8,26 +8,35 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import java.util.Map;
+import java.util.UUID;
+import java.util.WeakHashMap;
 
 @FacesConverter(value = "puestoConverter")
 public class PuestoConverter implements Converter {
+    private static Map<Object, String> entities = new WeakHashMap<Object, String>();
+
     @Override
-    public Puesto getAsObject(FacesContext facesContext, UIComponent uiComponent, String idPuesto) {
-        ValueExpression vex =
-                FacesContext.getCurrentInstance().getApplication().getExpressionFactory()
-                        .createValueExpression(FacesContext.getCurrentInstance().getELContext(),
-                                "#{puestoBean}", PuestoBean.class);
-
-        PuestoBean puestos = (PuestoBean) vex.getValue(FacesContext.getCurrentInstance().getELContext());
-        System.out.println(puestos.obtienePuestos(Integer.valueOf(idPuesto)).toString());
-        return puestos.obtienePuestos(Integer.valueOf(idPuesto));
-
+    public String getAsString(FacesContext context, UIComponent component, Object entity) {
+        synchronized (entities) {
+            if (!entities.containsKey(entity)) {
+                String uuid = UUID.randomUUID().toString();
+                entities.put(entity, uuid);
+                return uuid;
+            } else {
+                return entities.get(entity);
+            }
+        }
     }
 
     @Override
-    public String getAsString(FacesContext facesContext, UIComponent uiComponent, Object puesto) {
-        //((TipoMocion)tipoMocion).getID_TIPO_MOCION();
-        String idP = String.valueOf(((Puesto)puesto).getPk_idPuesto());
-        return idP;//.toString();
+    public Object getAsObject(FacesContext context, UIComponent component, String uuid) {
+        for (Map.Entry<Object, String> entry : entities.entrySet()) {
+            if (entry.getValue().equals(uuid)) {
+                return entry.getKey();
+            }
+        }
+        return null;
     }
+
 }

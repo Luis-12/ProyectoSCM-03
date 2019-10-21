@@ -33,6 +33,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
+
 @ManagedBean
 @Scope("session")
 public class ColaboradorBean {
@@ -455,6 +456,7 @@ public class ColaboradorBean {
         if (selectcolaborador==null) {
             addMessage("Aviso", "Debe Seleccionar un Colaborador."); //si esta vacio muetra este mensaje
         } else {
+
             current.executeScript("PF('dlUC').show();"); //si no esta vacio muestra el dialogo
         }
     }
@@ -514,6 +516,7 @@ public class ColaboradorBean {
             System.out.println("El nombre actualizado es:"+selectcolaborador.getNombre());
             colaboradorService.updateColaborador(selectcolaborador);
             current.executeScript("PF('dlUC').hide();");
+            current.ajax().update("form:tablaColaborador");
             addMessage("Aviso", "Colaborador actualizado correctamente.");
             colaboradores = colaboradorService.getAllColaboradoresActivos();
     }
@@ -535,6 +538,7 @@ public class ColaboradorBean {
     public void close2()
     {
         selectcolaborador = new Colaborador();
+        colaboradores = colaboradorService.getAllColaboradoresActivos();
     }
 
     public void addMessage(String summary, String detail)

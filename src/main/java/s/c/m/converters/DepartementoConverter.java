@@ -8,23 +8,35 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import java.util.Map;
+import java.util.UUID;
+import java.util.WeakHashMap;
 
 @FacesConverter(value = "departamentoConverter")
 public class DepartementoConverter implements Converter {
-    @Override
-    public Departamento getAsObject(FacesContext facesContext, UIComponent uiComponent, String idDepartamento) {
-        ValueExpression vex =
-                FacesContext.getCurrentInstance().getApplication().getExpressionFactory()
-                        .createValueExpression(FacesContext.getCurrentInstance().getELContext(),
-                                "#{departamentoBean}", DepartamentoBean.class);
+    private static Map<Object, String> entities = new WeakHashMap<Object, String>();
 
-        DepartamentoBean departamentos = (DepartamentoBean) vex.getValue(FacesContext.getCurrentInstance().getELContext());
-        return departamentos.obtieneDepartamento(idDepartamento);//obtieneDepartemento es una funcion del bean
+    @Override
+    public String getAsString(FacesContext context, UIComponent component, Object entity) {
+        synchronized (entities) {
+            if (!entities.containsKey(entity)) {
+                String uuid = UUID.randomUUID().toString();
+                entities.put(entity, uuid);
+                return uuid;
+            } else {
+                return entities.get(entity);
+            }
+        }
     }
 
     @Override
-    public String getAsString(FacesContext facesContext, UIComponent uiComponent, Object departamento) {
-        String idD = ((Departamento)departamento).getPk_idDepartamento();
-        return idD;//.toString();
+    public Object getAsObject(FacesContext context, UIComponent component, String uuid) {
+        for (Map.Entry<Object, String> entry : entities.entrySet()) {
+            if (entry.getValue().equals(uuid)) {
+                return entry.getKey();
+            }
+        }
+        return null;
     }
+
 }
