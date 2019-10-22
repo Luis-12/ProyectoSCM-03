@@ -117,16 +117,21 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
 
                     </p:inputText>
                     <p:outputLabel  value="Justificación:" />
-                    <p:inputText maxlength="50"  id="justificacion" required="true" style="height: 60px;"/>
+                    <p:inputText maxlength="50"  id="justificacion" required="true" style="height:60px;"/>
 
                 </h:panelGrid>
 
-                    <p:commandButton value="Aceptar"
-                                     style="margin-left:35px;margin-top: 20px"
+                    <br/>
+                    <p:outputLabel  value="¿La solicitud ha sido?" style="margin-right:60px;" />
+                    <br/>
+
+
+                    <p:commandButton value="Aceptada"
+                                     style="margin-left:33px;margin-top: 20px"
                                      styleClass="ui-priority-primary" ajax="false"/>
 
 
-                    <p:commandButton value="Rechazar"
+                    <p:commandButton value="Rechazada"
                                      style="margin-left:30px;margin-top: 20px"
                                      styleClass="ui-priority-primary" ajax="false"/>
 

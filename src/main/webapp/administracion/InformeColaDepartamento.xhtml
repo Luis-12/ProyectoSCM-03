@@ -41,7 +41,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                 </p:menu>
             </h:form>
         </div>
-        <h1 id="h1Centro">Informe Detallado de Colaborador por Departamento</h1>
+        <h1 id="h1Centro">Detalle de Colaborador por Departamento</h1>
         <h:form >
             <center>
                 <h:panelGrid columns="7" >
@@ -56,6 +56,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                         <f:selectItem itemLabel="RHH" itemValue="" />
                         <f:selectItem itemLabel="Informatica"  />
                         <f:selectItem itemLabel="Limpieza" />
+                        <f:selectItem itemLabel="Todos" />
                     </p:selectOneMenu>
                 </h:panelGrid>
                 <p:commandButton value="Buscar" style="margin-right:20px;margin-top: 20px" ajax="false"  />
@@ -81,7 +82,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                              scrollable="true" scrollHeight="450">
                     <p:autoUpdate />
 
-                    <p:column headerText="Nombre" filterBy="#{departamento.nombre}">
+                    <p:column headerText="Nombre Completo" filterBy="#{departamento.nombre}">
                         <h:outputText value="#{departamento.nombre}" />
                     </p:column>
 

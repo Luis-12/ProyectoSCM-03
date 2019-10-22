@@ -43,12 +43,24 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
             </h:form>
         </div>
 
-        <h1 id="h1Centro">Informe Detallado de Colaborador </h1>
-        <p:outputLabel value="Cédula: " styleClass="required"  indicateRequired="cedula" for="cedula"/>
-        <p:inputText autocomplete="off" required="true" requiredMessage="Ingrese la Cedula"  id="cedula"/>
-        <p:commandButton value="Buscar"
-                         style="margin-right:20px;margin-top: 20px"
-                         styleClass="ui-priority-primary" />
+        <h1 id="h1Centro"> Detalle de Colaborador </h1>
+        <center>
+            <h:panelGrid columns="7" >
+                <p:outputLabel value="Desde:" styleClass="required"  indicateRequired="false" for="fecha1"/>
+                <p:calendar autocomplete="off" required="true"  requiredMessage="Ingrese la Fecha"  id="fecha1" pattern="yyyy-MM-dd" />
+                <p:outputLabel value="Hasta: "  styleClass="required"  indicateRequired="false" for="fecha2"/>
+                <p:calendar autocomplete="off" required="true"   requiredMessage="Ingrese la Fecha" id="fecha2" pattern="yyyy-MM-dd" />
+                <p:outputLabel value="Cédula: " styleClass="required"  indicateRequired="cedula" for="cedula"/>
+                <p:inputText autocomplete="off" required="true" requiredMessage="Ingrese la Cedula"  id="cedula"/>
+            </h:panelGrid>
+                    <p:commandButton value="Buscar"
+                                     style="margin-right:30px;margin-top: 20px;"
+                                     styleClass="ui-priority-primary" />
+
+
+
+        </center>
+
 
         <div>
             <h:form>
@@ -74,7 +86,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                         <h:outputText value="" />
                     </p:column>
 
-                    <p:column headerText="Nombre" filterBy="#">
+                    <p:column headerText="Nombre Completo" filterBy="#">
                         <h:outputText value="" />
                     </p:column>
 
@@ -86,7 +98,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                         <h:outputText value="" />
                     </p:column>
 
-                    <p:column headerText="Horas Marcadas" filterBy="#">
+                    <p:column headerText="Cant. Horas Laboradas" filterBy="#">
                     <h:outputText value="" />
                 </p:column>
 

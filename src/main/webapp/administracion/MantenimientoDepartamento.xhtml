@@ -120,7 +120,7 @@
                 <p:watermark value="Código" for="pk_codDepartamento"/>
                 <p:message id="Codmessage" for="pk_codDepartamento"/>
 
-                <p:outputLabel id="just" value="Nombre:" styleClass="required" indicateRequired="true" for="nombre"/>
+                <p:outputLabel id="just" value="Nombre Completo:" styleClass="required" indicateRequired="true" for="nombre"/>
                 <p:inputText maxlength="50"  id="nombre" required="true" requiredMessage="Ingrese un nombre" validatorMessage="Solo letras"
                              value="#{departamentoBean.departamento.nombre}">
                     <f:validateRegex pattern="^[a-zA-Z-ÑñáéíóúÁÉÍÓÚ,]+(\s{0,1}[a-zA-Z-ÑñáéíóúÁÉÍÓÚ, ])*$"/>
@@ -156,7 +156,7 @@
                 <p:watermark value="Código" for="pk_codDepartamentoA"/>
                 <p:message ID="Cmessage" for="pk_codDepartamentoA"/>
 
-                <p:outputLabel id="nomb" value="Nombre:" styleClass="required" indicateRequired="false" for="nombreA"/>
+                <p:outputLabel id="nomb" value="Nombre Completo:" styleClass="required" indicateRequired="false" for="nombreA"/>
                 <p:inputText maxlength="50" id="nombreA" required="true" requiredMessage="Ingrese un nombre" validatorMessage="Solo letras"
                              value="#{departamentoBean.selectDepartamento.nombre}">
                 <f:validateRegex pattern="^[a-zA-Z-ÑñáéíóúÁÉÍÓÚ,]+(\s{0,1}[a-zA-Z-ÑñáéíóúÁÉÍÓÚ, ])*$"/>
@@ -183,8 +183,10 @@
         <p:panelGrid columns="2" rendered="#{not empty departamentoBean.selectDepartamento}">
             <h:outputText value="Cédula:" />
             <h:outputText value="#{departamentoBean.colaborador.pk_idColaborador}"/>
-            <h:outputText value="Nombre:" />
+            <h:outputText value="Nombre Completo:" />
             <h:outputText value="#{departamentoBean.colaborador.nombre}"/>
+            <h:outputText value="Cargo que desempeña:" />
+            <h:outputText value="#{departamentoBean.colaborador.puesto}"/>
             <h:outputText value="Correo:" />
             <h:outputText value="#{departamentoBean.colaborador.correo}"/>
             <h:outputText value="Teléfono:" />
@@ -192,7 +194,7 @@
         </p:panelGrid>
     </p:dialog>
 
-    <p:dialog id="dlED" header="Eliminar Departamento"  showEffect="fade" hideEffect="fade"
+    <p:dialog id="dlED" header="Desactivar Departamento"  showEffect="fade" hideEffect="fade"
               widgetVar="dlED" modal="true" resizable="false" minWidth="450"  >
         <p:ajax event="close" update="dlED" resetValues="true" listener="#{departamentoBean.close}" />
         <h:form id="EliminarDepartamento">

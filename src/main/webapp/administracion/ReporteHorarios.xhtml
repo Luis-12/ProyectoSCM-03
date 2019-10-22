@@ -54,6 +54,7 @@
                         <f:selectItem itemLabel="RHH" itemValue="" />
                         <f:selectItem itemLabel="Limpieza"  />
                         <f:selectItem itemLabel="Informatica" />
+                        <f:selectItem itemLabel="Todos" />
                     </p:selectOneMenu>
                 </h:panelGrid>
                 <p:commandButton value="Buscar" style="margin-right:20px;margin-top: 20px" ajax="false"  />
@@ -79,7 +80,7 @@
                              scrollable="true" scrollHeight="450">
                     <p:autoUpdate />
 
-                    <p:column headerText="Nombre" filterBy="#">
+                    <p:column headerText="Nombre Completo" filterBy="#">
                     <h:outputText value="" />
                 </p:column>
 
