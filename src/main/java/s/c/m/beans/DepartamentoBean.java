@@ -132,6 +132,8 @@ public class DepartamentoBean {
             colaborador.setNombre("Vacío");
             colaborador.setTelefono(0);
             colaborador.setCorreo("Vacío");
+            puesto.setDescripcion("Vacío");
+            colaborador.setPuesto(puesto);
         }if(colaboradorService.findColaboradorEncargado(selectDepartamento, puesto1) != null){
             colaborador = colaboradorService.findColaboradorEncargado(selectDepartamento, puesto1);
         }
