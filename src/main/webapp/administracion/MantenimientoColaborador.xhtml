@@ -106,7 +106,7 @@
                     <h:outputText value="#{colaborador.telefono}" />
                 </p:column>
 
-                <p:column headerText="Correo" filterBy="#{colaborador.correo}">
+                <p:column headerText="Correo Electrónico" filterBy="#{colaborador.correo}">
                     <h:outputText value="#{colaborador.correo}" />
                 </p:column>
 
@@ -175,7 +175,7 @@
                 <p:watermark value="12345678" for="telefono"/>
                 <p:message id="Telmessage" for="telefono"/>
 
-                <p:outputLabel value="Correo:" styleClass="required" id="cor" indicateRequired="false" for="correo"/>
+                <p:outputLabel value="Correo Electrónico:" styleClass="required" id="cor" indicateRequired="false" for="correo"/>
                 <p:inputText id="correo" maxlength="50" required="true"  label="email" validatorMessage="Formato incorrecto ej. nombre@gmail.com" requiredMessage="Ingrese un correo" value="#{colaboradorBean.colaborador.correo}">
                     <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                     <f:ajax event="blur" execute="@this" render="@this Comessage" />
@@ -248,10 +248,10 @@
                     <p:ajax update="telefon"/>
                     <f:validateLength minimum="8" maximum="8"/>
                 </p:inputText>
-                <p:watermark value="Teléfono" for="telefonoA"/>
+                <p:watermark value="12345678" for="telefonoA"/>
                 <p:message id="Telemessage" for="telefonoA"/>
 
-                <p:outputLabel id="corre" value="Correo:" styleClass="required" indicateRequired="false" for="correoA"/>
+                <p:outputLabel id="corre" value="Correo Electrónico:" styleClass="required" indicateRequired="false" for="correoA"/>
                 <p:inputText maxlength="50" id="correoA" required="true"  label="email" validatorMessage="Formato incorrecto ej. nombre@gmail.com" requiredMessage="Ingrese un correo" value="#{colaboradorBean.selectcolaborador.correo}">
                     <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                     <f:ajax event="blur" execute="@this" render="@this Coremessage" />
@@ -294,7 +294,7 @@
                     <f:ajax event="blur" execute="@this" render="@this justificacio" />
                     <p:ajax update="just"/>
                 </p:inputText>
-                <p:watermark value="Justifique por qué la desvinculación" for="justificacion"/>
+                <p:watermark value="Justifique por qué" for="justificacion"/>
                 <p:message id="justificacio" for="justificacion"/>
 
             </h:panelGrid>
