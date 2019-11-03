@@ -300,7 +300,7 @@
             </h:panelGrid>
             <center>
 
-                <p:commandButton value="Eliminar" id="ajax3"
+                <p:commandButton value="Desactivar" id="ajax3"
                                  oncomplete="if (args &amp;&amp; !args.validationFailed) PF('dlCFD').show()"
                                  style="margin-right:20px;margin-top: 20px"
                                  styleClass="ui-priority-primary" update="form:msgs, EliminarColaborador">
@@ -313,7 +313,7 @@
 
     <p:dialog id="dlCFD" header="Confirmación"  showEffect="fade" hideEffect="fade"
               widgetVar="dlCFD" modal="true" resizable="false" minWidth="300">
-        <h6 >¿Está seguro de eliminar este registro?</h6>
+        <h6 >¿Está seguro de desactivar este registro?</h6>
         <hr/>
         <center>
             <p:commandButton update="form:msgs" value="Sí"  styleClass="ui-confirmdialog-yes"  actionListener="#{colaboradorBean.delete}"  onclick="ocultaEliminar()" style="margin-right: 30px" />
