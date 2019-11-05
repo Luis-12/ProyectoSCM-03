@@ -50,7 +50,7 @@ public class ColaboradorService {
         Date fechaDeVencimiento =null;
         Date horaActual = new Date();
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
-        /*
+
         int mes;
         int dia;
         int year;
@@ -89,11 +89,11 @@ public class ColaboradorService {
         System.out.println("La fecha de venciamiento de clave calculada antes de convertirlo: "+ fVencimiento);
 
         fechaDeVencimiento = formato.parse(fVencimiento);
-        System.out.println("La fecha de venciamiento de clave calculada es : "+ formato.format(fechaDeVencimiento));*/
-        horaActual.setMonth((horaActual.getMonth()-1+3)%12 +1);
-        fechaDeVencimiento= formato.parse(formato.format(horaActual));
-        System.out.println("Fecha calculada Pablo:" + fechaDeVencimiento);//formato.format(horaActual));
-        return fechaDeVencimiento;
+        System.out.println("La fecha de venciamiento de clave calculada es : "+ formato.format(fechaDeVencimiento));
+        /*horaActual.setMonth((horaActual.getMonth()-1+3)%12 +1);
+        fechaDeVencimiento = formato.parse(formato.format(horaActual));
+        System.out.println("Fecha calculada Pablo:" + formato.parse(formato.format(horaActual)));//formato.format(horaActual));
+       */ return fechaDeVencimiento;
     }
     public void actualizaClave(Colaborador c) throws ParseException {
         c.setFechaVencimiento(calculaVencimiento());//Cuando se cambia la clave se vuelve a calcula la nueva fecha de vencimiento
