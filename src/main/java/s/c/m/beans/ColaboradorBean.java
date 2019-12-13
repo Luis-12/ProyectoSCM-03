@@ -1,10 +1,6 @@
 package s.c.m.beans;
 
-
-import org.apache.commons.codec.digest.DigestUtils;
 import org.primefaces.PrimeFaces;
-import org.primefaces.event.RowEditEvent;
-import org.primefaces.event.SelectEvent;
 import org.primefaces.model.menu.MenuModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -20,17 +16,11 @@ import s.c.m.services.PuestoService;
 import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.validator.ValidatorException;
-import java.io.IOException;
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 
 
 
@@ -40,6 +30,7 @@ public class ColaboradorBean {
     @Autowired
     ColaboradorService colaboradorService;
     private Colaborador colaborador = new Colaborador();
+    private Colaborador colaboradorMarca=new Colaborador();
     private Colaborador colaborador1 = new Colaborador();
     private Colaborador colaboradorlogueado = new Colaborador();
     private Colaborador selectcolaborador=new Colaborador();
@@ -78,7 +69,9 @@ public class ColaboradorBean {
     {
         this.fecha = fecha;
     }
-
+    public Colaborador getColaboradorMarca() {
+        return colaboradorMarca;
+    }
 
     public Colaborador getColaborador()
     {
@@ -524,7 +517,9 @@ public class ColaboradorBean {
     }
     }
 
-
+     public void findColaboradorMarca() throws Exception {
+        colaboradorMarca=colaboradorService.findColaborador(colaboradorMarca.getPk_idColaborador());
+     }
 
     public void find() throws Exception {
         String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("ColaboradorIdBusqueda");
@@ -549,38 +544,6 @@ public class ColaboradorBean {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
-    public void onRowSelectedColaborador(SelectEvent event)
-    {
-        FacesMessage msg = new FacesMessage("Colaborador Seleccionado",((Colaborador) event.getObject()).getNombre());
-        FacesContext.getCurrentInstance().addMessage("asdasdasdasd",msg);
-    }
-
-    public void onRowUnselectColaborador(SelectEvent event)
-    {
-        FacesMessage msg = new FacesMessage("Colaborador selecionado",((Colaborador) event.getObject()).getNombre());
-        FacesContext.getCurrentInstance().addMessage("dasdasdasdas",msg);
-    }
 
 
-    public void onRowEdit(RowEditEvent event)
-    {
-        colaboradorService.updateColaborador(((Colaborador) event.getObject()));
-        System.out.println(((Colaborador) event.getObject()).getNombre());
-        FacesMessage msg = new FacesMessage("Colaborador Editado", ((Colaborador) event.getObject()).getPk_idColaborador());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
-
-    public void onRowCancel(RowEditEvent event)
-    {
-        FacesMessage msg = new FacesMessage("Actualización Cancelada", ((Colaborador) event.getObject()).getPk_idColaborador());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
-
-    public void onRowDelete(RowEditEvent event)
-    {
-        colaboradorService.deleteColaborador((Colaborador) event.getObject());
-        FacesMessage msg = new FacesMessage("Colaborador eliminado", ((Colaborador) event.getObject()).getPk_idColaborador());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-        colaboradores = colaboradorService.getAllColaboradoresActivos();
-    }
 }

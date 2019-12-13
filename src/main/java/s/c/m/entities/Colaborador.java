@@ -140,17 +140,5 @@ public class Colaborador implements Serializable {
     {
     }
 
-    @Override
-    public String toString()
-    {
-        return "Colaborador{" +
-                "pk_idColaborador='" + pk_idColaborador + '\'' +
-                ", nombre='" + nombre + '\'' +
-                ", clave='" + clave + '\'' +
-                ", telefono=" + telefono +
-                ", correo='" + correo + '\'' +
-                ", fechaInicioLaboral=" + fechaInicioLaboral +
-                ", estado='" + estado + '\'' +
-                '}';
-    }
+
 }

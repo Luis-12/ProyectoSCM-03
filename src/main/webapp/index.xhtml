@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
@@ -10,6 +9,7 @@
 <h:head>
     <link href="css/style.css" rel="stylesheet" type="text/css" />
     <link href="//db.onlinewebfonts.com/c/f977213040abc486420980aae60e0db3?family=GestaW01-Medium" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js" ></script>
     <title>Marca
     </title>
 </h:head>
@@ -25,32 +25,32 @@
                 <p:commandButton action="login.xhtml?faces-redirect=true" style='float: left;' id="dynaButton" value="Ingresar"  icon="ui-icon-home"/>
             </h:form>
         </div>
+
+        <div style="text-align: left;margin-top: 50px">
+                <p:outputLabel id="nom" value="#{colaboradorBean.colaboradorMarca.nombre}" />
+                <p:outputLabel id="ced"  value="#{colaboradorBean.colaboradorMarca.pk_idColaborador}" />
+        </div>
+
         <center>
         <div class="camara">
-            <h:form >
-
-
-                    <h:panelGrid columns="3" cellpadding="5">
-
-                        <p:photoCam style="width: 368px;height: 268px;margin-left: -4%;margin-top: -1%;"/>
-                        <p:outputPanel >
-                            <p:graphicImage  />
-                        </p:outputPanel>
-
-                    </h:panelGrid>
-
-            </h:form>
+            <video  style="margin-bottom:10px; margin-left: 10px;margin-top: 10px" id="preview" width="350" autoplay="autoplay"/>
         </div>
         </center>
-
         <div>
+            <h:form>
             <center>
                 <h:panelGrid columns="3" cellpadding="5">
-                    <p:commandButton styleClass="ui-commandant2" value="Entrada"/>
+                    <p:commandButton styleClass="ui-commandant2" value="Entrada" />
                     <p:commandButton styleClass="ui-commandant2" value="Descanso"/>
                     <p:commandButton styleClass="ui-commandant2" value="Salida"/></h:panelGrid>
             </center>
+            </h:form>
         </div>
+        <h:form id="frm">
+            <p:commandButton id="hdnBtn" actionListener="#{colaboradorBean.findColaboradorMarca}" update="frm,ced,nom" style="display: none"/>
+            <p:inputText id="t1" value="#{colaboradorBean.colaboradorMarca.pk_idColaborador}" type="hidden" />
+        </h:form>
+
 
 
         <div id="footer">
@@ -58,9 +58,32 @@
             <h:link outcome="acerca" value ="©"/>  SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA
 
         </div>
+<script type="text/javascript">
+
+        scanner = new Instascan.Scanner(
+            {
+                video: document.getElementById("preview")
+            }
+        );
+        scanner.addListener('scan', function (content) {
+            if(content != null)
+            {
+                document.getElementById('frm'+':t1').value=content;
+                document.getElementById('frm'+':hdnBtn').click();
+            }
+
+        });
+        Instascan.Camera.getCameras().then(cameras =>
+        {
+            if (cameras.length > 0) {
+                scanner.start(cameras[0]);
+            } else {
+                console.error("No existe camara o dispositivo!");
+            }
+        });
+</script>
 
     </h:body>
 
 </div>
-
 </html>
