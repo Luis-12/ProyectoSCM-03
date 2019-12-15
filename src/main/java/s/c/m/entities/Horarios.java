@@ -1,8 +1,6 @@
 package s.c.m.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Time;
 
@@ -12,11 +10,22 @@ public class Horarios implements Serializable {
 
     @Id
     private int pk_idhorario;
-    private String fk_idjornada;
+    @OneToOne
+    @JoinColumn(name = "fk_idjornada",nullable = false)
+    private Jornadas jornada;
+
     private Time horaentrada;
     private Time horasalida;
 
     public Horarios() { }
+
+    public Jornadas getJornada() {
+        return jornada;
+    }
+
+    public void setJornada(Jornadas jornada) {
+        this.jornada = jornada;
+    }
 
     public int getPk_idhorario() {
         return pk_idhorario;
@@ -26,13 +35,6 @@ public class Horarios implements Serializable {
         this.pk_idhorario = pk_idhorario;
     }
 
-    public String getFk_idjornada() {
-        return fk_idjornada;
-    }
-
-    public void setFk_idjornada(String fk_idjornada) {
-        this.fk_idjornada = fk_idjornada;
-    }
 
     public Time getHoraentrada() {
         return horaentrada;

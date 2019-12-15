@@ -1,12 +1,13 @@
 package s.c.m.repositories;
 
-
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import s.c.m.entities.Horarios;
-import s.c.m.entities.Puesto;
+import s.c.m.entities.*;
+
+import java.util.List;
 
 @Repository
-public interface HorarioRepository extends CrudRepository<Horarios,String> {
+public interface AsignacionesRepository extends CrudRepository<Asignaciones, String> {
+
 
 }
