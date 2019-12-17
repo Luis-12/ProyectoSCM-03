@@ -17,7 +17,10 @@ public class AsignacionesServices {
     private AsignacionesRepository asignacionesRepository;
 
 
+public Asignaciones buscarHorario(Colaborador id){
 
+    return asignacionesRepository.findByColaborador(id);
+}
 
     public void createAsignacion(Asignaciones asignaciones) {
 

@@ -42,6 +42,8 @@ public class AsignacionesBean {
 
     Asignaciones asignacion = new Asignaciones();
 
+
+
     @PostConstruct
     public void init()
     {
@@ -155,6 +157,30 @@ public class AsignacionesBean {
         this.horariosTemp = horariosTemp;
     }
 
+    public void checkSelection()
+    {
+        PrimeFaces current = PrimeFaces.current();
+
+         if(asignacion.getColaborador() == null) {
+            FacesMessage msg = new FacesMessage("Aviso", "Debe seleccionar un colaborador");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } else {
+
+             if (asignacionesService.buscarHorario(asignacion.getColaborador())==null) {
+
+                 current.executeScript("PF('datos').show();"); //si no esta vacío muestra el dialogo
+             }
+
+             else {
+                 FacesMessage msg = new FacesMessage("Aviso", "Ya tiene un horario asignado");
+                 FacesContext.getCurrentInstance().addMessage(null, msg);
+                 asignacion = new Asignaciones();
+
+             }
+
+        }
+    }
+
     public void create()
     {
         FacesMessage mensaje = null;
@@ -172,5 +198,7 @@ public class AsignacionesBean {
             }
         FacesMessage msg = new FacesMessage("Aviso", "Asignacion realizada correctamente");
         FacesContext.getCurrentInstance().addMessage(null, msg);
+        asignacion = new Asignaciones();
+
     }
 }

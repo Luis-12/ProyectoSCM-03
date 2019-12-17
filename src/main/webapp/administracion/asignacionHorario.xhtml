@@ -55,7 +55,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                         <h:form>
 
                             <p:contextMenu >
-                                <p:menuitem value="Asignar Horario" oncomplete="PF('datos').show()" icon="ui-icon-document"/>
+                                <p:menuitem value="Asignar horario" update="datos"  icon="ui-icon-document" action="#{asignacionesBean.checkSelection}"/>
 
                             </p:contextMenu>
 
