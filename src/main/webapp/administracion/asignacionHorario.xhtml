@@ -45,11 +45,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                     </div>
 
                     <h1 id="h1Centro">Asignar Horarios</h1>
-                    <p:outputLabel value="Cédula: " styleClass="required"  indicateRequired="cedula" for="cedula"/>
-                    <p:inputText autocomplete="off" required="true" requiredMessage="Ingrese la Cedula"  id="cedula"/>
-                    <p:commandButton value="Buscar"
-                                     style="margin-right:20px;margin-top: 20px"
-                                     styleClass="ui-priority-primary" />
+
 
                     <div>
                         <h:form>
@@ -71,13 +67,13 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                          selection="#{asignacionesBean.asignacion.colaborador}" scrollable="true" scrollHeight="450">
                             <p:autoUpdate />
 
-                            <p:column headerText="Cédula" >
-                                <h:outputText value="#{colaborador.pk_idColaborador}" />
-                            </p:column>
+                                <p:column headerText="Cédula" filterBy="#{colaborador.pk_idColaborador}">
+                                    <h:outputText value="#{colaborador.pk_idColaborador}" />
+                                </p:column>
 
-                            <p:column headerText="Nombre Completo" >
-                                <h:outputText value="#{colaborador.nombre}" />
-                            </p:column>
+                                <p:column headerText="Nombre Completo" filterBy="#{colaborador.nombre}">
+                                    <h:outputText value="#{colaborador.nombre}"  />
+                                </p:column>
 
                             </p:dataTable>
 
