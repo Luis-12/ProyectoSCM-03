@@ -172,7 +172,7 @@ public class AsignacionesBean {
              }
 
              else {
-                 FacesMessage msg = new FacesMessage("Aviso", "Ya tiene un horario asignado");
+                 FacesMessage msg = new FacesMessage("Aviso", "¡Ya tiene un horario asignado!");
                  FacesContext.getCurrentInstance().addMessage(null, msg);
                  asignacion = new Asignaciones();
 
@@ -195,8 +195,9 @@ public class AsignacionesBean {
             } catch (Exception e) {
             } finally {
                 asignacion = new Asignaciones();
+                jornada = new Jornadas();
             }
-        FacesMessage msg = new FacesMessage("Aviso", "Asignacion realizada correctamente");
+        FacesMessage msg = new FacesMessage("Aviso", "Asignación realizada correctamente.");
         FacesContext.getCurrentInstance().addMessage(null, msg);
         asignacion = new Asignaciones();
 

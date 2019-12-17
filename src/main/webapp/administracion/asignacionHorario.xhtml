@@ -93,7 +93,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                         <h:panelGrid columns="2"  id="panel2">
                         <p:outputLabel  value="  Jornada:  " />
                             <p:selectOneMenu id="jornada" style="min-width: 195px" value="#{asignacionesBean.jornada}" converter="jornadaConverter">
-                                <f:selectItem itemLabel="- Seleccione jornada -" itemValue=""/>
+                                <f:selectItem itemLabel="- Seleccione la Jornada -" itemValue=""/>
                                 <f:selectItems value="#{asignacionesBean.jornadas}" var="jornada"
                                                itemValue="#{jornada}" itemLabel="#{jornada.descripcion}"/>
                                 <p:ajax listener="#{asignacionesBean.handleJornadaChange}" process=":horaio:jornada" update=":horaio:horario" />
@@ -101,7 +101,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
 
                                 <p:outputLabel  value="  Horario:  " />
                                 <p:selectOneMenu id="horario" style="min-width: 195px" value="#{asignacionesBean.asignacion.horario}" converter="horarioConverter">
-                                    <f:selectItem itemLabel="- Seleccione -" itemValue=""/>
+                                    <f:selectItem itemLabel="- Seleccione el Horario -" itemValue=""/>
                                     <f:selectItems value="#{asignacionesBean.horariosTemp}" var="horario"
                                         itemValue="#{horario}" itemLabel="#{horario.horaentrada} #{horario.horasalida}"/>
                                 </p:selectOneMenu>
@@ -110,10 +110,10 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                 <p:selectOneMenu value="#{asignacionesBean.asignacion.diadescanso}" id="descanso" style="min-width: 195px" >
                                     <f:selectItem itemValue="LU" itemLabel="Lunes"  />
                                     <f:selectItem itemValue="MA" itemLabel="Martes"  />
-                                    <f:selectItem itemValue="MI" itemLabel="Miercoles" />
+                                    <f:selectItem itemValue="MI" itemLabel="Miércoles" />
                                     <f:selectItem itemValue="JU" itemLabel="Jueves" />
                                     <f:selectItem itemValue="VI" itemLabel="Viernes" />
-                                    <f:selectItem itemValue="SA" itemLabel="Sabado" />
+                                    <f:selectItem itemValue="SA" itemLabel="Sábado" />
                                     <f:selectItem itemValue="DO" itemLabel="Domingo" />
                                 </p:selectOneMenu>
                         </h:panelGrid>
@@ -122,7 +122,9 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                             <p:commandButton value="Asignar"
                                              action="#{asignacionesBean.create}"
                                              style="margin-right:20px;margin-top: 20px"
-                                             styleClass="ui-priority-primary" ajax="false"/>
+                                             styleClass="ui-priority-primary" ajax="false"
+                            />
+
                         </center>
                         </h:form>
 
