@@ -3,6 +3,7 @@ package s.c.m.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import s.c.m.entities.Horarios;
+import s.c.m.entities.Jornadas;
 import s.c.m.entities.Puesto;
 import s.c.m.repositories.HorarioRepository;
 
@@ -27,4 +28,15 @@ public class HorarioService {
     {
         return horarioRepository.findById(jornada);
     }
+
+    public List<Horarios> findHorariosPorJornada(Jornadas idJornada){
+        if(idJornada.equals(null)){
+            System.out.println("No hay horarios para esa jornada");
+            List<Horarios> horarios = new ArrayList<Horarios>();
+            horarioRepository.findAll().forEach(e -> horarios.add(e));
+            return horarios;
+        }
+        return horarioRepository.findByJornada(idJornada);
+    }
+
 }

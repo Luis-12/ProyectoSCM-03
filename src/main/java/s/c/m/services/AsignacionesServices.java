@@ -25,8 +25,6 @@ public class AsignacionesServices {
         System.out.println("Descanso: "+asignaciones.getDiaDescanso());
         System.out.println("Horario: "+ asignaciones.getHorario().getPk_idhorario());
 
-
         asignacionesRepository.save(asignaciones);
-
     }
 }

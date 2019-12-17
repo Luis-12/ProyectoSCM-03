@@ -3,12 +3,15 @@ package s.c.m.beans;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import s.c.m.entities.Horarios;
+import s.c.m.entities.Jornadas;
 import s.c.m.entities.Puesto;
 import s.c.m.services.HorarioService;
 import s.c.m.services.PuestoService;
 
 import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
+import javax.faces.model.SelectItem;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -18,6 +21,7 @@ public class HorarioBean {
     @Autowired
     HorarioService horarioService;
     private Horarios horario = new Horarios();
+    private Jornadas jornada = new Jornadas();
 
     private List<Horarios> horarios;
 

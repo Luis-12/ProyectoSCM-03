@@ -10,6 +10,8 @@ import s.c.m.services.PuestoService;
 
 import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
+import javax.faces.model.SelectItem;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
