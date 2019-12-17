@@ -289,6 +289,15 @@ div {
     display: block;
 }
 
+div.container {
+    width: 96%;
+    max-width: 650px;
+    margin: 0 auto;
+}
+img {
+    width: 100%;
+    height: auto;
+}
 
 
 #logo{

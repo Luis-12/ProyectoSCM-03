@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html  xmlns="http://www.w3.org/1999/xhtml"
        xmlns:h="http://java.sun.com/jsf/html"
@@ -25,17 +26,19 @@
             </h:panelGrid>
         </p:fieldset>
 
-        <p:fieldset legend="Desarrolladores" style="margin-bottom:20px">
-            <h:panelGrid columns="2" cellpadding="5">
-
-                <p> El equipo de estudiantes desarrolladores, está conformado por los siguientes integrantes:<br/>
+        <p:panel header="Desarrolladores"  style="margin-bottom:20px">
+            <p:panelGrid columns="2" columnClasses="ui-g-12 ui-md-4,ui-g-12 ui-md-8" layout="grid" styleClass="ui-panelgrid-blank">
+                <h:outputText
+                        value="El equipo de estudiantes desarrolladores, está conformado por los siguientes integrantes:<br/>
                     Diego Salazar Pérez.<br/>
                     Luis Vargas Alvarado. <br/>
                     Pablo Herrera Rodríguez.<br/>
                     Allison Madriz Valverde. <br/>
-                    Yoselin Molina Arias. </p>
-            </h:panelGrid>
-        </p:fieldset>
+                    Yoselin Molina Arias. </p>" />
+            </p:panelGrid>
+        </p:panel>
+
+
     </h:body>
 </div>
 
