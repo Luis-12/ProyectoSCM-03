@@ -40,7 +40,8 @@ public class AsignacionesBean {
     private List<Horarios>horarios;
     private List<Horarios>horariosTemp;
 
-    Asignaciones asignacion = new Asignaciones();
+    private Asignaciones asignacion = new Asignaciones();
+    private Asignaciones selectAsignacion = new Asignaciones();
 
 
 
@@ -157,28 +158,116 @@ public class AsignacionesBean {
         this.horariosTemp = horariosTemp;
     }
 
+    public Asignaciones getSelectAsignacion() {
+        return selectAsignacion;
+    }
+
+    public void setSelectAsignacion(Asignaciones selectAsignacion) {
+        this.selectAsignacion = selectAsignacion;
+    }
+
     public void checkSelection()
     {
         PrimeFaces current = PrimeFaces.current();
 
-         if(asignacion.getColaborador() == null) {
+         if(selectAsignacion.getColaborador() == null) {
             FacesMessage msg = new FacesMessage("Aviso", "Debe seleccionar un colaborador");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } else {
-
-             if (asignacionesService.buscarHorario(asignacion.getColaborador())==null) {
-
+             if (asignacionesService.buscarHorario(selectAsignacion.getColaborador())==null) {
                  current.executeScript("PF('datos').show();"); //si no esta vacío muestra el dialogo
              }
-
              else {
                  FacesMessage msg = new FacesMessage("Aviso", "¡Ya tiene un horario asignado!");
                  FacesContext.getCurrentInstance().addMessage(null, msg);
-                 asignacion = new Asignaciones();
-
+                 //selectAsignacion = new Asignaciones();
              }
-
         }
+    }
+
+
+    public void checkSelectionC()
+    {
+        PrimeFaces current = PrimeFaces.current();
+
+        if(selectAsignacion.getColaborador() == null) {
+            FacesMessage msg = new FacesMessage("Aviso", "Debe seleccionar un colaborador");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }else if(asignacionesService.buscarHorario(selectAsignacion.getColaborador())==null){
+            FacesMessage msg = new FacesMessage("Aviso", "El colaborador no tiene horario asignado");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } else{
+            buscaHorarioAsignado();
+            current.executeScript("PF('dH').show();"); //si no esta vacío muestra el dialogo
+        }
+    }
+
+    public void buscaHorarioAsignado(){
+        Horarios horarioAux = new Horarios();
+        String diaDescanso= null;
+
+        if(asignacionesService.buscarHorario(selectAsignacion.getColaborador())!=null){
+            selectAsignacion = asignacionesService.buscarHorario(selectAsignacion.getColaborador());
+            if(selectAsignacion.getDiaDescanso().equals("LU")){
+                diaDescanso="Lunes";
+            }else if(selectAsignacion.getDiaDescanso().equals("MA")){
+                diaDescanso="Martes";
+            }else if(selectAsignacion.getDiaDescanso().equals("MI")){
+                diaDescanso="Miercoles";
+            }else if(selectAsignacion.getDiaDescanso().equals("JU")){
+                diaDescanso="Jueves";
+            }else if(selectAsignacion.getDiaDescanso().equals("VI")){
+                diaDescanso="Viernes";
+            }else if(selectAsignacion.getDiaDescanso().equals("SA")){
+                diaDescanso="Sabado";
+            }else if(selectAsignacion.getDiaDescanso().equals("DO")){
+                diaDescanso="Domingo";
+            }
+            selectAsignacion.setDiadescanso(diaDescanso);
+        }else{
+            System.out.println("No se encontro el horario");
+        }
+    }
+
+    public void checkSelectionScheduleChange()
+    {
+        PrimeFaces current = PrimeFaces.current();
+
+        if(selectAsignacion.getColaborador() == null) {
+            FacesMessage msg = new FacesMessage("Aviso", "Debe seleccionar un colaborador");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } else {
+            if (asignacionesService.buscarHorario(selectAsignacion.getColaborador())==null) {//Quiere decir que no tiene horario asignado
+                FacesMessage msg = new FacesMessage("Aviso", "El colaborador no tiene horario asignado");
+                FacesContext.getCurrentInstance().addMessage(null, msg);
+            }
+            else {
+                System.out.println("El colaborador ya tiene horario asignado y se desea cambiar");
+                current.executeScript("PF('datos2').show();"); //si no esta vacío muestra el dialogo
+                //selectAsignacion = new Asignaciones();
+            }
+        }
+    }
+
+    public void changeSchedule(){
+        FacesMessage mensaje = null;
+        PrimeFaces current = PrimeFaces.current();
+
+        Asignaciones asignaChage = asignacionesService.buscarHorario(selectAsignacion.getColaborador());
+        System.out.println("Jornada: "+ jornada.getDescripcion());
+            try{
+                asignacionesService.updateAsignacion(selectAsignacion);
+                current.executeScript("PF('datos2').hide();");
+
+                FacesMessage msg = new FacesMessage("Aviso", "Horario cambiado correctamente.");
+                FacesContext.getCurrentInstance().addMessage(null, msg);
+            } catch (Exception e) {
+                System.out.println("No se puedo cambiar el horario");
+            } finally {
+                selectAsignacion = new Asignaciones();
+                asignacion = new Asignaciones();
+                jornada = new Jornadas();
+            }
     }
 
     public void create()
@@ -186,20 +275,22 @@ public class AsignacionesBean {
         FacesMessage mensaje = null;
         PrimeFaces current = PrimeFaces.current();
 
-        System.out.println("Nombre: "+asignacion.getColaborador().getNombre());
+        System.out.println("Nombre: "+selectAsignacion.getColaborador().getNombre());
         System.out.println("Descanso: "+asignacion.getDiaDescanso());
         System.out.println("Horario: "+ asignacion.getHorario().getPk_idhorario());
             try {
+                asignacion.setColaborador(selectAsignacion.getColaborador());
                 asignacionesService.createAsignacion(asignacion);
-                current.executeScript("PF('dlAC').hide();");
+                current.executeScript("PF('datos').hide();");
+                System.out.println("Horario asignado");
+
+                FacesMessage msg = new FacesMessage("Aviso", "Asignación realizada correctamente.");
+                FacesContext.getCurrentInstance().addMessage(null, msg);
             } catch (Exception e) {
             } finally {
+                selectAsignacion = new Asignaciones();
                 asignacion = new Asignaciones();
                 jornada = new Jornadas();
             }
-        FacesMessage msg = new FacesMessage("Aviso", "Asignación realizada correctamente.");
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-        asignacion = new Asignaciones();
-
     }
 }

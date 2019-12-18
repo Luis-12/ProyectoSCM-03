@@ -45,18 +45,15 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                     </div>
 
                     <h1 id="h1Centro">Asignar Horarios</h1>
-                    <p:outputLabel value="Cédula: " styleClass="required"  indicateRequired="cedula" for="cedula"/>
-                    <p:inputText autocomplete="off" required="true" requiredMessage="Ingrese la Cedula"  id="cedula"/>
-                    <p:commandButton value="Buscar"
-                                     style="margin-right:20px;margin-top: 20px"
-                                     styleClass="ui-priority-primary" />
+
 
                     <div>
                         <h:form>
 
                             <p:contextMenu >
                                 <p:menuitem value="Asignar horario" update="datos"  icon="ui-icon-document" action="#{asignacionesBean.checkSelection}"/>
-
+                                <p:menuitem value="Cambiar horario asignado" update="datos2"  icon="ui-icon-document" action="#{asignacionesBean.checkSelectionScheduleChange}"/>
+                                <p:menuitem value="Consultar horario asignado" update="dH"  action="#{asignacionesBean.checkSelectionC}"/>
                             </p:contextMenu>
 
                             <p:dataTable var="colaborador" value="#{colaboradorBean.colaboradores}" style="margin-top: 15px" id="tablaColaborador"
@@ -68,16 +65,16 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                          paginator="true"
                                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                          rowsPerPageTemplate="10,15,20"
-                                         selection="#{asignacionesBean.asignacion.colaborador}" scrollable="true" scrollHeight="450">
+                                         selection="#{asignacionesBean.selectAsignacion.colaborador}" scrollable="true" scrollHeight="450">
                             <p:autoUpdate />
 
-                            <p:column headerText="Cédula" >
-                                <h:outputText value="#{colaborador.pk_idColaborador}" />
-                            </p:column>
+                                <p:column headerText="Cédula" filterBy="#{colaborador.pk_idColaborador}">
+                                    <h:outputText value="#{colaborador.pk_idColaborador}" />
+                                </p:column>
 
-                            <p:column headerText="Nombre Completo" >
-                                <h:outputText value="#{colaborador.nombre}" />
-                            </p:column>
+                                <p:column headerText="Nombre Completo" filterBy="#{colaborador.nombre}">
+                                    <h:outputText value="#{colaborador.nombre}"  />
+                                </p:column>
 
                             </p:dataTable>
 
@@ -124,10 +121,64 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                              style="margin-right:20px;margin-top: 20px"
                                              styleClass="ui-priority-primary" ajax="false"
                             />
-
                         </center>
                         </h:form>
 
+                    </p:dialog>
+
+
+                    <p:dialog id="datos2" header="Cambiar horario asignado"  showEffect="fade" hideEffect="fade"
+                              widgetVar="datos2" modal="true" minWidth="200"  style="width:360px;" >
+                        <p:ajax event="close" update="datos2" />
+                        <h:form id="horaio2">
+                            <p:growl id="msgs3" showDetail="true" />
+                            <h:panelGrid columns="2"  id="panel3">
+                                <p:outputLabel  value="  Jornada:  " />
+                                <p:selectOneMenu id="jornada2" style="min-width: 195px" value="#{asignacionesBean.jornada}" converter="jornadaConverter">
+                                    <f:selectItem itemLabel="- Seleccione la Jornada -" itemValue=""/>
+                                    <f:selectItems value="#{asignacionesBean.jornadas}" var="jornada"
+                                                   itemValue="#{jornada}" itemLabel="#{jornada.descripcion}"/>
+                                    <p:ajax listener="#{asignacionesBean.handleJornadaChange}" process=":horaio2:jornada2" update=":horaio2:horario2" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel  value="  Horario:  " />
+                                <p:selectOneMenu id="horario2" style="min-width: 195px" value="#{asignacionesBean.selectAsignacion.horario}" converter="horarioConverter">
+                                    <f:selectItem itemLabel="- Seleccione el Horario -" itemValue=""/>
+                                    <f:selectItems value="#{asignacionesBean.horariosTemp}" var="horario"
+                                                   itemValue="#{horario}" itemLabel="#{horario.horaentrada} #{horario.horasalida}"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel  value="  Descanso:  " />
+                                <p:selectOneMenu value="#{asignacionesBean.selectAsignacion.diadescanso}" id="descanso2" style="min-width: 195px" >
+                                    <f:selectItem itemValue="LU" itemLabel="Lunes"  />
+                                    <f:selectItem itemValue="MA" itemLabel="Martes"  />
+                                    <f:selectItem itemValue="MI" itemLabel="Miércoles" />
+                                    <f:selectItem itemValue="JU" itemLabel="Jueves" />
+                                    <f:selectItem itemValue="VI" itemLabel="Viernes" />
+                                    <f:selectItem itemValue="SA" itemLabel="Sábado" />
+                                    <f:selectItem itemValue="DO" itemLabel="Domingo" />
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+
+                            <center>
+                                <p:commandButton value="Asignar"
+                                                 action="#{asignacionesBean.changeSchedule}"
+                                                 style="margin-right:20px;margin-top: 20px"
+                                                 styleClass="ui-priority-primary" ajax="false"
+                                />
+                            </center>
+                        </h:form>
+                    </p:dialog>
+
+                    <p:dialog header="Horario de Colaborador" widgetVar="dH" modal="true" showEffect="fade" hideEffect="fade"
+                              resizable="false" id="dH"  minWidth="200">
+                        <p:growl id="msgs4" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
+                        <p:panelGrid columns="2" rendered="#{not empty asignacionesBean.selectAsignacion}">
+                            <h:outputText value="Horario:" />
+                            <h:outputText value="#{asignacionesBean.selectAsignacion.horario.horaentrada} #{asignacionesBean.selectAsignacion.horario.horasalida}"/>
+                            <h:outputText value="Descanso:" />
+                            <h:outputText value="#{asignacionesBean.selectAsignacion.diaDescanso}"/>
+                        </p:panelGrid>
                     </p:dialog>
 
                     <div id="footer">

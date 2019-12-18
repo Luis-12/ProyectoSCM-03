@@ -177,6 +177,8 @@ public class ColaboradorBean {
         String fechaVenceString = null;
         String fechaActualString = null;
 
+        Calendar fechaActual2 = Calendar.getInstance();
+
         int fechaV=0;
         int fechaA=0;
 
@@ -190,7 +192,6 @@ public class ColaboradorBean {
         int diaV;
         String diaV2 = null;
 
-
         int yearA;
         int yearV;
         Boolean vencio = false;
@@ -198,6 +199,11 @@ public class ColaboradorBean {
         mesV=fechaVence.getMonth() +1;
         diaV=fechaVence.getDate();
         yearV=fechaVence.getYear()+1900;
+
+        System.out.println("El mes de vencimiento es: " + mesV);
+        System.out.println("El dia de vencimiento es: " + diaV);
+        System.out.println("El anio de vencimiento es:" + yearV);
+
         if(mesV<10){
             mesV2 = "0"+ mesV;
         }else{
@@ -212,9 +218,10 @@ public class ColaboradorBean {
         fechaV = Integer.parseInt(fechaVenceString);
         //System.out.println("FECHA DE VENCIMIENTO"+fechaV);
 
-        mesA=fechaActual.getMonth()+1;
-        diaA=fechaActual.getDate();
-        yearA=fechaActual.getYear()+1900;
+        mesA=fechaActual2.get(Calendar.MONTH) +1;
+        diaA=fechaActual2.get(Calendar.DAY_OF_MONTH);
+        yearA=fechaActual2.get(Calendar.YEAR);
+
         if(mesA<10){
             mesA2 = "0"+ mesA;
         }else{
@@ -543,7 +550,5 @@ public class ColaboradorBean {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-
-
 
 }
