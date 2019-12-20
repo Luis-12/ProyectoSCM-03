@@ -34,7 +34,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                     <div id="top">
                         <h:form>
                             <p:commandButton id="dynaButton" value="Menú" type="button"  icon="ui-icon-home"/>
-                            <p:menu toggleable="true" style="width: 17%;" overlay="true" trigger="dynaButton" my="left top" at="left bottom" model="#{colaboradorBean.model}"/>
+                            <p:menu  toggleable="true" style="width: 17%;" overlay="true" trigger="dynaButton" my="left top" at="left bottom" model="#{colaboradorBean.model}"/>
                             <p:commandButton style='float: right;'  id="dynaButton1" value="Salir" type="button"  icon="ui-icon-person"/>
                             <p:menu style='float: right;'  overlay="true" trigger="dynaButton1" my="left top" at="left bottom">
                                 <p:submenu label="#{colaboradorBean.colaboradorlogueado.nombre}">
@@ -52,6 +52,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
 
                             <p:contextMenu >
                                 <p:menuitem value="Asignar horario" update="datos"  icon="ui-icon-document" action="#{asignacionesBean.checkSelection}"/>
+                                <p:menuitem value="Asignar Descansos" update="datos"  icon="ui-icon-document" action="#{asignacionesBean.colaboradorSelected}"/>
                                 <p:menuitem value="Cambiar horario asignado" update="datos2"  icon="ui-icon-document" action="#{asignacionesBean.checkSelectionScheduleChange}"/>
                                 <p:menuitem value="Consultar horario asignado" update="dH"  action="#{asignacionesBean.checkSelectionC}"/>
                             </p:contextMenu>
@@ -126,6 +127,36 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
 
                     </p:dialog>
 
+                    <p:dialog id="datos3" header="Asignar Descansos"  showEffect="fade" hideEffect="fade"
+                              widgetVar="datos3" modal="true" minWidth="200"  style="width:360px;" >
+                        <p:ajax event="close" update="datos3" />
+                        <h:form id="desc">
+                            <p:growl id="msgs" showDetail="true" />
+                            <h:panelGrid columns="2"  id="panel">
+
+                                <p:outputLabel  value="  Descripción:  " />
+                                <p:inputText maxlength="50" value="#{asignacionesBean.descansos.descripcion}" required="true"/>
+                                <p:outputLabel for="des" value="  Duración:  " />
+                                <p:selectOneMenu value="#{asignacionesBean.tiempoDescanso}" id="des" style="min-width: 195px" >
+                                    <f:selectItem itemValue="00:10:00" itemLabel="10 minutos"  />
+                                    <f:selectItem itemValue="00:15:00" itemLabel="15 minutos"  />
+                                    <f:selectItem itemValue="00:20:00" itemLabel="20 minutos" />
+                                    <f:selectItem itemValue="00:25:00" itemLabel="25 minutos" />
+                                    <f:selectItem itemValue="00:30:00" itemLabel="30 minutos" />
+                                </p:selectOneMenu>
+
+                            </h:panelGrid>
+
+                            <center>
+                                <p:commandButton value="Asignar"
+                                                 action="#{asignacionesBean.createDescanso}"
+                                                 style="margin-right:20px;margin-top: 20px"
+                                                 styleClass="ui-priority-primary" ajax="false"
+                                />
+                            </center>
+                        </h:form>
+
+                    </p:dialog>
 
                     <p:dialog id="datos2" header="Cambiar horario asignado"  showEffect="fade" hideEffect="fade"
                               widgetVar="datos2" modal="true" minWidth="200"  style="width:360px;" >

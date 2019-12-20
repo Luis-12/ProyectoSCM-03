@@ -2,10 +2,10 @@ package s.c.m.beans;
 
 import org.primefaces.PrimeFaces;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import s.c.m.entities.*;
 import s.c.m.services.AsignacionesServices;
+import s.c.m.services.DescansoServices;
 import s.c.m.services.HorarioService;
 import s.c.m.services.JornadaService;
 
@@ -13,7 +13,7 @@ import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,12 +29,24 @@ public class AsignacionesBean {
     @Autowired
     HorarioService horarioService;
 
+    @Autowired
+    DescansoServices descansoServices;
+
 
     private Colaborador colaborador = new Colaborador();
     private Horarios horario = new Horarios();
     private Jornadas jornada = new Jornadas();
     private String descanso;
+    private String tiempoDescanso;
     private List<Asignaciones> asignaciones;
+
+    public String getTiempoDescanso() {
+        return tiempoDescanso;
+    }
+
+    public void setTiempoDescanso(String tiempoDescanso) {
+        this.tiempoDescanso = tiempoDescanso;
+    }
 
     private List<Jornadas>jornadas;
     private List<Horarios>horarios;
@@ -42,6 +54,7 @@ public class AsignacionesBean {
 
     private Asignaciones asignacion = new Asignaciones();
     private Asignaciones selectAsignacion = new Asignaciones();
+    private Tipodedescansos descansos=new Tipodedescansos();
 
 
 
@@ -83,7 +96,13 @@ public class AsignacionesBean {
     public void setAsignacion(Asignaciones asignacion) {
         this.asignacion = asignacion;
     }
+    public Tipodedescansos getDescansos() {
+        return descansos;
+    }
 
+    public void setDescansos(Tipodedescansos descansos) {
+        this.descansos = descansos;
+    }
 
     public Horarios getHorario() {
         return horario;
@@ -160,6 +179,14 @@ public class AsignacionesBean {
 
     public Asignaciones getSelectAsignacion() {
         return selectAsignacion;
+    }
+
+    public DescansoServices getDescansoServices() {
+        return descansoServices;
+    }
+
+    public void setDescansoServices(DescansoServices descansoServices) {
+        this.descansoServices = descansoServices;
     }
 
     public void setSelectAsignacion(Asignaciones selectAsignacion) {
@@ -292,5 +319,35 @@ public class AsignacionesBean {
                 asignacion = new Asignaciones();
                 jornada = new Jornadas();
             }
+    }
+    public void createDescanso()
+    {
+        FacesMessage mensaje = null;
+        PrimeFaces current = PrimeFaces.current();
+        try {
+                descansos.setDuracion(Time.valueOf(tiempoDescanso));
+            descansos.setColaborador(selectAsignacion.getColaborador());
+            descansoServices.createDescansos(descansos);
+            current.executeScript("PF('datos3').hide();");
+            FacesMessage msg = new FacesMessage("Aviso", "Asignación realizada correctamente.");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } catch (Exception e) {
+            System.out.println(e.getCause());
+        } finally {
+            selectAsignacion = new Asignaciones();
+            descansos = new Tipodedescansos();
+        }
+    }
+
+    public void colaboradorSelected()
+    {
+        PrimeFaces current = PrimeFaces.current();
+
+        if(selectAsignacion.getColaborador()== null) {
+            FacesMessage msg = new FacesMessage("Aviso", "Debe seleccionar un colaborador");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } else {
+            current.executeScript("PF('datos3').show();"); //si no esta vacío muestra el dialogo
+        }
     }
 }
