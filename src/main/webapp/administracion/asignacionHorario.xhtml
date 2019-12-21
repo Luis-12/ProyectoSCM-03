@@ -106,6 +106,8 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
 
                                 <p:outputLabel  value="  Descanso:  " />
                                 <p:selectOneMenu value="#{asignacionesBean.asignacion.diadescanso}" id="descanso" style="min-width: 195px" >
+                                    <f:selectItem itemLabel="- Seleccione el día -" itemValue=""/>
+
                                     <f:selectItem itemValue="LU" itemLabel="Lunes"  />
                                     <f:selectItem itemValue="MA" itemLabel="Martes"  />
                                     <f:selectItem itemValue="MI" itemLabel="Miércoles" />

@@ -240,13 +240,13 @@ public class AsignacionesBean {
             }else if(selectAsignacion.getDiaDescanso().equals("MA")){
                 diaDescanso="Martes";
             }else if(selectAsignacion.getDiaDescanso().equals("MI")){
-                diaDescanso="Miercoles";
+                diaDescanso="Miércoles";
             }else if(selectAsignacion.getDiaDescanso().equals("JU")){
                 diaDescanso="Jueves";
             }else if(selectAsignacion.getDiaDescanso().equals("VI")){
                 diaDescanso="Viernes";
             }else if(selectAsignacion.getDiaDescanso().equals("SA")){
-                diaDescanso="Sabado";
+                diaDescanso="Sábado";
             }else if(selectAsignacion.getDiaDescanso().equals("DO")){
                 diaDescanso="Domingo";
             }
@@ -307,7 +307,6 @@ public class AsignacionesBean {
         PrimeFaces current = PrimeFaces.current();
 
         Asignaciones asignaChage = asignacionesService.buscarHorario(selectAsignacion.getColaborador());
-        System.out.println("Jornada: "+ jornada.getDescripcion());
             try{
                 convertirDia();
                 asignacionesService.updateAsignacion(selectAsignacion);
