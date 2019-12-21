@@ -165,8 +165,13 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                             <p:growl id="msgs3" showDetail="true" />
                             <h:panelGrid columns="2"  id="panel3">
                                 <p:outputLabel  value="  Jornada:  " />
+
+
+
                                 <p:selectOneMenu id="jornada2" style="min-width: 195px" value="#{asignacionesBean.jornada}" converter="jornadaConverter">
-                                    <f:selectItem itemLabel="- Seleccione la Jornada -" itemValue=""/>
+
+                                    signacionesBean.selectAsignacion.horario.horaentrada
+                                    <f:selectItem itemLabel="-- #{asignacionesBean.selectAsignacion.horario.jornada.descripcion} --" itemValue="#{asignacionesBean.jornada}"/>
                                     <f:selectItems value="#{asignacionesBean.jornadas}" var="jornada"
                                                    itemValue="#{jornada}" itemLabel="#{jornada.descripcion}"/>
                                     <p:ajax listener="#{asignacionesBean.handleJornadaChange}" process=":horaio2:jornada2" update=":horaio2:horario2" />
@@ -174,13 +179,14 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
 
                                 <p:outputLabel  value="  Horario:  " />
                                 <p:selectOneMenu id="horario2" style="min-width: 195px" value="#{asignacionesBean.selectAsignacion.horario}" converter="horarioConverter">
-                                    <f:selectItem itemLabel="- Seleccione el Horario -" itemValue=""/>
+                                    <f:selectItem itemLabel="-- #{asignacionesBean.selectAsignacion.horario.horaentrada} #{asignacionesBean.selectAsignacion.horario.horasalida} --" itemValue="#{asignacionesBean.selectAsignacion.horario}"/>
                                     <f:selectItems value="#{asignacionesBean.horariosTemp}" var="horario"
                                                    itemValue="#{horario}" itemLabel="#{horario.horaentrada} #{horario.horasalida}"/>
                                 </p:selectOneMenu>
 
                                 <p:outputLabel  value="  Descanso:  " />
                                 <p:selectOneMenu value="#{asignacionesBean.selectAsignacion.diadescanso}" id="descanso2" style="min-width: 195px" >
+                                    <f:selectItem itemLabel="-- #{asignacionesBean.selectAsignacion.diadescanso} --" itemValue="#{asignacionesBean.selectAsignacion.diadescanso}"/>
                                     <f:selectItem itemValue="LU" itemLabel="Lunes"  />
                                     <f:selectItem itemValue="MA" itemLabel="Martes"  />
                                     <f:selectItem itemValue="MI" itemLabel="Miércoles" />
@@ -205,6 +211,8 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                               resizable="false" id="dH"  minWidth="200">
                         <p:growl id="msgs4" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
                         <p:panelGrid columns="2" rendered="#{not empty asignacionesBean.selectAsignacion}">
+                            <h:outputText value="Jornada:" />
+                            <h:outputText value="#{asignacionesBean.selectAsignacion.horario.jornada.descripcion}"/>
                             <h:outputText value="Horario:" />
                             <h:outputText value="#{asignacionesBean.selectAsignacion.horario.horaentrada} #{asignacionesBean.selectAsignacion.horario.horasalida}"/>
                             <h:outputText value="Descanso:" />

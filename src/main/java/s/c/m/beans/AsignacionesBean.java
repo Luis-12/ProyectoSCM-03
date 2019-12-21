@@ -256,6 +256,31 @@ public class AsignacionesBean {
         }
     }
 
+
+    public void convertirDia(){
+        String diaDescanso= null;
+
+            if(selectAsignacion.getDiaDescanso().equals("Lunes")){
+                diaDescanso="LU";
+            }else if(selectAsignacion.getDiaDescanso().equals("Martes")){
+                diaDescanso="MA";
+            }else if(selectAsignacion.getDiaDescanso().equals("Miércoles")){
+                diaDescanso="MI";
+            }else if(selectAsignacion.getDiaDescanso().equals("Jueves")){
+                diaDescanso="JU";
+            }else if(selectAsignacion.getDiaDescanso().equals("Viernes")){
+                diaDescanso="VI";
+            }else if(selectAsignacion.getDiaDescanso().equals("Sábado")){
+                diaDescanso="SA";
+            }else if(selectAsignacion.getDiaDescanso().equals("Domingo")){
+                diaDescanso="DO";
+            }
+            else{
+                diaDescanso=selectAsignacion.getDiaDescanso();
+            }
+            selectAsignacion.setDiadescanso(diaDescanso);
+
+    }
     public void checkSelectionScheduleChange()
     {
         PrimeFaces current = PrimeFaces.current();
@@ -269,6 +294,7 @@ public class AsignacionesBean {
                 FacesContext.getCurrentInstance().addMessage(null, msg);
             }
             else {
+                buscaHorarioAsignado();
                 System.out.println("El colaborador ya tiene horario asignado y se desea cambiar");
                 current.executeScript("PF('datos2').show();"); //si no esta vacío muestra el dialogo
                 //selectAsignacion = new Asignaciones();
@@ -283,6 +309,7 @@ public class AsignacionesBean {
         Asignaciones asignaChage = asignacionesService.buscarHorario(selectAsignacion.getColaborador());
         System.out.println("Jornada: "+ jornada.getDescripcion());
             try{
+                convertirDia();
                 asignacionesService.updateAsignacion(selectAsignacion);
                 current.executeScript("PF('datos2').hide();");
 
