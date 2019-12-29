@@ -6,13 +6,15 @@ import s.c.m.entities.Colaborador;
 import s.c.m.entities.Tipodedescansos;
 import s.c.m.repositories.DescansosRepository;
 
+import java.util.List;
+
 @Service
 public class DescansoServices {
 
     @Autowired
     private DescansosRepository descansosRepository;
 
-    public Tipodedescansos buscarDescansos(Colaborador id)
+    public List<Tipodedescansos> buscarDescansos(Colaborador id)
     {
        return descansosRepository.findByColaborador(id);
     }

@@ -39,6 +39,7 @@ public class AsignacionesBean {
     private String descanso;
     private String tiempoDescanso;
     private List<Asignaciones> asignaciones;
+    private List<Tipodedescansos> listDescansos;
 
     public String getTiempoDescanso() {
         return tiempoDescanso;
@@ -79,6 +80,19 @@ public class AsignacionesBean {
 
     public void setAsignacionesService(AsignacionesServices asignacionesService) {
         this.asignacionesService = asignacionesService;
+    }
+
+    public List<Tipodedescansos> getListDescansos() {
+        return listDescansos;
+    }
+
+    public void setListDescansos(List<Tipodedescansos> listDescansos) {
+        this.listDescansos = listDescansos;
+    }
+
+    public void  listarDescanosos()
+    {
+        listDescansos=descansoServices.buscarDescansos(selectAsignacion.getColaborador());
     }
 
     public List<Asignaciones> getAsignaciones() {

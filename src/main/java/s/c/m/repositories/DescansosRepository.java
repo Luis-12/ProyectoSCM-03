@@ -5,7 +5,9 @@ import org.springframework.stereotype.Repository;
 import s.c.m.entities.Colaborador;
 import s.c.m.entities.Tipodedescansos;
 
+import java.util.List;
+
 @Repository
 public interface DescansosRepository extends CrudRepository<Tipodedescansos,String> {
-    Tipodedescansos findByColaborador(Colaborador id);
+    List<Tipodedescansos> findByColaborador(Colaborador id);
 }
