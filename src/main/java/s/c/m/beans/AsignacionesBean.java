@@ -254,13 +254,13 @@ public class AsignacionesBean {
             }else if(selectAsignacion.getDiaDescanso().equals("MA")){
                 diaDescanso="Martes";
             }else if(selectAsignacion.getDiaDescanso().equals("MI")){
-                diaDescanso="Miercoles";
+                diaDescanso="Miércoles";
             }else if(selectAsignacion.getDiaDescanso().equals("JU")){
                 diaDescanso="Jueves";
             }else if(selectAsignacion.getDiaDescanso().equals("VI")){
                 diaDescanso="Viernes";
             }else if(selectAsignacion.getDiaDescanso().equals("SA")){
-                diaDescanso="Sabado";
+                diaDescanso="Sábado";
             }else if(selectAsignacion.getDiaDescanso().equals("DO")){
                 diaDescanso="Domingo";
             }
@@ -270,6 +270,31 @@ public class AsignacionesBean {
         }
     }
 
+
+    public void convertirDia(){
+        String diaDescanso= null;
+
+            if(selectAsignacion.getDiaDescanso().equals("Lunes")){
+                diaDescanso="LU";
+            }else if(selectAsignacion.getDiaDescanso().equals("Martes")){
+                diaDescanso="MA";
+            }else if(selectAsignacion.getDiaDescanso().equals("Miércoles")){
+                diaDescanso="MI";
+            }else if(selectAsignacion.getDiaDescanso().equals("Jueves")){
+                diaDescanso="JU";
+            }else if(selectAsignacion.getDiaDescanso().equals("Viernes")){
+                diaDescanso="VI";
+            }else if(selectAsignacion.getDiaDescanso().equals("Sábado")){
+                diaDescanso="SA";
+            }else if(selectAsignacion.getDiaDescanso().equals("Domingo")){
+                diaDescanso="DO";
+            }
+            else{
+                diaDescanso=selectAsignacion.getDiaDescanso();
+            }
+            selectAsignacion.setDiadescanso(diaDescanso);
+
+    }
     public void checkSelectionScheduleChange()
     {
         PrimeFaces current = PrimeFaces.current();
@@ -283,6 +308,7 @@ public class AsignacionesBean {
                 FacesContext.getCurrentInstance().addMessage(null, msg);
             }
             else {
+                buscaHorarioAsignado();
                 System.out.println("El colaborador ya tiene horario asignado y se desea cambiar");
                 current.executeScript("PF('datos2').show();"); //si no esta vacío muestra el dialogo
                 //selectAsignacion = new Asignaciones();
@@ -295,8 +321,8 @@ public class AsignacionesBean {
         PrimeFaces current = PrimeFaces.current();
 
         Asignaciones asignaChage = asignacionesService.buscarHorario(selectAsignacion.getColaborador());
-        System.out.println("Jornada: "+ jornada.getDescripcion());
             try{
+                convertirDia();
                 asignacionesService.updateAsignacion(selectAsignacion);
                 current.executeScript("PF('datos2').hide();");
 
