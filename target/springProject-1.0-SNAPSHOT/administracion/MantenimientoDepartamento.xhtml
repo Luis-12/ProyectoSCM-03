@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html >
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<c:choose>
+    <c:when test="${(colaboradorBean.colaboradorlogueado.puesto.descripcion=='Gerencia'
+    and colaboradorBean.colaboradorlogueado.departamento.nombre=='Recursos Humanos')
+    or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporativa'
+    or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Analista' }">
+
+
+
+    <h:head>
+    <link href="../css/style.css" rel="stylesheet" type="text/css" />
+    <link href="//db.onlinewebfonts.com/c/f977213040abc486420980aae60e0db3?family=GestaW01-Medium" rel="stylesheet" type="text/css"/>
+    <title>Mantenimiento de Departamentos</title>
+
+</h:head>
+
+<h:body >
+    <div id="header">
+        <div id="logo"></div>
+
+    </div>
+    <div id="top">
+        <h:form>
+        <p:commandButton id="dynaButton" value="Menú" type="button"  icon="ui-icon-home"/>
+        <p:menu style="width: 17%;" toggleable="true" overlay="true" trigger="dynaButton" my="left top" at="left bottom">
+            <p:submenu label="Departamento">
+                <p:menuitem value="Incorporar Departamento" onclick="PF('dlAC').show()" icon="ui-icon-wrench"/>
+            </p:submenu>
+            <p:submenu label="Colaborador">
+                <p:menuitem value="Asignar Horario" outcome="asignacionHorario.xhtml" icon="ui-icon-wrench"/>
+                <p:menuitem value="Mantenimiento Colaborador" outcome="MantenimientoColaborador.xhtml" icon="ui-icon-plus"/>
+            </p:submenu>
+            <p:submenu label="Informes">
+                <p:menuitem value="Cantidad Laborando" outcome="CantidadLaborando.xhtml" icon="ui-icon-clipboard"/>
+                <p:menuitem value="Colaboradores Laborando en un Lapso de Tiempo" outcome="ColaboradorLapso.xhtml" icon="ui-icon-clipboard"/>
+                <p:menuitem value="Colaborador Detallado" outcome="InformeColaborador.xhtml" icon="ui-icon-clipboard"/>
+                <p:menuitem value="Colaborador por Departamento" outcome="InformeColaDepartamento.xhtml" icon="ui-icon-clipboard"/>
+                <p:menuitem value="Reporte Horarios" outcome="ReporteHorarios.xhtml" icon="ui-icon-clipboard"/>
+                <p:menuitem value="Reporte Tardías" outcome="ReporteTardias.xhtml" icon="ui-icon-clipboard"/>
+
+            </p:submenu>
+            <p:submenu label="Vacaciones" >
+                <p:menuitem value="Lista Solicitudes" outcome="ListaSolicitud.xhtml" icon="ui-icon-clipboard"/>
+            </p:submenu>
+            <p:submenu label="Solicitud de Vaciones" >
+                <p:menuitem value="Formulario de Solicitud" outcome="SolicitudVacaciones.xhtml" icon="ui-icon-clipboard"/>
+            </p:submenu>
+        </p:menu>
+
+        <p:commandButton style='float: right;'  id="dynaButton1" value="Salir" type="button"  icon="ui-icon-person"/>
+        <p:menu style='float: right;'  overlay="true" trigger="dynaButton1" my="left top" at="left bottom">
+            <p:submenu label="#{colaboradorBean.colaboradorlogueado.nombre}">
+                <p:menuitem value="Salir" action="#{colaboradorBean.doLogout}" icon="ui-icon-person" />
+            </p:submenu>
+        </p:menu>
+        </h:form>
+    </div>
+
+    <h1 id="h1Centro">Listado de Departamentos</h1>
+    <div>
+
+        <h:form id="form">
+            <p:growl id="msgs" showDetail="true" life="6000" rendered="#{not facesContext.validationFailed}"/>
+
+            <p:contextMenu for="tablaDepartamento" >
+                <p:menuitem value="Incorporar Departamento" onclick="PF('dlAC').show();">
+                </p:menuitem>
+                <p:menuitem value="Actualizar Departamento" update="dlUC"  action="#{departamentoBean.checkSelection}"/>
+                <p:menuitem value="Consultar Datos del Encargado del Departamento" update="dE"  action="#{departamentoBean.checkSelectionD}"/>
+                <p:menuitem value="Desactivar Departameto" update="dlCFD" action="#{departamentoBean.showconfirm}" icon="ui-icon-close"/>
+            </p:contextMenu>
+
+
+            <p:dataTable var="departamento"   value="#{departamentoBean.departamentos}" id="tablaDepartamento"
+                         emptyMessage="No se han encontrado departamentos" styleClass="ui-datatable-empty-message"
+                         widgetVar="departamentoTabla"
+                         resizableColumns="true"
+                         selectionMode="single"
+                         rowKey="#{departamento.pk_idDepartamento}"
+                         paginator="true"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="10"
+                         selection="#{departamentoBean.selectDepartamento}" style="margin-top: 20px">
+                <p:autoUpdate />
+                <p:column headerText="Código" filterBy="#{departamento.pk_idDepartamento}">
+                    <h:outputText value="#{departamento.pk_idDepartamento}" />
+                </p:column>
+                <p:column headerText="Nombre" filterBy="#{departamento.nombre}">
+                    <h:outputText value="#{departamento.nombre}" />
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </div>
+
+
+    <p:dialog id="dlAC" header="Incorporar Departamento" showEffect="fade" hideEffect="fade"
+              widgetVar="dlAC" resetValues="true" modal="true" resizable="false" minWidth="200">
+        <p:ajax event="close" update="dlAC" resetValues="true" listener="#{departamentoBean.close}" />
+        <h:form id="AgregarDepartamento">
+            <p:growl id="msgs2" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
+            <h:panelGrid columns="2"  id="panel2">
+                <p:outputLabel id="cod" value="Código de Departamento" styleClass="required" indicateRequired="true" for="pk_codDepartamento"/>
+                <p:inputText maxlength="6" id="pk_codDepartamento" required="true" requiredMessage="Ingrese un código"
+                             validatorMessage="Solo se aceptan mayúsculas y no se permiten números" value="#{departamentoBean.departamento.pk_idDepartamento}">
+                    <f:validateRegex pattern="[A-Z]+" />
+                    <f:ajax event="blur" execute="@this" render="@this Codmessage" />
+                    <p:ajax update="cod"/>
+                </p:inputText>
+                <p:watermark value="Código" for="pk_codDepartamento"/>
+                <p:message id="Codmessage" for="pk_codDepartamento"/>
+
+                <p:outputLabel id="just" value="Nombre Completo:" styleClass="required" indicateRequired="true" for="nombre"/>
+                <p:inputText maxlength="50"  id="nombre" required="true" requiredMessage="Ingrese un nombre" validatorMessage="Solo letras"
+                             value="#{departamentoBean.departamento.nombre}">
+                    <f:validateRegex pattern="^[a-zA-Z-ÑñáéíóúÁÉÍÓÚ,]+(\s{0,1}[a-zA-Z-ÑñáéíóúÁÉÍÓÚ, ])*$"/>
+                    <f:ajax event="blur" execute="@this" render="@this Nomessage" />
+                    <p:ajax update="just"/>
+                </p:inputText>
+                <p:watermark value="Nombre" for="nombre"/>
+                <p:message id="Nomessage" for="nombre"/>
+
+            </h:panelGrid>
+            <center>
+                <p:commandButton value="Guardar" update="form:msgs, AgregarDepartamento"
+                                 action="#{departamentoBean.create}" style="margin-right:20px;margin-top: 20px"
+                                 styleClass="ui-priority-primary" >
+                    <p:resetInput target="AgregarDepartamento"  />
+
+                </p:commandButton>
+            </center>
+        </h:form>
+    </p:dialog>
+
+
+    <p:dialog id="dlUC" header="Actualizar Departamento" showEffect="fade" hideEffect="fade"
+              widgetVar="dlUC" modal="true" resizable="false" minWidth="200">
+        <p:ajax event="close" update="dlUC" resetValues="true" listener="#{departamentoBean.close}" />
+
+        <h:form id="actualizarDepartamento">
+            <p:growl id="msgs3" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
+            <h:panelGrid columns="2"  id="panel3">
+                <p:outputLabel value="Código de Departamento" styleClass="required" indicateRequired="false" for="pk_codDepartamentoA"/>
+                <p:inputText id="pk_codDepartamentoA" disabled="true"
+                             value="#{departamentoBean.selectDepartamento.pk_idDepartamento}"/>
+                <p:watermark value="Código" for="pk_codDepartamentoA"/>
+                <p:message ID="Cmessage" for="pk_codDepartamentoA"/>
+
+                <p:outputLabel id="nomb" value="Nombre Completo:" styleClass="required" indicateRequired="false" for="nombreA"/>
+                <p:inputText maxlength="50" id="nombreA" required="true" requiredMessage="Ingrese un nombre" validatorMessage="Solo letras"
+                             value="#{departamentoBean.selectDepartamento.nombre}">
+                <f:validateRegex pattern="^[a-zA-Z-ÑñáéíóúÁÉÍÓÚ,]+(\s{0,1}[a-zA-Z-ÑñáéíóúÁÉÍÓÚ, ])*$"/>
+                    <f:ajax event="blur" execute="@this" render="@this Nmessage" />
+                    <p:ajax update="nomb"/>
+                </p:inputText>
+                <p:watermark value="Nombre" for="nombreA"/>
+                <p:message id="Nmessage" for="nombreA"/>
+            </h:panelGrid>
+            <center>
+                <p:commandButton value="Actualizar" id="ajax2" update="form:msgs, actualizarDepartamento"
+                                 oncomplete="if (args &amp;&amp; !args.validationFailed) PF('dlUC').hide()"
+                                 action="#{departamentoBean.update}"
+                                 style="margin-right:20px;margin-top: 20px" styleClass="ui-priority-primary" >
+                    <p:resetInput target="actualizarDepartamento"  />
+
+                </p:commandButton>
+            </center>
+        </h:form>
+    </p:dialog>
+    <p:dialog header="Encargado" widgetVar="dE" modal="true" showEffect="fade" hideEffect="fade"
+        resizable="false" id="dE"  minWidth="200">
+        <p:growl id="msgs4" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
+        <p:panelGrid columns="2" rendered="#{not empty departamentoBean.selectDepartamento}">
+            <h:outputText value="Cédula:" />
+            <h:outputText value="#{departamentoBean.colaborador.pk_idColaborador}"/>
+            <h:outputText value="Nombre Completo:" />
+            <h:outputText value="#{departamentoBean.colaborador.nombre}"/>
+            <h:outputText value="Cargo que Desempeña:" />
+            <h:outputText value="#{departamentoBean.colaborador.puesto.descripcion}"/>
+            <h:outputText value="Correo Electrónico:" />
+            <h:outputText value="#{departamentoBean.colaborador.correo}"/>
+            <h:outputText value="Teléfono:" />
+            <h:outputText value="#{departamentoBean.colaborador.telefono}"/>
+        </p:panelGrid>
+    </p:dialog>
+
+    <p:dialog id="dlED" header="Desactivar Departamento"  showEffect="fade" hideEffect="fade"
+              widgetVar="dlED" modal="true" resizable="false" minWidth="450"  >
+        <p:ajax event="close" update="dlED" resetValues="true" listener="#{departamentoBean.close}" />
+        <h:form id="EliminarDepartamento">
+            <p:autoUpdate/>
+            <p:growl id="msgs5" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
+            <h:panelGrid columns="2"  id="panel5">
+                <p:outputLabel  value="Justificación:" indicateRequired="true" for="justificacion"/>
+                <p:inputText validatorMessage="Solo letras" rows="1" cols="33" id="justificacion" required="true"
+                                 requiredMessage="Ingrese una justificación"
+                                 value="#{departamentoBean.selectDepartamento.justificacion}">
+                    <f:validateRegex  pattern="^[a-zA-Z0-9-ÑñáéíóúÁÉÍÓÚ,]+(\s{0,1}[a-zA-Z0-9-ÑñáéíóúÁÉÍÓÚ, ])*$" />
+                    <f:ajax event="blur" execute="@this" render="@this justificacio" />
+                </p:inputText>
+                <p:watermark value="Justifique por qué" for="justificacion"/>
+                <p:message id="justificacio" for="justificacion"/>
+            </h:panelGrid>
+            <center>
+
+                <p:commandButton value="Desactivar" id="ajax3"
+                                 oncomplete="if (args &amp;&amp; !args.validationFailed) PF('dlCFD').show()"
+                                 style="margin-right:20px;margin-top: 20px"
+                                 styleClass="ui-priority-primary" update="form:msgs, EliminarDepartamento">
+                <p:resetInput target="EliminarColaborador"  />
+                </p:commandButton>
+
+            </center>
+        </h:form>
+    </p:dialog>
+    <p:dialog id="dlCFD" header="Confirmación"  showEffect="fade" hideEffect="fade"
+              widgetVar="dlCFD" modal="true" resizable="false" minWidth="300">
+        <h6 >¿Está seguro de desactivar este registro?</h6>
+        <hr/>
+        <center>
+            <p:commandButton value="Sí" update="form:msgs"   styleClass="ui-confirmdialog-yes"  actionListener="#{departamentoBean.delete}" onclick="ocultaEliminar()"  style="margin-right: 30px" />
+            <p:commandButton value="No" update="form:msgs"  styleClass="ui-confirmdialog-no"  style="margin-right: 20px"  onclick="ocultaConfirm()"/>
+        </center>
+    </p:dialog>
+
+    <div id="footer">
+        <br/>
+        <h:outputLink value="../acerca.xhtml" >©</h:outputLink>  <p:outputLabel value=" SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA" />
+
+
+    </div>
+    <script type="text/javascript">
+        function handleCrearRequest(xhr, status, args) {
+            if(args.validationFailed || !args.existeDepartamento) {
+                //PF('dlAC').hide();
+            }
+            else {
+                PF('dlAC').jq.effect("shake", {times:1500}, 100);
+            }
+        }
+        function ocultaConfirm(){
+            PF('dlCFD').hide();
+        }
+
+        function ocultaEliminar(){
+            if(getJSFElementId("input","justificacion").valueOf()==null){
+                PF('dlCFD').hide();
+            }else{
+                PF('dlCFD').hide();
+                PF('dlED').hide();
+            }
+        }
+        function getJSFElementId(_tagName,_fieldName) {
+            var elements = document.getElementsByTagName(_tagName);
+            if (elements != null &amp;&amp; elements.length != 0) {
+                for (i=0, x=elements.length; i &lt; x; i++) {
+                    var myid=elements[i].id+'#';
+                    if(myid.match(_fieldName+'#') != null) {
+                        return elements[i].id;
+                    }
+                }
+            }
+            return 'NOID';
+        }
+    </script>
+</h:body>
+</c:when>
+    <c:otherwise>
+        <h:head>
+            <link href="../css/style.css" rel="stylesheet" type="text/css" />
+            <link href="//db.onlinewebfonts.com/c/f977213040abc486420980aae60e0db3?family=GestaW01-Medium" rel="stylesheet" type="text/css"/>
+            <title>Acceso denegado</title>
+
+        </h:head>
+
+        <h:body >
+            <div class="error">
+                Acceso denegado
+            </div>
+        </h:body>
+    </c:otherwise>
+</c:choose>
+</ui:composition>
+
+</html>

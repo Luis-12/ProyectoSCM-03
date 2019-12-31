@@ -50,11 +50,13 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                     <div>
                         <h:form>
 
-                            <p:contextMenu >
-                                <p:menuitem value="Asignar horario" update="datos"  icon="ui-icon-document" action="#{asignacionesBean.checkSelection}"/>
-                                <p:menuitem value="Asignar Descansos" update="datos"  icon="ui-icon-document" action="#{asignacionesBean.colaboradorSelected}"/>
-                                <p:menuitem value="Cambiar horario asignado" update="datos2"  icon="ui-icon-document" action="#{asignacionesBean.checkSelectionScheduleChange}"/>
-                                <p:menuitem value="Consultar horario asignado" update="dH"  action="#{asignacionesBean.checkSelectionC}"/>
+                            <p:contextMenu  >
+                                <p:menuitem value="Asignar Horario" update="datos"   action="#{asignacionesBean.checkSelection}"/>
+                                <p:menuitem value="Asignar Descansos" update="datos"   action="#{asignacionesBean.colaboradorSelected}"/>
+                                <p:menuitem value="Actualizar Horario Asignado" update="datos2"   action="#{asignacionesBean.checkSelectionScheduleChange}"/>
+                                <p:menuitem value="Consultar Horario Asignado" update="dH"  action="#{asignacionesBean.checkSelectionC}"/>
+                                <p:menuitem value="Consultar Descansos Asignados" update="dD"  action="#{asignacionesBean.checkSelectionD}"/>
+
                             </p:contextMenu>
 
                             <p:dataTable var="colaborador" value="#{colaboradorBean.colaboradores}" style="margin-top: 15px" id="tablaColaborador"
@@ -160,7 +162,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
 
                     </p:dialog>
 
-                    <p:dialog id="datos2" header="Cambiar horario asignado"  showEffect="fade" hideEffect="fade"
+                    <p:dialog id="datos2" header="Actualizar Horario Asignado"  showEffect="fade" hideEffect="fade"
                               widgetVar="datos2" modal="true" minWidth="200"  style="width:360px;" >
                         <p:ajax event="close" update="datos2" />
                         <h:form id="horaio2">
@@ -209,7 +211,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                         </h:form>
                     </p:dialog>
 
-                    <p:dialog header="Horario de Colaborador" widgetVar="dH" modal="true" showEffect="fade" hideEffect="fade"
+                    <p:dialog header="Horario del Colaborador" widgetVar="dH" modal="true" showEffect="fade" hideEffect="fade"
                               resizable="false" id="dH"  minWidth="200">
                         <p:growl id="msgs4" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
                         <p:panelGrid columns="2" rendered="#{not empty asignacionesBean.selectAsignacion}">
@@ -220,6 +222,20 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                             <h:outputText value="Descanso:" />
                             <h:outputText value="#{asignacionesBean.selectAsignacion.diaDescanso}"/>
                         </p:panelGrid>
+                    </p:dialog>
+
+                    <p:dialog header="Descansos del Colaborador" widgetVar="dD" modal="true" showEffect="fade" hideEffect="fade"
+                              resizable="false" id="dD"  minWidth="270">
+                        <p:growl id="msgm5" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
+                        <p:dataTable  var="descansos" value="#{asignacionesBean.listDescansos}" style="width: 320px;"
+                            emptyMessage="No tiene descansos asignados">
+                            <p:column headerText="Descripción">
+                                <h:outputText value="#{descansos.descripcion}"/>
+                            </p:column>
+                            <p:column headerText="Duración">
+                                <h:outputText value="#{descansos.duracion}"/>
+                            </p:column>
+                        </p:dataTable>
                     </p:dialog>
 
                     <div id="footer">

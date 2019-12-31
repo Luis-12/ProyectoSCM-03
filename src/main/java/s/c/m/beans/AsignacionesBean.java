@@ -53,6 +53,8 @@ public class AsignacionesBean {
     private List<Horarios>horarios;
     private List<Horarios>horariosTemp;
 
+
+
     private Asignaciones asignacion = new Asignaciones();
     private Asignaciones selectAsignacion = new Asignaciones();
     private Tipodedescansos descansos=new Tipodedescansos();
@@ -90,7 +92,7 @@ public class AsignacionesBean {
         this.listDescansos = listDescansos;
     }
 
-    public void  listarDescanosos()
+    public void  listarDescansos()
     {
         listDescansos=descansoServices.buscarDescansos(selectAsignacion.getColaborador());
     }
@@ -226,6 +228,21 @@ public class AsignacionesBean {
         }
     }
 
+    public void checkSelectionD()
+    {
+        PrimeFaces current = PrimeFaces.current();
+
+        if(selectAsignacion.getColaborador() == null) {
+            FacesMessage msg = new FacesMessage("Aviso", "Debe seleccionar un colaborador");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }else if(listDescansos==null){
+            FacesMessage msg = new FacesMessage("Aviso", "El colaborador no tiene descansos asignados");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } else{
+            listarDescansos();
+            current.executeScript("PF('dD').show();"); //si no esta vacío muestra el dialogo
+        }
+    }
 
     public void checkSelectionC()
     {

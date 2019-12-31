@@ -19,9 +19,6 @@ public class AsignacionesServices {
 
 public Asignaciones buscarHorario(Colaborador id){
     Asignaciones asignacion=asignacionesRepository.findByColaborador(id);
-    //System.out.println("Nombre encontrado: "+asignacion.getColaborador().getNombre());
-    //System.out.println("Descanso encontrado: "+asignacion.getDiaDescanso());
-    //System.out.println("Horario encontrado: "+ asignacion.getHorario().getPk_idhorario());
 
     return asignacion;
 }

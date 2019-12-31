@@ -1,0 +1,368 @@
+@font-face {font-family: "GestaW01-Medium";
+    src: url("//db.onlinewebfonts.com/t/f977213040abc486420980aae60e0db3.eot");
+    src: url("//db.onlinewebfonts.com/t/f977213040abc486420980aae60e0db3.eot?#iefix") format("embedded-opentype"),
+    url("//db.onlinewebfonts.com/t/f977213040abc486420980aae60e0db3.woff2") format("woff2"),
+    url("//db.onlinewebfonts.com/t/f977213040abc486420980aae60e0db3.woff") format("woff"),
+    url("//db.onlinewebfonts.com/t/f977213040abc486420980aae60e0db3.ttf") format("truetype"),
+    url("//db.onlinewebfonts.com/t/f977213040abc486420980aae60e0db3.svg#GestaW01-Medium") format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
+
+#page2 {
+    width: 100%;
+    background-color: #3DBBD3;
+}
+.ui-widget-header .ui-inputfield, .ui-widget-content .ui-inputfield {
+    font-weight: normal;
+    width: -moz-available;
+}
+div.error {
+    font-weight: normal;
+    font-style: normal;
+    font-size: x-large;
+}
+#bod2 {
+    background-color: #3DBBD3;
+}
+
+.ui-commandant2  {
+    background-color: #7accf0;
+    font-size:12px;
+    border-radius: 4px;
+}
+
+.image{
+    margin-top: 10px;
+    margin-left: 273px;
+    margin-right: 297px;
+    width: 435px;
+    height: 277px;
+    -webkit-border-radius: 4px;
+
+}
+div.camara{
+    background-color: #AEB6BF;
+    margin-top: 10px;
+    margin-left: 273px;
+    margin-right: 273px;
+    width: 400px;
+    height: 277px;
+    -webkit-border-radius: 4px;
+}
+
+
+
+#fecha{background: #f2f2f2; width: 16%; margin-left: 10%;}
+
+#solicitud{
+    background-color: #AEB6BF;
+    width:40%;
+    margin-top:-78px;
+    margin-left:440px;
+    height:200px;
+
+}
+.envia{
+    margin-right: 150px;
+    margin-top:30px;
+
+}
+
+
+.required:before { content:"* ";color: red; }
+
+.ui-datatable-empty-message
+{
+    color: darkred;
+}
+
+.ui-calendar{
+    margin-rigth:20px;
+    width:50%;
+}
+
+h1{
+
+    font-family:GestaW01-Medium;
+    color:#404041;
+}
+
+
+.ui-button .ui-button-text {
+
+    display: block;
+    line-height: normal;
+    font-family: GestaW01-Medium;
+
+}
+
+.ui-messages-error .ui-widget {
+    font-size: small;
+}
+
+
+.ui-messages-error, .ui-message-error {
+    color: #b94a48;
+    background-color: #f2dede;
+    border-color: #eed3d7;
+    display: table-caption;
+}
+
+.ui-messages-info, .ui-messages-warn, .ui-messages-error, .ui-messages-fatal {
+    display: table-caption; font-size: small; margin: inherit; padding: revert;
+}
+
+.ui-widget .ui-widget {
+    font-size: 1em;
+    font-family: GestaW01-Medium;
+}
+.ui-widget {
+
+    font-size: 1.1em;
+    font-family: GestaW01-Medium;
+
+}
+
+
+.ui-selectonemenu .ui-selectonemenu-label {
+    display: contents;
+    border: ghostwhite;
+    white-space: nowrap;
+    overflow: hidden;
+    font-weight: normal;
+    width: 100%;
+    text-align: left;
+    padding: 84%;
+}
+
+
+.ui-selectonemenu {
+    display: revert;
+    position: sticky;
+    width: inherit;
+    cursor: pointer;
+    padding-right: initial;
+}
+
+.ui-selectonemenu-panel {
+    width: 15%;
+}
+#h1Centro{
+    font-family:GestaW01-Medium;
+    color:#404041;
+    text-align: center;
+}
+
+
+
+clearing {
+    clear: both;
+    height: 1px;
+    overflow: hidden;
+}
+
+.button{
+    width: 105%;
+    border-radius: 4px;
+}
+
+div.login {
+    background-color: #AEB6BF;
+    margin-top: 90px;
+    margin-left: 273px;
+    margin-right: 297px;
+    width: 375px;
+    height: 300px;
+    -webkit-border-radius: 4px;}
+
+ .loginButton{
+     cursor: pointer;
+     text-align: center;
+     width: 54%;
+     margin-left: 5%;
+}
+
+#page {
+    width: 100%;
+    background-color: #f2f2f2;
+
+}
+
+
+.myHeader{
+    font-family:GestaW01-Medium;
+
+}
+
+
+.ui-commandbutton{
+    font-family:GestaW01-Medium;
+
+}
+
+.ui-datatable table{
+    border-collapse:collapse;
+    text-align: center;
+    margin-top: 20px;
+    font-family:GestaW01-Medium;
+
+}
+body
+{
+    background: #f2f2f2;
+}
+
+#titulo{
+    font-family:GestaW01-Medium;
+    font-size:25px;
+}
+
+.ui-inputfield-text {
+    width: 106%;
+    height: 30px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+
+
+.ui-outputlabel{
+    margin-top:10px;
+    margin-rigth:10px;
+    margin-left:10px;
+}
+
+
+.ui-dialog .ui-dialog-title {
+    position: relative;
+    font-family:GestaW01-Medium;
+    left: 28%;
+    color: #109EB8;
+}
+.ui-dialog .ui-dialog-titlebar-close
+{
+    position: relative;
+    right: 6%;
+    background-color: darkred;
+}
+
+
+.ui-commandbutton  {
+    width: 10%;
+    font-family:GestaW01-Medium;
+    font-size:15px;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.panelGridCenter {background-color: #f2f2f2;
+    margin: 0 auto;
+}
+
+.ui-commandbutton:hover {
+    background-color:#A4A4A4;
+}
+
+div {
+    border-radius: 5px;
+    width: 100%;
+}
+
+.loginI{
+    width: 70%;
+    height: 75px;
+    background: url("imagen/th.jpg") no-repeat;
+    background-size: 70% 75px;
+}
+
+.botton2
+{
+    margin-left: 30px;
+    display: block;
+}
+
+div.container {
+    width: 96%;
+    max-width: 650px;
+    margin: 0 auto;
+}
+img {
+    width: 100%;
+    height: auto;
+}
+
+
+#logo{
+    width: 40%;
+    height: 65px;
+    background: url('imagen/logo.jpg') no-repeat;
+    background-size: 40% 55px;
+    background-position: 10px 10px ;
+}
+
+#logo2{
+    width: 40%;
+    height: 65px;
+    background: url('imagen/logo.jpg') no-repeat;
+    background-size: 40% 55px;
+    background-position: 10px 10px ;
+}
+
+#una{
+    width: 50%;
+    height: 75px;
+    background-size: 50% 75px;
+    //background: url("imagen/una1.png") no-repeat 10px 10px;
+}
+
+#header {
+    width: 100%;
+    height: 80px;
+    background: -webkit-linear-gradient(#6FCBDC, #3DBBD3, #109EB8);
+    background: -o-linear-gradient(#6FCBDC, #3DBBD3,#109EB8);
+    background: -moz-linear-gradient(#6FCBDC, #3DBBD3, #109EB8);
+    background: linear-gradient(#6FCBDC,#3DBBD3, #109EB8);
+    background-color: #3DBBD3;
+}
+
+#footer {
+    background: -webkit-linear-gradient(#6FCBDC, #3DBBD3, #109EB8);
+    background: -o-linear-gradient(#6FCBDC, #3DBBD3,#109EB8);
+    background: -moz-linear-gradient(#6FCBDC, #3DBBD3, #109EB8);
+    background: linear-gradient(#6FCBDC,#3DBBD3, #109EB8);
+    background-color: #3DBBD3;
+    width: 100%;
+    height: 60px;
+    text-align: center;
+    color: white;
+    margin-right: 60px;
+    margin-top: 75px;
+    position: fixed;
+    bottom: 0;
+    font-family: GestaW01-Medium;
+
+
+}
+
+.sidebar1{
+    width: 20%;
+    background-color: #cccccc;
+}
+
+
+.ui-datatable tbody > tr.ui-widget-content.ui-state-highlight {
+    background-color: #7accf0;
+    color: #000000
+}
+
+.ui-datatable-empty-message{
+    color: darkred;
+}
