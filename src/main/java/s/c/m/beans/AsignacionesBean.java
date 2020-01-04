@@ -94,6 +94,7 @@ public class AsignacionesBean {
 
     public void  listarDescansos()
     {
+        System.out.println("El id del colaborador es: "+selectAsignacion.getColaborador().getPk_idColaborador());
         listDescansos=descansoServices.buscarDescansos(selectAsignacion.getColaborador());
     }
 
@@ -235,7 +236,8 @@ public class AsignacionesBean {
         if(selectAsignacion.getColaborador() == null) {
             FacesMessage msg = new FacesMessage("Aviso", "Debe seleccionar un colaborador");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-        }else if(listDescansos==null){
+        //}else if(listDescansos==null){
+        }else if(descansoServices.buscarDescansos(selectAsignacion.getColaborador())==null){
             FacesMessage msg = new FacesMessage("Aviso", "El colaborador no tiene descansos asignados");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } else{
