@@ -94,8 +94,15 @@ public class AsignacionesBean {
 
     public void  listarDescansos()
     {
-        System.out.println("El id del colaborador es: "+selectAsignacion.getColaborador().getPk_idColaborador());
+        PrimeFaces current = PrimeFaces.current();
         listDescansos=descansoServices.buscarDescansos(selectAsignacion.getColaborador());
+        if(listDescansos.isEmpty())
+        {
+            FacesMessage msg = new FacesMessage("Aviso", "El colaborador no tiene descansos asignados");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }else {
+            current.executeScript("PF('dD').show();"); //si no esta vacío muestra el dialogo
+        }
     }
 
     public List<Asignaciones> getAsignaciones() {
@@ -242,7 +249,6 @@ public class AsignacionesBean {
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } else{
             listarDescansos();
-            current.executeScript("PF('dD').show();"); //si no esta vacío muestra el dialogo
         }
     }
 
