@@ -48,7 +48,9 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
 
 
                     <div>
-                        <h:form>
+                        <h:form id="form">
+                            <p:growl id="msgs1" showDetail="true" life="5000" rendered="#{not facesContext.validationFailed}"/>
+
 
                             <p:contextMenu  >
                                 <p:menuitem value="Asignar Horario" update="datos"   action="#{asignacionesBean.checkSelection}"/>
@@ -69,7 +71,6 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                          rowsPerPageTemplate="10,15,20"
                                          selection="#{asignacionesBean.selectAsignacion.colaborador}" scrollable="true" scrollHeight="450">
-                            <p:autoUpdate />
 
                                 <p:column headerText="Cédula" filterBy="#{colaborador.pk_idColaborador}">
                                     <h:outputText value="#{colaborador.pk_idColaborador}" />
@@ -135,12 +136,16 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                               widgetVar="datos3" modal="true" minWidth="200"  style="width:360px;" >
                         <p:ajax event="close" update="datos3" />
                         <h:form id="desc">
-                            <p:growl id="msgs" showDetail="true" />
+                            <p:growl id="msgs" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
                             <h:panelGrid columns="2"  id="panel">
 
-                                <p:outputLabel  value="  Descripción:  " />
-                                <p:inputText maxlength="50" value="#{asignacionesBean.descansos.descripcion}" required="true"/>
-                                <p:outputLabel for="des" value="  Duración:  " />
+                                <p:outputLabel value="Descripción:" for="descri"/>
+                                <p:inputText id="descri" requiredMessage="Ingrese una descripción" required="true" value="#{asignacionesBean.descansos.descripcion}"/>
+                                <p:watermark value="" for="descri"/>
+                                <p:message for="descri"/>
+
+
+                                <p:outputLabel value="Duración:  " />
                                 <p:selectOneMenu value="#{asignacionesBean.tiempoDescanso}" id="des" style="min-width: 195px" >
                                     <f:selectItem itemValue="00:10:00" itemLabel="10 minutos"  />
                                     <f:selectItem itemValue="00:15:00" itemLabel="15 minutos"  />
@@ -155,8 +160,13 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                 <p:commandButton value="Asignar"
                                                  action="#{asignacionesBean.createDescanso}"
                                                  style="margin-right:20px;margin-top: 20px"
-                                                 styleClass="ui-priority-primary" ajax="false"
-                                />
+                                                 styleClass="ui-priority-primary"
+                                                 update="form:msgs1, desc">
+                                    <p:resetInput target="desc"  />
+
+                                </p:commandButton>
+
+
                             </center>
                         </h:form>
 
@@ -173,8 +183,6 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
 
 
                                 <p:selectOneMenu id="jornada2" style="min-width: 195px" value="#{asignacionesBean.jornada}" converter="jornadaConverter">
-
-                                    signacionesBean.selectAsignacion.horario.horaentrada
                                     <f:selectItem itemLabel="-- #{asignacionesBean.selectAsignacion.horario.jornada.descripcion} --" itemValue="#{asignacionesBean.jornada}"/>
                                     <f:selectItems value="#{asignacionesBean.jornadas}" var="jornada"
                                                    itemValue="#{jornada}" itemLabel="#{jornada.descripcion}"/>
