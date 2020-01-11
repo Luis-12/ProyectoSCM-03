@@ -8,6 +8,7 @@
 
 <h:head>
     <link href="../css/style.css" rel="stylesheet" type="text/css" />
+    <link href="../css/styleM.css" media='screen and (max-device-width: 480px)' rel="stylesheet" type="text/css" />
     <link href="//db.onlinewebfonts.com/c/f977213040abc486420980aae60e0db3?family=GestaW01-Medium" rel="stylesheet" type="text/css"/>
     <title>Solicitud de Vacaciones</title>
 
@@ -28,7 +29,7 @@
                 </p:submenu>
            </p:menu>
             <p:commandButton   id="dynaButton" value="Menu" type="button"  icon="ui-icon-person"  style='float: left;'/>
-            <p:menu toggleable="true" style="width: 17%;" overlay="true" trigger="dynaButton" my="left top" at="left bottom" model="#{colaboradorBean.model}"/>
+            <p:menu toggleable="true" style="width: 25%;" overlay="true" trigger="dynaButton" my="left top" at="left bottom" model="#{colaboradorBean.model}"/>
         </h:form>
     </div>
 

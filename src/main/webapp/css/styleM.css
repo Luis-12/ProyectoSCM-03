@@ -1,0 +1,22 @@
+
+#logo{
+    background: url('imagen/logo.jpg') no-repeat;
+    background-size: 75% 40px;
+    background-position: 10px 10px ;
+}
+
+#header {
+    height: 60px;
+}
+
+.ui-menu.ui-menu-toggleable li.ui-widget-header
+{
+    font-size: 10px;
+}
+.ui-menu .ui-menu-list .ui-menuitem
+{
+    font-size: 10px;
+}
+
+
+
