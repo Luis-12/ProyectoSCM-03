@@ -30,6 +30,7 @@ public class Colaborador implements Serializable {
     private String estado;
     private String justificacion;
     private Date fechaVencimiento;
+    private String tipoPago;
 
 
 
@@ -135,6 +136,10 @@ public class Colaborador implements Serializable {
     public void setFechaVencimiento(Date fechaVencimiento) {
         this.fechaVencimiento = fechaVencimiento;
     }
+
+    public String getTipoPago() { return tipoPago; }
+
+    public void setTipoPago(String tipoPago) { this.tipoPago = tipoPago; }
 
     public Colaborador()
     {

@@ -122,6 +122,10 @@
                 <p:column headerText="Departamento" filterBy="#{colaborador.departamento.nombre}">
                     <h:outputText value="#{colaborador.departamento.nombre}" />
                 </p:column>
+
+                <p:column headerText="Tipo Pago" filterBy="#{colaborador.tipoPago}">
+                    <h:outputText value="#{colaborador.tipoPago}" />
+                </p:column>
             </p:dataTable>
         </h:form>
     </div>
@@ -191,6 +195,12 @@
                 </p:calendar>
                 <p:watermark value="Fecha" for="fechaInicioLaboral"/>
                 <p:message id="fechamessage" for="fechaInicioLaboral"/>
+
+                <p:outputLabel value="Tipo de Pago:  "  styleClass="required" />
+                <p:selectOneMenu value="#{colaboradorBean.colaborador.tipoPago}" id="tipoPago" style="min-width: 195px" >
+                    <f:selectItem itemValue="Semana" itemLabel="Semana"  />
+                    <f:selectItem itemValue="Quincena" itemLabel="Quincena"  />
+                </p:selectOneMenu>
 
 
             </h:panelGrid>
@@ -265,7 +275,6 @@
                 <p:calendar autocomplete="off" maxdate="#{colaboradorBean.fecha}" id="fechaInicioLaboralA" required="true" requiredMessage="Ingrese la Fecha"  value="#{colaboradorBean.selectcolaborador.fechaInicioLaboral}" pattern="yyyy-MM-dd" disabled="true"/>
                 <p:watermark value="Fecha" for="fechaInicioLaboralA"/>
                 <p:message for="fechaInicioLaboralA"/>
-
 
             </h:panelGrid>
             <center>
