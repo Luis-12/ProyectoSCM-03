@@ -33,7 +33,7 @@
     <div id="top">
         <h:form>
         <p:commandButton id="dynaButton" value="Menú" type="button"  icon="ui-icon-home"/>
-        <p:menu style="width: 30%;" toggleable="true" overlay="true" trigger="dynaButton" my="left top" at="left bottom">
+        <p:tieredMenu autoDisplay="false" style="width: 17%;" overlay="true" trigger="dynaButton" my="left top" at="left bottom">
             <p:submenu label="Departamento">
                 <p:menuitem value="Incorporar Departamento" onclick="PF('dlAC').show()" icon="ui-icon-wrench"/>
             </p:submenu>
@@ -56,7 +56,7 @@
             <p:submenu label="Solicitud de Vaciones" >
                 <p:menuitem value="Formulario de Solicitud" outcome="SolicitudVacaciones.xhtml" icon="ui-icon-clipboard"/>
             </p:submenu>
-        </p:menu>
+        </p:tieredMenu>
 
         <p:commandButton style='float: right;'  id="dynaButton1" value="Salir" type="button"  icon="ui-icon-person"/>
         <p:menu style='float: right;'  overlay="true" trigger="dynaButton1" my="left top" at="left bottom">
