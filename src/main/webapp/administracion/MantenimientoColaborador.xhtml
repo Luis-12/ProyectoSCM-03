@@ -196,12 +196,11 @@
                 <p:watermark value="Fecha" for="fechaInicioLaboral"/>
                 <p:message id="fechamessage" for="fechaInicioLaboral"/>
 
-                <p:outputLabel value="Tipo de Pago:  "  styleClass="required" />
-                <p:selectOneMenu value="#{colaboradorBean.colaborador.tipoPago}" id="tipoPago" style="min-width: 195px" >
-                    <f:selectItem itemValue="Semana" itemLabel="Semana"  />
-                    <f:selectItem itemValue="Quincena" itemLabel="Quincena"  />
-                </p:selectOneMenu>
-
+                <p:outputLabel value="Tipo de Pago:  " indicateRequired="false" styleClass="required" />
+                <p:selectOneRadio required="true"  requiredMessage="Debe selecionar una opción" value="#{colaboradorBean.colaborador.tipoPago}" unselectable="true">
+                    <f:selectItem itemLabel="Semanal" itemValue="Semanal" />
+                    <f:selectItem itemLabel="Quincenal" itemValue="Quincenal" />
+                </p:selectOneRadio>
 
             </h:panelGrid>
             <center>
@@ -275,6 +274,12 @@
                 <p:calendar autocomplete="off" maxdate="#{colaboradorBean.fecha}" id="fechaInicioLaboralA" required="true" requiredMessage="Ingrese la Fecha"  value="#{colaboradorBean.selectcolaborador.fechaInicioLaboral}" pattern="yyyy-MM-dd" disabled="true"/>
                 <p:watermark value="Fecha" for="fechaInicioLaboralA"/>
                 <p:message for="fechaInicioLaboralA"/>
+
+                <p:outputLabel value="Tipo de Pago:  " indicateRequired="false" styleClass="required" />
+                <p:selectOneRadio required="true"  requiredMessage="Debe selecionar una opción" value="#{colaboradorBean.selectcolaborador.tipoPago}" unselectable="true" >
+                    <f:selectItem itemLabel="Semanal" itemValue="Semanal" />
+                    <f:selectItem itemLabel="Quincenal" itemValue="Quincenal" />
+                </p:selectOneRadio>
 
             </h:panelGrid>
             <center>
