@@ -308,6 +308,14 @@ img {
     background-position: 10px 10px ;
 }
 
+#logoP{
+    width: 40%;
+    height: 65px;
+    /*background: url('imagen/logo.jpg') no-repeat;*/
+    background-size: 40% 55px;
+    background-position: 10px 10px ;
+}
+
 #logo2{
     width: 40%;
     height: 65px;

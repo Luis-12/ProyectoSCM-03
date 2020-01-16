@@ -121,6 +121,7 @@ public class ColaboradorService {
         formato.format(fechaA);
         System.out.println("FECHA DE HOY: " + formato.format(fechaA));
         colaborador.setEstado("Activo");
+        colaborador.setJustificacion("N/A");
         colaborador.setFechaVencimiento(fechaA);
         colaborador.setClave(colaborador.getPk_idColaborador());//Aca pongo de clave el mismo id del colaborador agregado
         colaboradorRepository.save(colaborador);
