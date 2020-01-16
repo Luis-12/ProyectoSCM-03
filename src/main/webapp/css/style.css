@@ -1,3 +1,11 @@
+@media all and (max-width: 250px){
+    div{
+        width:100%;
+        height:auto;
+        margin-left:10px;
+    }
+}
+
 @font-face {font-family: "GestaW01-Medium";
     src: url("//db.onlinewebfonts.com/t/f977213040abc486420980aae60e0db3.eot");
     src: url("//db.onlinewebfonts.com/t/f977213040abc486420980aae60e0db3.eot?#iefix") format("embedded-opentype"),
@@ -274,6 +282,7 @@ body
 div {
     border-radius: 5px;
     width: 100%;
+
 }
 
 .loginI{
@@ -294,11 +303,6 @@ div.container {
     max-width: 650px;
     margin: 0 auto;
 }
-img {
-    width: 100%;
-    height: auto;
-}
-
 
 #logo{
     width: 40%;
@@ -308,11 +312,13 @@ img {
     background-position: 10px 10px ;
 }
 
+
+
 #logoP{
     width: 40%;
     height: 65px;
     /*background: url('imagen/logo.jpg') no-repeat;*/
-    background-size: 40% 55px;
+    background-size: 40% 59px;
     background-position: 10px 10px ;
 }
 
