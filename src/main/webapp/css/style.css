@@ -387,3 +387,7 @@ div.container {
 .ui-datatable-empty-message{
     color: darkred;
 }
+
+.tamTable{
+    width: 8%
+}

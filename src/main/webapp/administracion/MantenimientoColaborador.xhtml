@@ -95,7 +95,7 @@
                          rowsPerPageTemplate="10,15,20"
                          selection="#{colaboradorBean.selectcolaborador}" scrollable="true" scrollHeight="450">
 
-                <p:column style="width: 8%;" headerText="Cédula" filterBy="#{colaborador.pk_idColaborador}">
+                <p:column styleClass="tamTable" headerText="Cédula" filterBy="#{colaborador.pk_idColaborador}">
                     <h:outputText value="#{colaborador.pk_idColaborador}" />
                 </p:column>
 
@@ -103,7 +103,7 @@
                     <h:outputText value="#{colaborador.nombre}" />
                 </p:column>
 
-                <p:column style="width: 8%;" headerText="Teléfono" filterBy="#{colaborador.telefono}">
+                <p:column styleClass="tamTable" headerText="Teléfono" filterBy="#{colaborador.telefono}">
                     <h:outputText value="#{colaborador.telefono}" />
                 </p:column>
 
@@ -112,13 +112,13 @@
                 </p:column>
 
 
-                <p:column style="width: 8%;" headerText="Fecha de Inicio Laboral" filterBy="#{colaborador.fechaInicioLaboral}">
+                <p:column styleClass="tamTable" headerText="Fecha de Inicio Laboral" filterBy="#{colaborador.fechaInicioLaboral}">
                     <h:outputText value="#{colaborador.fechaInicioLaboral}" >
                         <f:convertDateTime type="date" pattern="yyyy-MM-dd"/>
                     </h:outputText>
                 </p:column>
 
-                <p:column style="width: 8%;" headerText="Puesto" filterBy="#{colaborador.puesto.descripcion}">
+                <p:column styleClass="tamTable" headerText="Puesto" filterBy="#{colaborador.puesto.descripcion}">
                     <h:outputText value="#{colaborador.puesto.descripcion}" />
                 </p:column>
 
@@ -126,7 +126,7 @@
                     <h:outputText value="#{colaborador.departamento.nombre}" />
                 </p:column>
 
-                <p:column style="width: 8%;" headerText="Tipo Pago" filterBy="#{colaborador.tipoPago}">
+                <p:column styleClass="tamTable" headerText="Tipo Pago" filterBy="#{colaborador.tipoPago}">
                     <h:outputText value="#{colaborador.tipoPago}" />
                 </p:column>
             </p:dataTable>
