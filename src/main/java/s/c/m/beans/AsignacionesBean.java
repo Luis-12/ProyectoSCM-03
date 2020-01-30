@@ -3,11 +3,9 @@ package s.c.m.beans;
 import org.primefaces.PrimeFaces;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import s.c.m.entities.*;
-import s.c.m.services.AsignacionesServices;
-import s.c.m.services.DescansoServices;
-import s.c.m.services.HorarioService;
-import s.c.m.services.JornadaService;
+import s.c.m.services.*;
 
 import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
@@ -30,7 +28,10 @@ public class AsignacionesBean {
     HorarioService horarioService;
 
     @Autowired
-    DescansoServices descansoServices;
+    AsignacionDescansosService asignacionDescansosService;
+
+    @Autowired
+    DescansosService descansosService;
 
 
     private Colaborador colaborador = new Colaborador();
@@ -38,8 +39,9 @@ public class AsignacionesBean {
     private Jornadas jornada = new Jornadas();
     private String descanso;
     private String tiempoDescanso;
-    private List<Asignaciones> asignaciones;
-    private List<Tipodedescansos> listDescansos;
+    private List<Asignaciones> asignaciones = new ArrayList<>();
+    private List<AsignacionDescansos>asignacionesDescansos = new ArrayList<>();
+    private List<Descansos>listDescansos = new ArrayList<Descansos>();
 
     public String getTiempoDescanso() {
         return tiempoDescanso;
@@ -52,13 +54,13 @@ public class AsignacionesBean {
     private List<Jornadas>jornadas;
     private List<Horarios>horarios;
     private List<Horarios>horariosTemp;
+    private List<Descansos>descansosPorColaborador = new ArrayList<>();
 
 
 
     private Asignaciones asignacion = new Asignaciones();
     private Asignaciones selectAsignacion = new Asignaciones();
-    private Tipodedescansos descansos=new Tipodedescansos();
-
+    private AsignacionDescansos asignacionDescansos = new AsignacionDescansos();
 
 
     @PostConstruct
@@ -76,6 +78,30 @@ public class AsignacionesBean {
         }
     }
 
+    public List<Descansos> getListDescansos() {
+        return listDescansos;
+    }
+
+    public void setListDescansos(List<Descansos> listDescansos) {
+        this.listDescansos = listDescansos;
+    }
+
+    public List<Descansos> getDescansosPorColaborador() {
+        return descansosPorColaborador;
+    }
+
+    public void setDescansosPorColaborador(List<Descansos> descansosPorColaborador) {
+        this.descansosPorColaborador = descansosPorColaborador;
+    }
+
+    public DescansosService getDescansosService() {
+        return descansosService;
+    }
+
+    public void setDescansosService(DescansosService descansosService) {
+        this.descansosService = descansosService;
+    }
+
     public AsignacionesServices getAsignacionesService() {
         return asignacionesService;
     }
@@ -84,23 +110,31 @@ public class AsignacionesBean {
         this.asignacionesService = asignacionesService;
     }
 
-    public List<Tipodedescansos> getListDescansos() {
-        return listDescansos;
+    public List<AsignacionDescansos> getAsignacionesDescansos() {
+        return asignacionesDescansos;
     }
 
-    public void setListDescansos(List<Tipodedescansos> listDescansos) {
-        this.listDescansos = listDescansos;
+    public void setAsignacionesDescansos(List<AsignacionDescansos> asignacionesDescansos) {
+        this.asignacionesDescansos = asignacionesDescansos;
     }
 
     public void  listarDescansos()
     {
+        listDescansos.clear();
         PrimeFaces current = PrimeFaces.current();
-        listDescansos=descansoServices.buscarDescansos(selectAsignacion.getColaborador());
-        if(listDescansos.isEmpty())
+        asignacionesDescansos = asignacionDescansosService.buscarDescansosAsignadosPorColaborador(selectAsignacion.getColaborador());
+
+        if(asignacionesDescansos.isEmpty())
         {
             FacesMessage msg = new FacesMessage("Aviso", "El colaborador no tiene descansos asignados");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }else {
+            System.out.println("Descripcion de descanso: "+asignacionesDescansos.get(0).getDescanso().getDescripcion());
+            for(int i=0; i < asignacionesDescansos.size(); i++){//Se va recorriendo la lista de asignaciones
+                listDescansos.add(asignacionesDescansos.get(i).getDescanso());//luego se van sacando los descanso que tenga asignados el colaborador
+                //Con esta lista de Descansos se podra imprimir los datos de los Descansos que tiene asignados el colaborador en la tabla asignacionDescansos
+            }
+            System.out.println("Los descansos que tiene asignados el colaborador son: " + asignacionesDescansos.size());
             current.executeScript("PF('dD').show();"); //si no esta vacío muestra el dialogo
         }
     }
@@ -120,12 +154,13 @@ public class AsignacionesBean {
     public void setAsignacion(Asignaciones asignacion) {
         this.asignacion = asignacion;
     }
-    public Tipodedescansos getDescansos() {
-        return descansos;
+
+    public AsignacionDescansos getAsignacionDescansos() {
+        return asignacionDescansos;
     }
 
-    public void setDescansos(Tipodedescansos descansos) {
-        this.descansos = descansos;
+    public void setAsignacionDescansos(AsignacionDescansos asignacionDescansos) {
+        this.asignacionDescansos = asignacionDescansos;
     }
 
     public Horarios getHorario() {
@@ -205,12 +240,12 @@ public class AsignacionesBean {
         return selectAsignacion;
     }
 
-    public DescansoServices getDescansoServices() {
-        return descansoServices;
+    public AsignacionDescansosService getAsignacionDescansosService() {
+        return asignacionDescansosService;
     }
 
-    public void setDescansoServices(DescansoServices descansoServices) {
-        this.descansoServices = descansoServices;
+    public void setAsignacionDescansosService(AsignacionDescansosService asignacionDescansosService) {
+        this.asignacionDescansosService = asignacionDescansosService;
     }
 
     public void setSelectAsignacion(Asignaciones selectAsignacion) {
@@ -231,7 +266,6 @@ public class AsignacionesBean {
              else {
                  FacesMessage msg = new FacesMessage("Aviso", "¡Ya tiene un horario asignado!");
                  FacesContext.getCurrentInstance().addMessage(null, msg);
-                 //selectAsignacion = new Asignaciones();
              }
         }
     }
@@ -243,8 +277,7 @@ public class AsignacionesBean {
         if(selectAsignacion.getColaborador() == null) {
             FacesMessage msg = new FacesMessage("Aviso", "Debe seleccionar un colaborador");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-        //}else if(listDescansos==null){
-        }else if(descansoServices.buscarDescansos(selectAsignacion.getColaborador())==null){
+        }else if(asignacionDescansosService.buscarDescansosAsignadosPorColaborador(selectAsignacion.getColaborador())==null){
             FacesMessage msg = new FacesMessage("Aviso", "El colaborador no tiene descansos asignados");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } else{
@@ -341,14 +374,31 @@ public class AsignacionesBean {
         }
     }
 
+    @Transactional
     public void changeSchedule(){
+        descansosPorColaborador.clear();
         FacesMessage mensaje = null;
         PrimeFaces current = PrimeFaces.current();
 
         Asignaciones asignaChage = asignacionesService.buscarHorario(selectAsignacion.getColaborador());
-            try{
+          try{
+                //Se procede a actualizar el nuevo horario asignado en la base
                 convertirDia();
                 asignacionesService.updateAsignacion(selectAsignacion);
+                System.out.println("Id colaborador: "+selectAsignacion.getColaborador().getPk_idColaborador());
+                //Seguidamente se procede a eliminar los descanso que tenia asignados el colaborador segun el horario anterior
+                asignacionDescansosService.deletePorColaborador(selectAsignacion.getColaborador());
+
+                //Y por ultimo volver a asignar los descanso por el nuevo horario
+                descansosPorColaborador = descansosService.buscarDescansosPorHorario(selectAsignacion.getHorario());//Aca se llena una lista de descansos
+                System.out.println("Los descansos que pertenecen al horario son: "+ descansosPorColaborador.size());
+                for(int i=0 ; i < descansosPorColaborador.size();i++){//Ciclo for para asignar los descansos al colaborador por el horario
+                    asignacionDescansos.setColaborador(selectAsignacion.getColaborador());
+                    asignacionDescansos.setDescanso(descansosPorColaborador.get(i));
+                    asignacionDescansosService.updateAsignacionDescanso(asignacionDescansos);
+                    asignacionDescansos = new AsignacionDescansos();
+                }
+
                 current.executeScript("PF('datos2').hide();");
 
                 FacesMessage msg = new FacesMessage("Aviso", "Horario cambiado correctamente.");
@@ -359,20 +409,34 @@ public class AsignacionesBean {
                 selectAsignacion = new Asignaciones();
                 asignacion = new Asignaciones();
                 jornada = new Jornadas();
+                asignacionDescansos = new AsignacionDescansos();
+                descansosPorColaborador.clear();
             }
     }
 
     public void create()
     {
+        descansosPorColaborador.clear();
         FacesMessage mensaje = null;
         PrimeFaces current = PrimeFaces.current();
 
         System.out.println("Nombre: "+selectAsignacion.getColaborador().getNombre());
-        System.out.println("Descanso: "+asignacion.getDiaDescanso());
+        System.out.println("Dia de Descanso: "+asignacion.getDiaDescanso());
         System.out.println("Horario: "+ asignacion.getHorario().getPk_idhorario());
             try {
+                //Insersion de asignacion de horario en la tabla asignaciones
                 asignacion.setColaborador(selectAsignacion.getColaborador());
                 asignacionesService.createAsignacion(asignacion);
+
+                //Ahora se procede a hacer la insercion a la base de datos de las asignaciones de descansos
+                descansosPorColaborador = descansosService.buscarDescansosPorHorario(asignacion.getHorario());//Aca se llena una lista de descansos
+                System.out.println("Los descansos que tiene pertenecen al horario son: "+ descansosPorColaborador.size());
+                for(int i=0 ; i < descansosPorColaborador.size();i++){//Ciclo for para asignar los descansos al colaborador por el horario
+                    asignacionDescansos.setColaborador(selectAsignacion.getColaborador());
+                    asignacionDescansos.setDescanso(descansosPorColaborador.get(i));
+                    asignacionDescansosService.createAsignacionDescanso(asignacionDescansos);
+                    asignacionDescansos = new AsignacionDescansos();
+                }
                 current.executeScript("PF('datos').hide();");
                 System.out.println("Horario asignado");
 
@@ -383,36 +447,9 @@ public class AsignacionesBean {
                 selectAsignacion = new Asignaciones();
                 asignacion = new Asignaciones();
                 jornada = new Jornadas();
+                asignacionDescansos = new AsignacionDescansos();
+                descansosPorColaborador.clear();
             }
     }
-    public void createDescanso()
-    {
-        FacesMessage mensaje = null;
-        PrimeFaces current = PrimeFaces.current();
-        try {
-                descansos.setDuracion(Time.valueOf(tiempoDescanso));
-            descansos.setColaborador(selectAsignacion.getColaborador());
-            descansoServices.createDescansos(descansos);
-            current.executeScript("PF('datos3').hide();");
-            FacesMessage msg = new FacesMessage("Aviso", "Asignación realizada correctamente.");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-        } catch (Exception e) {
-            System.out.println(e.getCause());
-        } finally {
-            selectAsignacion = new Asignaciones();
-            descansos = new Tipodedescansos();
-        }
-    }
 
-    public void colaboradorSelected()
-    {
-        PrimeFaces current = PrimeFaces.current();
-
-        if(selectAsignacion.getColaborador()== null) {
-            FacesMessage msg = new FacesMessage("Aviso", "Debe seleccionar un colaborador");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-        } else {
-            current.executeScript("PF('datos3').show();"); //si no esta vacío muestra el dialogo
-        }
-    }
 }

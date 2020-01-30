@@ -5,14 +5,13 @@ import org.springframework.data.jpa.repository.query.Procedure;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "colaboradores")
 
 
 public class Colaborador implements Serializable {
-
-
 
     @Id
     private String pk_idColaborador;
@@ -31,9 +30,16 @@ public class Colaborador implements Serializable {
     private String justificacion;
     private Date fechaVencimiento;
     private String tipoPago;
+    @OneToMany(mappedBy = "colaborador")
+    private Set<AsignacionDescansos> asignacionDescansos;
 
+    public Set<AsignacionDescansos> getAsignacionDescansos() {
+        return asignacionDescansos;
+    }
 
-
+    public void setAsignacionDescansos(Set<AsignacionDescansos> asignacionDescansos) {
+        this.asignacionDescansos = asignacionDescansos;
+    }
 
     public String getPk_idColaborador()
     {

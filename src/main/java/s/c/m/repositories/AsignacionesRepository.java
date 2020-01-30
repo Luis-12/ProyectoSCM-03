@@ -9,7 +9,4 @@ import java.util.List;
 @Repository
 public interface AsignacionesRepository extends CrudRepository<Asignaciones, String> {
     Asignaciones findByColaborador(Colaborador id);
-
-
-
 }

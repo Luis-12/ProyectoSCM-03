@@ -9,8 +9,6 @@ import java.io.Serializable;
 
 public class Asignaciones implements Serializable {
 
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(columnDefinition = "serial")
