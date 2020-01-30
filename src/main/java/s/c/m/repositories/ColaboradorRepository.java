@@ -20,6 +20,8 @@ import java.util.List;
 public interface ColaboradorRepository extends CrudRepository<Colaborador, String> {
     Colaborador findByDepartamentoAndPuestoAndEstado(Departamento idD,Puesto idP,String estado);
     List<Colaborador> findByDepartamento(Departamento idD);
+
+
 }
 
 

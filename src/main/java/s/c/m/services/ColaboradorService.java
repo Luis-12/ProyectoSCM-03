@@ -36,12 +36,44 @@ public class ColaboradorService {
         List<Colaborador> list = new ArrayList<Colaborador>();
         List<Colaborador> listA = new ArrayList<Colaborador>();
         colaboradorRepository.findAll().forEach(e -> list.add(e));
-        for(Colaborador c: list){
-            if(c.getEstado().equals("Activo")){
-                listA.add(c);
+
+            for (Colaborador c : list) {
+                if (c.getEstado().equals("Activo")) {
+                    listA.add(c);
+                }
             }
+            return listA;
+
+    }
+
+    public List<Colaborador> getAllColaboradoresActivos(Colaborador a)
+    {
+        Colaborador miC=new Colaborador();
+        List<Colaborador> list = new ArrayList<Colaborador>();
+        List<Colaborador> listA = new ArrayList<Colaborador>();
+        colaboradorRepository.findAll().forEach(e -> list.add(e));
+
+        if(a.getPuesto().getDescripcion().equals("Gerencia")&&a.getDepartamento().getNombre().equals("Recursos Humanos")) {
+            for (Colaborador c : list) {
+                if (c.getEstado().equals("Activo")) {
+                    listA.add(c);
+                }
+            }
+
+        }else {
+            for (Colaborador c : list) {
+
+                if (c.getEstado().equals("Activo")&&c.getDepartamento().getNombre().equals(a.getDepartamento().getNombre())) {
+                    System.out.println(c.getDepartamento());
+                    System.out.println(a.getDepartamento());
+                    listA.add(c);
+                }
+
+            }
+
         }
         return listA;
+
     }
 
 

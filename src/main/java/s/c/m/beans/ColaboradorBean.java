@@ -54,7 +54,6 @@ public class ColaboradorBean {
     public String init()
     {
         Colaborador miC = new Colaborador();
-        colaboradores = colaboradorService.getAllColaboradoresActivos();
         return "colaboradorList.xhtml";
     }
 
@@ -274,6 +273,7 @@ public class ColaboradorBean {
                 } else {
                     construyeMenuDinamico(colaborador1.getPuesto().getDescripcion(), colaborador1.getDepartamento().getNombre());
                     loggedIn = true;
+                    colaboradores = colaboradorService.getAllColaboradoresActivos(colaboradorlogueado);
                     return "/administracion/MantenimientoColaborador.xhtml?faces-redirect=true";
                 }
 
@@ -290,6 +290,7 @@ public class ColaboradorBean {
                 } else {
                     construyeMenuDinamico(colaborador1.getPuesto().getDescripcion(), colaborador1.getDepartamento().getNombre());
                     loggedIn = true;
+                    colaboradores = colaboradorService.getAllColaboradoresActivos(colaboradorlogueado);
                     return "/administracion/ListaSolicitud.xhtml?faces-redirect=true";
                 }
 
@@ -303,6 +304,7 @@ public class ColaboradorBean {
                 } else {
                     construyeMenuDinamico(colaborador1.getPuesto().getDescripcion(), colaborador1.getDepartamento().getNombre());
                     loggedIn = true;
+                    colaboradores = colaboradorService.getAllColaboradoresActivos(colaboradorlogueado);
                     return "/administracion/SolicitudVacaciones.xhtml?faces-redirect=true";
                 }
             }
@@ -319,6 +321,9 @@ public class ColaboradorBean {
                 } else {
                     construyeMenuDinamico(colaborador1.getPuesto().getDescripcion(), colaborador1.getDepartamento().getNombre());
                     loggedIn = true;
+                    colaboradores = colaboradorService.getAllColaboradoresActivos(colaboradorlogueado);
+
+
                     return "/administracion/ListaSolicitud.xhtml?faces-redirect=true";
                 }
             }
@@ -420,7 +425,7 @@ public class ColaboradorBean {
                 current.executeScript("PF('dlAC').hide();");
                 current.ajax().update("form:tablaColaborador");
                 mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Colaborador insertado correctamente.");
-                colaboradores = colaboradorService.getAllColaboradoresActivos();
+                colaboradores = colaboradorService.getAllColaboradoresActivos(colaboradorlogueado);
             }catch (Exception e){
             } finally {
                 colaborador = new Colaborador();
@@ -479,7 +484,7 @@ public class ColaboradorBean {
         colaboradorService.deleteColaborador(selectcolaborador);
         current.ajax().update("form:tablaColaborador");
         addMessage("Aviso", "Colaborador desactivado correctamente.");
-        colaboradores = colaboradorService.getAllColaboradoresActivos();
+        colaboradores = colaboradorService.getAllColaboradoresActivos(colaboradorlogueado);
         System.out.println("Eliminado");
     }
 
@@ -504,7 +509,7 @@ public class ColaboradorBean {
                 current.executeScript("PF('dlUC').hide();");
                 current.ajax().update("form:tablaColaborador");
                 addMessage("Aviso", "Colaborador actualizado correctamente.");
-                colaboradores = colaboradorService.getAllColaboradoresActivos();
+                colaboradores = colaboradorService.getAllColaboradoresActivos(colaboradorlogueado);
             }catch (Exception e){
             } finally {
                 selectcolaborador = new Colaborador();
@@ -520,7 +525,7 @@ public class ColaboradorBean {
             current.executeScript("PF('dlUC').hide();");
             current.ajax().update("form:tablaColaborador");
             addMessage("Aviso", "Colaborador actualizado correctamente.");
-            colaboradores = colaboradorService.getAllColaboradoresActivos();
+            colaboradores = colaboradorService.getAllColaboradoresActivos(colaboradorlogueado);
     }
     }
 
@@ -542,7 +547,7 @@ public class ColaboradorBean {
     public void close2()
     {
         selectcolaborador = new Colaborador();
-        colaboradores = colaboradorService.getAllColaboradoresActivos();
+        colaboradores = colaboradorService.getAllColaboradoresActivos(colaboradorlogueado);
     }
 
     public void addMessage(String summary, String detail)
