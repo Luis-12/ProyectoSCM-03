@@ -5,10 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import s.c.m.entities.Asignaciones;
 import s.c.m.entities.Colaborador;
-import s.c.m.entities.Departamento;
-import s.c.m.entities.Horarios;
 import s.c.m.repositories.AsignacionesRepository;
-import s.c.m.repositories.DepartamentoRepository;
+
 
 @Service
 public class AsignacionesServices {

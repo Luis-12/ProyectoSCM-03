@@ -1,22 +1,24 @@
 package s.c.m.beans;
 
+import com.sun.org.apache.xalan.internal.xsltc.dom.CachedNodeListIterator;
 import org.primefaces.PrimeFaces;
 import org.primefaces.model.menu.MenuModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import s.c.m.components.MenuView;
-import s.c.m.entities.Colaborador;
-import s.c.m.entities.Departamento;
-import s.c.m.entities.Puesto;
+import s.c.m.entities.*;
+import s.c.m.services.AsignacionesServices;
 import s.c.m.services.ColaboradorService;
 import s.c.m.services.DepartamentoService;
 import s.c.m.services.PuestoService;
+import sun.awt.geom.AreaOp;
 
 
 import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import java.sql.Time;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -37,6 +39,7 @@ public class ColaboradorBean {
     private Colaborador colaboradorClave = new Colaborador();
     private Departamento departamento = new Departamento();
     private Puesto puesto = new Puesto();
+    private Asignaciones asignaciones=new Asignaciones();
 
     @Autowired
     private PuestoService puestoService;
@@ -44,6 +47,9 @@ public class ColaboradorBean {
     private  boolean loggedIn;
     private MenuView generaMenu = new MenuView();
     private MenuModel model;
+
+    @Autowired
+    AsignacionesServices asignacionesServices;
 
     @Autowired
     DepartamentoService departamentoService;
@@ -531,6 +537,39 @@ public class ColaboradorBean {
 
      public void findColaboradorMarca() throws Exception {
         colaboradorMarca=colaboradorService.findColaborador(colaboradorMarca.getPk_idColaborador());
+     }
+
+     public void marcaEntrada(){
+         asignaciones=asignacionesServices.buscarHorario(colaboradorMarca);
+         Calendar c1=Calendar.getInstance();
+         Calendar c2= Calendar.getInstance();
+         c1.setTime(asignaciones.getHorario().getHoraentrada());
+         c1.set(Calendar.YEAR,c2.get(Calendar.YEAR));
+         c1.set(Calendar.MONTH,c2.get(Calendar.MONTH));
+         c1.set(Calendar.DAY_OF_MONTH,c2.get(Calendar.DAY_OF_MONTH));
+         if(c1.compareTo(c2)==1) //  antes de entrada
+         {
+
+             long resultado=(Math.abs(c1.getTimeInMillis()-c2.getTimeInMillis())/(1000*60));
+             if(resultado<=15){
+                 addMessage("Aviso","marca de la entrada");
+             }else {
+                 addMessage("Aviso","antes de la entrada, no le correponde realizar la marca");
+             }
+         }
+         else //  despues de entrada
+         {
+             Calendar c3=c1;
+             c3.add(Calendar.HOUR,1);
+             long resultado=(Math.abs(c3.getTimeInMillis()-c2.getTimeInMillis())/(1000*60));
+             if(resultado<=60)
+             {
+                 addMessage("Aviso","marca tarde");
+             }else {
+                 addMessage("Aviso","no puede realizar marca, 1 hora despues");
+             }
+         }
+
      }
 
     public void find() throws Exception {

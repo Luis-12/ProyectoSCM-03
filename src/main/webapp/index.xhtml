@@ -43,9 +43,10 @@
         </center>
         <div>
             <h:form>
+                <p:growl id="msgs" showDetail="true" life="3000" ><p:autoUpdate/></p:growl>
             <center>
                 <h:panelGrid columns="3" cellpadding="5">
-                    <p:commandButton styleClass="ui-commandant2" value="Entrada" />
+                    <p:commandButton styleClass="ui-commandant2" value="Entrada" actionListener="#{colaboradorBean.marcaEntrada}" />
                     <p:commandButton styleClass="ui-commandant2" value="Descanso"/>
                     <p:commandButton styleClass="ui-commandant2" value="Salida"/></h:panelGrid>
             </center>

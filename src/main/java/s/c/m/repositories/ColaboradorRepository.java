@@ -9,11 +9,6 @@ import org.springframework.stereotype.Repository;
 import s.c.m.entities.Colaborador;
 import s.c.m.entities.Departamento;
 import s.c.m.entities.Puesto;
-
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.transaction.Transactional;
-import java.util.Date;
 import java.util.List;
 
 @Repository
