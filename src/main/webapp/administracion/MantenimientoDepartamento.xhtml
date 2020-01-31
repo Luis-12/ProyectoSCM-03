@@ -104,13 +104,12 @@
         </h:form>
     </div>
 
-
-    <p:dialog id="dlAC" header="Incorporar Departamento" showEffect="fade" hideEffect="fade"
-              widgetVar="dlAC" resetValues="true" modal="true" resizable="false" minWidth="200">
+    <p:dialog id="dlAC" header="Incorporar Departamento" showEffect="fade"  hideEffect="fade"
+              widgetVar="dlAC" resetValues="true" modal="true" resizable="false"  >
         <p:ajax event="close" update="dlAC" resetValues="true" listener="#{departamentoBean.close}" />
         <h:form id="AgregarDepartamento">
             <p:growl id="msgs2" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
-            <h:panelGrid columns="2"  id="panel2">
+            <h:panelGrid columns="2" >
                 <p:outputLabel id="cod" value="Código de Departamento" styleClass="required" indicateRequired="true" for="pk_codDepartamento"/>
                 <p:inputText maxlength="6" id="pk_codDepartamento" required="true" requiredMessage="Ingrese un código"
                              validatorMessage="Solo se aceptan mayúsculas y no se permiten números" value="#{departamentoBean.departamento.pk_idDepartamento}">

@@ -11,6 +11,7 @@
     <link href="css/style.css" rel="stylesheet" type="text/css" />
     <link href="//db.onlinewebfonts.com/c/f977213040abc486420980aae60e0db3?family=GestaW01-Medium" rel="stylesheet" type="text/css"/>
     <title>Ingresar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
 </h:head>
 
@@ -20,7 +21,9 @@
         <br/>
         <p:fieldset legend="Sistema Control de Marcas Wyndham Herradura" style="margin-bottom:20px">
             <h:panelGrid columns="2" cellpadding="5">
-                <div id="logo2"></div>
+                <div id="logo2">
+                    <img srcset="imagen/logo.jpg 1535w, imagen/logR.PNG 480w"  src="imagen/logo.jpg" style="max-width: 43%; max-height: 77%;  padding: 10px; "></img>
+                </div>
                 <p> El Sistema Control de Marcas (SCM) ha sido creado para solventar las necesidades del  Hotel Wyndham Herradura, <br/>
                     es desarrollado por un grupo de estudiantes de la Universidad Nacional de Costa Rica, <br/>
                     siendo el propósito de los cursos Ingeniería en Sistemas I, Ingeniería en Sistemas II e <br/>
@@ -28,8 +31,8 @@
             </h:panelGrid>
         </p:fieldset>
 
-        <p:panel header="Desarrolladores"  style="margin-bottom:20px">
-            <p:panelGrid columns="2" columnClasses="ui-g-12 ui-md-4,ui-g-12 ui-md-8" layout="grid" styleClass="ui-panelgrid-blank">
+        <p:fieldset legend="Desarrolladores" style="margin-bottom:20px">
+            <h:panelGrid columns="2" cellpadding="5">
                 <p>
                     El equipo de estudiantes desarrolladores, está conformado por los siguientes integrantes:<br/>
                     Diego Salazar Pérez.<br/>
@@ -37,8 +40,8 @@
                     Pablo Herrera Rodríguez.<br/>
                     Allison Madriz Valverde. <br/>
                     Yoselin Molina Arias. </p>
-            </p:panelGrid>
-        </p:panel>
+            </h:panelGrid>
+        </p:fieldset>
 
 
     </h:body>

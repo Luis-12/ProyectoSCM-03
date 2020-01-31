@@ -6,7 +6,6 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
-
 >
 
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
@@ -135,7 +134,7 @@
 
 
     <p:dialog id="dlAC" header="Incorporar Colaborador"  showEffect="fade" hideEffect="fade"
-              widgetVar="dlAC" modal="true" resizable="false" minWidth="200"  >
+              widgetVar="dlAC" resizable="false" minWidth="200">
         <p:ajax event="close" update="dlAC" resetValues="true" listener="#{colaboradorBean.close}" />
         <h:form id="AgregarColaborador">
             <p:growl id="msgs2" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
