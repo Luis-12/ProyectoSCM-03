@@ -55,7 +55,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                             <p:growl id="msgs1" showDetail="true" life="5000" rendered="#{not facesContext.validationFailed}"/>
 
 
-                            <p:contextMenu  >
+                            <p:contextMenu for="tablaColaborador" >
                                 <p:menuitem value="Asignar Horario" update="datos"   action="#{asignacionesBean.checkSelection}"/>
                                 <p:menuitem value="Actualizar Horario Asignado" update="datos2"   action="#{asignacionesBean.checkSelectionScheduleChange}"/>
                                 <p:menuitem value="Consultar Horario Asignado" update="dH"  action="#{asignacionesBean.checkSelectionC}"/>

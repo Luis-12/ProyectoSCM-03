@@ -370,3 +370,68 @@ color: darkred;
 .tamTable{
 width: 8%
 }
+
+.ui-dialog{
+        width: auto !important;
+    }
+
+#just_title{
+    margin-left: -50px;
+}
+#dH_title{margin-left: -40px;}
+/*RELOJ*/
+
+.wrap{
+    position: absolute;
+    top: 120px;
+    right: 0;
+    width: 300px;
+    height: 200px;
+    margin-top: 23%;
+    margin-right: 15px;
+}
+
+.widget{
+    width:40%;
+    margin:10px;
+}
+
+.widget p{
+    display: inline-block;
+    line-height: 0em;
+}
+
+.fecha{
+    font-family: 'Oswald', sans-serif;/*Fuente de reloj*/
+    color: white;
+    text-align: center;
+    font-size: 1.0em;
+    margin-bottom: 0.3125rem;
+    background: rgba(0,0,0,.5);
+    width: 300px;
+    -webkit-border-radius:5px;
+    -ms-border-radius:5px;
+    -o-border-radius:5px;
+    -moz-border-radius:5px;
+}
+
+.reloj{
+    font-family: 'Oswald', sans-serif;
+    color: white;
+    width: 300px;
+    font-size: 3.0em;
+    text-align: center;
+    background: rgba(0,0,0,.5);
+    -webkit-border-radius:5px;
+    -ms-border-radius:5px;
+    -o-border-radius:5px;
+    -moz-border-radius:5px;
+}
+.reloj .ampm{
+    font-size: 1.0rem;
+}
+.reloj .segundos
+{
+    font-size: 3.0rem;
+}
+

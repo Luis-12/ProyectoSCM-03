@@ -42,13 +42,13 @@
         </div>
         </center>
         <div>
-            <h:form>
-                <p:growl id="msgs" showDetail="true" life="3000" ><p:autoUpdate/></p:growl>
+            <h:form id="bot">
+                <p:growl id="msgs" showDetail="true" life="3000" rendered="#{not facesContext.validationFailed}" ><p:autoUpdate/></p:growl>
             <center>
                 <h:panelGrid columns="3" cellpadding="5">
-                    <p:commandButton styleClass="ui-commandant2" value="Entrada" actionListener="#{colaboradorBean.marcaEntrada}" />
-                    <p:commandButton styleClass="ui-commandant2" value="Descanso"/>
-                    <p:commandButton styleClass="ui-commandant2" value="Salida"/></h:panelGrid>
+                    <p:commandButton styleClass="ui-commandant2" id="ent" value="Entrada" disabled="#{colaboradorBean.botonEntrada}" actionListener="#{colaboradorBean.marcaEntrada}" />
+                    <p:commandButton styleClass="ui-commandant2" id="des" value="Descanso" disabled="#{colaboradorBean.botonDesSali}"/>
+                    <p:commandButton styleClass="ui-commandant2" id="sali" value="Salida" disabled="#{colaboradorBean.botonDesSali}"/></h:panelGrid>
             </center>
             </h:form>
         </div>
@@ -57,7 +57,38 @@
             <p:inputText id="t1" value="#{colaboradorBean.colaboradorMarca.pk_idColaborador}" type="hidden" />
         </h:form>
 
+       <p:dialog id="just" header="Justificación llegada tardía" showEffect="fade" hideEffect="fade"
+                 widgetVar="just" resizable="false" closable="false"  minWidth="400">
+           <h:form id="justificacion">
+               <h:panelGrid columns="2" id="panel2">
+                   <p:inputTextarea required="true" rows="5" cols="30" value="#{colaboradorBean.marcaLaboradas.descripcion}" placeholder="Se necesita la Justificación para realizar la marca"  />
+                   <center>
+                       <p:commandButton styleClass="ui-priority-primary" value="Aceptar" update="justificacion" action="#{colaboradorBean.marcaTarde}"/>
+                   </center>
+               </h:panelGrid>
+           </h:form>
+       </p:dialog>
 
+        <div class="wrap">
+            <div class="widget">
+                <div class="fecha">
+                    <p id="diaSemana" class="diaSemana" style="font-family: 'Oswald', sans-serif;"></p>
+                    <p id="dia" class="dia" style="font-family: 'Oswald', sans-serif;"></p>
+                    <p style="font-family: 'Oswald', sans-serif;">de </p>
+                    <p id="mes" class="mes" style="font-family: 'Oswald', sans-serif;"></p>
+                    <p style="font-family: 'Oswald', sans-serif;">del </p>
+                    <p id="year" class="year" style="font-family: 'Oswald', sans-serif;"></p>
+                </div>
+                <div class="reloj">
+                    <p id="horas" class="horas" style="font-family: 'Oswald', sans-serif;"></p>
+                    <p style="font-family: 'Oswald', sans-serif;">:</p>
+                    <p id="minutos" class="minutos" style="font-family: 'Oswald', sans-serif;"></p>
+                    <p style="font-family: 'Oswald', sans-serif;">:</p>
+                    <p id="segundos" class="segundos" style="font-family: 'Oswald', sans-serif;"></p>
+                    <p id="ampm" class="ampm" style="font-family: 'Oswald', sans-serif;"></p>
+                </div>
+            </div>
+        </div>
 
         <div id="footer">
             <br/>
@@ -87,6 +118,110 @@
                 console.error("No existe camara o dispositivo!");
             }
         });
+
+        //reloj
+        (function () {
+            var actualizarHora = function () {
+                var fecha = new Date(),
+                    horas = fecha.getHours(),
+                    ampm,
+                    minutos = fecha.getMinutes(),
+                    segundos = fecha.getSeconds(),
+                    diaSemana = fecha.getDay(),
+                    dia = fecha.getDate(),
+                    mes = fecha.getMonth(),
+                    year = fecha.getFullYear();
+
+                var pHoras = document.getElementById('horas'),
+                    pAMPM = document.getElementById('ampm'),
+                    pMinutos = document.getElementById('minutos'),
+                    pSegundos = document.getElementById('segundos'),
+                    pDiaSemana = document.getElementById('diaSemana'),
+                    pDia = document.getElementById('dia'),
+                    pMes = document.getElementById('mes'),
+                    pYear = document.getElementById('year');
+
+                var semana = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
+                pDiaSemana.textContent = semana[diaSemana];
+
+                pDia.textContent = dia;
+
+                var meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Setiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+                pMes.textContent = meses[mes];
+
+                pYear.textContent = year;
+
+                if (horas >= 12) {
+                    horas = horas - 12;
+                    ampm = 'PM';
+                } else {
+                    ampm = 'AM';
+                }
+
+                if (horas == 0) {
+                    horas = 12;
+                }
+                ;
+
+                pHoras.textContent = horas;
+                pAMPM.textContent = ampm;
+
+                if (10 > minutos) {
+                    minutos = "0" + minutos
+                }
+                ;
+                if (10 > segundos) {
+                    segundos = "0" + segundos
+                }
+                ;
+
+                pMinutos.textContent = minutos;
+                pSegundos.textContent = segundos;
+
+            };
+
+
+            actualizarHora();
+            var intervalo = setInterval(actualizarHora, 1000);
+        }())
+        function marca() {
+            var fecha2 = new Date(),
+                hour = fecha2.getHours(),
+                ap,
+                min = fecha2.getMinutes(),
+                seg = fecha2.getSeconds();
+
+            var pHour = document.getElementById('hour'),
+                pAP = document.getElementById('ap'),
+                pMin = document.getElementById('min'),
+                pSeg = document.getElementById('seg');
+
+            if (hour >= 12) {
+                hour = hour - 12;
+                ap = 'PM';
+            } else {
+                ap = 'AM';
+            }
+            if (hour == 0) {
+                hour = 12;
+            }
+            ;
+
+            pHour.textContent = hour;
+            pAP.textContent = ap;
+
+            if (10 > min) {
+                min = "0" + min
+            }
+            ;
+            if (10 > seg) {
+                seg = "0" + seg
+            }
+            ;
+            pMin.textContent = min;
+            pSeg.textContent = seg;
+            $("#w2").show();
+        }
 </script>
 
     </h:body>

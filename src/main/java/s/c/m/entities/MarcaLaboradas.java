@@ -4,7 +4,8 @@ package s.c.m.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
+import java.sql.Time;
 
 @Entity
 @Table(name = "marcaslaboradas")
@@ -19,9 +20,11 @@ public class MarcaLaboradas implements Serializable {
     @JoinColumn(name = "fk_idcolaborador",nullable = false)
     private Colaborador colaborador;
 
-    private Timestamp horaEntrada;
+    private Time horaEntrada;
 
-    private Timestamp horaSalida;
+    private Time horaSalida;
+
+    private Date fechaMarca;
 
     private String descripcion;
 
@@ -41,19 +44,19 @@ public class MarcaLaboradas implements Serializable {
         this.colaborador = colaborador;
     }
 
-    public Timestamp getHoraEntrada() {
+    public Time getHoraEntrada() {
         return horaEntrada;
     }
 
-    public void setHoraEntrada(Timestamp horaEntrada) {
+    public void setHoraEntrada(Time horaEntrada) {
         this.horaEntrada = horaEntrada;
     }
 
-    public Timestamp getHoraSalida() {
+    public Time getHoraSalida() {
         return horaSalida;
     }
 
-    public void setHoraSalida(Timestamp horaSalida) {
+    public void setHoraSalida(Time horaSalida) {
         this.horaSalida = horaSalida;
     }
 
@@ -63,5 +66,13 @@ public class MarcaLaboradas implements Serializable {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public Date getFechaMarca() {
+        return fechaMarca;
+    }
+
+    public void setFechaMarca(Date fechaMarca) {
+        this.fechaMarca = fechaMarca;
     }
 }

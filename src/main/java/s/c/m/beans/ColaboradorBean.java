@@ -1,17 +1,14 @@
 package s.c.m.beans;
 
-import com.sun.org.apache.xalan.internal.xsltc.dom.CachedNodeListIterator;
+
+import org.omg.CORBA.PUBLIC_MEMBER;
 import org.primefaces.PrimeFaces;
 import org.primefaces.model.menu.MenuModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import s.c.m.components.MenuView;
 import s.c.m.entities.*;
-import s.c.m.services.AsignacionesServices;
-import s.c.m.services.ColaboradorService;
-import s.c.m.services.DepartamentoService;
-import s.c.m.services.PuestoService;
-import sun.awt.geom.AreaOp;
+import s.c.m.services.*;
 
 
 import javax.annotation.ManagedBean;
@@ -22,7 +19,6 @@ import java.sql.Time;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
 
 
 
@@ -40,6 +36,7 @@ public class ColaboradorBean {
     private Departamento departamento = new Departamento();
     private Puesto puesto = new Puesto();
     private Asignaciones asignaciones=new Asignaciones();
+    Calendar c2;
 
     @Autowired
     private PuestoService puestoService;
@@ -54,6 +51,11 @@ public class ColaboradorBean {
     @Autowired
     DepartamentoService departamentoService;
     private Date fecha;
+    @Autowired
+    MarcaLaboradaService marcaLaboradaService;
+    private  MarcaLaboradas marcaLaboradas=new MarcaLaboradas();
+    public boolean botonEntrada=true;
+    public boolean botonDesSali=true;
 
 
     @PostConstruct
@@ -68,6 +70,14 @@ public class ColaboradorBean {
     {
         Calendar c = Calendar.getInstance();
         return c.getTime();
+    }
+
+    public boolean isBotonEntrada() {
+        return botonEntrada;
+    }
+
+    public boolean isBotonDesSali() {
+        return botonDesSali;
     }
 
     public void setFecha(Date fecha)
@@ -142,6 +152,14 @@ public class ColaboradorBean {
 
     public void setColaboradorlogueado(Colaborador colaboradorlogueado) {
         this.colaboradorlogueado = colaboradorlogueado;
+    }
+
+    public MarcaLaboradas getMarcaLaboradas() {
+        return marcaLaboradas;
+    }
+
+    public void setMarcaLaboradas(MarcaLaboradas marcaLaboradas) {
+        this.marcaLaboradas = marcaLaboradas;
     }
 
     public Colaborador getColaborador1() {
@@ -536,40 +554,109 @@ public class ColaboradorBean {
     }
 
      public void findColaboradorMarca() throws Exception {
-        colaboradorMarca=colaboradorService.findColaborador(colaboradorMarca.getPk_idColaborador());
+         colaboradorMarca = colaboradorService.findColaborador(colaboradorMarca.getPk_idColaborador());
+         if (colaboradorMarca==null)
+         {
+             addMessage("Aviso","No se encuentra el colaborador");
+         }else
+         {
+             habilitarAccion();
+         }
+     }
+
+     public void habilitarAccion()
+     {
+         PrimeFaces current = PrimeFaces.current();
+         asignaciones=asignacionesServices.buscarHorario(colaboradorMarca);
+        if(asignaciones==null)
+        {
+            addMessage("Aviso","El colaborador no tiene horario asignado");
+        }else {
+            Date date=new Date();
+            MarcaLaboradas marcaLa=marcaLaboradaService.buscaMarca(date);
+            if(marcaLa==null){
+                botonEntrada=false;
+                current.ajax().update("bot:ent");
+            }else {
+                botonDesSali=false;
+                current.ajax().update("bot:des");
+                current.ajax().update("bot:sali");
+            }
+        }
+     }
+
+     public String verificaDiaLibre(int a)
+     {
+         String day=null;
+         switch (a){
+             case 1: day= "DO";break;
+             case 2: day="LU";break;
+             case 3: day="MA";break;
+             case 4: day="MI";break;
+             case 5: day="JU";break;
+             case 6: day="VI";break;
+             case 7: day="SA";break;
+         }
+         return day;
      }
 
      public void marcaEntrada(){
-         asignaciones=asignacionesServices.buscarHorario(colaboradorMarca);
          Calendar c1=Calendar.getInstance();
-         Calendar c2= Calendar.getInstance();
+         c2= Calendar.getInstance();
          c1.setTime(asignaciones.getHorario().getHoraentrada());
          c1.set(Calendar.YEAR,c2.get(Calendar.YEAR));
          c1.set(Calendar.MONTH,c2.get(Calendar.MONTH));
          c1.set(Calendar.DAY_OF_MONTH,c2.get(Calendar.DAY_OF_MONTH));
-         if(c1.compareTo(c2)==1) //  antes de entrada
-         {
-
-             long resultado=(Math.abs(c1.getTimeInMillis()-c2.getTimeInMillis())/(1000*60));
-             if(resultado<=15){
-                 addMessage("Aviso","marca de la entrada");
-             }else {
-                 addMessage("Aviso","antes de la entrada, no le correponde realizar la marca");
-             }
-         }
-         else //  despues de entrada
-         {
-             Calendar c3=c1;
-             c3.add(Calendar.HOUR,1);
-             long resultado=(Math.abs(c3.getTimeInMillis()-c2.getTimeInMillis())/(1000*60));
-             if(resultado<=60)
+         if(!asignaciones.getDiadescanso().equals(verificaDiaLibre(c1.get(Calendar.DAY_OF_WEEK)))) {
+             if (c1.compareTo(c2) == 1) //  antes de entrada
              {
-                 addMessage("Aviso","marca tarde");
-             }else {
-                 addMessage("Aviso","no puede realizar marca, 1 hora despues");
+                 long resultado = (Math.abs(c1.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));
+                 if (resultado <= 15) {
+                     addMessage("Aviso", "marca de la entrada");
+                     marcaEn();
+                 } else {
+                     addMessage("Aviso", "antes de la entrada, no le correponde realizar la marca");
+                 }
+             } else //  despues de entrada
+             {
+                 Calendar c3 = c1;
+                 c3.add(Calendar.HOUR, 1);
+                 long resultado = (Math.abs(c3.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));
+                 if (resultado <= 60) {
+                     addMessage("Aviso", "marca tarde");
+                     PrimeFaces current = PrimeFaces.current();
+                     current.executeScript("PF('just').show();");
+                 } else {
+                     addMessage("Aviso", "despues de la marca, no puede realizar marca tiempo limite agotado");
+                 }
              }
+         }else {
+             addMessage("Aviso", "free day");
          }
+     }
+     public void marcaEn()
+     {
+         PrimeFaces current = PrimeFaces.current();
+         marcaLaboradas.setColaborador(colaboradorMarca);
+         Date date=new Date();
+         Time time=new Time(c2.get(Calendar.HOUR_OF_DAY),c2.get(Calendar.MINUTE),c2.get(Calendar.SECOND));
+         marcaLaboradas.setHoraEntrada(time);
+         marcaLaboradas.setFechaMarca(date);
+         marcaLaboradaService.crearMarcaLaborada(marcaLaboradas);
+         marcaLaboradas=new MarcaLaboradas();
+         colaboradorMarca=new Colaborador();
+         botonEntrada=true;
+         current.ajax().update("bot:ent");
+         current.ajax().update("nom");
+         current.ajax().update("ced");
 
+     }
+     public void marcaTarde()
+     {
+         PrimeFaces current = PrimeFaces.current();
+         marcaEn();
+         current.executeScript("PF('just').hide();");
+         addMessage("Aviso", "Marca realizada con exito");
      }
 
     public void find() throws Exception {
