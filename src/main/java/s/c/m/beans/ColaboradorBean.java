@@ -659,8 +659,8 @@ public class ColaboradorBean {
                      addMessage("Aviso", "despues de la marca, no puede realizar marca tiempo limite agotado");
 
                      /////////////////////////LINEAS PARA PRUEBA
-                     marcaEn();
-                     addMessage("Aviso", "Pero igual marco para probar");
+                     //marcaEn();
+                     //addMessage("Aviso", "Pero igual marco para probar");
                      ////////////////////
 
                      botonEntrada=true;
