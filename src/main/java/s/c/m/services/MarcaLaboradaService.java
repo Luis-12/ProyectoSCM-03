@@ -2,6 +2,7 @@ package s.c.m.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import s.c.m.entities.Colaborador;
 import s.c.m.entities.MarcaLaboradas;
 import s.c.m.repositories.MarcasLaboradasRepository;
 
@@ -22,8 +23,19 @@ public class MarcaLaboradaService {
         return marcaLaboradas;
     }
 
+    public MarcaLaboradas buscaMarcaPorColaboradoYEstado(Colaborador idColaborador , String estado){
+        MarcaLaboradas marcaLaboradas=null;
+        try
+        {
+            marcaLaboradas=marcasLaboradasRepository.findByColaboradorAndEstado(idColaborador,estado);
+        }catch (Exception ex){}
+        return marcaLaboradas;
+    }
+
     public void crearMarcaLaborada(MarcaLaboradas marcaLaboradas)
     {
         marcasLaboradasRepository.save(marcaLaboradas);
     }
+
+    public void actualizarMarcaLaborada(MarcaLaboradas marcaLaboradas) { marcasLaboradasRepository.save(marcaLaboradas); }
 }

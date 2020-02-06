@@ -48,7 +48,8 @@
                 <h:panelGrid columns="3" cellpadding="5">
                     <p:commandButton styleClass="ui-commandant2" id="ent" value="Entrada" disabled="#{colaboradorBean.botonEntrada}" actionListener="#{colaboradorBean.marcaEntrada}" />
                     <p:commandButton styleClass="ui-commandant2" id="des" value="Descanso" disabled="#{colaboradorBean.botonDesSali}"/>
-                    <p:commandButton styleClass="ui-commandant2" id="sali" value="Salida" disabled="#{colaboradorBean.botonDesSali}"/></h:panelGrid>
+                    <p:commandButton styleClass="ui-commandant2" id="sali" value="Salida" disabled="#{colaboradorBean.botonDesSali}" actionListener="#{colaboradorBean.marcaSalida}"/>
+                </h:panelGrid>
             </center>
             </h:form>
         </div>
@@ -68,6 +69,18 @@
                </h:panelGrid>
            </h:form>
        </p:dialog>
+
+        <p:dialog id="just2" header="Justificación salida temprana" showEffect="fade" hideEffect="fade"
+                  widgetVar="just2" resizable="false" closable="false"  minWidth="400">
+            <h:form id="justificacion2">
+                <h:panelGrid columns="2" id="panel3">
+                    <p:inputText required="true"  value="#{colaboradorBean.justST}" placeholder="Se necesita la Justificación para realizar la marca"  />
+                    <center>
+                        <p:commandButton styleClass="ui-priority-primary" value="Aceptar" update="justificacion2" action="#{colaboradorBean.marcaSalidaAntes}"/>
+                    </center>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
 
         <div class="wrap">
             <div class="widget">

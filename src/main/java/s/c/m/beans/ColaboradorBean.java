@@ -42,8 +42,10 @@ public class ColaboradorBean {
     private PuestoService puestoService;
     private List<Colaborador> colaboradores;
     private  boolean loggedIn;
+    private String justST;
     private MenuView generaMenu = new MenuView();
     private MenuModel model;
+
 
     @Autowired
     AsignacionesServices asignacionesServices;
@@ -55,6 +57,7 @@ public class ColaboradorBean {
     MarcaLaboradaService marcaLaboradaService;
     private  MarcaLaboradas marcaLaboradas=new MarcaLaboradas();
     public boolean botonEntrada=true;
+    public boolean botonSalida=true;
     public boolean botonDesSali=true;
 
 
@@ -70,6 +73,14 @@ public class ColaboradorBean {
     {
         Calendar c = Calendar.getInstance();
         return c.getTime();
+    }
+
+    public String getJustST() {
+        return justST;
+    }
+
+    public void setJustST(String justST) {
+        this.justST = justST;
     }
 
     public boolean isBotonEntrada() {
@@ -553,39 +564,51 @@ public class ColaboradorBean {
     }
     }
 
-     public void findColaboradorMarca() throws Exception {
+     public void findColaboradorMarca() throws Exception {//Funcion que valida si el colaborador se encuentra en la base de datos
          colaboradorMarca = colaboradorService.findColaborador(colaboradorMarca.getPk_idColaborador());
          if (colaboradorMarca==null)
          {
              addMessage("Aviso","No se encuentra el colaborador");
-         }else
+         }else//Si es asi se pasa a validar que tenga horario asignado
          {
              habilitarAccion();
          }
      }
 
-     public void habilitarAccion()
+     public void habilitarAccion()//Funcion que valida si el colaborador al mostrar el qr tiene un horario asignado
      {
+         Calendar c1=Calendar.getInstance();
          PrimeFaces current = PrimeFaces.current();
-         asignaciones=asignacionesServices.buscarHorario(colaboradorMarca);
-        if(asignaciones==null)
-        {
-            addMessage("Aviso","El colaborador no tiene horario asignado");
-        }else {
-            Date date=new Date();
-            MarcaLaboradas marcaLa=marcaLaboradaService.buscaMarca(date);
-            if(marcaLa==null){
-                botonEntrada=false;
-                current.ajax().update("bot:ent");
-            }else {
-                botonDesSali=false;
-                current.ajax().update("bot:des");
-                current.ajax().update("bot:sali");
+         asignaciones=asignacionesServices.buscarHorario(colaboradorMarca);//Busca si exite una asignacion con el id del colaborador
+        if(asignaciones==null)//Si no tiene horario asignado se muestra el mensaje
+            {
+                addMessage("Aviso","El colaborador no tiene horario asignado");
+                colaboradorMarca = new Colaborador();
+            }else {//Si tiene horario asignado
+                if(!asignaciones.getDiadescanso().equals(verificaDiaLibre(c1.get(Calendar.DAY_OF_WEEK)))) {//Se valida si es el dia libre del colaborador
+                    Date date=new Date();
+                    MarcaLaboradas marcaLa = marcaLaboradaService.buscaMarcaPorColaboradoYEstado(colaboradorMarca,"Entrada");//Se busca si ya marco la entrada por medio de la fecha del dia
+                    if(marcaLa == null){//si no encuentra la marca con el colaborador y el estado Entrada se habilita el boton de entrada
+                        botonEntrada=false;
+                        current.ajax().update("bot:ent");
+
+                    }else {//Si la encuentra se habilita el boton de salida y descanso
+                        botonDesSali=false;
+                        current.ajax().update("bot:des");
+                        current.ajax().update("bot:sali");
+                    }
+                }else{//Si el dia de hoy y el dia de descanso son iguales se muestra el mensaje de que es dia libre
+                    addMessage("Aviso", ""+colaboradorMarca.getNombre() + " es su día libre");
+                    botonEntrada=true;
+                    current.ajax().update("bot:ent");//Se vuelven a bloquear los botones
+                    colaboradorMarca = new Colaborador();
+                    current.ajax().update("nom");// se limpia el nombre
+                    current.ajax().update("ced");
+                }
             }
-        }
      }
 
-     public String verificaDiaLibre(int a)
+     public String verificaDiaLibre(int a)//Funcion que verifica segun el dia por numero el dia en string
      {
          String day=null;
          switch (a){
@@ -600,66 +623,153 @@ public class ColaboradorBean {
          return day;
      }
 
-     public void marcaEntrada(){
+     public void marcaEntrada(){//funcion para el boton marcar Entrada
+         PrimeFaces current2 = PrimeFaces.current();
          Calendar c1=Calendar.getInstance();
          c2= Calendar.getInstance();
          c1.setTime(asignaciones.getHorario().getHoraentrada());
          c1.set(Calendar.YEAR,c2.get(Calendar.YEAR));
          c1.set(Calendar.MONTH,c2.get(Calendar.MONTH));
-         c1.set(Calendar.DAY_OF_MONTH,c2.get(Calendar.DAY_OF_MONTH));
-         if(!asignaciones.getDiadescanso().equals(verificaDiaLibre(c1.get(Calendar.DAY_OF_WEEK)))) {
-             if (c1.compareTo(c2) == 1) //  antes de entrada
+         c1.set(Calendar.DAY_OF_MONTH,c2.get(Calendar.DAY_OF_MONTH));//se carga la fecha actual
+         if (c1.compareTo(c2) == 1) //  antes de entrada madrugo el colaborador
              {
                  long resultado = (Math.abs(c1.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));
-                 if (resultado <= 15) {
+                 if (resultado <= 15) {//Valida si ya puede marcar
                      addMessage("Aviso", "marca de la entrada");
-                     marcaEn();
-                 } else {
+                     marcaEn();//Aca se llama la funcion para realizar la marca en la base de datos
+                 } else {//Si no se le avisa que aun no puede marcar por que es muy temprano
                      addMessage("Aviso", "antes de la entrada, no le correponde realizar la marca");
+
+                     botonEntrada=true;
+                     current2.ajax().update("bot:ent");//Se vuelven a bloquear los botones
+                     colaboradorMarca = new Colaborador();
+                     current2.ajax().update("nom");// se limpia el nombre
+                     current2.ajax().update("ced");
                  }
-             } else //  despues de entrada
+             } else //  despues de entrada llego tarde el colaborador
              {
                  Calendar c3 = c1;
                  c3.add(Calendar.HOUR, 1);
                  long resultado = (Math.abs(c3.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));
-                 if (resultado <= 60) {
-                     addMessage("Aviso", "marca tarde");
+                 if (resultado <= 60) {//Aca se esta dando un tiempo de colchon para realizar la marca tarde despues del tiempo de un 1 de la hora de entrada segun horario
+                     addMessage("Aviso", "marca tarde");//Como es tarde pero todavia es valido que marque puede justificar su tardia
                      PrimeFaces current = PrimeFaces.current();
-                     current.executeScript("PF('just').show();");
-                 } else {
+                     current.executeScript("PF('just').show();");//
+                 } else {//Si es demasiado tarde se muestra el mensaje de que ya no puede marca :(
                      addMessage("Aviso", "despues de la marca, no puede realizar marca tiempo limite agotado");
+
+                     /////////////////////////LINEAS PARA PRUEBA
+                     //marcaEn();
+                     //addMessage("Aviso", "Pero igual marco para probar");
+                     ////////////////////
+
+                     botonEntrada=true;
+                     current2.ajax().update("bot:ent");//Se vuelven a bloquear los botones
+                     colaboradorMarca = new Colaborador();
+                     current2.ajax().update("nom");// se limpia el nombre
+                     current2.ajax().update("ced");
                  }
              }
-         }else {
-             addMessage("Aviso", "free day");
-         }
      }
-     public void marcaEn()
+
+     public void marcaEn()//Funcion para realizar marca en la base de datos
      {
          PrimeFaces current = PrimeFaces.current();
-         marcaLaboradas.setColaborador(colaboradorMarca);
-         Date date=new Date();
-         Time time=new Time(c2.get(Calendar.HOUR_OF_DAY),c2.get(Calendar.MINUTE),c2.get(Calendar.SECOND));
-         marcaLaboradas.setHoraEntrada(time);
-         marcaLaboradas.setFechaMarca(date);
-         marcaLaboradaService.crearMarcaLaborada(marcaLaboradas);
+         //Se prepara el objeto de marca
+         marcaLaboradas.setColaborador(colaboradorMarca);//Se carga el colaborador que realiza la marca
+         Date date=new Date();//Se saca fecha actual
+         Time time=new Time(c2.get(Calendar.HOUR_OF_DAY),c2.get(Calendar.MINUTE),c2.get(Calendar.SECOND));//se carga la hora, min, seg en que se realizo la marca
+         marcaLaboradas.setHoraEntrada(time);//se guarda el tiempo de la marca
+         marcaLaboradas.setJustSalidaTemprana("N/A");
+         marcaLaboradas.setEstado("Entrada");//Para saber que es una marca de entrada a la hora de marcar la salida
+         marcaLaboradas.setFechaMarca(date);//se carga la fecha de la marca que es la fecha del sistema
+         marcaLaboradaService.crearMarcaLaborada(marcaLaboradas);//y por ultimo se agrega la marca de entrada a la base de datos
          marcaLaboradas=new MarcaLaboradas();
          colaboradorMarca=new Colaborador();
          botonEntrada=true;
-         current.ajax().update("bot:ent");
-         current.ajax().update("nom");
-         current.ajax().update("ced");
+         current.ajax().update("bot:ent");//Se vuelven a bloquear los botones
+         current.ajax().update("nom");// se limpia el nombre
+         current.ajax().update("ced");//y cedula del colaborador que marca
 
      }
-     public void marcaTarde()
+
+     public void marcaTarde()//funcion que se dispara con el boton de el formulario just
      {
          PrimeFaces current = PrimeFaces.current();
-         marcaEn();
-         current.executeScript("PF('just').hide();");
+         marcaEn();//se marca en la base de datos la entrada aunque sea tarde
+         current.executeScript("PF('just').hide();");// y se enconde el form
          addMessage("Aviso", "Marca realizada con exito");
      }
 
-    public void find() throws Exception {
+    public void marcaSalida(){//funcion para el boton marcar Salida
+        PrimeFaces current2 = PrimeFaces.current();
+        Calendar c1=Calendar.getInstance();
+        c2= Calendar.getInstance();
+        c1.setTime(asignaciones.getHorario().getHorasalida());
+        c1.set(Calendar.YEAR,c2.get(Calendar.YEAR));
+        c1.set(Calendar.MONTH,c2.get(Calendar.MONTH));
+        c1.set(Calendar.DAY_OF_MONTH,c2.get(Calendar.DAY_OF_MONTH));//se carga la fecha actual
+
+        //Arreglar condicional para la hora 00:00:00
+        ////////////////////////////////////////////
+        System.out.println("Hora de salida:"+ c1.get(Calendar.HOUR_OF_DAY)+" "+c1.get(Calendar.MINUTE)+" "+c1.get(Calendar.SECOND));
+        if(c1.get(Calendar.HOUR_OF_DAY) == 0 && c1.get(Calendar.HOUR_OF_DAY) == 0 && c1.get(Calendar.HOUR_OF_DAY) == 0){//Cero si son iguales
+            c1.set(Calendar.HOUR_OF_DAY,24);
+            c1.set(Calendar.MINUTE,00);
+            c1.set(Calendar.SECOND,00);
+            System.out.println("Entro aqui al compara hora con 00:00:00");
+        }
+        /////////////////////////////////////////////
+        if (c1.compareTo(c2) == 1) //  antes de salida madrugo el colaborador para salir
+        {
+            long resultado = (Math.abs(c1.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));
+            if (resultado <= 15) {//Valida si ya puede marcar la salida a la hora establecida por horario
+                addMessage("Aviso", "marca de la salida");
+                marcaSal();//Aca se llama la funcion para realizar la marca de salida en la base de datos
+            } else {//Si no se le avisa que aun no puede marcar por que es muy temprano
+                addMessage("Aviso", "Es antes de su hora de salida, justifique ");
+                PrimeFaces current = PrimeFaces.current();
+                current.executeScript("PF('just2').show();");
+            }
+        } else // salio tarde el colaborador hizo mas horas champion
+        {
+            addMessage("Aviso", "Marco salida mas tarde según su horario realizo mas horas");//Como es tarde pero todavia es valido que marque puede justificar su tardia
+            marcaSal();//Aca se llama la funcion para realizar la marca de salida en la base de datos
+        }
+    }
+
+
+    public void marcaSal()//Funcion para realizar marca de salida en la base de datos
+    {
+        PrimeFaces current = PrimeFaces.current();
+        //Se prepara el objeto de marcalaboradas de salida
+        marcaLaboradas = marcaLaboradaService.buscaMarcaPorColaboradoYEstado(colaboradorMarca,"Entrada");//Se busca la marca de entrada que tenia el colaborador por el estado
+        Time time=new Time(c2.get(Calendar.HOUR_OF_DAY),c2.get(Calendar.MINUTE),c2.get(Calendar.SECOND));//se carga la hora, min, seg en que se realizo la marca de salida
+        marcaLaboradas.setHoraSalida(time);//se guarda el tiempo de la marca
+        marcaLaboradas.setJustSalidaTemprana(justST);
+        marcaLaboradas.setEstado("Finalizado");
+        marcaLaboradaService.actualizarMarcaLaborada(marcaLaboradas);//y por ultimo se agrega la marca de entrada a la base de datos
+
+        marcaLaboradas=new MarcaLaboradas();
+        colaboradorMarca=new Colaborador();
+        botonDesSali=true;
+        justST=null;
+        current.ajax().update("bot:des");//Se desabilita el boton de descanso y el de salida
+        current.ajax().update("bot:sali");
+        current.ajax().update("nom");// se limpia el nombre
+        current.ajax().update("ced");//y cedula del colaborador que marca
+    }
+
+    public void marcaSalidaAntes()//funcion que se dispara con el boton de el formulario just
+    {
+        justST = null;
+        PrimeFaces current = PrimeFaces.current();
+        marcaSal();//se marca en la base de datos la entrada aunque sea tarde
+        current.executeScript("PF('just2').hide();");// y se enconde el form
+        addMessage("Aviso", "Marca realizada con exito");
+    }
+
+     public void find() throws Exception {
         String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("ColaboradorIdBusqueda");
         colaboradores.clear();
         colaboradores.add(colaboradorService.findColaborador(id));
