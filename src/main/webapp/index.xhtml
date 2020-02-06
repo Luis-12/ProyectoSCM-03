@@ -74,9 +74,21 @@
                   widgetVar="just2" resizable="false" closable="false"  minWidth="400">
             <h:form id="justificacion2">
                 <h:panelGrid columns="2" id="panel3">
-                    <p:inputText required="true"  value="#{colaboradorBean.justST}" placeholder="Se necesita la Justificación para realizar la marca"  />
+                    <p:inputText required="true" size="50" value="#{colaboradorBean.justST}" placeholder="Se necesita la Justificación para realizar la marca"  />
                     <center>
                         <p:commandButton styleClass="ui-priority-primary" value="Aceptar" update="justificacion2" action="#{colaboradorBean.marcaSalidaAntes}"/>
+                    </center>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog id="just3" header="Justificación Tiempo Extra" showEffect="fade" hideEffect="fade"
+                  widgetVar="just3" resizable="false" closable="false"  minWidth="400">
+            <h:form id="justificacion3">
+                <h:panelGrid columns="2" id="panel4">
+                    <p:inputText required="true"  size="50" value="#{colaboradorBean.justTE}" placeholder="Se necesita la Justificación para realizar la marca"  />
+                    <center>
+                        <p:commandButton styleClass="ui-priority-primary" value="Aceptar" update="justificacion3" action="#{colaboradorBean.marcaTiempoExtra}"/>
                     </center>
                 </h:panelGrid>
             </h:form>

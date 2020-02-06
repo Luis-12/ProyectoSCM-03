@@ -32,6 +32,8 @@ public class MarcaLaboradas implements Serializable {
 
     private String justSalidaTemprana;
 
+    private String justTiempoExtra;
+
     public int getPk_idMarcasLaboradas() {
         return pk_idMarcasLaboradas;
     }
@@ -94,5 +96,13 @@ public class MarcaLaboradas implements Serializable {
 
     public void setJustSalidaTemprana(String justSalidaTemprana) {
         this.justSalidaTemprana = justSalidaTemprana;
+    }
+
+    public String getJustTiempoExtra() {
+        return justTiempoExtra;
+    }
+
+    public void setJustTiempoExtra(String justTiempoExtra) {
+        this.justTiempoExtra = justTiempoExtra;
     }
 }
