@@ -659,8 +659,8 @@ public class ColaboradorBean {
                      addMessage("Aviso", "despues de la marca, no puede realizar marca tiempo limite agotado");
 
                      /////////////////////////LINEAS PARA PRUEBA
-                     //marcaEn();
-                     //addMessage("Aviso", "Pero igual marco para probar");
+                     marcaEn();
+                     addMessage("Aviso", "Pero igual marco para probar");
                      ////////////////////
 
                      botonEntrada=true;
@@ -762,11 +762,11 @@ public class ColaboradorBean {
 
     public void marcaSalidaAntes()//funcion que se dispara con el boton de el formulario just
     {
-        justST = null;
         PrimeFaces current = PrimeFaces.current();
         marcaSal();//se marca en la base de datos la entrada aunque sea tarde
         current.executeScript("PF('just2').hide();");// y se enconde el form
         addMessage("Aviso", "Marca realizada con exito");
+        justST = null;
     }
 
      public void find() throws Exception {
