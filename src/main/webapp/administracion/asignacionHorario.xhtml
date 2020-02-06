@@ -63,7 +63,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
 
                             </p:contextMenu>
 
-                            <p:dataTable var="colaborador" value="#{colaboradorBean.colaboradores}" style="margin-top: 15px" id="tablaColaborador"
+                            <p:dataTable var="colaborador" value="#{colaboradorBean.colaboradores}" rows="10" responsive="true" style="margin-top: 15px" id="tablaColaborador"
                                          emptyMessage="No se han encontrado colaboradores"
                                          widgetVar="colaboradorTabla"
                                          resizableColumns="true"
@@ -71,7 +71,6 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                          rowKey="#{colaborador.pk_idColaborador}"
                                          paginator="true"
                                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                         rowsPerPageTemplate="10,15,20"
                                          selection="#{asignacionesBean.selectAsignacion.colaborador}" scrollable="true" scrollHeight="450">
 
                                 <p:column headerText="Cédula" filterBy="#{colaborador.pk_idColaborador}">

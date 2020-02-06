@@ -83,7 +83,7 @@
             </p:contextMenu>
 
 
-            <p:dataTable var="departamento"   value="#{departamentoBean.departamentos}" id="tablaDepartamento"
+            <p:dataTable var="departamento"   value="#{departamentoBean.departamentos}" responsive="true" rows="10" id="tablaDepartamento"
                          emptyMessage="No se han encontrado departamentos" styleClass="ui-datatable-empty-message"
                          widgetVar="departamentoTabla"
                          resizableColumns="true"
@@ -91,7 +91,6 @@
                          rowKey="#{departamento.pk_idDepartamento}"
                          paginator="true"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         rowsPerPageTemplate="10"
                          selection="#{departamentoBean.selectDepartamento}" style="margin-top: 20px">
                 <p:autoUpdate />
                 <p:column headerText="Código" filterBy="#{departamento.pk_idDepartamento}">
