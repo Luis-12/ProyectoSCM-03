@@ -63,11 +63,14 @@ public class AsignacionesBean {
     private AsignacionDescansos asignacionDescansos = new AsignacionDescansos();
 
 
+
+
     @PostConstruct
     public void init()
     {
         jornadas = jornadaService.getAllJornadas();
         horarios = horarioService.getAllHorarios();
+
     }
 
     public void handleJornadaChange(){
@@ -420,18 +423,21 @@ public class AsignacionesBean {
         FacesMessage mensaje = null;
         PrimeFaces current = PrimeFaces.current();
 
-        System.out.println("Nombre: "+selectAsignacion.getColaborador().getNombre());
-        System.out.println("Dia de Descanso: "+asignacion.getDiaDescanso());
-        System.out.println("Horario: "+ asignacion.getHorario().getPk_idhorario());
+        if(jornada != null) {
             try {
+
+                System.out.println("Nombre: "+selectAsignacion.getColaborador().getNombre());
+                System.out.println("Dia de Descanso: "+asignacion.getDiaDescanso());
+                System.out.println("Horario: "+ asignacion.getHorario().getPk_idhorario());
+
                 //Insersion de asignacion de horario en la tabla asignaciones
                 asignacion.setColaborador(selectAsignacion.getColaborador());
                 asignacionesService.createAsignacion(asignacion);
 
                 //Ahora se procede a hacer la insercion a la base de datos de las asignaciones de descansos
                 descansosPorColaborador = descansosService.buscarDescansosPorHorario(asignacion.getHorario());//Aca se llena una lista de descansos
-                System.out.println("Los descansos que tiene pertenecen al horario son: "+ descansosPorColaborador.size());
-                for(int i=0 ; i < descansosPorColaborador.size();i++){//Ciclo for para asignar los descansos al colaborador por el horario
+                System.out.println("Los descansos que tiene pertenecen al horario son: " + descansosPorColaborador.size());
+                for (int i = 0; i < descansosPorColaborador.size(); i++) {//Ciclo for para asignar los descansos al colaborador por el horario
                     asignacionDescansos.setColaborador(selectAsignacion.getColaborador());
                     asignacionDescansos.setDescanso(descansosPorColaborador.get(i));
                     asignacionDescansosService.createAsignacionDescanso(asignacionDescansos);
@@ -450,6 +456,12 @@ public class AsignacionesBean {
                 asignacionDescansos = new AsignacionDescansos();
                 descansosPorColaborador.clear();
             }
+        }
+        else{
+            FacesMessage msg = new FacesMessage("Aviso", "Debe seleccionar una jornada.");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+
+        }
     }
 
 }

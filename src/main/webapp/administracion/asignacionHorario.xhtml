@@ -94,7 +94,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                         <h:panelGrid columns="2"  id="panel2">
                         <p:outputLabel  value="  Jornada:  " />
                             <p:selectOneMenu id="jornada" style="min-width: 195px" value="#{asignacionesBean.jornada}" converter="jornadaConverter">
-                                <f:selectItem itemLabel="- Seleccione la Jornada -" itemValue=""/>
+                                <f:selectItem itemLabel="- Seleccione la Jornada -" itemValue="#{asignacionesBean.jornada=null}"/>
                                 <f:selectItems value="#{asignacionesBean.jornadas}" var="jornada"
                                                itemValue="#{jornada}" itemLabel="#{jornada.descripcion}"/>
                                 <p:ajax listener="#{asignacionesBean.handleJornadaChange}" process=":horaio:jornada" update=":horaio:horario" />
@@ -190,9 +190,9 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                     </p:dialog>
 
                     <p:dialog header="Descansos Colaborador" widgetVar="dD" modal="true" responsive="true" showEffect="fade" hideEffect="fade"
-                              resizable="false" id="dD"  minWidth="220">
+                              resizable="false" id="dD"  minWidth="180">
                         <p:growl id="msgm5" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
-                        <p:dataTable  var="descansos" value="#{asignacionesBean.listDescansos}" style="width: 300px;"
+                        <p:dataTable  var="descansos" value="#{asignacionesBean.listDescansos}" style="width: 300px; margin-top: -20px"
                             emptyMessage="No tiene descansos asignados">
                             <p:column headerText="Descripción">
                                 <h:outputText value="#{descansos.descripcion}"/>
