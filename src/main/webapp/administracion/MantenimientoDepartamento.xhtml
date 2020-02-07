@@ -104,7 +104,7 @@
     </div>
 
     <p:dialog id="dlAC" header="Incorporar Departamento" showEffect="fade"  hideEffect="fade"
-              widgetVar="dlAC" resetValues="true" modal="true" resizable="false"  >
+              widgetVar="dlAC" resetValues="true" modal="true" resizable="false" responsive="true"  >
         <p:ajax event="close" update="dlAC" resetValues="true" listener="#{departamentoBean.close}" />
         <h:form id="AgregarDepartamento">
             <p:growl id="msgs2" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
@@ -143,7 +143,7 @@
 
 
     <p:dialog id="dlUC" header="Actualizar Departamento" showEffect="fade" hideEffect="fade"
-              widgetVar="dlUC" modal="true" resizable="false" minWidth="200">
+              widgetVar="dlUC" modal="true" resizable="false" minWidth="200" responsive="true">
         <p:ajax event="close" update="dlUC" resetValues="true" listener="#{departamentoBean.close}" />
 
         <h:form id="actualizarDepartamento">
@@ -177,7 +177,7 @@
         </h:form>
     </p:dialog>
     <p:dialog header="Encargado" widgetVar="dE" modal="true" showEffect="fade" hideEffect="fade"
-        resizable="false" id="dE"  minWidth="200">
+        resizable="false" id="dE"  minWidth="200" responsive="true">
         <p:growl id="msgs4" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
         <p:panelGrid columns="2" rendered="#{not empty departamentoBean.selectDepartamento}">
             <h:outputText value="Cédula:" />
@@ -194,7 +194,7 @@
     </p:dialog>
 
     <p:dialog id="dlED" header="Desactivar Departamento"  showEffect="fade" hideEffect="fade"
-              widgetVar="dlED" modal="true" resizable="false" minWidth="450"  >
+              widgetVar="dlED" modal="true" resizable="false" minWidth="450" responsive="true" >
         <p:ajax event="close" update="dlED" resetValues="true" listener="#{departamentoBean.close}" />
         <h:form id="EliminarDepartamento">
             <p:autoUpdate/>

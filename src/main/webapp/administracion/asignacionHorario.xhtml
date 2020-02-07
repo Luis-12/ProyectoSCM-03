@@ -63,15 +63,14 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
 
                             </p:contextMenu>
 
-                            <p:dataTable var="colaborador" value="#{colaboradorBean.colaboradores}" rows="10" responsive="true" style="margin-top: 15px" id="tablaColaborador"
-                                         emptyMessage="No se han encontrado colaboradores"
+                            <p:dataTable var="colaborador" value="#{colaboradorBean.colaboradores}" rows="10" id="tablaColaborador"
+                                         emptyMessage="No se han encontrado colaboradores" styleClass="ui-datatable-empty-message"
                                          widgetVar="colaboradorTabla"
-                                         resizableColumns="true"
                                          selectionMode="single"
                                          rowKey="#{colaborador.pk_idColaborador}"
                                          paginator="true"
                                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                         selection="#{asignacionesBean.selectAsignacion.colaborador}" scrollable="true" scrollHeight="450">
+                                         selection="#{asignacionesBean.selectAsignacion.colaborador}" style="margin-top: 20px" >
 
                                 <p:column headerText="Cédula" filterBy="#{colaborador.pk_idColaborador}">
                                     <h:outputText value="#{colaborador.pk_idColaborador}" />
@@ -88,7 +87,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
 
 
                     <p:dialog id="datos" header="Asignar Horario"  showEffect="fade" hideEffect="fade"
-                              widgetVar="datos" modal="true" minWidth="200"  style="width:360px;" >
+                              widgetVar="datos" modal="true" responsive="true" minWidth="200"  style="width:360px;" >
                         <p:ajax event="close" update="datos" />
                         <h:form id="horaio">
                         <p:growl id="msgs2" showDetail="true" />
@@ -132,8 +131,8 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                         </h:form>
                     </p:dialog>
 
-                    <p:dialog id="datos2" header="Actualizar Horario Asignado"  showEffect="fade" hideEffect="fade"
-                              widgetVar="datos2" modal="true" minWidth="200"  style="width:360px;" >
+                    <p:dialog id="datos2" header="Actualizar Horario "  showEffect="fade" hideEffect="fade"
+                              widgetVar="datos2" modal="true" responsive="true" minWidth="200"  style="width:360px;" >
                         <p:ajax event="close" update="datos2" />
                         <h:form id="horaio2">
                             <p:growl id="msgs3" showDetail="true" />
@@ -177,7 +176,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                         </h:form>
                     </p:dialog>
 
-                    <p:dialog header="Horario del Colaborador" widgetVar="dH" modal="true" showEffect="fade" hideEffect="fade"
+                    <p:dialog header="Horario del Colaborador" widgetVar="dH" modal="true" responsive="true" showEffect="fade" hideEffect="fade"
                               resizable="false" id="dH"  minWidth="200">
                         <p:growl id="msgs4" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
                         <p:panelGrid columns="2" rendered="#{not empty asignacionesBean.selectAsignacion}">
@@ -190,15 +189,15 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                         </p:panelGrid>
                     </p:dialog>
 
-                    <p:dialog header="Descansos del Colaborador" widgetVar="dD" modal="true" showEffect="fade" hideEffect="fade"
-                              resizable="false" id="dD"  minWidth="270">
+                    <p:dialog header="Descansos Colaborador" widgetVar="dD" modal="true" responsive="true" showEffect="fade" hideEffect="fade"
+                              resizable="false" id="dD"  minWidth="220">
                         <p:growl id="msgm5" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
-                        <p:dataTable  var="descansos" value="#{asignacionesBean.listDescansos}" style="width: 320px;"
+                        <p:dataTable  var="descansos" value="#{asignacionesBean.listDescansos}" style="width: 300px;"
                             emptyMessage="No tiene descansos asignados">
                             <p:column headerText="Descripción">
                                 <h:outputText value="#{descansos.descripcion}"/>
                             </p:column>
-                            <p:column headerText="Horario de descanso">
+                            <p:column headerText="Hora de descanso">
                                 <h:outputText value="#{descansos.horainicio} #{descansos.horafinalizacion}" />
                             </p:column>
                         </p:dataTable>
