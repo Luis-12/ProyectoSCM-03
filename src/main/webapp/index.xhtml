@@ -61,20 +61,28 @@
        <p:dialog id="just" header="Justificación llegada tardía" showEffect="fade" hideEffect="fade"
                  widgetVar="just" resizable="false" closable="false"  minWidth="400">
            <h:form id="justificacion">
+               <p:growl id="msgs4" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
                <h:panelGrid columns="2" id="panel2">
-                   <p:inputTextarea required="true" rows="5" cols="30" value="#{colaboradorBean.marcaLaboradas.descripcion}" placeholder="Se necesita la Justificación para realizar la marca"  />
+                   <p:inputTextarea requiredMessage="Ingrese una justificación" id="justi" required="true" rows="5" cols="30" value="#{colaboradorBean.marcaLaboradas.descripcion}">
+
+                   </p:inputTextarea>
+                   <p:watermark value="Se necesita la Justificación para realizar la marca" for="justi"/>
+                   <p:message id="justificacio" for="justi"/>
+
                    <center>
-                       <p:commandButton styleClass="ui-priority-primary" value="Aceptar" update="justificacion" action="#{colaboradorBean.marcaTarde}"/>
+                       <p:commandButton style="margin-left: 34%" styleClass="ui-priority-primary" value="Aceptar" update="bot:msgs, justificacion" action="#{colaboradorBean.marcaTarde}"/>
                    </center>
                </h:panelGrid>
            </h:form>
        </p:dialog>
+
 
         <p:dialog id="just2" header="Justificación salida temprana" showEffect="fade" hideEffect="fade"
                   widgetVar="just2" resizable="false" closable="false"  minWidth="400">
             <h:form id="justificacion2">
                 <h:panelGrid columns="2" id="panel3">
                     <p:inputText required="true" size="50" value="#{colaboradorBean.justST}" placeholder="Se necesita la Justificación para realizar la marca"  />
+
                     <center>
                         <p:commandButton styleClass="ui-priority-primary" value="Aceptar" update="justificacion2" action="#{colaboradorBean.marcaSalidaAntes}"/>
                     </center>
