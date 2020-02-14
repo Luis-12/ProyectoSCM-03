@@ -1,6 +1,7 @@
 package s.c.m.entities;
 
 import javax.persistence.*;
+import java.sql.Time;
 import java.sql.Timestamp;
 
 @Entity
@@ -16,9 +17,17 @@ public class MarcaDescansos {
     @JoinColumn(name = "fk_idcolaborador",nullable = false)
     private Colaborador colaborador;
 
-    private Timestamp horaFin;
+    @OneToOne
+    @JoinColumn(name = "fk_idmarcaslaboradas",nullable = false)
+    private MarcaLaboradas marcaLaboradas;
 
-    private Timestamp horaInicio;
+    @OneToOne
+    @JoinColumn(name = "fk_iddescanso",nullable = false)
+    private Descansos descansos;
+
+    private Time horaFin;
+
+    private Time horaInicio;
 
     public int getPk_idMarcaDescanso() {
         return pk_idMarcaDescanso;
@@ -36,19 +45,35 @@ public class MarcaDescansos {
         this.colaborador = colaborador;
     }
 
-    public Timestamp getHoraFin() {
+    public Time getHoraFin() {
         return horaFin;
     }
 
-    public void setHoraFin(Timestamp horaFin) {
+    public void setHoraFin(Time horaFin) {
         this.horaFin = horaFin;
     }
 
-    public Timestamp getHoraInicio() {
+    public Time getHoraInicio() {
         return horaInicio;
     }
 
-    public void setHoraInicio(Timestamp horaInicio) {
+    public void setHoraInicio(Time horaInicio) {
         this.horaInicio = horaInicio;
+    }
+
+    public MarcaLaboradas getMarcaLaboradas() {
+        return marcaLaboradas;
+    }
+
+    public void setMarcaLaboradas(MarcaLaboradas marcaLaboradas) {
+        this.marcaLaboradas = marcaLaboradas;
+    }
+
+    public Descansos getDescansos() {
+        return descansos;
+    }
+
+    public void setDescansos(Descansos descansos) {
+        this.descansos = descansos;
     }
 }

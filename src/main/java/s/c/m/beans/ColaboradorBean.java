@@ -47,10 +47,18 @@ public class ColaboradorBean {
     private String justTE;
     private MenuView generaMenu = new MenuView();
     private MenuModel model;
-
+    Calendar now;
+    String variable="Descanso";
+    private AsignacionDescansos asignacionDescansos=new AsignacionDescansos();
 
     @Autowired
     AsignacionesServices asignacionesServices;
+
+    @Autowired
+    MarcaDescansoService marcaDescansoService;
+
+    @Autowired
+     AsignacionDescansosService asignacionDescansosService;
 
     @Autowired
     DepartamentoService departamentoService;
@@ -67,6 +75,10 @@ public class ColaboradorBean {
     public String init() {
         Colaborador miC = new Colaborador();
         return "colaboradorList.xhtml";
+    }
+
+    public String getVariable() {
+        return variable;
     }
 
     public String getJustTE() {
@@ -870,6 +882,76 @@ public class ColaboradorBean {
     public void addMessage(String summary, String detail) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
         FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public  void marcaIniDes()
+    {
+        MarcaLaboradas marcaLa = marcaLaboradaService.buscaMarcaPorColaboradoYEstado(colaboradorMarca,"Entrada");
+        MarcaDescansos marcaDescansos=new MarcaDescansos();
+        marcaDescansos.setColaborador(colaboradorMarca);
+        marcaDescansos.setMarcaLaboradas(marcaLa);
+        marcaDescansos.setDescansos(asignacionDescansos.getDescanso());
+        Time time=new Time(now.get(Calendar.HOUR_OF_DAY),now.get(Calendar.MINUTE),now.get(Calendar.SECOND));
+        marcaDescansos.setHoraInicio(time);
+        marcaDescansoService.crearMarcaDescanso(marcaDescansos);
+    }
+    public void validacionMarcaDes()
+    {
+
+        List<AsignacionDescansos> asignacionesList=asignacionDescansosService.buscarDescansosAsignadosPorColaborador(colaboradorMarca);//numero de descansos que tiene el colaborador
+        MarcaLaboradas marcaLa = marcaLaboradaService.buscaMarcaPorColaboradoYEstado(colaboradorMarca,"Entrada");//para sacar el id de la marca que esta asociada a la marca de descanso por dia
+        List<MarcaDescansos> marcaDescansosList = marcaDescansoService.buscarMarcaPorMarcaLab(marcaLa.getPk_idMarcasLaboradas());
+        PrimeFaces current = PrimeFaces.current();
+        boolean encontrado=false;
+        Calendar calendar=Calendar.getInstance();
+        Calendar calendar2=Calendar.getInstance();
+        now=Calendar.getInstance();
+        for (AsignacionDescansos asignacionDescansos1 : asignacionesList)
+        {
+            String time=asignacionDescansos1.getDescanso().getHorainicio().toString();
+            String[] timeArrayInicio = time.split(":");
+            String time2=asignacionDescansos1.getDescanso().getHorafinalizacion().toString();
+            String[] timeArrayFin = time2.split(":");
+            if(timeArrayFin[0].equals("01")){timeArrayFin[0]="24";timeArrayFin[1]="59";}
+            calendar.set(Calendar.HOUR_OF_DAY,Integer.parseInt(timeArrayInicio[0]));
+            calendar.set(Calendar.MINUTE,Integer.parseInt(timeArrayInicio[1]));
+            calendar.set(Calendar.SECOND,Integer.parseInt(timeArrayInicio[2]));
+            calendar2.set(Calendar.HOUR_OF_DAY,Integer.parseInt(timeArrayFin[0]));
+            calendar2.set(Calendar.MINUTE,Integer.parseInt(timeArrayFin[1]));
+            calendar2.set(Calendar.SECOND,Integer.parseInt(timeArrayFin[2]));
+            if(now.get(Calendar.HOUR)==0)
+            {
+                now.set(Calendar.HOUR_OF_DAY,24);
+            }
+            if((now.compareTo(calendar) >= 0) && ( now.compareTo(calendar2) <= 0)){
+                asignacionDescansos=asignacionDescansos1;
+                if(marcaDescansoService.buscarMdescanso(asignacionDescansos1.getPk_idasigdescansos(),marcaLa.getPk_idMarcasLaboradas())==null)
+                {
+                    variable="Inicio Descanso";
+                }else
+                {
+                    variable="Fin Descanso";
+                }
+                botonDesSali=false;
+                encontrado=true;
+                current.ajax().update("bot");
+                break;
+            }
+        }
+        if(encontrado==false)
+        {
+            addMessage("Aviso","No puede marcar descanso");
+        }
+    }
+
+    public void marcarDescanso()
+    {
+        if(variable.equals("Inicio Descanso"))
+        {
+            marcaIniDes();
+        }else {
+            addMessage("Aviso","Marca fin del descanso");
+        }
     }
 
 }
