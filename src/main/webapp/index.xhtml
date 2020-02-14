@@ -58,45 +58,63 @@
             <p:inputText id="t1" value="#{colaboradorBean.colaboradorMarca.pk_idColaborador}" type="hidden" />
         </h:form>
 
-       <p:dialog id="just" header="Justificación llegada tardía" showEffect="fade" hideEffect="fade"
+       <p:dialog id="just" header="Justificación de Llegada Tardía" showEffect="fade" hideEffect="fade"
                  widgetVar="just" resizable="false" closable="false"  minWidth="400">
            <h:form id="justificacion">
                <p:growl id="msgs4" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
                <h:panelGrid columns="2" id="panel2">
-                   <p:inputTextarea requiredMessage="Ingrese una justificación" id="justi" required="true" rows="5" cols="30" value="#{colaboradorBean.marcaLaboradas.descripcion}">
+                   <p:inputTextarea requiredMessage="Debe justificar su tardía" id="justi" required="true" rows="5" cols="30" value="#{colaboradorBean.marcaLaboradas.descripcion}">
 
                    </p:inputTextarea>
-                   <p:watermark value="Se necesita la Justificación para realizar la marca" for="justi"/>
+                   <p:watermark value="Se necesita la justificación para realizar la Marca" for="justi"/>
                    <p:message id="justificacio" for="justi"/>
 
                    <center>
-                       <p:commandButton style="margin-left: 34%" styleClass="ui-priority-primary" value="Aceptar" update="bot:msgs, justificacion" action="#{colaboradorBean.marcaTarde}"/>
+                       <p:commandButton style="margin-left: 34%"
+                                        styleClass="ui-priority-primary"
+                                        value="Aceptar" update="bot:msgs, justificacion" action="#{colaboradorBean.marcaTarde}"/>
                    </center>
                </h:panelGrid>
            </h:form>
        </p:dialog>
 
 
-        <p:dialog id="just2" header="Justificación salida temprana" showEffect="fade" hideEffect="fade"
+        <p:dialog id="just2" header="Justificación de Salida Temprana" style="text-align: center"
+                  showEffect="fade" hideEffect="fade"
                   widgetVar="just2" resizable="false" closable="false"  minWidth="400">
             <h:form id="justificacion2">
+                <p:growl showDetail="true" rendered="#{not facesContext.validationFailed}"/>
                 <h:panelGrid columns="2" id="panel3">
-                    <p:inputText required="true" size="50" value="#{colaboradorBean.justST}" placeholder="Se necesita la Justificación para realizar la marca"  />
+                    <p:inputTextarea required="true"  requiredMessage="Debe justificar su salida temprana"
+                                     id="justi2" rows="5" cols="30"
+                                 value="#{colaboradorBean.justST}">
 
+                    </p:inputTextarea>
+                    <p:watermark value="Se necesita la justificación para realizar la Marca" for="justi2"/>
+                    <p:message id="justificacio2" for="justi2"/>
                     <center>
-                        <p:commandButton styleClass="ui-priority-primary" value="Aceptar" update="justificacion2" action="#{colaboradorBean.marcaSalidaAntes}"/>
+                        <p:commandButton
+                                styleClass="ui-priority-primary"
+                                value="Aceptar" update="justificacion2" action="#{colaboradorBean.marcaSalidaAntes}"/>
                     </center>
                 </h:panelGrid>
             </h:form>
         </p:dialog>
 
-        <p:dialog id="just3" header="Justificación Tiempo Extra" showEffect="fade" hideEffect="fade"
+        <p:dialog id="just3" header="Justificación de Tiempo Extra" showEffect="fade" hideEffect="fade"
                   widgetVar="just3" resizable="false" closable="false"  minWidth="400">
             <h:form id="justificacion3">
+                <p:growl showDetail="true" rendered="#{not facesContext.validationFailed}"/>
                 <h:panelGrid columns="2" id="panel4">
-                    <p:inputText required="true"  size="50" value="#{colaboradorBean.justTE}" placeholder="Se necesita la Justificación para realizar la marca"  />
+                    <p:inputTextarea required="true"  requiredMessage="Debe justificar su tiempo extra" id="justi3"
+                                     rows="5" cols="30"  value="#{colaboradorBean.justTE}">
+                    </p:inputTextarea>
+                    <p:watermark value="Se necesita la justificación para realizar la Marca" for="justi3"/>
+                    <p:message id="justificacio3" for="justi3"/>
                     <center>
-                        <p:commandButton styleClass="ui-priority-primary" value="Aceptar" update="justificacion3" action="#{colaboradorBean.marcaTiempoExtra}"/>
+                        <p:commandButton style="margin-left: 34%"
+                                styleClass="ui-priority-primary"
+                                value="Aceptar" update="justificacion3" action="#{colaboradorBean.marcaTiempoExtra}"/>
                     </center>
                 </h:panelGrid>
             </h:form>

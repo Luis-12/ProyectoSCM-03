@@ -595,14 +595,6 @@ public class ColaboradorBean {
                 current.ajax().update("bot:des");
                 current.ajax().update("bot:sali");
             }
-                /*}else{//Si el dia de hoy y el dia de descanso son iguales se muestra el mensaje de que es dia libre
-                    addMessage("Aviso", ""+colaboradorMarca.getNombre() + " es su día libre");
-                    botonEntrada=true;
-                    current.ajax().update("bot:ent");//Se vuelven a bloquear los botones
-                    colaboradorMarca = new Colaborador();
-                    current.ajax().update("nom");// se limpia el nombre
-                    current.ajax().update("ced");
-                }*/
         }
     }
 
@@ -647,15 +639,10 @@ public class ColaboradorBean {
         {
             long resultado = (Math.abs(c1.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));
             if (resultado <= 15) {//Valida si ya puede marcar
-                addMessage("Aviso", "marca de la entrada");
+                addMessage("Aviso", "¡Marca de Entrada!");
                 marcaEn();//Aca se llama la funcion para realizar la marca en la base de datos
             } else {//Si no se le avisa que aun no puede marcar por que es muy temprano
-                addMessage("Aviso", "Es demasiado temprano, no le correponde realizar la marca");
-
-                ///////////LINEAS PRUEBA
-                //marcaEn();
-                //addMessage("Aviso", "Pero igual marco para probar");
-                ///////////////
+                addMessage("Aviso", "Aún no le corresponde realizar su Marca de Entrada");
 
                 botonEntrada = true;
                 current2.ajax().update("bot:ent");//Se vuelven a bloquear los botones
@@ -669,17 +656,11 @@ public class ColaboradorBean {
             c3.add(Calendar.HOUR, 1);
             long resultado = (Math.abs(c3.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));
             if (resultado <= 60) {//Aca se esta dando un tiempo de colchon para realizar la marca tarde despues del tiempo de un 1 de la hora de entrada segun horario
-                addMessage("Aviso", "marca tarde");//Como es tarde pero todavia es valido que marque puede justificar su tardia
+                addMessage("Aviso", "Marca tardía");//Como es tarde pero todavia es valido que marque puede justificar su tardia
                 PrimeFaces current = PrimeFaces.current();
                 current.executeScript("PF('just').show();");//
             } else {//Si es demasiado tarde se muestra el mensaje de que ya no puede marca :(
-                addMessage("Aviso", "Demasiado tarde, no puede realizar marca tiempo limite agotado");
-
-                /////////////////////////LINEAS PARA PRUEBA
-                //marcaEn();
-                //addMessage("Aviso", "Pero igual marco para probar");
-                ////////////////////
-
+                addMessage("Aviso", "Su límite de tiempo para realizar la Marca de Entrada se ha agotado");
                 botonEntrada = true;
                 current2.ajax().update("bot:ent");//Se vuelven a bloquear los botones
                 colaboradorMarca = new Colaborador();
@@ -716,7 +697,7 @@ public class ColaboradorBean {
         PrimeFaces current = PrimeFaces.current();
         marcaEn();//se marca en la base de datos la entrada aunque sea tarde
         current.executeScript("PF('just').hide();");// y se enconde el form
-        addMessage("Aviso", "Marca realizada con exito");
+        addMessage("Aviso", "¡Marca realizada con éxito!");
     }
 
     public void marcaSalida() {//funcion para el boton marcar Salida
@@ -738,10 +719,9 @@ public class ColaboradorBean {
 
         System.out.println("Fecha de marca Entrada:" + fechaME);
         System.out.println("Fecha de marca Salida:" + fechaMS);
-        //C1 = hora salida
-        //C2 = hora sistema
+
         if (idH == 11) {
-            //System.out.println("Entro al if para horarios de 00:00:00");
+
             if ((c1.before(c2) && fechaME == fechaMS) || (c1.after(c2) && fechaME <= fechaMS)) //  antes de salida madrugo el colaborador para salir c1.compareTo(c2) < 0
             {
                 if (c1.get(Calendar.HOUR_OF_DAY) == 0 && c1.get(Calendar.HOUR_OF_DAY) == 0 && c1.get(Calendar.HOUR_OF_DAY) == 0) {
@@ -753,7 +733,7 @@ public class ColaboradorBean {
 
                 long resultado = (Math.abs(c1.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));
                 if (resultado <= 15) {
-                    addMessage("Aviso", "marca de la salida");
+                    addMessage("Aviso", "Marca de Salida");
                     marcaSal();
                 } else {//Si no es que salio demasiado mas temprano por ello debe justificar
                     addMessage("Aviso", "Es antes de su hora de salida, justifique ");

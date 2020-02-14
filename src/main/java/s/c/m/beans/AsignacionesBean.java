@@ -404,10 +404,10 @@ public class AsignacionesBean {
 
                 current.executeScript("PF('datos2').hide();");
 
-                FacesMessage msg = new FacesMessage("Aviso", "Horario cambiado correctamente.");
+                FacesMessage msg = new FacesMessage("Aviso", "¡Horario actualizado correctamente!");
                 FacesContext.getCurrentInstance().addMessage(null, msg);
             } catch (Exception e) {
-                System.out.println("No se puedo cambiar el horario");
+                System.out.println("No se puedo actualizar el horario");
             } finally {
                 selectAsignacion = new Asignaciones();
                 asignacion = new Asignaciones();
@@ -446,7 +446,7 @@ public class AsignacionesBean {
                 current.executeScript("PF('datos').hide();");
                 System.out.println("Horario asignado");
 
-                FacesMessage msg = new FacesMessage("Aviso", "Asignación realizada correctamente.");
+                FacesMessage msg = new FacesMessage("Aviso", "¡Asignación realizada correctamente!");
                 FacesContext.getCurrentInstance().addMessage(null, msg);
             } catch (Exception e) {
             } finally {
