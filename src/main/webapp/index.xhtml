@@ -31,7 +31,7 @@
             </h:form>
         </div>
 
-        <div style="text-align: left;margin-top: 50px">
+        <div id="info" style="text-align: left;margin-top: 50px">
                 <p:outputLabel id="nom" value="#{colaboradorBean.colaboradorMarca.nombre}" />
                 <p:outputLabel id="ced"  value="#{colaboradorBean.colaboradorMarca.pk_idColaborador}" />
         </div>
@@ -47,8 +47,8 @@
             <center>
                 <h:panelGrid columns="3" cellpadding="5">
                     <p:commandButton styleClass="ui-commandant2" id="ent" value="Entrada" disabled="#{colaboradorBean.botonEntrada}" actionListener="#{colaboradorBean.marcaEntrada}" />
-                    <p:commandButton styleClass="ui-commandant2" id="des" value="Descanso" disabled="#{colaboradorBean.botonDesSali}"/>
-                    <p:commandButton styleClass="ui-commandant2" id="sali" value="Salida" disabled="#{colaboradorBean.botonDesSali}" actionListener="#{colaboradorBean.marcaSalida}"/>
+                    <p:commandButton styleClass="ui-commandant2" id="des" value="#{colaboradorBean.variable}" disabled="#{colaboradorBean.botonDesSali}" actionListener="#{colaboradorBean.marcarDescanso}"/>
+                    <p:commandButton styleClass="ui-commandant2" id="sali" value="Salida" disabled="#{colaboradorBean.botonSalida}" actionListener="#{colaboradorBean.marcaSalida}"/>
                 </h:panelGrid>
             </center>
             </h:form>

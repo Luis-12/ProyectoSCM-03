@@ -1,6 +1,7 @@
 package s.c.m.beans;
 
 
+import org.omg.CORBA.NO_IMPLEMENT;
 import org.omg.CORBA.PUBLIC_MEMBER;
 import org.primefaces.PrimeFaces;
 import org.primefaces.model.menu.MenuModel;
@@ -38,6 +39,7 @@ public class ColaboradorBean {
     private Puesto puesto = new Puesto();
     private Asignaciones asignaciones = new Asignaciones();
     Calendar c2;
+    private MarcaLaboradas marcaLa=new MarcaLaboradas();
 
     @Autowired
     private PuestoService puestoService;
@@ -164,6 +166,10 @@ public class ColaboradorBean {
 
     public void setLoggedIn(boolean loggedIn) {
         this.loggedIn = loggedIn;
+    }
+
+    public boolean isBotonSalida() {
+        return botonSalida;
     }
 
     public Colaborador getColaboradorlogueado() {
@@ -603,8 +609,8 @@ public class ColaboradorBean {
                     current.ajax().update("ced");
                 }
             } else {//Si la encuentra se habilita el boton de salida y descanso
-                botonDesSali = false;
-                current.ajax().update("bot:des");
+               botonSalida=false;
+               validacionMarcaDes();
                 current.ajax().update("bot:sali");
             }
         }
@@ -651,10 +657,10 @@ public class ColaboradorBean {
         {
             long resultado = (Math.abs(c1.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));
             if (resultado <= 15) {//Valida si ya puede marcar
-                addMessage("Aviso", "¡Marca de Entrada!");
+                addMessage("Aviso", "marca de la entrada");
                 marcaEn();//Aca se llama la funcion para realizar la marca en la base de datos
             } else {//Si no se le avisa que aun no puede marcar por que es muy temprano
-                addMessage("Aviso", "Aún no le corresponde realizar su Marca de Entrada");
+                addMessage("Aviso", "Es demasiado temprano, no le correponde realizar la marca");
 
                 botonEntrada = true;
                 current2.ajax().update("bot:ent");//Se vuelven a bloquear los botones
@@ -668,11 +674,11 @@ public class ColaboradorBean {
             c3.add(Calendar.HOUR, 1);
             long resultado = (Math.abs(c3.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));
             if (resultado <= 60) {//Aca se esta dando un tiempo de colchon para realizar la marca tarde despues del tiempo de un 1 de la hora de entrada segun horario
-                addMessage("Aviso", "Marca tardía");//Como es tarde pero todavia es valido que marque puede justificar su tardia
+                addMessage("Aviso", "marca tarde");//Como es tarde pero todavia es valido que marque puede justificar su tardia
                 PrimeFaces current = PrimeFaces.current();
                 current.executeScript("PF('just').show();");//
             } else {//Si es demasiado tarde se muestra el mensaje de que ya no puede marca :(
-                addMessage("Aviso", "Su límite de tiempo para realizar la Marca de Entrada se ha agotado");
+                addMessage("Aviso", "Demasiado tarde, no puede realizar marca tiempo limite agotado");
                 botonEntrada = true;
                 current2.ajax().update("bot:ent");//Se vuelven a bloquear los botones
                 colaboradorMarca = new Colaborador();
@@ -709,7 +715,7 @@ public class ColaboradorBean {
         PrimeFaces current = PrimeFaces.current();
         marcaEn();//se marca en la base de datos la entrada aunque sea tarde
         current.executeScript("PF('just').hide();");// y se enconde el form
-        addMessage("Aviso", "¡Marca realizada con éxito!");
+        addMessage("Aviso", "Marca realizada con exito");
     }
 
     public void marcaSalida() {//funcion para el boton marcar Salida
@@ -731,9 +737,8 @@ public class ColaboradorBean {
 
         System.out.println("Fecha de marca Entrada:" + fechaME);
         System.out.println("Fecha de marca Salida:" + fechaMS);
-
         if (idH == 11) {
-
+            //System.out.println("Entro al if para horarios de 00:00:00");
             if ((c1.before(c2) && fechaME == fechaMS) || (c1.after(c2) && fechaME <= fechaMS)) //  antes de salida madrugo el colaborador para salir c1.compareTo(c2) < 0
             {
                 if (c1.get(Calendar.HOUR_OF_DAY) == 0 && c1.get(Calendar.HOUR_OF_DAY) == 0 && c1.get(Calendar.HOUR_OF_DAY) == 0) {
@@ -745,7 +750,7 @@ public class ColaboradorBean {
 
                 long resultado = (Math.abs(c1.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));
                 if (resultado <= 15) {
-                    addMessage("Aviso", "Marca de Salida");
+                    addMessage("Aviso", "marca de la salida");
                     marcaSal();
                 } else {//Si no es que salio demasiado mas temprano por ello debe justificar
                     addMessage("Aviso", "Es antes de su hora de salida, justifique ");
@@ -895,12 +900,22 @@ public class ColaboradorBean {
         marcaDescansos.setHoraInicio(time);
         marcaDescansoService.crearMarcaDescanso(marcaDescansos);
     }
+
+    public void marcaFindes()
+    {
+        MarcaDescansos marcaDescansos= marcaDescansoService.buscarMdescanso(asignacionDescansos.getDescanso(),marcaLa);
+        Time time=new Time(now.get(Calendar.HOUR_OF_DAY),now.get(Calendar.MINUTE),now.get(Calendar.SECOND));
+        marcaDescansos.setHoraFin(time);
+        marcaDescansoService.actualizarMarcaDescanso(marcaDescansos);
+
+    }
+
     public void validacionMarcaDes()
     {
 
         List<AsignacionDescansos> asignacionesList=asignacionDescansosService.buscarDescansosAsignadosPorColaborador(colaboradorMarca);//numero de descansos que tiene el colaborador
-        MarcaLaboradas marcaLa = marcaLaboradaService.buscaMarcaPorColaboradoYEstado(colaboradorMarca,"Entrada");//para sacar el id de la marca que esta asociada a la marca de descanso por dia
-        List<MarcaDescansos> marcaDescansosList = marcaDescansoService.buscarMarcaPorMarcaLab(marcaLa.getPk_idMarcasLaboradas());
+        marcaLa = marcaLaboradaService.buscaMarcaPorColaboradoYEstado(colaboradorMarca,"Entrada");//para sacar el id de la marca que esta asociada a la marca de descanso por dia
+        List<MarcaDescansos> marcaDescansosList = marcaDescansoService.buscarMarcaPorMarcaLab(marcaLa);
         PrimeFaces current = PrimeFaces.current();
         boolean encontrado=false;
         Calendar calendar=Calendar.getInstance();
@@ -925,14 +940,18 @@ public class ColaboradorBean {
             }
             if((now.compareTo(calendar) >= 0) && ( now.compareTo(calendar2) <= 0)){
                 asignacionDescansos=asignacionDescansos1;
-                if(marcaDescansoService.buscarMdescanso(asignacionDescansos1.getPk_idasigdescansos(),marcaLa.getPk_idMarcasLaboradas())==null)
+                if(marcaDescansoService.buscarMdescanso(asignacionDescansos1.getDescanso(),marcaLa)==null)
                 {
+                    botonDesSali=false;
                     variable="Inicio Descanso";
-                }else
-                {
-                    variable="Fin Descanso";
                 }
-                botonDesSali=false;
+                if(marcaDescansoService.buscarMdescanso(asignacionDescansos1.getDescanso(),marcaLa).getHoraFin()==null)
+                {
+                    botonDesSali=false;
+                    variable="Fin Descanso";
+                }else {
+                    addMessage("Aviso","Ya realizo la marca que le corresponde");
+                }
                 encontrado=true;
                 current.ajax().update("bot");
                 break;
@@ -948,10 +967,28 @@ public class ColaboradorBean {
     {
         if(variable.equals("Inicio Descanso"))
         {
+            addMessage("Aviso","Marca descanso");
             marcaIniDes();
+            limpia();
         }else {
+            marcaFindes();
+            limpia();
             addMessage("Aviso","Marca fin del descanso");
         }
     }
 
+    public void limpia()
+    {
+        PrimeFaces current = PrimeFaces.current();
+        colaboradorMarca=new Colaborador();
+        asignacionDescansos=new AsignacionDescansos();
+        marcaLa=new MarcaLaboradas();
+        botonSalida=true;
+        botonDesSali=true;
+        variable="Descanso";
+        current.ajax().update("bot:des");//Se desabilita el boton de descanso y el de salida
+        current.ajax().update("bot:sali");
+        current.ajax().update("nom");// se limpia el nombre
+        current.ajax().update("ced");//y cedula del colaborador que marca
+    }
 }
