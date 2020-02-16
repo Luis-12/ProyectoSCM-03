@@ -23,6 +23,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static java.util.Calendar.YEAR;
+
 
 @ManagedBean
 @Scope("session")
@@ -40,6 +42,12 @@ public class ColaboradorBean {
     private Asignaciones asignaciones = new Asignaciones();
     Calendar c2;
     private MarcaLaboradas marcaLa=new MarcaLaboradas();
+
+    private Vacaciones vacaciones=new Vacaciones();
+    private Vacaciones vacaciones1=new Vacaciones();
+
+
+
 
     @Autowired
     private PuestoService puestoService;
@@ -67,6 +75,10 @@ public class ColaboradorBean {
     private Date fecha;
     @Autowired
     MarcaLaboradaService marcaLaboradaService;
+
+    @Autowired
+    VacacionesService vacacionesService;
+
     private MarcaLaboradas marcaLaboradas = new MarcaLaboradas();
     public boolean botonEntrada = true;
     public boolean botonSalida = true;
@@ -77,6 +89,22 @@ public class ColaboradorBean {
     public String init() {
         Colaborador miC = new Colaborador();
         return "colaboradorList.xhtml";
+    }
+
+    public Vacaciones getVacaciones() {
+        return vacaciones;
+    }
+
+    public void setVacaciones(Vacaciones vacaciones) {
+        this.vacaciones = vacaciones;
+    }
+
+    public Vacaciones getVacaciones1() {
+        return vacaciones1;
+    }
+
+    public void setVacaciones1(Vacaciones vacaciones1) {
+        this.vacaciones1 = vacaciones1;
     }
 
     public String getVariable() {
@@ -269,7 +297,7 @@ public class ColaboradorBean {
 
         mesA = fechaActual2.get(Calendar.MONTH) + 1;
         diaA = fechaActual2.get(Calendar.DAY_OF_MONTH);
-        yearA = fechaActual2.get(Calendar.YEAR);
+        yearA = fechaActual2.get(YEAR);
 
         if (mesA < 10) {
             mesA2 = "0" + mesA;
@@ -314,10 +342,14 @@ public class ColaboradorBean {
             if (colaboradorlogueado.getPk_idColaborador().equals(dbUsername)
                     && colaboradorlogueado.getClave().equals(dbPassword)
                     && colaborador1.getPuesto().getDescripcion().equals("Gerencia")
+                    && colaborador1.getPuesto().getDescripcion().equals("Gerencia")
                     && colaborador1.getDepartamento().getNombre().equals("Recursos Humanos")) {
                 colaboradorlogueado.setNombre(colaborador1.getNombre());
                 colaboradorlogueado.setPuesto(colaborador1.getPuesto());
                 colaboradorlogueado.setDepartamento(colaborador1.getDepartamento());
+                diasDisponibles(colaborador1);
+               vacaciones1=vacacionesService.diasDisponibles(colaborador1);
+
                 if (validaVence(colaborador1.getFechaVencimiento())) {
                     current.executeScript("PF('dlCC').show();");
                 } else {
@@ -335,6 +367,9 @@ public class ColaboradorBean {
                 colaboradorlogueado.setNombre(colaborador1.getNombre());
                 colaboradorlogueado.setPuesto(colaborador1.getPuesto());
                 colaboradorlogueado.setDepartamento(colaborador1.getDepartamento());
+                diasDisponibles(colaborador1);
+                vacaciones1=vacacionesService.diasDisponibles(colaborador1);
+
                 if (validaVence(colaborador1.getFechaVencimiento())) {
                     current.executeScript("PF('dlCC').show();");
                 } else {
@@ -349,6 +384,9 @@ public class ColaboradorBean {
                 colaboradorlogueado.setNombre(colaborador1.getNombre());
                 colaboradorlogueado.setPuesto(colaborador1.getPuesto());
                 colaboradorlogueado.setDepartamento(colaborador1.getDepartamento());
+                diasDisponibles(colaborador1);
+                vacaciones1=vacacionesService.diasDisponibles(colaborador1);
+
                 if (validaVence(colaborador1.getFechaVencimiento())) {
                     current.executeScript("PF('dlCC').show();");
                 } else {
@@ -366,6 +404,9 @@ public class ColaboradorBean {
                 colaboradorlogueado.setNombre(colaborador1.getNombre());
                 colaboradorlogueado.setPuesto(colaborador1.getPuesto());
                 colaboradorlogueado.setDepartamento(colaborador1.getDepartamento());
+                diasDisponibles(colaborador1);
+                vacaciones1=vacacionesService.diasDisponibles(colaborador1);
+
                 if (validaVence(colaborador1.getFechaVencimiento())) {
                     current.executeScript("PF('dlCC').show();");
                 } else {
@@ -650,7 +691,7 @@ public class ColaboradorBean {
         Calendar c1 = Calendar.getInstance();
         c2 = Calendar.getInstance();
         c1.setTime(asignaciones.getHorario().getHoraentrada());
-        c1.set(Calendar.YEAR, c2.get(Calendar.YEAR));
+        c1.set(YEAR, c2.get(YEAR));
         c1.set(Calendar.MONTH, c2.get(Calendar.MONTH));
         c1.set(Calendar.DAY_OF_MONTH, c2.get(Calendar.DAY_OF_MONTH));//se carga la fecha actual
         if (c1.compareTo(c2) == 1) //  antes de entrada madrugo el colaborador
@@ -688,6 +729,50 @@ public class ColaboradorBean {
         }
     }
 
+
+    public void diasDisponibles(Colaborador colaborador) {
+
+      //  alter table vacaciones add column pk_idvacaciones serial primary key;
+        PrimeFaces current2 = PrimeFaces.current();
+        Calendar c1 = Calendar.getInstance();
+       c2 = Calendar.getInstance();
+
+        /*c2.set(YEAR, 2023);
+        c2.set(Calendar.MONTH, 10);
+        c2.set(Calendar.DAY_OF_MONTH, 21);*/
+
+        c1.setTime(colaborador.getFechaInicioLaboral());
+
+        vacaciones.setColaborador(colaborador);
+        int anios = c2.get(YEAR) - c1.get(YEAR);
+        if (c1.get(Calendar.MONTH) > c2.get(Calendar.MONTH) ||
+                (c1.get(Calendar.MONTH) == c2.get(Calendar.MONTH) && c1.get(Calendar.DATE) > c2.get(Calendar.DATE))) {
+            anios--;
+        }//funcion para calcular los annos de trabajo en la empresa
+
+        if (anios==0&&vacacionesService.diasDisponibles(colaborador)==null){
+
+            vacaciones.setDiasdisponibles(0);
+            vacacionesService.createVacaciones(vacaciones);
+        }
+        else if(anios>=1&&anios<=3){
+            vacaciones.setDiasdisponibles(12);
+            vacacionesService.updateVacaciones(vacaciones);
+        }
+        else if(anios>3&&anios<=5){
+            vacaciones.setDiasdisponibles(15);
+            vacacionesService.updateVacaciones(vacaciones);
+        }
+        else if(anios>5){
+            vacaciones.setDiasdisponibles(18);
+            vacacionesService.updateVacaciones(vacaciones);
+        }
+
+    }
+
+
+
+
     public void marcaEn()//Funcion para realizar marca en la base de datos
     {
         PrimeFaces current = PrimeFaces.current();
@@ -722,7 +807,7 @@ public class ColaboradorBean {
         Calendar c1 = Calendar.getInstance();
         c2 = Calendar.getInstance();
         c1.setTime(asignaciones.getHorario().getHorasalida());//c1 se convierte en horaSalida
-        c1.set(Calendar.YEAR, c2.get(Calendar.YEAR));
+        c1.set(YEAR, c2.get(YEAR));
         c1.set(Calendar.MONTH, c2.get(Calendar.MONTH));
         c1.set(Calendar.DAY_OF_MONTH, c2.get(Calendar.DAY_OF_MONTH));//se carga la fecha actual
 

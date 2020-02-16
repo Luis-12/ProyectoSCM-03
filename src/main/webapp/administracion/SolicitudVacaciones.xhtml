@@ -39,9 +39,8 @@
 
 
     <div id="fecha">
-        <p:dataTable style="width: 53%"  reflow="true" responsive="true" emptyMessage="3">
+        <p:dataTable style="width: 53%"  reflow="true" responsive="true" emptyMessage="#{colaboradorBean.vacaciones1.diasdisponibles}">
             <p:column headerText="Días disponibles">
-                <h:outputText value="#3" />
             </p:column>
 
         </p:dataTable>
