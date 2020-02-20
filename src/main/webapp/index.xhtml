@@ -43,6 +43,24 @@
         </center>
         <div>
             <h:form id="bot">
+                <p:dataTable  var="marcaJornada" value="#{colaboradorBean.marcasJornadasList}"
+                              reflow="true"
+                              responsive="true"
+                              style="margin-top: 15px" id="marcaJornadaTabla"
+                              emptyMessage="No se han encontrado marcas"
+                              widgetVar="marcajornadatabla"
+                              resizableColumns="true"
+                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                              scrollable="true" scrollHeight="450" tableStyle="width: 200px">
+
+                    <p:column style="width: 70px" headerText="Marca">
+                        <h:outputText value="#{marcaJornada.marca}" />
+                    </p:column>
+
+                    <p:column style="width: 70px" headerText="Descripción">
+                        <h:outputText value="#{marcaJornada.descripcion}" />
+                    </p:column>
+                </p:dataTable>
                 <p:growl id="msgs" showDetail="true" life="3000" rendered="#{not facesContext.validationFailed}" ><p:autoUpdate/></p:growl>
             <center>
                 <h:panelGrid columns="3" cellpadding="5">

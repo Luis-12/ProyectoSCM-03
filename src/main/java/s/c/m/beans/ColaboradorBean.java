@@ -18,6 +18,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -41,25 +42,24 @@ public class ColaboradorBean {
     private Puesto puesto = new Puesto();
     private Asignaciones asignaciones = new Asignaciones();
     Calendar c2;
-    private MarcaLaboradas marcaLa=new MarcaLaboradas();
+    private MarcaLaboradas marcaLa = new MarcaLaboradas();
 
-    private Vacaciones vacaciones=new Vacaciones();
-    private Vacaciones vacaciones1=new Vacaciones();
-
-
+    private Vacaciones vacaciones = new Vacaciones();
+    private Vacaciones vacaciones1 = new Vacaciones();
 
 
     @Autowired
     private PuestoService puestoService;
     private List<Colaborador> colaboradores;
+    private List<MarcasJornada> marcasJornadasList = new ArrayList<MarcasJornada>();
     private boolean loggedIn;
     private String justST;
     private String justTE;
     private MenuView generaMenu = new MenuView();
     private MenuModel model;
     Calendar now;
-    String variable="Descanso";
-    private AsignacionDescansos asignacionDescansos=new AsignacionDescansos();
+    String variable = "Descanso";
+    private AsignacionDescansos asignacionDescansos = new AsignacionDescansos();
 
     @Autowired
     AsignacionesServices asignacionesServices;
@@ -68,7 +68,7 @@ public class ColaboradorBean {
     MarcaDescansoService marcaDescansoService;
 
     @Autowired
-     AsignacionDescansosService asignacionDescansosService;
+    AsignacionDescansosService asignacionDescansosService;
 
     @Autowired
     DepartamentoService departamentoService;
@@ -89,6 +89,14 @@ public class ColaboradorBean {
     public String init() {
         Colaborador miC = new Colaborador();
         return "colaboradorList.xhtml";
+    }
+
+    public List<MarcasJornada> getMarcasJornadasList() {
+        return marcasJornadasList;
+    }
+
+    public void setMarcasJornadasList(List<MarcasJornada> marcasJornadasList) {
+        this.marcasJornadasList = marcasJornadasList;
     }
 
     public Vacaciones getVacaciones() {
@@ -348,7 +356,7 @@ public class ColaboradorBean {
                 colaboradorlogueado.setPuesto(colaborador1.getPuesto());
                 colaboradorlogueado.setDepartamento(colaborador1.getDepartamento());
                 diasDisponibles(colaborador1);
-               vacaciones1=vacacionesService.diasDisponibles(colaborador1);
+                vacaciones1 = vacacionesService.diasDisponibles(colaborador1);
 
                 if (validaVence(colaborador1.getFechaVencimiento())) {
                     current.executeScript("PF('dlCC').show();");
@@ -368,7 +376,7 @@ public class ColaboradorBean {
                 colaboradorlogueado.setPuesto(colaborador1.getPuesto());
                 colaboradorlogueado.setDepartamento(colaborador1.getDepartamento());
                 diasDisponibles(colaborador1);
-                vacaciones1=vacacionesService.diasDisponibles(colaborador1);
+                vacaciones1 = vacacionesService.diasDisponibles(colaborador1);
 
                 if (validaVence(colaborador1.getFechaVencimiento())) {
                     current.executeScript("PF('dlCC').show();");
@@ -385,7 +393,7 @@ public class ColaboradorBean {
                 colaboradorlogueado.setPuesto(colaborador1.getPuesto());
                 colaboradorlogueado.setDepartamento(colaborador1.getDepartamento());
                 diasDisponibles(colaborador1);
-                vacaciones1=vacacionesService.diasDisponibles(colaborador1);
+                vacaciones1 = vacacionesService.diasDisponibles(colaborador1);
 
                 if (validaVence(colaborador1.getFechaVencimiento())) {
                     current.executeScript("PF('dlCC').show();");
@@ -405,7 +413,7 @@ public class ColaboradorBean {
                 colaboradorlogueado.setPuesto(colaborador1.getPuesto());
                 colaboradorlogueado.setDepartamento(colaborador1.getDepartamento());
                 diasDisponibles(colaborador1);
-                vacaciones1=vacacionesService.diasDisponibles(colaborador1);
+                vacaciones1 = vacacionesService.diasDisponibles(colaborador1);
 
                 if (validaVence(colaborador1.getFechaVencimiento())) {
                     current.executeScript("PF('dlCC').show();");
@@ -624,6 +632,107 @@ public class ColaboradorBean {
         }
     }
 
+    public void listaMarcasPorJornada() {
+        marcasJornadasList = new ArrayList<MarcasJornada>();
+
+        PrimeFaces current = PrimeFaces.current();
+        MarcaLaboradas mLaborada = new MarcaLaboradas();
+        mLaborada = marcaLaboradaService.buscaMarcaPorColaboradoYEstado(colaboradorMarca, "Entrada");//Saco marca de entrada
+
+        if (mLaborada == null) {
+            System.out.println("No ha marcado entrada");
+        } else {//Lleno objeto con hora entrada y la descripcion de entrada
+            if (mLaborada.getHoraEntrada() != null) {//Si solo a marcado entrada
+                MarcasJornada miMJ = new MarcasJornada();
+                System.out.println("ENTRO A IF SIN MARCA SALIDA");
+
+                //Ingreso la entrada
+                miMJ.setMarca(mLaborada.getHoraEntrada());
+                miMJ.setDescripcion("Entrada");
+                marcasJornadasList.add(miMJ);
+                miMJ = new MarcasJornada();
+
+                List<MarcaDescansos> marcaDescansosList = marcaDescansoService.buscarMarcaPorMarcaLab(mLaborada);
+                if (!marcaDescansosList.isEmpty()) {//Si la marca descansos no esta vacia
+                    for (MarcaDescansos md : marcaDescansosList) {
+                        if (md.getHoraFin()==null) {//Si no ha finalizado el descanso
+                            miMJ.setMarca(md.getHoraInicio());
+                            miMJ.setDescripcion("Inicio "+md.getDescansos().getDescripcion());
+                            marcasJornadasList.add(miMJ);//Solo agrega el inicio de descanso
+                            miMJ = new MarcasJornada();
+
+                        } else {//Si el descanso si finalizo es decir el campo getHoraFin tiene algo se carga
+                            miMJ.setMarca(md.getHoraInicio());
+                            miMJ.setDescripcion("Inicio "+md.getDescansos().getDescripcion());
+                            marcasJornadasList.add(miMJ);//el inicio
+                            miMJ = new MarcasJornada();
+
+                            miMJ.setMarca(md.getHoraFin());
+                            miMJ.setDescripcion("Finalizo "+md.getDescansos().getDescripcion());
+                            marcasJornadasList.add(miMJ);//el fin
+                            miMJ = new MarcasJornada();
+                        }
+                    }
+                }
+            }
+        }
+
+        for (MarcasJornada mj : marcasJornadasList) {
+            System.out.println("Marca: " + mj.getMarca() + " Descripcion: " + mj.getDescripcion());
+        }
+
+        //Por aca debe poner la linea para que se actualice la tabla cada vez que se marque algo
+        current.ajax().update("bot:marcaJornadaTabla");
+        //marcasJornadasList = new ArrayList<MarcasJornada>();
+    }
+
+    public void listaMarcasPorJornadaFinalizada(MarcaLaboradas mLaborada) {
+        marcasJornadasList = new ArrayList<MarcasJornada>();
+        PrimeFaces current = PrimeFaces.current();
+        if (mLaborada.getHoraSalida() != null) {//Si tambien marco salida
+            MarcasJornada miMJ = new MarcasJornada();
+            System.out.println("ENTRO A IF CON MARCA SALIDA");
+
+            miMJ.setMarca(mLaborada.getHoraEntrada());
+            miMJ.setDescripcion("Entrada");
+            marcasJornadasList.add(miMJ);
+            miMJ = new MarcasJornada();
+
+            List<MarcaDescansos> marcaDescansosList = marcaDescansoService.buscarMarcaPorMarcaLab(mLaborada);
+            if (!marcaDescansosList.isEmpty()) {//Si la marca descansos no esta vacia
+                for (MarcaDescansos md : marcaDescansosList) {
+                    if (md.getHoraFin()==null) {//Si no ha finalizado el descanso
+                        miMJ.setMarca(md.getHoraInicio());
+                        miMJ.setDescripcion("Inicio "+md.getDescansos().getDescripcion());
+                        marcasJornadasList.add(miMJ);//Solo agrega el inicio de descanso
+                        miMJ = new MarcasJornada();
+
+                    } else {//Si el descanso si finalizo es decir el campo getHoraFin tiene algo se carga
+                        miMJ.setMarca(md.getHoraInicio());
+                        miMJ.setDescripcion("Inicio "+md.getDescansos().getDescripcion());
+                        marcasJornadasList.add(miMJ);//el inicio
+                        miMJ = new MarcasJornada();
+
+                        miMJ.setMarca(md.getHoraFin());
+                        miMJ.setDescripcion("Finalizo "+md.getDescansos().getDescripcion());
+                        marcasJornadasList.add(miMJ);//el fin
+                        miMJ = new MarcasJornada();
+                    }
+                }
+            }
+            miMJ.setMarca(mLaborada.getHoraSalida());
+            miMJ.setDescripcion("Salida");
+            marcasJornadasList.add(miMJ);
+        }
+
+        for (MarcasJornada mj : marcasJornadasList) {
+            System.out.println("Marca: " + mj.getMarca() + " Descripcion: " + mj.getDescripcion());
+        }
+        //Por aca debe poner la linea para que se actualice la tabla cada vez que se marque algo
+        current.ajax().update("bot:marcaJornadaTabla");
+        //marcasJornadasList = new ArrayList<MarcasJornada>();
+    }
+
     public void habilitarAccion()//Funcion que valida si el colaborador al mostrar el qr tiene un horario asignado
     {
         Calendar c1 = Calendar.getInstance();
@@ -634,7 +743,10 @@ public class ColaboradorBean {
             addMessage("Aviso", "El colaborador no tiene horario asignado");
             colaboradorMarca = new Colaborador();
         } else {//Si tiene horario asignado
-            //if(!asignaciones.getDiadescanso().equals(verificaDiaLibre(c1.get(Calendar.DAY_OF_WEEK)))) {//Se valida si es el dia libre del colaborador
+
+            //ACA SE INVOCARA LA FUNCION PARA BUSCAR LAS MARCAS DEL COLABORADOR
+            listaMarcasPorJornada();
+
             Date date = new Date();
             MarcaLaboradas marcaLa = marcaLaboradaService.buscaMarcaPorColaboradoYEstado(colaboradorMarca, "Entrada");//Se busca si ya marco la entrada por medio de la fecha del dia
             if (marcaLa == null) {//si no encuentra la marca con el colaborador y el estado Entrada se habilita el boton de entrada
@@ -650,8 +762,8 @@ public class ColaboradorBean {
                     current.ajax().update("ced");
                 }
             } else {//Si la encuentra se habilita el boton de salida y descanso
-               botonSalida=false;
-               validacionMarcaDes();
+                botonSalida = false;
+                validacionMarcaDes();
                 current.ajax().update("bot:sali");
             }
         }
@@ -703,6 +815,11 @@ public class ColaboradorBean {
             } else {//Si no se le avisa que aun no puede marcar por que es muy temprano
                 addMessage("Aviso", "Es demasiado temprano, no le correponde realizar la marca");
 
+                /////////////////LINEAS PRUEBA
+                //marcaEn();//Aca se llama la funcion para realizar la marca en la base de datos
+                //addMessage("Aviso", "Pero igual marco para probar");
+                ///////////////////////////////
+
                 botonEntrada = true;
                 current2.ajax().update("bot:ent");//Se vuelven a bloquear los botones
                 colaboradorMarca = new Colaborador();
@@ -720,6 +837,12 @@ public class ColaboradorBean {
                 current.executeScript("PF('just').show();");//
             } else {//Si es demasiado tarde se muestra el mensaje de que ya no puede marca :(
                 addMessage("Aviso", "Demasiado tarde, no puede realizar marca tiempo limite agotado");
+
+                /////////////////LINEAS PRUEBA
+                //marcaEn();//Aca se llama la funcion para realizar la marca en la base de datos
+                //addMessage("Aviso", "Pero igual marco para probar");
+                /////////////////////////////
+
                 botonEntrada = true;
                 current2.ajax().update("bot:ent");//Se vuelven a bloquear los botones
                 colaboradorMarca = new Colaborador();
@@ -732,10 +855,10 @@ public class ColaboradorBean {
 
     public void diasDisponibles(Colaborador colaborador) {
 
-      //  alter table vacaciones add column pk_idvacaciones serial primary key;
+        //  alter table vacaciones add column pk_idvacaciones serial primary key;
         PrimeFaces current2 = PrimeFaces.current();
         Calendar c1 = Calendar.getInstance();
-       c2 = Calendar.getInstance();
+        c2 = Calendar.getInstance();
 
         /*c2.set(YEAR, 2023);
         c2.set(Calendar.MONTH, 10);
@@ -750,27 +873,22 @@ public class ColaboradorBean {
             anios--;
         }//funcion para calcular los annos de trabajo en la empresa
 
-        if (anios==0&&vacacionesService.diasDisponibles(colaborador)==null){
+        if (anios == 0 && vacacionesService.diasDisponibles(colaborador) == null) {
 
             vacaciones.setDiasdisponibles(0);
             vacacionesService.createVacaciones(vacaciones);
-        }
-        else if(anios>=1&&anios<=3){
+        } else if (anios >= 1 && anios <= 3) {
             vacaciones.setDiasdisponibles(12);
             vacacionesService.updateVacaciones(vacaciones);
-        }
-        else if(anios>3&&anios<=5){
+        } else if (anios > 3 && anios <= 5) {
             vacaciones.setDiasdisponibles(15);
             vacacionesService.updateVacaciones(vacaciones);
-        }
-        else if(anios>5){
+        } else if (anios > 5) {
             vacaciones.setDiasdisponibles(18);
             vacacionesService.updateVacaciones(vacaciones);
         }
 
     }
-
-
 
 
     public void marcaEn()//Funcion para realizar marca en la base de datos
@@ -786,6 +904,9 @@ public class ColaboradorBean {
         marcaLaboradas.setEstado("Entrada");//Para saber que es una marca de entrada a la hora de marcar la salida
         marcaLaboradas.setFechaMarca(date);//se carga la fecha de la marca que es la fecha del sistema
         marcaLaboradaService.crearMarcaLaborada(marcaLaboradas);//y por ultimo se agrega la marca de entrada a la base de datos
+
+        listaMarcasPorJornada();
+
         marcaLaboradas = new MarcaLaboradas();
         colaboradorMarca = new Colaborador();
         botonEntrada = true;
@@ -924,11 +1045,14 @@ public class ColaboradorBean {
         marcaLaboradas.setEstado("Finalizado");
         marcaLaboradaService.actualizarMarcaLaborada(marcaLaboradas);//y por ultimo se agrega la marca de entrada a la base de datos
 
+        listaMarcasPorJornadaFinalizada(marcaLaboradas);
+
         marcaLaboradas = new MarcaLaboradas();
         colaboradorMarca = new Colaborador();
         botonDesSali = true;
         justST = null;
         justTE = null;
+
         current.ajax().update("bot:des");//Se desabilita el boton de descanso y el de salida
         current.ajax().update("bot:sali");
         current.ajax().update("nom");// se limpia el nombre
@@ -974,25 +1098,26 @@ public class ColaboradorBean {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
-    public  void marcaIniDes()
-    {
-        MarcaLaboradas marcaLa = marcaLaboradaService.buscaMarcaPorColaboradoYEstado(colaboradorMarca,"Entrada");
-        MarcaDescansos marcaDescansos=new MarcaDescansos();
+    public void marcaIniDes() {
+        MarcaLaboradas marcaLa = marcaLaboradaService.buscaMarcaPorColaboradoYEstado(colaboradorMarca, "Entrada");
+        MarcaDescansos marcaDescansos = new MarcaDescansos();
         marcaDescansos.setColaborador(colaboradorMarca);
         marcaDescansos.setMarcaLaboradas(marcaLa);
         marcaDescansos.setDescansos(asignacionDescansos.getDescanso());
-        Time time=new Time(now.get(Calendar.HOUR_OF_DAY),now.get(Calendar.MINUTE),now.get(Calendar.SECOND));
+        Time time = new Time(now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), now.get(Calendar.SECOND));
         marcaDescansos.setHoraInicio(time);
         marcaDescansoService.crearMarcaDescanso(marcaDescansos);
+
+        listaMarcasPorJornada();
     }
 
-    public void marcaFindes()
-    {
-        MarcaDescansos marcaDescansos= marcaDescansoService.buscarMdescanso(asignacionDescansos.getDescanso(),marcaLa);
-        Time time=new Time(now.get(Calendar.HOUR_OF_DAY),now.get(Calendar.MINUTE),now.get(Calendar.SECOND));
+    public void marcaFindes() {
+        MarcaDescansos marcaDescansos = marcaDescansoService.buscarMdescanso(asignacionDescansos.getDescanso(), marcaLa);
+        Time time = new Time(now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), now.get(Calendar.SECOND));
         marcaDescansos.setHoraFin(time);
         marcaDescansoService.actualizarMarcaDescanso(marcaDescansos);
 
+        listaMarcasPorJornada();
     }
 
     public void validacionMarcaDes()
@@ -1030,12 +1155,10 @@ public class ColaboradorBean {
                     botonDesSali=false;
                     variable="Inicio Descanso";
                 }
-                if(marcaDescansoService.buscarMdescanso(asignacionDescansos1.getDescanso(),marcaLa).getHoraFin()==null)
+                else if(marcaDescansoService.buscarMdescanso(asignacionDescansos1.getDescanso(),marcaLa).getHoraFin()==null) //hacer debug con lo que agrego pablo ya que no pasa de aqui
                 {
                     botonDesSali=false;
                     variable="Fin Descanso";
-                }else {
-                    addMessage("Aviso","Ya realizo la marca que le corresponde");
                 }
                 encontrado=true;
                 current.ajax().update("bot");
@@ -1048,29 +1171,26 @@ public class ColaboradorBean {
         }
     }
 
-    public void marcarDescanso()
-    {
-        if(variable.equals("Inicio Descanso"))
-        {
-            addMessage("Aviso","Marca descanso");
+    public void marcarDescanso() {
+        if (variable.equals("Inicio Descanso")) {
+            addMessage("Aviso", "Marca descanso");
             marcaIniDes();
             limpia();
-        }else {
+        } else {
             marcaFindes();
             limpia();
-            addMessage("Aviso","Marca fin del descanso");
+            addMessage("Aviso", "Marca fin del descanso");
         }
     }
 
-    public void limpia()
-    {
+    public void limpia() {
         PrimeFaces current = PrimeFaces.current();
-        colaboradorMarca=new Colaborador();
-        asignacionDescansos=new AsignacionDescansos();
-        marcaLa=new MarcaLaboradas();
-        botonSalida=true;
-        botonDesSali=true;
-        variable="Descanso";
+        colaboradorMarca = new Colaborador();
+        asignacionDescansos = new AsignacionDescansos();
+        marcaLa = new MarcaLaboradas();
+        botonSalida = true;
+        botonDesSali = true;
+        variable = "Descanso";
         current.ajax().update("bot:des");//Se desabilita el boton de descanso y el de salida
         current.ajax().update("bot:sali");
         current.ajax().update("nom");// se limpia el nombre
