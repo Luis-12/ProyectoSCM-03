@@ -81,6 +81,12 @@
             </center>
             </h:form>
         </div>
+
+        <div id="MensajeP">
+            <p:outputLabel id="msj" value="#{colaboradorBean.mensaje}" />
+        </div>
+
+
         <h:form id="frm">
             <p:commandButton id="hdnBtn" actionListener="#{colaboradorBean.findColaboradorMarca}" update="frm,info:ced,info:nom" style="display: none"/>
             <p:inputText id="t1" value="#{colaboradorBean.colaboradorMarca.pk_idColaborador}" type="hidden" />
@@ -303,6 +309,9 @@
             pSeg.textContent = seg;
             $("#w2").show();
         }
+
+
+
 </script>
 
     </h:body>
