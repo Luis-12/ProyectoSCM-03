@@ -34,6 +34,8 @@ public class ColaboradorBean {
     ColaboradorService colaboradorService;
     private Colaborador colaborador = new Colaborador();
     private Colaborador colaboradorMarca = new Colaborador();
+    private Colaborador colaboradorinfo=new Colaborador();
+
     private Colaborador colaborador1 = new Colaborador();
     private Colaborador colaboradorlogueado = new Colaborador();
     private Colaborador selectcolaborador = new Colaborador();
@@ -89,6 +91,14 @@ public class ColaboradorBean {
     public String init() {
         Colaborador miC = new Colaborador();
         return "colaboradorList.xhtml";
+    }
+
+    public Colaborador getColaboradorinfo() {
+        return colaboradorinfo;
+    }
+
+    public void setColaboradorinfo(Colaborador colaboradorinfo) {
+        this.colaboradorinfo = colaboradorinfo;
     }
 
     public List<MarcasJornada> getMarcasJornadasList() {
@@ -624,6 +634,8 @@ public class ColaboradorBean {
 
     public void findColaboradorMarca() throws Exception {//Funcion que valida si el colaborador se encuentra en la base de datos
         colaboradorMarca = colaboradorService.findColaborador(colaboradorMarca.getPk_idColaborador());
+        colaboradorinfo = colaboradorService.findColaborador(colaboradorMarca.getPk_idColaborador());
+
         if (colaboradorMarca == null) {
             addMessage("Aviso", "No se encuentra el colaborador");
         } else//Si es asi se pasa a validar que tenga horario asignado
@@ -855,14 +867,13 @@ public class ColaboradorBean {
 
     public void diasDisponibles(Colaborador colaborador) {
 
-        //  alter table vacaciones add column pk_idvacaciones serial primary key;
         PrimeFaces current2 = PrimeFaces.current();
         Calendar c1 = Calendar.getInstance();
         c2 = Calendar.getInstance();
 
-        /*c2.set(YEAR, 2023);
-        c2.set(Calendar.MONTH, 10);
-        c2.set(Calendar.DAY_OF_MONTH, 21);*/
+        //  c2.set(YEAR, 2023);
+        //  c2.set(Calendar.MONTH, 10);
+        //  c2.set(Calendar.DAY_OF_MONTH, 15);
 
         c1.setTime(colaborador.getFechaInicioLaboral());
 
@@ -873,23 +884,56 @@ public class ColaboradorBean {
             anios--;
         }//funcion para calcular los annos de trabajo en la empresa
 
-        if (anios == 0 && vacacionesService.diasDisponibles(colaborador) == null) {
+
+        if (anios==0&&vacacionesService.diasDisponibles(colaborador)==null){
 
             vacaciones.setDiasdisponibles(0);
             vacacionesService.createVacaciones(vacaciones);
-        } else if (anios >= 1 && anios <= 3) {
-            vacaciones.setDiasdisponibles(12);
-            vacacionesService.updateVacaciones(vacaciones);
-        } else if (anios > 3 && anios <= 5) {
-            vacaciones.setDiasdisponibles(15);
-            vacacionesService.updateVacaciones(vacaciones);
-        } else if (anios > 5) {
-            vacaciones.setDiasdisponibles(18);
-            vacacionesService.updateVacaciones(vacaciones);
+        }
+
+        else if ((c1.get(Calendar.MONTH)+1)==c2.get(Calendar.MONTH)&&c1.get(Calendar.DAY_OF_MONTH)==c2.get(Calendar.DAY_OF_MONTH)){
+
+            if(anios>=1&&anios<=3){
+                vacaciones.setDiasdisponibles(12);
+                vacacionesService.updateVacaciones(vacaciones);
+            }
+            else if(anios>3&&anios<=5){
+                vacaciones.setDiasdisponibles(15);
+                vacacionesService.updateVacaciones(vacaciones);
+            }
+            else if(anios>5){
+                vacaciones.setDiasdisponibles(18);
+                vacacionesService.updateVacaciones(vacaciones);
+            }
+
+        }
+        else {
+            vacaciones.setDiasdisponibles(0);
+            vacacionesService.createVacaciones(vacaciones);
         }
 
     }
 
+    public void reset() {
+        PrimeFaces current = PrimeFaces.current();
+
+        colaboradorinfo=new Colaborador();
+        marcasJornadasList = new ArrayList<>();
+        asignacionDescansos = new AsignacionDescansos();
+        marcaLa = new MarcaLaboradas();
+        botonEntrada=true;
+        botonSalida=true;
+        botonDesSali=true;
+        current.ajax().update("bot:ent");//Se desabilita el boton de descanso y el de salida
+        current.ajax().update("bot:des");//Se desabilita el boton de descanso y el de salida
+        current.ajax().update("bot:sali");
+        current.ajax().update("info:nom");
+        current.ajax().update("info:ced");
+        current.ajax().update("bot:marcaJornadaTabla");
+
+
+
+    }
 
     public void marcaEn()//Funcion para realizar marca en la base de datos
     {

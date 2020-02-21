@@ -19,6 +19,7 @@
 
 <div id="page">
 
+
     <h:body>
         <div id="header">
             <div id="logoP">
@@ -30,10 +31,19 @@
                 <p:commandButton action="login.xhtml?faces-redirect=true" style='float: left;' id="dynaButton" value="Ingresar"  icon="ui-icon-home"/>
             </h:form>
         </div>
+        <h:form>
 
-        <div id="info" style="text-align: left;margin-top: 50px">
-                <p:outputLabel id="nom" value="#{colaboradorBean.colaboradorMarca.nombre}" />
-                <p:outputLabel id="ced"  value="#{colaboradorBean.colaboradorMarca.pk_idColaborador}" />
+            <p:idleMonitor timeout="10000">
+                <p:ajax event="idle" listener="#{colaboradorBean.reset}" />
+            </p:idleMonitor>
+        </h:form>
+
+
+        <div style="text-align: left;margin-top: 50px">
+            <h:form id="info">
+                <p:outputLabel id="nom" value="#{colaboradorBean.colaboradorinfo.nombre}" />
+                <p:outputLabel id="ced"  value="#{colaboradorBean.colaboradorinfo.pk_idColaborador}" />
+            </h:form>
         </div>
 
         <center>
@@ -65,14 +75,14 @@
             <center>
                 <h:panelGrid columns="3" cellpadding="5">
                     <p:commandButton styleClass="ui-commandant2" id="ent" value="Entrada" disabled="#{colaboradorBean.botonEntrada}" actionListener="#{colaboradorBean.marcaEntrada}" />
-                    <p:commandButton styleClass="ui-commandant2" id="des" value="#{colaboradorBean.variable}" disabled="#{colaboradorBean.botonDesSali}" actionListener="#{colaboradorBean.marcarDescanso}"/>
+                    <p:commandButton  styleClass="ui-commandant2" id="des" value="#{colaboradorBean.variable}" disabled="#{colaboradorBean.botonDesSali}" actionListener="#{colaboradorBean.marcarDescanso}"/>
                     <p:commandButton styleClass="ui-commandant2" id="sali" value="Salida" disabled="#{colaboradorBean.botonSalida}" actionListener="#{colaboradorBean.marcaSalida}"/>
                 </h:panelGrid>
             </center>
             </h:form>
         </div>
         <h:form id="frm">
-            <p:commandButton id="hdnBtn" actionListener="#{colaboradorBean.findColaboradorMarca}" update="frm,ced,nom" style="display: none"/>
+            <p:commandButton id="hdnBtn" actionListener="#{colaboradorBean.findColaboradorMarca}" update="frm,info:ced,info:nom" style="display: none"/>
             <p:inputText id="t1" value="#{colaboradorBean.colaboradorMarca.pk_idColaborador}" type="hidden" />
         </h:form>
 
@@ -164,6 +174,8 @@
             <p:link outcome="acerca.xhtml" value="©"/>  <p:outputLabel  value=" SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA "/>
 
         </div>
+
+
 <script type="text/javascript">
 
         scanner = new Instascan.Scanner(
