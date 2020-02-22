@@ -16,6 +16,8 @@ import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.xml.bind.DatatypeConverter;
+import java.io.*;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,7 +36,7 @@ public class ColaboradorBean {
     ColaboradorService colaboradorService;
     private Colaborador colaborador = new Colaborador();
     private Colaborador colaboradorMarca = new Colaborador();
-    private Colaborador colaboradorinfo=new Colaborador();
+
 
     private Colaborador colaborador1 = new Colaborador();
     private Colaborador colaboradorlogueado = new Colaborador();
@@ -44,6 +46,7 @@ public class ColaboradorBean {
     private Puesto puesto = new Puesto();
     private Asignaciones asignaciones = new Asignaciones();
     Calendar c2;
+    private String base64Image="";
     private MarcaLaboradas marcaLa = new MarcaLaboradas();
 
     private Vacaciones vacaciones = new Vacaciones();
@@ -94,14 +97,6 @@ public class ColaboradorBean {
         return "colaboradorList.xhtml";
     }
 
-    public Colaborador getColaboradorinfo() {
-        return colaboradorinfo;
-    }
-
-    public void setColaboradorinfo(Colaborador colaboradorinfo) {
-        this.colaboradorinfo = colaboradorinfo;
-    }
-
     public List<MarcasJornada> getMarcasJornadasList() {
         return marcasJornadasList;
     }
@@ -141,6 +136,14 @@ public class ColaboradorBean {
     public Date getFecha() {
         Calendar c = Calendar.getInstance();
         return c.getTime();
+    }
+
+    public String getBase64Image() {
+        return base64Image;
+    }
+
+    public void setBase64Image(String base64Image) {
+        this.base64Image = base64Image;
     }
 
     public String getJustST() {
@@ -643,7 +646,6 @@ public class ColaboradorBean {
 
     public void findColaboradorMarca() throws Exception {//Funcion que valida si el colaborador se encuentra en la base de datos
         colaboradorMarca = colaboradorService.findColaborador(colaboradorMarca.getPk_idColaborador());
-        colaboradorinfo = colaboradorService.findColaborador(colaboradorMarca.getPk_idColaborador());
 
         if (colaboradorMarca == null) {
             addMessage("Aviso", "No se encuentra el colaborador");
@@ -758,6 +760,7 @@ public class ColaboradorBean {
     {
         Calendar c1 = Calendar.getInstance();
         PrimeFaces current = PrimeFaces.current();
+        createDirectory();
         asignaciones = asignacionesServices.buscarHorario(colaboradorMarca);//Busca si exite una asignacion con el id del colaborador
         if (asignaciones == null)//Si no tiene horario asignado se muestra el mensaje
         {
@@ -779,8 +782,8 @@ public class ColaboradorBean {
                     botonEntrada = true;
                     current.ajax().update("bot:ent");//Se vuelven a bloquear los botones
                     colaboradorMarca = new Colaborador();
-                    current.ajax().update("nom");// se limpia el nombre
-                    current.ajax().update("ced");
+                    current.ajax().update("info:nom");// se limpia el nombre
+                    current.ajax().update("info:ced");
                 }
             } else {//Si la encuentra se habilita el boton de salida y descanso
                 botonSalida = false;
@@ -832,13 +835,11 @@ public class ColaboradorBean {
             long resultado = (Math.abs(c1.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));
             if (resultado <= 15) {//Valida si ya puede marcar
                 mensaje = "marca de la entrada";
-                PrimeFaces current = PrimeFaces.current();
-                current.ajax().update("mensajeP:msj");
+                current2.ajax().update("msj");
                 marcaEn();//Aca se llama la funcion para realizar la marca en la base de datos
             } else {//Si no se le avisa que aun no puede marcar por que es muy temprano
                 mensaje= "Es muy temprano, no le correponde realizar la marca";
-                PrimeFaces current = PrimeFaces.current();
-                current.ajax().update("mensajeP:msj");
+                current2.ajax().update("msj");
 
 
                 /////////////////LINEAS PRUEBA
@@ -849,8 +850,8 @@ public class ColaboradorBean {
                 botonEntrada = true;
                 current2.ajax().update("bot:ent");//Se vuelven a bloquear los botones
                 colaboradorMarca = new Colaborador();
-                current2.ajax().update("nom");// se limpia el nombre
-                current2.ajax().update("ced");
+                current2.ajax().update("info:nom");// se limpia el nombre
+                current2.ajax().update("info:ced");
             }
         } else //  despues de entrada llego tarde el colaborador
         {
@@ -859,13 +860,11 @@ public class ColaboradorBean {
             long resultado = (Math.abs(c3.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));
             if (resultado <= 60) {//Aca se esta dando un tiempo de colchon para realizar la marca tarde despues del tiempo de un 1 de la hora de entrada segun horario
                 mensaje= "marca tarde";//Como es tarde pero todavia es valido que marque puede justificar su tardia
-                PrimeFaces current = PrimeFaces.current();
-                current.ajax().update("mensajeP:msj");
-                current.executeScript("PF('just').show();");//
+                current2.ajax().update("msj");
+                current2.executeScript("PF('just').show();");//
             } else {//Si es demasiado tarde se muestra el mensaje de que ya no puede marca
                 mensaje="Demasiado tarde, no puede realizar marca, tiempo limite agotado";
-                PrimeFaces current = PrimeFaces.current();
-                current.ajax().update("mensajeP:msj");
+                current2.ajax().update("msj");
                 /////////////////LINEAS PRUEBA
                 //marcaEn();//Aca se llama la funcion para realizar la marca en la base de datos
                 //addMessage("Aviso", "Pero igual marco para probar");
@@ -874,8 +873,8 @@ public class ColaboradorBean {
                 botonEntrada = true;
                 current2.ajax().update("bot:ent");//Se vuelven a bloquear los botones
                 colaboradorMarca = new Colaborador();
-                current2.ajax().update("nom");// se limpia el nombre
-                current2.ajax().update("ced");
+                current2.ajax().update("info:nom");// se limpia el nombre
+                current2.ajax().update("info:ced");
             }
         }
     }
@@ -932,8 +931,8 @@ public class ColaboradorBean {
 
     public void reset() {
         PrimeFaces current = PrimeFaces.current();
-
-        colaboradorinfo=new Colaborador();
+        mensaje="";
+        colaboradorMarca=new Colaborador();
         marcasJornadasList = new ArrayList<>();
         asignacionDescansos = new AsignacionDescansos();
         marcaLa = new MarcaLaboradas();
@@ -945,9 +944,8 @@ public class ColaboradorBean {
         current.ajax().update("bot:sali");
         current.ajax().update("info:nom");
         current.ajax().update("info:ced");
+        current.ajax().update("msj");
         current.ajax().update("bot:marcaJornadaTabla");
-
-
 
     }
 
@@ -964,16 +962,14 @@ public class ColaboradorBean {
         marcaLaboradas.setEstado("Entrada");//Para saber que es una marca de entrada a la hora de marcar la salida
         marcaLaboradas.setFechaMarca(date);//se carga la fecha de la marca que es la fecha del sistema
         marcaLaboradaService.crearMarcaLaborada(marcaLaboradas);//y por ultimo se agrega la marca de entrada a la base de datos
-
         listaMarcasPorJornada();
-
+        saveImage();
         marcaLaboradas = new MarcaLaboradas();
         colaboradorMarca = new Colaborador();
         botonEntrada = true;
         current.ajax().update("bot:ent");//Se vuelven a bloquear los botones
-        current.ajax().update("nom");// se limpia el nombre
-        current.ajax().update("ced");//y cedula del colaborador que marca
-
+        current.ajax().update("info:nom");// se limpia el nombre
+        current.ajax().update("info:ced");//y cedula del colaborador que marca
     }
 
     public void marcaTarde()//funcion que se dispara con el boton de el formulario just
@@ -982,7 +978,7 @@ public class ColaboradorBean {
         marcaEn();//se marca en la base de datos la entrada aunque sea tarde
         current.executeScript("PF('just').hide();");// y se enconde el form
         mensaje="Marca realizada con exito";
-        current.ajax().update("mensajeP:msj");
+        current.ajax().update("msj");
     }
 
     public void marcaSalida() {//funcion para el boton marcar Salida
@@ -992,7 +988,7 @@ public class ColaboradorBean {
         c1.set(YEAR, c2.get(YEAR));
         c1.set(Calendar.MONTH, c2.get(Calendar.MONTH));
         c1.set(Calendar.DAY_OF_MONTH, c2.get(Calendar.DAY_OF_MONTH));//se carga la fecha actual
-
+        PrimeFaces current = PrimeFaces.current();
         marcaLaboradas = marcaLaboradaService.buscaMarcaPorColaboradoYEstado(colaboradorMarca, "Entrada");//Saco la marca de entrada
         Date fechaDeMarcaEntrada = new Date();
         fechaDeMarcaEntrada = marcaLaboradas.getFechaMarca();
@@ -1018,14 +1014,12 @@ public class ColaboradorBean {
                 long resultado = (Math.abs(c1.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));
                 if (resultado <= 15) {
                     mensaje="Marca de la salida";
-                    PrimeFaces current = PrimeFaces.current();
-                    current.ajax().update("mensajeP:msj");
+                    current.ajax().update("msj");
                     marcaSal();
                 } else {//Si no es que salio demasiado mas temprano por ello debe justificar
 
                     mensaje="Es antes de su hora de salida, justifique ";
-                    PrimeFaces current = PrimeFaces.current();
-                    current.ajax().update("mensajeP:msj");
+                    current.ajax().update("msj");
                     current.executeScript("PF('just2').show();");
                 }
             } else if (fechaME < fechaMS)// salio tarde el colaborador hizo mas tiempo champion
@@ -1034,14 +1028,12 @@ public class ColaboradorBean {
                 long resultado = (Math.abs(c3.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));
                 if (resultado >= 30) {//Aca esta dando que si esta saliendo 30 minutos o mas tarde de la hora de salida pida justificacion de tiempo extra
                     mensaje="Marco salida mas tarde según su horario realizo Tiempo Extra";
-                    PrimeFaces current = PrimeFaces.current();
-                    current.ajax().update("mensajeP:msj");
+                    current.ajax().update("msj");
                     current.executeScript("PF('just3').show();");
                 } else {//Si no es mayor o igual el tiempo de media hora extra se depliega el siguiente mensaje
 
                     mensaje="Marco salida mas tarde, sin embargo no se toma como Tiempo Extra";
-                    PrimeFaces current = PrimeFaces.current();
-                    current.ajax().update("mensajeP:msj");
+                    current.ajax().update("msj");
                     marcaSal();
                 }
             }
@@ -1052,14 +1044,12 @@ public class ColaboradorBean {
                 long resultado = (Math.abs(c1.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));
                 if (resultado <= 15 && fechaME < fechaMS) {//Valida si ya puede marcar la salida a la hora establecida por horario
                     mensaje="Marca de la salida";
-                    PrimeFaces current = PrimeFaces.current();
-                    current.ajax().update("mensajeP:msj");
+                    current.ajax().update("msj");
                     marcaSal();
                 } else {//Si no es que salio demasiado mas temprano por ello debe justificar
 
-                    PrimeFaces current = PrimeFaces.current();
                     mensaje="Es antes de su hora de salida, justifique";
-                    current.ajax().update("mensajeP:msj");
+                    current.ajax().update("msj");
                     current.executeScript("PF('just2').show();");
                 }
             } else if (c1.after(c2) || fechaME < fechaMS)// salio tarde el colaborador hizo mas tiempo champion
@@ -1067,14 +1057,12 @@ public class ColaboradorBean {
                 Calendar c3 = c1;
                 long resultado = (Math.abs(c3.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));
                 if (resultado >= 30) {//Aca esta dando que si esta saliendo 30 minutos o mas tarde de la hora de salida pida justificacion de tiempo extra
-                    PrimeFaces current = PrimeFaces.current();
                     mensaje="Marcó salida más tarde, según su horario realizó Tiempo Extra";
-                    current.ajax().update("mensajeP:msj");
+                    current.ajax().update("msj");
                     current.executeScript("PF('just3').show();");//Se despliega el dialogo con el campo para que justifique por que hizo Tiempo extra
                 } else {//Si no es mayor o igual el tiempo de media hora extra se depliega el siguiente mensaje
-                    PrimeFaces current = PrimeFaces.current();
                     mensaje="Marcó salida más tarde, sin embargo, no se toma como Tiempo Extra";
-                    current.ajax().update("mensajeP:msj");
+                    current.ajax().update("msj");
                     marcaSal();
                 }
             }
@@ -1084,14 +1072,12 @@ public class ColaboradorBean {
             {
                 long resultado = (Math.abs(c1.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));
                 if (resultado <= 15) {//Valida si ya puede marcar la salida a la hora establecida por horario
-                    PrimeFaces current = PrimeFaces.current();
                     mensaje="Se realiza la marca de salida";
-                    current.ajax().update("mensajeP:msj");
+                    current.ajax().update("msj");
                     marcaSal();//Aca se llama la funcion para realizar la marca de salida en la base de datos
                 } else {//Si no es que salio demasiado mas temprano por ello debe justificar
-                    PrimeFaces current = PrimeFaces.current();
                     mensaje="Es antes de su hora de salida, Justifique";
-                    current.ajax().update("mensajeP:msj");
+                    current.ajax().update("msj");
                     current.executeScript("PF('just2').show();");
                 }
             } else // salio tarde el colaborador hizo mas tiempo champion
@@ -1099,14 +1085,12 @@ public class ColaboradorBean {
                 Calendar c3 = c1;
                 long resultado = (Math.abs(c3.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));
                 if (resultado >= 30 || fechaME < fechaMS) {//Aca esta dando que si esta saliendo 30 minutos o mas tarde de la hora de salida pida justificacion de tiempo extra
-                    PrimeFaces current = PrimeFaces.current();
                     mensaje="Marcó salida más tarde según su horario realizo Tiempo Extra";
-                    current.ajax().update("mensajeP:msj");
+                    current.ajax().update("msj");
                     current.executeScript("PF('just3').show();");//Se despliega el dialogo con el campo para que justifique por que hizo Tiempo extra
                 } else {//Si no es mayor o igual el tiempo de media hora extra se depliega el siguiente mensaje
-                    PrimeFaces current = PrimeFaces.current();
                     mensaje="Marcó salida más tarde, sin embargo no se toma como Tiempo Extra";
-                    current.ajax().update("mensajeP:msj");
+                    current.ajax().update("msj");
                     marcaSal();
                 }
             }
@@ -1128,17 +1112,16 @@ public class ColaboradorBean {
         marcaLaboradaService.actualizarMarcaLaborada(marcaLaboradas);//y por ultimo se agrega la marca de entrada a la base de datos
 
         listaMarcasPorJornadaFinalizada(marcaLaboradas);
-
+        saveImage();
         marcaLaboradas = new MarcaLaboradas();
         colaboradorMarca = new Colaborador();
-        botonDesSali = true;
+        botonSalida = true;
         justST = null;
         justTE = null;
-
         current.ajax().update("bot:des");//Se desabilita el boton de descanso y el de salida
         current.ajax().update("bot:sali");
-        current.ajax().update("nom");// se limpia el nombre
-        current.ajax().update("ced");//y cedula del colaborador que marca
+        current.ajax().update("info:nom");// se limpia el nombre
+        current.ajax().update("info:ced");//y cedula del colaborador que marca
     }
 
     public void marcaSalidaAntes()//funcion que se dispara con el boton de el formulario just2
@@ -1147,7 +1130,7 @@ public class ColaboradorBean {
         marcaSal();//se marca en la base de datos la entrada aunque sea tarde
         current.executeScript("PF('just2').hide();");// y se enconde el form
         mensaje="Marca salida prematura realizada con exito";
-        current.ajax().update("mensajeP:msj");
+        current.ajax().update("msj");
         justST = null;
     }
 
@@ -1158,7 +1141,7 @@ public class ColaboradorBean {
         marcaSal();//se marca en la base de datos la entrada aunque sea tarde
         current.executeScript("PF('just3').hide();");// y se enconde el form
         mensaje="Marca de tiempo extra realizada con exito";
-        current.ajax().update("mensajeP:msj");
+        current.ajax().update("msj");
         justTE = null;
     }
 
@@ -1191,7 +1174,7 @@ public class ColaboradorBean {
         Time time = new Time(now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), now.get(Calendar.SECOND));
         marcaDescansos.setHoraInicio(time);
         marcaDescansoService.crearMarcaDescanso(marcaDescansos);
-
+        saveImage();
         listaMarcasPorJornada();
     }
 
@@ -1200,7 +1183,7 @@ public class ColaboradorBean {
         Time time = new Time(now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), now.get(Calendar.SECOND));
         marcaDescansos.setHoraFin(time);
         marcaDescansoService.actualizarMarcaDescanso(marcaDescansos);
-
+        saveImage();
         listaMarcasPorJornada();
     }
 
@@ -1252,7 +1235,7 @@ public class ColaboradorBean {
         if(encontrado==false)
         {
             mensaje="No puede marcar descanso";
-            current.ajax().update("mensajeP:msj");
+            current.ajax().update("msj");
 
         }
     }
@@ -1261,7 +1244,7 @@ public class ColaboradorBean {
         if (variable.equals("Inicio Descanso")) {
             PrimeFaces current = PrimeFaces.current();
             mensaje="Marca descanso";
-            current.ajax().update("mensajeP:msj");
+            current.ajax().update("msj");
             marcaIniDes();
             limpia();
         } else {
@@ -1269,7 +1252,7 @@ public class ColaboradorBean {
             limpia();
             PrimeFaces current = PrimeFaces.current();
             mensaje="Marca fin del descanso";
-            current.ajax().update("mensajeP:msj");
+            current.ajax().update("msj");
 
         }
     }
@@ -1282,9 +1265,56 @@ public class ColaboradorBean {
         botonSalida = true;
         botonDesSali = true;
         variable = "Descanso";
+        mensaje="";
+        current.ajax().update("msj");
         current.ajax().update("bot:des");//Se desabilita el boton de descanso y el de salida
         current.ajax().update("bot:sali");
-        current.ajax().update("nom");// se limpia el nombre
-        current.ajax().update("ced");//y cedula del colaborador que marca
+        current.ajax().update("info:nom");// se limpia el nombre
+        current.ajax().update("info:ced");//y cedula del colaborador que marca
     }
+    public void resetMsj()
+    {
+        PrimeFaces current = PrimeFaces.current();
+        mensaje="";
+        current.ajax().update("msj");
+    }
+
+    public void createDirectory() {
+        Calendar can= Calendar.getInstance();
+        String date=""+(can.get(Calendar.MONTH)+1 )+"-"+can.get(Calendar.DATE)+"-"+can.get(YEAR);
+        File file = new File("C:\\"+date);
+        if (!file.exists()) {
+            file.mkdir();
+        }
+    }
+
+    public void saveImage()
+    {
+
+        String[] strings = base64Image.split(",");
+        String extension;
+        switch (strings[0]) {//check image's extension
+            case "data:image/jpeg;base64":
+                extension = "jpeg";
+                break;
+            case "data:image/png;base64":
+                extension = "png";
+                break;
+            default://should write cases for more images types
+                extension = "jpg";
+                break;
+        }
+        Calendar can= Calendar.getInstance();
+        String date=""+(can.get(Calendar.MONTH)+1 )+"-"+can.get(Calendar.DATE)+"-"+can.get(YEAR);
+        //convert base64 string to binary data
+        byte[] data = DatatypeConverter.parseBase64Binary(strings[1]);
+        String path = "C:\\"+date+"\\"+colaboradorMarca.getPk_idColaborador()+"_"+can.get(Calendar.HOUR)+"_"+can.get(Calendar.MINUTE)+"_"+can.get(Calendar.SECOND)+"."+ extension;
+        File file = new File(path);
+        try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file))) {
+            outputStream.write(data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

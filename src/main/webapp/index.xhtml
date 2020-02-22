@@ -31,21 +31,36 @@
                 <p:commandButton action="login.xhtml?faces-redirect=true" style='float: left;' id="dynaButton" value="Ingresar"  icon="ui-icon-home"/>
             </h:form>
         </div>
-        <h:form>
-
-            <p:idleMonitor timeout="10000">
-                <p:ajax event="idle" listener="#{colaboradorBean.reset}" />
-            </p:idleMonitor>
-        </h:form>
-
-
         <div style="text-align: left;margin-top: 50px">
             <h:form id="info">
-                <p:outputLabel id="nom" value="#{colaboradorBean.colaboradorinfo.nombre}" />
-                <p:outputLabel id="ced"  value="#{colaboradorBean.colaboradorinfo.pk_idColaborador}" />
+                <p:outputLabel id="nom" value="#{colaboradorBean.colaboradorMarca.nombre}" />
+                <p:outputLabel id="ced"  value="#{colaboradorBean.colaboradorMarca.pk_idColaborador}" />
             </h:form>
         </div>
+  <div>
 
+      <h:form >
+          <p:dataTable  var="marcaJornada" value="#{colaboradorBean.marcasJornadasList}"
+                        reflow="true"
+                        responsive="true"
+                        style="margin-top: 15px;width: 200px;position: absolute" id="marcaJornadaTabla"
+                        emptyMessage="No se han encontrado marcas"
+                        widgetVar="marcajornadatabla"
+                        resizableColumns="true"
+                        paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                        scrollable="true" scrollHeight="450" tableStyle="width: 200px" >
+
+              <p:column style="width: 70px" headerText="Marca">
+                  <h:outputText value="#{marcaJornada.marca}" />
+              </p:column>
+
+              <p:column style="width: 70px" headerText="Descripción">
+                  <h:outputText value="#{marcaJornada.descripcion}" />
+              </p:column>
+          </p:dataTable>
+      </h:form>
+  </div>
+        <div id="camara2"> <canvas id="canvas" width="100" height="50"></canvas> </div>
         <center>
         <div class="camara">
             <video  style="margin-bottom:10px; margin-left: 10px;margin-top: 10px" id="preview" width="350" autoplay="autoplay"/>
@@ -53,43 +68,30 @@
         </center>
         <div>
             <h:form id="bot">
-                <p:dataTable  var="marcaJornada" value="#{colaboradorBean.marcasJornadasList}"
-                              reflow="true"
-                              responsive="true"
-                              style="margin-top: 15px" id="marcaJornadaTabla"
-                              emptyMessage="No se han encontrado marcas"
-                              widgetVar="marcajornadatabla"
-                              resizableColumns="true"
-                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                              scrollable="true" scrollHeight="450" tableStyle="width: 200px">
-
-                    <p:column style="width: 70px" headerText="Marca">
-                        <h:outputText value="#{marcaJornada.marca}" />
-                    </p:column>
-
-                    <p:column style="width: 70px" headerText="Descripción">
-                        <h:outputText value="#{marcaJornada.descripcion}" />
-                    </p:column>
-                </p:dataTable>
                 <p:growl id="msgs" showDetail="true" life="3000" rendered="#{not facesContext.validationFailed}" ><p:autoUpdate/></p:growl>
             <center>
                 <h:panelGrid columns="3" cellpadding="5">
-                    <p:commandButton styleClass="ui-commandant2" id="ent" value="Entrada" disabled="#{colaboradorBean.botonEntrada}" actionListener="#{colaboradorBean.marcaEntrada}" />
-                    <p:commandButton  styleClass="ui-commandant2" id="des" value="#{colaboradorBean.variable}" disabled="#{colaboradorBean.botonDesSali}" actionListener="#{colaboradorBean.marcarDescanso}"/>
-                    <p:commandButton styleClass="ui-commandant2" id="sali" value="Salida" disabled="#{colaboradorBean.botonSalida}" actionListener="#{colaboradorBean.marcaSalida}"/>
+                    <p:commandButton styleClass="ui-commandant2" id="ent" value="Entrada" onclick="clearTimeout(myVar),setTimeout(myFunction2,3000),foto();" disabled="#{colaboradorBean.botonEntrada}" actionListener="#{colaboradorBean.marcaEntrada}" />
+                    <p:commandButton  styleClass="ui-commandant2" id="des" value="#{colaboradorBean.variable}" onclick="clearTimeout(myVar),setTimeout(myFunction2,3000),foto();" disabled="#{colaboradorBean.botonDesSali}" actionListener="#{colaboradorBean.marcarDescanso}"/>
+                    <p:commandButton styleClass="ui-commandant2" id="sali" value="Salida" onclick="clearTimeout(myVar),setTimeout(myFunction2,3000),foto();" disabled="#{colaboradorBean.botonSalida}" actionListener="#{colaboradorBean.marcaSalida}"/>
                 </h:panelGrid>
             </center>
             </h:form>
         </div>
 
-        <div id="MensajeP">
-            <p:outputLabel id="msj" value="#{colaboradorBean.mensaje}" />
+        <div id="mensajeP">
+                <p:outputLabel id="msj" value="#{colaboradorBean.mensaje}" />
         </div>
 
 
         <h:form id="frm">
             <p:commandButton id="hdnBtn" actionListener="#{colaboradorBean.findColaboradorMarca}" update="frm,info:ced,info:nom" style="display: none"/>
             <p:inputText id="t1" value="#{colaboradorBean.colaboradorMarca.pk_idColaborador}" type="hidden" />
+            <p:inputText id="t2" value="#{colaboradorBean.base64Image}" type="hidden" />
+            <p:commandButton id="hdnBtn2" onclick="myVar=setTimeout(myFunction, 15000);"  style="display: none"/>
+            <p:commandButton id="hdnBtn3" actionListener="#{colaboradorBean.reset}"  style="display: none"/>
+            <p:commandButton id="hdnBtn4" actionListener="#{colaboradorBean.resetMsj}"  style="display: none"/>
+            <p:commandButton id="hdnBtn5" update="frm" style="display: none"/>
         </h:form>
 
        <p:dialog id="just" header="Justificación de Llegada Tardía" showEffect="fade" hideEffect="fade"
@@ -106,7 +108,8 @@
                    <center>
                        <p:commandButton style="margin-left: 34%"
                                         styleClass="ui-priority-primary"
-                                        value="Aceptar" update="bot:msgs, justificacion" action="#{colaboradorBean.marcaTarde}"/>
+                                        value="Aceptar" update="bot:msgs, justificacion" action="#{colaboradorBean.marcaTarde}"
+                       onclick="setTimeout(myFunction2,3000)"/>
                    </center>
                </h:panelGrid>
            </h:form>
@@ -129,7 +132,7 @@
                     <center>
                         <p:commandButton
                                 styleClass="ui-priority-primary"
-                                value="Aceptar" update="justificacion2" action="#{colaboradorBean.marcaSalidaAntes}"/>
+                                value="Aceptar" update="justificacion2" action="#{colaboradorBean.marcaSalidaAntes}" onclick="setTimeout(myFunction2,3000)"/>
                     </center>
                 </h:panelGrid>
             </h:form>
@@ -148,7 +151,7 @@
                     <center>
                         <p:commandButton style="margin-left: 34%"
                                 styleClass="ui-priority-primary"
-                                value="Aceptar" update="justificacion3" action="#{colaboradorBean.marcaTiempoExtra}"/>
+                                value="Aceptar" update="justificacion3" action="#{colaboradorBean.marcaTiempoExtra}" onclick="setTimeout(myFunction2,3000)"/>
                     </center>
                 </h:panelGrid>
             </h:form>
@@ -194,6 +197,7 @@
             {
                 document.getElementById('frm'+':t1').value=content;
                 document.getElementById('frm'+':hdnBtn').click();
+                document.getElementById('frm'+':hdnBtn2').click();
             }
 
         });
@@ -205,6 +209,14 @@
                 console.error("No existe camara o dispositivo!");
             }
         });
+
+        function myFunction() {
+            document.getElementById('frm'+':hdnBtn3').click();
+        }
+        function myFunction2() {
+            document.getElementById('frm'+':hdnBtn4').click();
+            context.clearRect(0, 0, canvas.width, canvas.height);
+        }
 
         //reloj
         (function () {
@@ -310,6 +322,14 @@
             $("#w2").show();
         }
 
+        var canvas=document.getElementById("canvas");
+        var context=canvas.getContext('2d');
+        function foto() {
+            context.drawImage(preview,0,0,100,50);
+            var fullQuality = canvas.toDataURL('image/jpeg', 1.0);
+            document.getElementById('frm'+':t2').value=fullQuality;
+            document.getElementById('frm'+':hdnBtn5').click();
+        };
 
 
 </script>
