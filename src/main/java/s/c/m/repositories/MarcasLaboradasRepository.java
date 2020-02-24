@@ -8,5 +8,6 @@ import java.util.Date;
 
 public interface MarcasLaboradasRepository extends CrudRepository<MarcaLaboradas,String> {
     MarcaLaboradas findByFechaMarca(Date fecha);
+   MarcaLaboradas findByColaboradorAndAndFechaMarca(Colaborador idColaborador, Date fecha);
     MarcaLaboradas findByColaboradorAndEstado(Colaborador idColaborador , String estado);
 }

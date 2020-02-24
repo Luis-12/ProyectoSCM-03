@@ -646,9 +646,13 @@ public class ColaboradorBean {
 
     public void findColaboradorMarca() throws Exception {//Funcion que valida si el colaborador se encuentra en la base de datos
         colaboradorMarca = colaboradorService.findColaborador(colaboradorMarca.getPk_idColaborador());
+        PrimeFaces current = PrimeFaces.current();
 
         if (colaboradorMarca == null) {
             addMessage("Aviso", "No se encuentra el colaborador");
+            mensaje="No se encuentra el colaborador";
+            current.ajax().update("msj");
+
         } else//Si es asi se pasa a validar que tenga horario asignado
         {
             habilitarAccion();
@@ -764,8 +768,11 @@ public class ColaboradorBean {
         asignaciones = asignacionesServices.buscarHorario(colaboradorMarca);//Busca si exite una asignacion con el id del colaborador
         if (asignaciones == null)//Si no tiene horario asignado se muestra el mensaje
         {
-            addMessage("Aviso", "El colaborador no tiene horario asignado");
+            mensaje="El colaborador no tiene horario asignado";
+            current.ajax().update("msj");
+
             colaboradorMarca = new Colaborador();
+
         } else {//Si tiene horario asignado
 
             //ACA SE INVOCARA LA FUNCION PARA BUSCAR LAS MARCAS DEL COLABORADOR
@@ -773,26 +780,32 @@ public class ColaboradorBean {
 
             Date date = new Date();
             MarcaLaboradas marcaLa = marcaLaboradaService.buscaMarcaPorColaboradoYEstado(colaboradorMarca, "Entrada");//Se busca si ya marco la entrada por medio de la fecha del dia
-            if (marcaLa == null) {//si no encuentra la marca con el colaborador y el estado Entrada se habilita el boton de entrada
-                if (!asignaciones.getDiadescanso().equals(verificaDiaLibre(c1.get(Calendar.DAY_OF_WEEK)))) {//Pero primero valida que no sea el dia libre del cola
-                    botonEntrada = false;
-                    current.ajax().update("bot:ent");
-                } else {//Si el dia de hoy y el dia de descanso son iguales se muestra el mensaje de que es dia libre
-                    addMessage("Aviso", "" + colaboradorMarca.getNombre() + " es su día libre");
-                    botonEntrada = true;
-                    current.ajax().update("bot:ent");//Se vuelven a bloquear los botones
-                    colaboradorMarca = new Colaborador();
-                    current.ajax().update("info:nom");// se limpia el nombre
-                    current.ajax().update("info:ced");
+            java.sql.Date fechahoy = new java.sql.Date(date.getTime());
+            if (marcaLaboradaService.validaMarcaDia(colaboradorMarca, fechahoy)!=null&&marcaLaboradaService.validaMarcaDia(colaboradorMarca, fechahoy).getEstado().equals("Finalizado")) {
+                mensaje="Ya realizo sus marcas del dia de hoy";
+                current.ajax().update("msj");
+            } else {
+
+                if (marcaLa == null) {//si no encuentra la marca con el colaborador y el estado Entrada se habilita el boton de entrada
+                    if (!asignaciones.getDiadescanso().equals(verificaDiaLibre(c1.get(Calendar.DAY_OF_WEEK)))) {//Pero primero valida que no sea el dia libre del cola
+                        botonEntrada = false;
+                        current.ajax().update("bot:ent");
+                    } else {//Si el dia de hoy y el dia de descanso son iguales se muestra el mensaje de que es dia libre
+                        addMessage("Aviso", "" + colaboradorMarca.getNombre() + " es su día libre");
+                        botonEntrada = true;
+                        current.ajax().update("bot:ent");//Se vuelven a bloquear los botones
+                        colaboradorMarca = new Colaborador();
+                        current.ajax().update("info:nom");// se limpia el nombre
+                        current.ajax().update("info:ced");
+                    }
+                } else {//Si la encuentra se habilita el boton de salida y descanso
+                    botonSalida = false;
+                    validacionMarcaDes();
+                    current.ajax().update("bot:sali");
                 }
-            } else {//Si la encuentra se habilita el boton de salida y descanso
-                botonSalida = false;
-                validacionMarcaDes();
-                current.ajax().update("bot:sali");
             }
         }
     }
-
     public String verificaDiaLibre(int a)//Funcion que verifica segun el dia por numero el dia en string
     {
         String day = null;

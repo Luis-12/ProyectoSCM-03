@@ -23,6 +23,16 @@ public class MarcaLaboradaService {
         return marcaLaboradas;
     }
 
+    public MarcaLaboradas validaMarcaDia(Colaborador idColaborador, Date date)
+    {
+        MarcaLaboradas marcaLaboradas=null;
+        try
+        {
+            marcaLaboradas=marcasLaboradasRepository.findByColaboradorAndAndFechaMarca(idColaborador,date);
+        }catch (Exception ex){}
+        return marcaLaboradas;
+    }
+
     public MarcaLaboradas buscaMarcaPorColaboradoYEstado(Colaborador idColaborador , String estado){
         MarcaLaboradas marcaLaboradas=null;
         try
