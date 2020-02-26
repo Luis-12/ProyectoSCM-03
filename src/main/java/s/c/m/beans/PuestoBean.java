@@ -4,10 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import s.c.m.entities.Puesto;
 import s.c.m.services.PuestoService;
-
 import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
-import java.time.Period;
 import java.util.List;
 
 

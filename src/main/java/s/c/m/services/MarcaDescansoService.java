@@ -22,7 +22,7 @@ public class MarcaDescansoService {
         marcaDescansosRepository.save(marcaDescansos);
     }
 
-    public void actualizarMarcaDescanso(MarcaDescansos marcaDescansos)
+    public void updateMarcaDescanso(MarcaDescansos marcaDescansos)
     {
         marcaDescansosRepository.save(marcaDescansos);
     }

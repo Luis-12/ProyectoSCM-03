@@ -1,9 +1,6 @@
 package s.c.m.beans;
 
-import org.hibernate.sql.Select;
 import org.primefaces.PrimeFaces;
-import org.primefaces.event.RowEditEvent;
-import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import s.c.m.entities.Colaborador;
@@ -12,13 +9,12 @@ import s.c.m.entities.Puesto;
 import s.c.m.services.ColaboradorService;
 import s.c.m.services.DepartamentoService;
 import s.c.m.services.PuestoService;
-
 import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import java.util.List;
-import java.util.Optional;
+
 
 
 @Component

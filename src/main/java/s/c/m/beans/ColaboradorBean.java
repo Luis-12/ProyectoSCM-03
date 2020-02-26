@@ -1,8 +1,7 @@
 package s.c.m.beans;
 
 
-import org.omg.CORBA.NO_IMPLEMENT;
-import org.omg.CORBA.PUBLIC_MEMBER;
+
 import org.primefaces.PrimeFaces;
 import org.primefaces.model.menu.MenuModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+
 
 import static java.util.Calendar.YEAR;
 
@@ -935,7 +934,7 @@ public class ColaboradorBean {
         marcaLaboradas.setJustTiempoExtra("N/A");
         marcaLaboradas.setEstado("Entrada");//Para saber que es una marca de entrada a la hora de marcar la salida
         marcaLaboradas.setFechaMarca(date);//se carga la fecha de la marca que es la fecha del sistema
-        marcaLaboradaService.crearMarcaLaborada(marcaLaboradas);//y por ultimo se agrega la marca de entrada a la base de datos
+        marcaLaboradaService.createMarcaLaborada(marcaLaboradas);//y por ultimo se agrega la marca de entrada a la base de datos
         listaMarcasPorJornada();
         saveImage();
         marcaLaboradas = new MarcaLaboradas();
@@ -1078,7 +1077,7 @@ public class ColaboradorBean {
         marcaLaboradas.setJustSalidaTemprana(justST);
         marcaLaboradas.setJustTiempoExtra(justTE);
         marcaLaboradas.setEstado("Finalizado");
-        marcaLaboradaService.actualizarMarcaLaborada(marcaLaboradas);//y por ultimo se agrega la marca de entrada a la base de datos
+        marcaLaboradaService.updateMarcaLaborada(marcaLaboradas);//y por ultimo se agrega la marca de entrada a la base de datos
 
         listaMarcasPorJornadaFinalizada(marcaLaboradas);
         saveImage();
@@ -1151,7 +1150,7 @@ public class ColaboradorBean {
         MarcaDescansos marcaDescansos = marcaDescansoService.buscarMdescanso(asignacionDescansos.getDescanso(), marcaLa);
         Time time = new Time(now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), now.get(Calendar.SECOND));
         marcaDescansos.setHoraFin(time);
-        marcaDescansoService.actualizarMarcaDescanso(marcaDescansos);
+        marcaDescansoService.updateMarcaDescanso(marcaDescansos);
         saveImage();
         listaMarcasPorJornada();
     }
@@ -1209,7 +1208,7 @@ public class ColaboradorBean {
         }
     }
 
-    public void marcarDescanso() {
+    public void marcaDescanso() {
         if (variable.equals("Inicio Descanso")) {
             PrimeFaces current = PrimeFaces.current();
             mensaje="Marca descanso";

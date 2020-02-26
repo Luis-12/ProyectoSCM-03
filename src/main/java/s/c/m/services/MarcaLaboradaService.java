@@ -42,10 +42,10 @@ public class MarcaLaboradaService {
         return marcaLaboradas;
     }
 
-    public void crearMarcaLaborada(MarcaLaboradas marcaLaboradas)
+    public void createMarcaLaborada(MarcaLaboradas marcaLaboradas)
     {
         marcasLaboradasRepository.save(marcaLaboradas);
     }
 
-    public void actualizarMarcaLaborada(MarcaLaboradas marcaLaboradas) { marcasLaboradasRepository.save(marcaLaboradas); }
+    public void updateMarcaLaborada(MarcaLaboradas marcaLaboradas) { marcasLaboradasRepository.save(marcaLaboradas); }
 }

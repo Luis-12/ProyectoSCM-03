@@ -2,16 +2,10 @@ package s.c.m.beans;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import s.c.m.entities.Horarios;
 import s.c.m.entities.Jornadas;
-import s.c.m.entities.Puesto;
 import s.c.m.services.JornadaService;
-import s.c.m.services.PuestoService;
-
 import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
-import javax.faces.model.SelectItem;
-import java.util.ArrayList;
 import java.util.List;
 
 @Component

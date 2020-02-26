@@ -72,7 +72,7 @@
             <center>
                 <h:panelGrid columns="3" cellpadding="5">
                     <p:commandButton styleClass="ui-commandant2" id="ent" value="Entrada" onclick="clearTimeout(myVar),setTimeout(myFunction2,3000),foto();" disabled="#{colaboradorBean.botonEntrada}" actionListener="#{colaboradorBean.marcaEntrada}" />
-                    <p:commandButton  styleClass="ui-commandant2" id="des" value="#{colaboradorBean.variable}" onclick="clearTimeout(myVar),setTimeout(myFunction2,3000),foto();" disabled="#{colaboradorBean.botonDesSali}" actionListener="#{colaboradorBean.marcarDescanso}"/>
+                    <p:commandButton  styleClass="ui-commandant2" id="des" value="#{colaboradorBean.variable}" onclick="clearTimeout(myVar),setTimeout(myFunction2,3000),foto();" disabled="#{colaboradorBean.botonDesSali}" actionListener="#{colaboradorBean.marcaDescanso}"/>
                     <p:commandButton styleClass="ui-commandant2" id="sali" value="Salida" onclick="clearTimeout(myVar),setTimeout(myFunction2,3000),foto();" disabled="#{colaboradorBean.botonSalida}" actionListener="#{colaboradorBean.marcaSalida}"/>
                 </h:panelGrid>
             </center>
