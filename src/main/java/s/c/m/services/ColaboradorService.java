@@ -95,10 +95,6 @@ public class ColaboradorService {
         dia= horaActual.get(Calendar.DAY_OF_MONTH);
         year = horaActual.get(Calendar.YEAR);
 
-        System.out.println("El mes de hoy es " + mes + " con Calendar");
-        System.out.println("El dia de hoy es " + dia + " con Calendar");
-        System.out.println("El year de hoy es " + year + " con Calendar");
-
         if(dia==28 || dia==30||dia == 31){
             dia2="0"+1;
         }
@@ -130,15 +126,7 @@ public class ColaboradorService {
             dia2 = ""+dia;
         }
         String fVencimiento = year +"-"+mes2+"-"+dia2;
-        System.out.println("La fecha de venciamiento de clave calculada antes de convertirlo: "+ fVencimiento);
-
         fechaDeVencimiento = formato.parse(fVencimiento);
-        System.out.println("La fecha de venciamiento de clave calculada es : "+ formato.format(fechaDeVencimiento));
-        /*
-        horaActual.setMonth((horaActual.getMonth()-1+3)%12 +1);
-        fechaDeVencimiento = formato.parse(formato.format(horaActual));
-        System.out.println("Fecha calculada Pablo:" + formato.parse(formato.format(horaActual)));//formato.format(horaActual));
-       */
         return fechaDeVencimiento;
     }
     public void actualizaClave(Colaborador c) throws ParseException {
@@ -177,12 +165,6 @@ public class ColaboradorService {
             colaborador=null;
         }
         return colaborador;
-       /* if(colaboradorRepository.findById(id).get()==null){//if que valida que si no encuentra nada retorne null
-            System.out.println("ENTRO EN IF DOND NO EXISTE EL OBJETO");
-            return null;
-        }else{
-            return colaboradorRepository.findById(id).get();//Si no retorna null quiere decir que lo encontro por ello retorne el objeto colaborador
-        }*/
     }
 
 

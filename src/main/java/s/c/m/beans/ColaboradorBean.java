@@ -307,10 +307,6 @@ public class ColaboradorBean {
         diaV = fechaVence.getDate();
         yearV = fechaVence.getYear() + 1900;
 
-        System.out.println("El mes de vencimiento es: " + mesV);
-        System.out.println("El dia de vencimiento es: " + diaV);
-        System.out.println("El anio de vencimiento es:" + yearV);
-
         if (mesV < 10) {
             mesV2 = "0" + mesV;
         } else {
@@ -323,7 +319,6 @@ public class ColaboradorBean {
         }
         fechaVenceString = yearV + "" + mesV2 + "" + diaV2;
         fechaV = Integer.parseInt(fechaVenceString);
-        //System.out.println("FECHA DE VENCIMIENTO"+fechaV);
 
         mesA = fechaActual2.get(Calendar.MONTH) + 1;
         diaA = fechaActual2.get(Calendar.DAY_OF_MONTH);
@@ -341,7 +336,6 @@ public class ColaboradorBean {
         }
         fechaActualString = yearA + "" + mesA2 + "" + diaA2;
         fechaA = Integer.parseInt(fechaActualString);
-        //System.out.println("FECHA ACTUAL:"+fechaA);
 
         if (fechaA >= fechaV) {
             vencio = true;
@@ -703,14 +697,7 @@ public class ColaboradorBean {
                 }
             }
         }
-
-        for (MarcasJornada mj : marcasJornadasList) {
-            System.out.println("Marca: " + mj.getMarca() + " Descripcion: " + mj.getDescripcion());
-        }
-
-        //Por aca debe poner la linea para que se actualice la tabla cada vez que se marque algo
         current.ajax().update("f1:marcaJornadaTabla");
-        //marcasJornadasList = new ArrayList<MarcasJornada>();
     }
 
     public void listaMarcasPorJornadaFinalizada(MarcaLaboradas mLaborada) {
@@ -718,8 +705,6 @@ public class ColaboradorBean {
         PrimeFaces current = PrimeFaces.current();
         if (mLaborada.getHoraSalida() != null) {//Si tambien marco salida
             MarcasJornada miMJ = new MarcasJornada();
-            System.out.println("ENTRO A IF CON MARCA SALIDA");
-
             miMJ.setMarca(mLaborada.getHoraEntrada());
             miMJ.setDescripcion("Entrada");
             marcasJornadasList.add(miMJ);
@@ -751,13 +736,7 @@ public class ColaboradorBean {
             miMJ.setDescripcion("Salida");
             marcasJornadasList.add(miMJ);
         }
-
-        for (MarcasJornada mj : marcasJornadasList) {
-            System.out.println("Marca: " + mj.getMarca() + " Descripcion: " + mj.getDescripcion());
-        }
-        //Por aca debe poner la linea para que se actualice la tabla cada vez que se marque algo
         current.ajax().update("f1:marcaJornadaTabla");
-        //marcasJornadasList = new ArrayList<MarcasJornada>();
     }
 
     public void habilitarAccion()//Funcion que valida si el colaborador al mostrar el qr tiene un horario asignado
@@ -853,13 +832,6 @@ public class ColaboradorBean {
             } else {//Si no se le avisa que aun no puede marcar por que es muy temprano
                 mensaje= "Es muy temprano, no le correponde realizar la marca";
                 current2.ajax().update("msj");
-
-
-                /////////////////LINEAS PRUEBA
-                marcaEn();//Aca se llama la funcion para realizar la marca en la base de datos
-                addMessage("Aviso", "Pero igual marco para probar");
-                ///////////////////////////////
-
                 botonEntrada = true;
                 current2.ajax().update("bot:ent");//Se vuelven a bloquear los botones
                 colaboradorMarca = new Colaborador();
@@ -878,11 +850,6 @@ public class ColaboradorBean {
             } else {//Si es demasiado tarde se muestra el mensaje de que ya no puede marca
                 mensaje="Demasiado tarde, no puede realizar marca, tiempo limite agotado";
                 current2.ajax().update("msj");
-                /////////////////LINEAS PRUEBA
-                marcaEn();//Aca se llama la funcion para realizar la marca en la base de datos
-                addMessage("Aviso", "Pero igual marco para probar");
-                /////////////////////////////
-
                 botonEntrada = true;
                 current2.ajax().update("bot:ent");//Se vuelven a bloquear los botones
                 colaboradorMarca = new Colaborador();
@@ -898,13 +865,7 @@ public class ColaboradorBean {
         PrimeFaces current2 = PrimeFaces.current();
         Calendar c1 = Calendar.getInstance();
         c2 = Calendar.getInstance();
-
-        //  c2.set(YEAR, 2023);
-        //  c2.set(Calendar.MONTH, 10);
-        //  c2.set(Calendar.DAY_OF_MONTH, 15);
-
         c1.setTime(colaborador.getFechaInicioLaboral());
-
         vacaciones.setColaborador(colaborador);
         int anios = c2.get(YEAR) - c1.get(YEAR);
         if (c1.get(Calendar.MONTH) > c2.get(Calendar.MONTH) ||
@@ -1010,18 +971,13 @@ public class ColaboradorBean {
         int fechaME = Integer.parseInt(timeStampFME);//Paso la fecha de marca de entrada a int
         int fechaMS = Integer.parseInt(timeStampFMS);//Paso la fecha de marca de salida a int
         int idH = asignaciones.getHorario().getPk_idhorario();
-
-        System.out.println("Fecha de marca Entrada:" + fechaME);
-        System.out.println("Fecha de marca Salida:" + fechaMS);
         if (idH == 11) {
-            //System.out.println("Entro al if para horarios de 00:00:00");
             if ((c1.before(c2) && fechaME == fechaMS) || (c1.after(c2) && fechaME <= fechaMS)) //  antes de salida madrugo el colaborador para salir c1.compareTo(c2) < 0
             {
                 if (c1.get(Calendar.HOUR_OF_DAY) == 0 && c1.get(Calendar.HOUR_OF_DAY) == 0 && c1.get(Calendar.HOUR_OF_DAY) == 0) {
                     c1.set(Calendar.HOUR_OF_DAY, 24);
                     c1.set(Calendar.MINUTE, 00);
                     c1.set(Calendar.SECOND, 00);
-                    //System.out.println("Entro aqui al compara hora con 00:00:00");
                 }
 
                 long resultado = (Math.abs(c1.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));

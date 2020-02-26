@@ -219,41 +219,6 @@ public class DepartamentoBean {
         departamentos.clear();
         departamentos.add(departamentoService.findDepartamento(id));
     }
-
-    public void onRowSelectedDepartamento(SelectEvent event)
-    {
-        FacesMessage msg = new FacesMessage("Departamento Seleccionado", ((Departamento) event.getObject()).getNombre());
-        FacesContext.getCurrentInstance().addMessage("asdasdasdasd", msg);
-    }
-
-    public void onRowUnselectColaborador(SelectEvent event)
-    {
-        FacesMessage msg = new FacesMessage("Departamento Seleccionado", ((Departamento) event.getObject()).getNombre());
-        FacesContext.getCurrentInstance().addMessage("dasdasdasdas", msg);
-    }
-
-    public void onRowEdit(RowEditEvent event)
-    {
-        departamentoService.updateDepartamento(((Departamento) event.getObject()));
-        System.out.println(((Departamento) event.getObject()).getNombre());
-        FacesMessage msg = new FacesMessage("Departamento Editado", ((Departamento) event.getObject()).getPk_idDepartamento());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
-
-    public void onRowCancel(RowEditEvent event)
-    {
-        FacesMessage msg = new FacesMessage("Actualización Cancelada", ((Departamento) event.getObject()).getPk_idDepartamento());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
-
-    public void onRowDelete(RowEditEvent event)
-    {
-        departamentoService.deleteDepartamento((Departamento) event.getObject());
-        FacesMessage msg = new FacesMessage("Departamento eliminado", ((Departamento) event.getObject()).getPk_idDepartamento());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-        departamentos = departamentoService.getAllDepartamentosActivos();
-    }
-
     public void addMessage(String summary, String detail)
     {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);

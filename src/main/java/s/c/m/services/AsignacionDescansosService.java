@@ -18,7 +18,6 @@ public class AsignacionDescansosService {
     @Transactional
     public void deletePorColaborador(Colaborador idColaborador){
         asignacionDescansosRepository.deleteByColaborador(idColaborador);
-        //asignacionDescansosRepository.deleteById(idColaborador);
     }
 
     public List<AsignacionDescansos> buscarDescansosAsignadosPorColaborador(Colaborador idColaborador)
