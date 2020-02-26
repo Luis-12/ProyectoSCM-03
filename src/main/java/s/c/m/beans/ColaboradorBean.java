@@ -709,7 +709,7 @@ public class ColaboradorBean {
         }
 
         //Por aca debe poner la linea para que se actualice la tabla cada vez que se marque algo
-        current.ajax().update("bot:marcaJornadaTabla");
+        current.ajax().update("f1:marcaJornadaTabla");
         //marcasJornadasList = new ArrayList<MarcasJornada>();
     }
 
@@ -756,7 +756,7 @@ public class ColaboradorBean {
             System.out.println("Marca: " + mj.getMarca() + " Descripcion: " + mj.getDescripcion());
         }
         //Por aca debe poner la linea para que se actualice la tabla cada vez que se marque algo
-        current.ajax().update("bot:marcaJornadaTabla");
+        current.ajax().update("f1:marcaJornadaTabla");
         //marcasJornadasList = new ArrayList<MarcasJornada>();
     }
 
@@ -789,7 +789,7 @@ public class ColaboradorBean {
                 if (marcaLa == null) {//si no encuentra la marca con el colaborador y el estado Entrada se habilita el boton de entrada
                     if (!asignaciones.getDiadescanso().equals(verificaDiaLibre(c1.get(Calendar.DAY_OF_WEEK)))) {//Pero primero valida que no sea el dia libre del cola
                         botonEntrada = false;
-                        current.ajax().update("bot:ent");
+                        current.ajax().update("bot");
                     } else {//Si el dia de hoy y el dia de descanso son iguales se muestra el mensaje de que es dia libre
                         addMessage("Aviso", "" + colaboradorMarca.getNombre() + " es su día libre");
                         botonEntrada = true;
@@ -856,8 +856,8 @@ public class ColaboradorBean {
 
 
                 /////////////////LINEAS PRUEBA
-                //marcaEn();//Aca se llama la funcion para realizar la marca en la base de datos
-                //addMessage("Aviso", "Pero igual marco para probar");
+                marcaEn();//Aca se llama la funcion para realizar la marca en la base de datos
+                addMessage("Aviso", "Pero igual marco para probar");
                 ///////////////////////////////
 
                 botonEntrada = true;
@@ -879,8 +879,8 @@ public class ColaboradorBean {
                 mensaje="Demasiado tarde, no puede realizar marca, tiempo limite agotado";
                 current2.ajax().update("msj");
                 /////////////////LINEAS PRUEBA
-                //marcaEn();//Aca se llama la funcion para realizar la marca en la base de datos
-                //addMessage("Aviso", "Pero igual marco para probar");
+                marcaEn();//Aca se llama la funcion para realizar la marca en la base de datos
+                addMessage("Aviso", "Pero igual marco para probar");
                 /////////////////////////////
 
                 botonEntrada = true;
@@ -958,7 +958,7 @@ public class ColaboradorBean {
         current.ajax().update("info:nom");
         current.ajax().update("info:ced");
         current.ajax().update("msj");
-        current.ajax().update("bot:marcaJornadaTabla");
+        current.ajax().update("f1:marcaJornadaTabla");
 
     }
 

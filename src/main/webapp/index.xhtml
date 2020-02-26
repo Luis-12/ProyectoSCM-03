@@ -39,22 +39,22 @@
         </div>
   <div>
 
-      <h:form >
+      <h:form id="f1">
           <p:dataTable  var="marcaJornada" value="#{colaboradorBean.marcasJornadasList}"
                         reflow="true"
                         responsive="true"
-                        style="margin-top: 15px;width: 200px;position: absolute" id="marcaJornadaTabla"
+                        style="margin-top: 15px;width: 220px;position: absolute" id="marcaJornadaTabla"
                         emptyMessage="No se han encontrado marcas"
                         widgetVar="marcajornadatabla"
                         resizableColumns="true"
                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                         scrollable="true" scrollHeight="450" tableStyle="width: 200px" >
 
-              <p:column style="width: 70px" headerText="Marca">
+              <p:column style="width: 80px" headerText="Marca">
                   <h:outputText value="#{marcaJornada.marca}" />
               </p:column>
 
-              <p:column style="width: 70px" headerText="Descripción">
+              <p:column style="width: 90px" headerText="Descripción">
                   <h:outputText value="#{marcaJornada.descripcion}" />
               </p:column>
           </p:dataTable>
