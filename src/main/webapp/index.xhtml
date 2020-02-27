@@ -43,18 +43,18 @@
           <p:dataTable  var="marcaJornada" value="#{colaboradorBean.marcasJornadasList}"
                         reflow="true"
                         responsive="true"
-                        style="margin-top: 15px;width: 220px;position: absolute" id="marcaJornadaTabla"
-                        emptyMessage="No se han encontrado marcas"
+                        style="margin-top: 15px;width: 217px;position: absolute" id="marcaJornadaTabla"
+                        emptyMessage="No hay marcas registradas"
                         widgetVar="marcajornadatabla"
                         resizableColumns="true"
                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                        scrollable="true" scrollHeight="450" tableStyle="width: 200px" >
+                        scrollable="true" scrollHeight="450" tableStyle="width: 200px">
 
-              <p:column style="width: 80px" headerText="Marca">
+              <p:column style="width: 75px" headerText="Marca">
                   <h:outputText value="#{marcaJornada.marca}" />
               </p:column>
 
-              <p:column style="width: 90px" headerText="Descripción">
+              <p:column style="width: 97px" headerText="Descripción">
                   <h:outputText value="#{marcaJornada.descripcion}" />
               </p:column>
           </p:dataTable>

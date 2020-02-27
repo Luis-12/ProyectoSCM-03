@@ -461,3 +461,7 @@ div.camara2{
     position: absolute;
     margin-top: 10px;
 }
+
+.ui-datatable-odd {
+    background: none repeat scroll 0 0  #0b4f64;
+}
