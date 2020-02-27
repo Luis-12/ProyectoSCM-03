@@ -16,12 +16,13 @@ public class VacacionesService {
     public Vacaciones diasDisponibles(Colaborador idColaborador){
 
         Vacaciones diasDisponibles=null;
+
         try
         {
+
             diasDisponibles=vacacionesRepository.findByColaborador(idColaborador);
         }catch (Exception ex){}
 
-        //System.out.println("Dias Disponibles:::  "+diasDisponibles.getDiasdisponibles());
         return diasDisponibles;
     }
 

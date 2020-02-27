@@ -379,6 +379,7 @@ public class ColaboradorBean {
                     construyeMenuDinamico(colaborador1.getPuesto().getDescripcion(), colaborador1.getDepartamento().getNombre());
                     loggedIn = true;
                     colaboradores = colaboradorService.getAllColaboradoresActivos(colaboradorlogueado);
+
                     return "/administracion/MantenimientoColaborador.xhtml?faces-redirect=true";
                 }
 
@@ -861,44 +862,52 @@ public class ColaboradorBean {
 
     public void diasDisponibles(Colaborador colaborador) {
 
+        Vacaciones disponibles = new Vacaciones();
+        vacaciones.setColaborador(colaborador);
+        disponibles = vacacionesService.diasDisponibles(colaborador);
+        int anios = calculaAnios(colaborador);
         PrimeFaces current2 = PrimeFaces.current();
+
+
+        if (disponibles == null) {
+            vacaciones.setDiasdisponibles(0);
+            vacacionesService.createVacaciones(vacaciones);
+            vacaciones=new Vacaciones();
+            asignaDiasVacaciones(anios);
+        } else {
+          asignaDiasVacaciones(anios);
+            vacaciones=new Vacaciones();
+
+        }
+
+    }
+
+    public int calculaAnios(Colaborador colaborador){
         Calendar c1 = Calendar.getInstance();
         c2 = Calendar.getInstance();
         c1.setTime(colaborador.getFechaInicioLaboral());
         vacaciones.setColaborador(colaborador);
         int anios = c2.get(YEAR) - c1.get(YEAR);
-        if (c1.get(Calendar.MONTH) > c2.get(Calendar.MONTH) ||
-                (c1.get(Calendar.MONTH) == c2.get(Calendar.MONTH) && c1.get(Calendar.DATE) > c2.get(Calendar.DATE))) {
+        if (c1.get(Calendar.MONTH+1) > c2.get(Calendar.MONTH) ||
+                (c1.get(Calendar.MONTH+1) == c2.get(Calendar.MONTH) && c1.get(Calendar.DATE) > c2.get(Calendar.DATE))) {
             anios--;
         }//funcion para calcular los annos de trabajo en la empresa
+        return anios;
+    }
 
+    public void asignaDiasVacaciones(int anios){
 
-        if (anios==0&&vacacionesService.diasDisponibles(colaborador)==null){
-
-            vacaciones.setDiasdisponibles(0);
-            vacacionesService.createVacaciones(vacaciones);
+        if (anios == 1||anios==2||anios == 3) {//dependiendo de la cantidad de anios se le asigna los dias de vacaciones
+            vacaciones.setDiasdisponibles(12);
+            vacacionesService.updateVacaciones(vacaciones);
+        } else if (anios == 3 ||anios==4|| anios == 5) {
+            vacaciones.setDiasdisponibles(15);
+            vacacionesService.updateVacaciones(vacaciones);
+        } else if (anios > 5) {
+            vacaciones.setDiasdisponibles(18);
+            vacacionesService.updateVacaciones(vacaciones);
         }
 
-        else if ((c1.get(Calendar.MONTH)+1)==c2.get(Calendar.MONTH)&&c1.get(Calendar.DAY_OF_MONTH)==c2.get(Calendar.DAY_OF_MONTH)){
-
-            if(anios>=1&&anios<=3){
-                vacaciones.setDiasdisponibles(12);
-                vacacionesService.updateVacaciones(vacaciones);
-            }
-            else if(anios>3&&anios<=5){
-                vacaciones.setDiasdisponibles(15);
-                vacacionesService.updateVacaciones(vacaciones);
-            }
-            else if(anios>5){
-                vacaciones.setDiasdisponibles(18);
-                vacacionesService.updateVacaciones(vacaciones);
-            }
-
-        }
-        else {
-            vacaciones.setDiasdisponibles(0);
-            vacacionesService.createVacaciones(vacaciones);
-        }
 
     }
 
