@@ -9,6 +9,8 @@ import s.c.m.entities.Vacaciones;
 
 @Repository
 public interface VacacionesRepository extends CrudRepository<Vacaciones, Integer> {
-    Vacaciones findByColaborador(Colaborador idColaborador);
+    /*Interfaz para acceder a las funciones que ofrece spring JPA data para transaciones y consultas a la base para
+    la tabla Vacaciones.*/
+    Vacaciones findByColaborador(Colaborador idColaborador);//Se declara la funcion para consultar la vacaciones por colaborador.
 
 }

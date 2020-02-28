@@ -13,6 +13,8 @@ import java.util.Optional;
 
 @Service
 public class HorarioService {
+    //Es esta clase se implementan las funciones desclaradas en los repositorios para acceder
+    // y hacer transacciones en la tabla Departamento
     @Autowired
     private HorarioRepository horarioRepository;
 

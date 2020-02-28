@@ -9,5 +9,7 @@ import java.util.List;
 
 @Repository
 public interface DescansosRepository extends CrudRepository<Descansos,String> {
-    List<Descansos> findByHorario(Horarios idHorario);
+    /*Interfaz para acceder a las funciones que ofrece spring JPA data para transaciones y consultas a la base para
+    la tabla Descansos.*/
+    List<Descansos> findByHorario(Horarios idHorario);//Se declara funcion para consultar los descansos por el horario al que pertenecen
 }

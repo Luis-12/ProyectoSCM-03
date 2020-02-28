@@ -11,5 +11,7 @@ import java.util.List;
 
 @Repository
 public interface HorarioRepository extends CrudRepository<Horarios,String> {
-    List<Horarios> findByJornada(Jornadas idJ);
+    /*Interfaz para acceder a las funciones que ofrece spring JPA data para transaciones y consultas a la base para
+    la tabla Horarios.*/
+    List<Horarios> findByJornada(Jornadas idJ);//Se declara la funcion para consultar los horarios por jornada.
 }
