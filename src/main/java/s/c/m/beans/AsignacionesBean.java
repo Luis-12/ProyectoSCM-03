@@ -346,6 +346,8 @@ public class AsignacionesBean {
                     diaDescanso2 = "Sábado";
                 } else if (selectAsignacion.getSegundodiades().equals("DO")) {
                     diaDescanso2 = "Domingo";
+                }else if (selectAsignacion.getSegundodiades().equals("N/A")) {
+                    diaDescanso2 = "N/A";
                 }
                 selectAsignacion.setSegundodiades(diaDescanso2);
             }
@@ -372,7 +374,9 @@ public class AsignacionesBean {
             diaDescanso = "SA";
         } else if (selectAsignacion.getDiaDescanso().equals("Domingo")) {
             diaDescanso = "DO";
-        } else {
+        } else if (selectAsignacion.getDiaDescanso() == null) {
+            diaDescanso = "N/A";
+        }else {
             diaDescanso = selectAsignacion.getDiaDescanso();
         }
         selectAsignacion.setDiadescanso(diaDescanso);
@@ -415,7 +419,8 @@ public class AsignacionesBean {
                     || selectAsignacion.getSegundodiades().equals("Jueves")
                     || selectAsignacion.getSegundodiades().equals("Viernes")
                     || selectAsignacion.getSegundodiades().equals("Sábado")
-                    || selectAsignacion.getSegundodiades().equals("Domingo")) {
+                    || selectAsignacion.getSegundodiades().equals("Domingo")
+                    || selectAsignacion.getSegundodiades().equals("")) {
                 selectAsignacion.setSegundodiades("N/A");
             }
             asignacionesService.updateAsignacion(selectAsignacion);//Aca se actualiza la asignacion del horario
