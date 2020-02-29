@@ -10,13 +10,15 @@ import javax.annotation.PostConstruct;
 
 @ManagedBean
 public class MenuView {
+    //Clase para generar los menus dinamicos
 
     private MenuModel model;
 
-    public MenuModel construyeMenuPorRol(String rol,String nombreDept){
+    public MenuModel construyeMenuPorRol(String rol,String nombreDept){//Funcion para construir menu dinamico por rol y nombre de dept
         model = new DefaultMenuModel();
 
         //First submenu
+        //Se generan submenus de cada modulo
         DefaultSubMenu firstSubmenu = new DefaultSubMenu("Colaborador");
         DefaultMenuItem item = new DefaultMenuItem("Mantenimiento Colaborador");
         item.setUrl("MantenimientoColaborador.xhtml");
@@ -90,8 +92,7 @@ public class MenuView {
         item.setCommand("asignacionHorario.xhtml");
         sextoSubmenu.addElement(item);
 
-
-
+        //Segun el rol se agrupan los submenus
        if(((rol.equals("Dirección Corporativa") && nombreDept.equals("Recursos Humanos")) || rol.equals("Analista") || (rol.equals("Dirección Corporativa") && nombreDept.equals("Tecnología de Infomación")) || rol.equals("Dirección Corporativa") || rol.equals("Gerencia"))) {//
             model.addElement(firstSubmenu);//SUBMENU MANTENIMIENTO COLABORADOR
             model.addElement(secondSubmenu);//SUBMENU MANTENIMIENTO DEPARTAMENTO

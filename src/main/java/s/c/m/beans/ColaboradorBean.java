@@ -1,7 +1,6 @@
 package s.c.m.beans;
 
 
-
 import org.primefaces.PrimeFaces;
 import org.primefaces.model.menu.MenuModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +30,11 @@ import static java.util.Calendar.YEAR;
 @ManagedBean
 @Scope("session")
 public class ColaboradorBean {
+    //Controlador que conecta el front end con el backend para IO de colaborador.
     @Autowired
     ColaboradorService colaboradorService;
     private Colaborador colaborador = new Colaborador();
     private Colaborador colaboradorMarca = new Colaborador();
-
 
     private Colaborador colaborador1 = new Colaborador();
     private Colaborador colaboradorlogueado = new Colaborador();
@@ -45,7 +44,7 @@ public class ColaboradorBean {
     private Puesto puesto = new Puesto();
     private Asignaciones asignaciones = new Asignaciones();
     Calendar c2;
-    private String base64Image="";
+    private String base64Image = "";
     private MarcaLaboradas marcaLa = new MarcaLaboradas();
 
     private Vacaciones vacaciones = new Vacaciones();
@@ -277,7 +276,7 @@ public class ColaboradorBean {
         this.model = model;
     }
 
-    public boolean validaVence(Date f) {
+    public boolean validaVence(Date f) {//Funcion que valida si la clave del usuario ya vencio
         Date fechaVence = f;
         Date fechaActual = new Date();
         String fechaVenceString = null;
@@ -316,8 +315,8 @@ public class ColaboradorBean {
         } else {
             diaV2 = "" + diaV;
         }
-        fechaVenceString = yearV + "" + mesV2 + "" + diaV2;
-        fechaV = Integer.parseInt(fechaVenceString);
+        fechaVenceString = yearV + "" + mesV2 + "" + diaV2;//Se forma un numero con la fecha de vencimiento
+        fechaV = Integer.parseInt(fechaVenceString);//Y se pasa a int la fecha de vencimiento formado con la fecha que tenia en la base el colan
 
         mesA = fechaActual2.get(Calendar.MONTH) + 1;
         diaA = fechaActual2.get(Calendar.DAY_OF_MONTH);
@@ -333,29 +332,29 @@ public class ColaboradorBean {
         } else {
             diaA2 = "" + diaA;
         }
-        fechaActualString = yearA + "" + mesA2 + "" + diaA2;
-        fechaA = Integer.parseInt(fechaActualString);
+        fechaActualString = yearA + "" + mesA2 + "" + diaA2;//Se da formato a la fecha actual
+        fechaA = Integer.parseInt(fechaActualString);//Se pasa a int la fecha actual
 
-        if (fechaA >= fechaV) {
+        if (fechaA >= fechaV) {//Se valida si la fecha actual es mayor o igual a la fecha de vencimiento
             vencio = true;
             System.out.println("AL USUARIO SE LE VENCIÓ LA CONTRASEÑA");
-            addMessage("Aviso", "La contraseña venció, ¡debe cambiarla!");
-        } else {
+            addMessage("Aviso", "La contraseña venció, ¡debe cambiarla!");//Si es asi quiere decir que vencio
+        } else {//De no ser asi la clave sigue vigente
             vencio = false;
             System.out.println("AL USUARIO SE LE SIGUE VIGENTE LA CONTRASEÑA");
         }
         return vencio;//Si es true quiere decir que vencio
     }
 
-    public void construyeMenuDinamico(String rol, String nombreDept) {
+    public void construyeMenuDinamico(String rol, String nombreDept) {//Funcion para crear el menu dinamico segun el departamento y rol
         model = generaMenu.construyeMenuPorRol(rol, nombreDept);
     }
 
-    public String doLogin() throws Exception {
+    public String doLogin() throws Exception {//Funcion para hacer login
         PrimeFaces current = PrimeFaces.current();
-        colaborador1 = colaboradorService.findColaborador(colaboradorlogueado.getPk_idColaborador());
+        colaborador1 = colaboradorService.findColaborador(colaboradorlogueado.getPk_idColaborador());//Se encuetra el colaborador
 
-        if (colaborador1 != null && colaborador1.getEstado().equals("Activo")) {//IF que valida que el usuario ingresado existe o no
+        if (colaborador1 != null && colaborador1.getEstado().equals("Activo")) {//IF que valida que el usuario ingresado existe y esta activo o no
             String dbUsername = colaborador1.getPk_idColaborador();
             String dbPassword = colaborador1.getClave();
             FacesContext context = FacesContext.getCurrentInstance();
@@ -367,16 +366,17 @@ public class ColaboradorBean {
                     && colaborador1.getPuesto().getDescripcion().equals("Gerencia")
                     && colaborador1.getPuesto().getDescripcion().equals("Gerencia")
                     && colaborador1.getDepartamento().getNombre().equals("Recursos Humanos")) {
+                //Se valida si la clave y usuario corresponden y se valida si el puesto es Gerencia y RH
                 colaboradorlogueado.setNombre(colaborador1.getNombre());
                 colaboradorlogueado.setPuesto(colaborador1.getPuesto());
                 colaboradorlogueado.setDepartamento(colaborador1.getDepartamento());
                 diasDisponibles(colaborador1);
-                vacaciones1 = vacacionesService.diasDisponibles(colaborador1);
+                vacaciones1 = vacacionesService.diasDisponibles(colaborador1);//Se llena las vacaciones con los dias disponibles del colaborador
 
-                if (validaVence(colaborador1.getFechaVencimiento())) {
-                    current.executeScript("PF('dlCC').show();");
-                } else {
-                    construyeMenuDinamico(colaborador1.getPuesto().getDescripcion(), colaborador1.getDepartamento().getNombre());
+                if (validaVence(colaborador1.getFechaVencimiento())) {//Se valida si la fecha de vencimiento del cola que se loguea se vencio
+                    current.executeScript("PF('dlCC').show();");//Si es asi se despliega el form para cambiar la clase
+                } else {//Si no
+                    construyeMenuDinamico(colaborador1.getPuesto().getDescripcion(), colaborador1.getDepartamento().getNombre());//Se contruye el menu dinamico
                     loggedIn = true;
                     colaboradores = colaboradorService.getAllColaboradoresActivos(colaboradorlogueado);
 
@@ -394,55 +394,59 @@ public class ColaboradorBean {
                 diasDisponibles(colaborador1);
                 vacaciones1 = vacacionesService.diasDisponibles(colaborador1);
 
-                if (validaVence(colaborador1.getFechaVencimiento())) {
-                    current.executeScript("PF('dlCC').show();");
-                } else {
+                if (validaVence(colaborador1.getFechaVencimiento())) {//Se valida si la clave vencio
+                    current.executeScript("PF('dlCC').show();");//Si vencio se muestra el form para cambiar la clave
+                } else {//Si no es necesario cambiar la clave
                     construyeMenuDinamico(colaborador1.getPuesto().getDescripcion(), colaborador1.getDepartamento().getNombre());
-                    loggedIn = true;
-                    colaboradores = colaboradorService.getAllColaboradoresActivos(colaboradorlogueado);
+                    //Se construye el menu dinamico por rol y dept
+                    loggedIn = true;//Se loguea
+                    colaboradores = colaboradorService.getAllColaboradoresActivos(colaboradorlogueado);//Se cargan todos los cola
                     return "/administracion/ListaSolicitud.xhtml?faces-redirect=true";
                 }
 
             }
             if (colaboradorlogueado.getPk_idColaborador().equals(dbUsername) && colaboradorlogueado.getClave().equals(dbPassword) && colaborador1.getPuesto().getDescripcion().equals("Colaborador")) {
+                //Si es que se loguea es un simple colaborador
                 colaboradorlogueado.setNombre(colaborador1.getNombre());
                 colaboradorlogueado.setPuesto(colaborador1.getPuesto());
                 colaboradorlogueado.setDepartamento(colaborador1.getDepartamento());
                 diasDisponibles(colaborador1);
                 vacaciones1 = vacacionesService.diasDisponibles(colaborador1);
 
-                if (validaVence(colaborador1.getFechaVencimiento())) {
-                    current.executeScript("PF('dlCC').show();");
+                if (validaVence(colaborador1.getFechaVencimiento())) {//Valida si la clave vencio
+                    current.executeScript("PF('dlCC').show();");//Se muestra el dialogo para mostrar el form de cambio de clave
                 } else {
                     construyeMenuDinamico(colaborador1.getPuesto().getDescripcion(), colaborador1.getDepartamento().getNombre());
+                    //Se construye el menu dinamico por puesto y departamento
                     loggedIn = true;
-                    colaboradores = colaboradorService.getAllColaboradoresActivos(colaboradorlogueado);
-                    return "/administracion/SolicitudVacaciones.xhtml?faces-redirect=true";
+                    colaboradores = colaboradorService.getAllColaboradoresActivos(colaboradorlogueado);//Se listan todos los colaboradores
+                    return "/administracion/SolicitudVacaciones.xhtml?faces-redirect=true";//Se muestra el form de solicitud de vacaciones
                 }
             }
             if (colaboradorlogueado.getPk_idColaborador().equals(dbUsername) && colaboradorlogueado.getClave().equals(dbPassword)
                     && (colaborador1.getPuesto().getDescripcion().equals("Dirección Corporativa")
                     || colaborador1.getPuesto().getDescripcion().equals("Jefatura")
                     || colaborador1.getPuesto().getDescripcion().equals("Supervisor")
-                    || colaborador1.getPuesto().getDescripcion().equals("Analista"))) {
+                    || colaborador1.getPuesto().getDescripcion().equals("Analista"))) {//Se valida por el rol lo que se va a mostrar
                 colaboradorlogueado.setNombre(colaborador1.getNombre());
                 colaboradorlogueado.setPuesto(colaborador1.getPuesto());
                 colaboradorlogueado.setDepartamento(colaborador1.getDepartamento());
                 diasDisponibles(colaborador1);
                 vacaciones1 = vacacionesService.diasDisponibles(colaborador1);
 
-                if (validaVence(colaborador1.getFechaVencimiento())) {
-                    current.executeScript("PF('dlCC').show();");
+                if (validaVence(colaborador1.getFechaVencimiento())) {//Valida si la clave ya vencio
+                    current.executeScript("PF('dlCC').show();");//Despliega el form de cambio de clave
                 } else {
                     construyeMenuDinamico(colaborador1.getPuesto().getDescripcion(), colaborador1.getDepartamento().getNombre());
-                    loggedIn = true;
-                    colaboradores = colaboradorService.getAllColaboradoresActivos(colaboradorlogueado);
+                    //Se construye el menu dinamico
+                    loggedIn = true;//Se de acceso al logueo
+                    colaboradores = colaboradorService.getAllColaboradoresActivos(colaboradorlogueado);//Se cargan todos los colaboradores
 
-
-                    return "/administracion/ListaSolicitud.xhtml?faces-redirect=true";
+                    return "/administracion/ListaSolicitud.xhtml?faces-redirect=true";//Se despliega la ventana de lista de solicitudes para estos roles
                 }
             }
             FacesMessage msg = new FacesMessage("Aviso", "El usuario o contraseña son incorrectos");
+            //Si el usuario y clave no corresponden
             msg.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return null;
@@ -453,21 +457,20 @@ public class ColaboradorBean {
     }
 
 
-    public boolean validaClave() {
+    public boolean validaClave() {//Valida que la clave no sea igual a la anterior
         boolean diferente = false;
         if (colaborador1.getClave().equals(colaboradorlogueado.getClave())) {//Si son iguales retorna false por ende no puede cambiar la clave
             FacesContext.getCurrentInstance().addMessage("contraseñaCCC",
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "La nueva clave no puede ser igual a la anterior", "La nueva clave no puede ser igual a la anterior"));
-
             diferente = false;
-        } else {
+        } else {//Si es diferente se retorna true para que puede pasar y cambiar
             diferente = true;
         }
         return diferente;//Si es true quiere decir que son diferentes por lo tanto pueden hacer el cambio
     }
 
 
-    public boolean validarContrasena(String usuario, String contrasena) {
+    public boolean validarContrasena(String usuario, String contrasena) {//Valida que la clave no sea similar al usuario
         for (int i = 0; (i + 2) < usuario.length(); i++)
             if (contrasena.indexOf(usuario.substring(i, i + 3)) != -1) {
                 return false;
@@ -475,18 +478,18 @@ public class ColaboradorBean {
         return true;
     }
 
-    public String cambioClave() throws Exception {
+    public String cambioClave() throws Exception {//Funcion para cambiar la clave del colaborador cuando vensa
 
-        if (validaClave()) {//Si validaClave retorna true se puede cambiar la clave
-            if (validarContrasena(colaborador1.getNombre(), colaboradorlogueado.getClave()) == true) {
+        if (validaClave()) {//Si validaClave retorna true se debe cambiar la clave
+            if (validarContrasena(colaborador1.getNombre(), colaboradorlogueado.getClave()) == true) {//Valida que si sirva la clave nueva
 
                 colaborador1.setClave(colaboradorlogueado.getClave());
-                System.out.println("NUEVA CLAVE:" + colaborador1.getClave());
+                //System.out.println("NUEVA CLAVE:" + colaborador1.getClave());
                 colaboradorService.actualizaClave(colaborador1);//Aca le paso el colaborador ya con la nueva clave para que en el service con esta funcion lo updatee en la base con la nueva clave
-                Colaborador c = colaboradorService.findColaborador(colaborador1.getPk_idColaborador());
-                System.out.println("La nueva clave es" + c.getClave());
+                Colaborador c = colaboradorService.findColaborador(colaborador1.getPk_idColaborador());//Aca se actualiza el colaborador con la nueva clave
+                //System.out.println("La nueva clave es" + c.getClave());
                 return doLogin();
-            } else {
+            } else {//Si no quiere decir que la clave no es valida
                 FacesContext.getCurrentInstance().addMessage("contraseñaCCC",
                         new FacesMessage(FacesMessage.SEVERITY_ERROR, "No puede usar su nombre o apellidos", "No puede usar su nombre o apellidos"));
                 return null;
@@ -500,30 +503,30 @@ public class ColaboradorBean {
         return "/login.xhtml";
     }
 
-    public String doLogout() {
+    public String doLogout() {//Funcion para desloguearse
         loggedIn = false;
 
         FacesMessage msg = new FacesMessage("Salió", "Ha salido con éxito");
         msg.setSeverity(FacesMessage.SEVERITY_INFO);
         FacesContext.getCurrentInstance().addMessage(null, msg);
-        return "/login.xhtml?faces-redirect=true";
+        return "/login.xhtml?faces-redirect=true";//Se vuelve a la pagina de logueo
     }
 
 
-    public void create() {
+    public void create() {//Funcion para agregar colaborador a la base
         PrimeFaces current = PrimeFaces.current();
         FacesMessage mensaje = null;
-        boolean existeColaborador = false;
+        boolean existeColaborador = false;//Parametro para validar si el colaborador existe
 
-        for (Colaborador c : colaboradores) {
+        for (Colaborador c : colaboradores) {//Se busca en la lista de colaboradores activos si el colaborador se encuentra
             if (colaborador.getPk_idColaborador().equals(c.getPk_idColaborador())) {
-                existeColaborador = true;
+                existeColaborador = true;//Si existe se pone la bandera true
                 break;
             } else {
                 existeColaborador = false;
             }
         }
-        if (!existeColaborador) {
+        if (!existeColaborador) {//Si el colaborador no existe se puede agregar el colaborador
             if (((colaboradorService.findColaboradorEncargado(colaborador.getDepartamento(), puestoService.findIdPuesto("Gerencia")) == null)
                     && //Si no encuetra un gerente Gerencia
                     (colaboradorService.findColaboradorEncargado(colaborador.getDepartamento(), puestoService.findIdPuesto("Jefatura")) == null))//Y si no encuentra un jefe pasa directo a agregar Jefatura
@@ -531,24 +534,24 @@ public class ColaboradorBean {
                     ((!colaborador.getPuesto().getDescripcion().equals("Gerencia"))//Si el puesto es distinto de Gerencia
                             &&
                             (!colaborador.getPuesto().getDescripcion().equals("Jefatura")))//Y si el puesto es distinto de Jefatura pasa directo a agregar
-            ) {
+            ) {//Se valida si no existe un jefe de departamento y si el que se esta agregando no es un jefe de dept
                 try {
-                    System.out.println("No existe el colaborador");
-                    colaboradorService.createColaborador(colaborador);
+                    //System.out.println("No existe el colaborador");
+                    colaboradorService.createColaborador(colaborador);//Aca se agrega el colaborador a la base
                     current.executeScript("PF('dlAC').hide();");
                     current.ajax().update("form:tablaColaborador");
                     mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Colaborador insertado correctamente.");
-                    colaboradores = colaboradorService.getAllColaboradoresActivos(colaboradorlogueado);
+                    colaboradores = colaboradorService.getAllColaboradoresActivos(colaboradorlogueado);//Se refresca la lista de colaboradores
                 } catch (Exception e) {
                 } finally {
                     colaborador = new Colaborador();
                 }
-            } else {
+            } else {//Si no se avisa que ya hay un jefe existente
                 mensaje = new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "El departamento " + colaborador.getDepartamento().getNombre() + " ya tiene un Gerente o Jefe Asignado");
                 System.out.println("Ya existe un JEFE PARA ESTE DEPARTAMENTO");
             }
-        } else if (existeColaborador) {
-            System.out.println("Si existe el colaborador con esa cédula");
+        } else if (existeColaborador) {//Si ya se econtro un colaborador con ese id
+            //System.out.println("Si existe el colaborador con esa cédula");
             mensaje = new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "Ya existe un colaborador con esa cédula, pruebe nuevamente.");
             colaborador = new Colaborador();
         }
@@ -556,7 +559,7 @@ public class ColaboradorBean {
         PrimeFaces.current().ajax().addCallbackParam("existeColaborador", existeColaborador);
     }
 
-    public void checkDepartamento() {
+    public void checkDepartamento() {//Se valida existe un dept al cual se pueden agregar colaboradores
         PrimeFaces current = PrimeFaces.current();
 
         if (departamentoService.getAllDepartamentosActivos().size() != 0) {
@@ -574,32 +577,32 @@ public class ColaboradorBean {
             addMessage("Aviso", "Debe Seleccionar un Colaborador."); //si esta vacio muetra este mensaje
         } else {
 
-            current.executeScript("PF('dlUC').show();"); //si no esta vacio muestra el dialogo
+            current.executeScript("PF('dlUC').show();"); //si no esta vacio muestra el dialogo para actualizar colaborador
         }
     }
 
-    public void showconfirm() {
+    public void showconfirm() {//Funcion para mostrar confirmacion de desactivar el colaborador
         PrimeFaces current = PrimeFaces.current();
 
         if (selectcolaborador == null) {
             addMessage("Aviso", "Debe Seleccionar un Colaborador."); //si esta vacio muetra este mensaje
         } else {
-            current.executeScript("PF('dlEC').show();"); //si no esta vacio muestra el dialogo
+            current.executeScript("PF('dlEC').show();"); //si no esta vacio muestra el dialogo de confirmacion
         }
 
     }
 
-    public void delete() {
+    public void delete() {//Funcion para desactivar el colaborador de la base
         PrimeFaces current = PrimeFaces.current();
         colaboradorService.deleteColaborador(selectcolaborador);
         current.ajax().update("form:tablaColaborador");
         addMessage("Aviso", "Colaborador desactivado correctamente.");
         colaboradores = colaboradorService.getAllColaboradoresActivos(colaboradorlogueado);
-        System.out.println("Eliminado");
+        //System.out.println("Eliminado");
     }
 
-    public void update() throws Exception {
-        Colaborador colaboradorEvalua = colaboradorService.findColaborador(selectcolaborador.getPk_idColaborador());
+    public void update() throws Exception {//Funcion para actualizar colaborador
+        Colaborador colaboradorEvalua = colaboradorService.findColaborador(selectcolaborador.getPk_idColaborador());//Se busca el colaborador a actualizar
         PrimeFaces current = PrimeFaces.current();
         FacesMessage mensaje = null;
         if ((!colaboradorEvalua.getPuesto().getDescripcion().equals(selectcolaborador.getPuesto().getDescripcion()))//Si es diferente el puesto o el departamento
@@ -612,29 +615,29 @@ public class ColaboradorBean {
                     ((!selectcolaborador.getPuesto().getDescripcion().equals("Gerencia"))//Si el puesto es distinto de Gerencia
                             && (!selectcolaborador.getPuesto().getDescripcion().equals("Jefatura")))//Y si el puesto es distinto de Jefatura pasa directo a agregar
             ) {
-                try {
+                try {//Se procede a actualizar el colaborador
                     System.out.println("El nombre actualizado es:" + selectcolaborador.getNombre());
-                    colaboradorService.updateColaborador(selectcolaborador);
+                    colaboradorService.updateColaborador(selectcolaborador);//Aca se actualiza en la base de datos
                     current.executeScript("PF('dlUC').hide();");
                     current.ajax().update("form:tablaColaborador");
                     addMessage("Aviso", "Colaborador actualizado correctamente.");
-                    colaboradores = colaboradorService.getAllColaboradoresActivos(colaboradorlogueado);
+                    colaboradores = colaboradorService.getAllColaboradoresActivos(colaboradorlogueado);//Se cargan los colaboradores por jefe logueado
                 } catch (Exception e) {
                 } finally {
                     selectcolaborador = new Colaborador();
                 }
-            } else {
+            } else {//Si se trata de agregar un jefe y esta ya esta agregado se muestra el siguiente mensaje
                 addMessage("Aviso", "El departamento " + selectcolaborador.getDepartamento().getNombre() + " ya tiene un Gerente o Jefe Asignado");
                 //mensaje = new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "El departamento " + selectcolaborador.getDepartamento().getNombre() +" ya tiene un Gerente o Jefe Asignado");
                 System.out.println("Ya existe un JEFE PARA ESTE DEPARTAMENTO");
             }
-        } else {
+        } else {//Si no si se puede actualizar el colaborador
             System.out.println("El nombre actualizado es:" + selectcolaborador.getNombre());
-            colaboradorService.updateColaborador(selectcolaborador);
+            colaboradorService.updateColaborador(selectcolaborador);//Se actualizar el colaborador en la base de datos
             current.executeScript("PF('dlUC').hide();");
             current.ajax().update("form:tablaColaborador");
             addMessage("Aviso", "Colaborador actualizado correctamente.");
-            colaboradores = colaboradorService.getAllColaboradoresActivos(colaboradorlogueado);
+            colaboradores = colaboradorService.getAllColaboradoresActivos(colaboradorlogueado);//Se cargan los colaboradores por jefe logueado
         }
     }
 
@@ -642,9 +645,9 @@ public class ColaboradorBean {
         colaboradorMarca = colaboradorService.findColaborador(colaboradorMarca.getPk_idColaborador());
         PrimeFaces current = PrimeFaces.current();
 
-        if (colaboradorMarca == null) {
+        if (colaboradorMarca == null) {//Se valida si el colaborador existe
             addMessage("Aviso", "No se encuentra el colaborador");
-            mensaje="No se encuentra el colaborador";
+            mensaje = "No se encuentra el colaborador";
             current.ajax().update("msj");
 
         } else//Si es asi se pasa a validar que tenga horario asignado
@@ -653,90 +656,91 @@ public class ColaboradorBean {
         }
     }
 
-    public void listaMarcasPorJornada() {
+    public void listaMarcasPorJornada() {//Funcion para listar las marcas que tiene el colaborador en la jornada
         marcasJornadasList = new ArrayList<MarcasJornada>();
 
         PrimeFaces current = PrimeFaces.current();
         MarcaLaboradas mLaborada = new MarcaLaboradas();
         mLaborada = marcaLaboradaService.buscaMarcaPorColaboradoYEstado(colaboradorMarca, "Entrada");//Saco marca de entrada
 
-        if (mLaborada == null) {
-            System.out.println("No ha marcado entrada");
+        if (mLaborada == null) {//Si no ha marcado entro aca
+        //System.out.println("No ha marcado entrada");
         } else {//Lleno objeto con hora entrada y la descripcion de entrada
-            if (mLaborada.getHoraEntrada() != null) {//Si solo a marcado entrada
-                MarcasJornada miMJ = new MarcasJornada();
-                System.out.println("ENTRO A IF SIN MARCA SALIDA");
+        if (mLaborada.getHoraEntrada() != null) {//Si solo a marcado entrada
+            MarcasJornada miMJ = new MarcasJornada();
+            System.out.println("ENTRO A IF SIN MARCA SALIDA");
 
-                //Ingreso la entrada
-                miMJ.setMarca(mLaborada.getHoraEntrada());
-                miMJ.setDescripcion("Entrada");
-                marcasJornadasList.add(miMJ);
-                miMJ = new MarcasJornada();
+            //Ingreso la entrada
+            miMJ.setMarca(mLaborada.getHoraEntrada());//Se agrega el objeto de entrada
+            miMJ.setDescripcion("Entrada");
+            marcasJornadasList.add(miMJ);//Se agrega a la lista a mostrar
+            miMJ = new MarcasJornada();
 
-                List<MarcaDescansos> marcaDescansosList = marcaDescansoService.buscarMarcaPorMarcaLab(mLaborada);
-                if (!marcaDescansosList.isEmpty()) {//Si la marca descansos no esta vacia
-                    for (MarcaDescansos md : marcaDescansosList) {
-                        if (md.getHoraFin()==null) {//Si no ha finalizado el descanso
-                            miMJ.setMarca(md.getHoraInicio());
-                            miMJ.setDescripcion("Inicio "+md.getDescansos().getDescripcion());
-                            marcasJornadasList.add(miMJ);//Solo agrega el inicio de descanso
-                            miMJ = new MarcasJornada();
+            List<MarcaDescansos> marcaDescansosList = marcaDescansoService.buscarMarcaPorMarcaLab(mLaborada);//Se cargan los descansos
+            //Se buscan la marcas por descansos
+            if (!marcaDescansosList.isEmpty()) {//Si la marca descansos no esta vacia
+                for (MarcaDescansos md : marcaDescansosList) {//Se listan las marcas de descanso que tenga
+                    if (md.getHoraFin() == null) {//Si no ha finalizado el descanso
+                        miMJ.setMarca(md.getHoraInicio());
+                        miMJ.setDescripcion("Inicio " + md.getDescansos().getDescripcion());
+                        marcasJornadasList.add(miMJ);//Solo agrega el inicio de descanso
+                        miMJ = new MarcasJornada();
+                    } else {//Si el descanso si finalizo es decir el campo getHoraFin tiene algo se carga
+                        miMJ.setMarca(md.getHoraInicio());
+                        miMJ.setDescripcion("Inicio " + md.getDescansos().getDescripcion());
+                        marcasJornadasList.add(miMJ);//el inicio
+                        miMJ = new MarcasJornada();
 
-                        } else {//Si el descanso si finalizo es decir el campo getHoraFin tiene algo se carga
-                            miMJ.setMarca(md.getHoraInicio());
-                            miMJ.setDescripcion("Inicio "+md.getDescansos().getDescripcion());
-                            marcasJornadasList.add(miMJ);//el inicio
-                            miMJ = new MarcasJornada();
-
-                            miMJ.setMarca(md.getHoraFin());
-                            miMJ.setDescripcion("Finalizo "+md.getDescansos().getDescripcion());
-                            marcasJornadasList.add(miMJ);//el fin
-                            miMJ = new MarcasJornada();
-                        }
+                        miMJ.setMarca(md.getHoraFin());
+                        miMJ.setDescripcion("Finalizo " + md.getDescansos().getDescripcion());
+                        marcasJornadasList.add(miMJ);//el fin
+                        miMJ = new MarcasJornada();
                     }
                 }
             }
         }
-        current.ajax().update("f1:marcaJornadaTabla");
+            current.ajax().update("f1:marcaJornadaTabla");//Se actualiza la tabla
+        }
+
     }
 
-    public void listaMarcasPorJornadaFinalizada(MarcaLaboradas mLaborada) {
+    public void listaMarcasPorJornadaFinalizada(MarcaLaboradas mLaborada) {//Funcion para listar marcas de jornada hasta el final
         marcasJornadasList = new ArrayList<MarcasJornada>();
         PrimeFaces current = PrimeFaces.current();
         if (mLaborada.getHoraSalida() != null) {//Si tambien marco salida
             MarcasJornada miMJ = new MarcasJornada();
             miMJ.setMarca(mLaborada.getHoraEntrada());
             miMJ.setDescripcion("Entrada");
-            marcasJornadasList.add(miMJ);
+            marcasJornadasList.add(miMJ);//Se lista la marca de entrada
             miMJ = new MarcasJornada();
 
-            List<MarcaDescansos> marcaDescansosList = marcaDescansoService.buscarMarcaPorMarcaLab(mLaborada);
+            List<MarcaDescansos> marcaDescansosList = marcaDescansoService.buscarMarcaPorMarcaLab(mLaborada);//Se buscan las marcas de descansos
             if (!marcaDescansosList.isEmpty()) {//Si la marca descansos no esta vacia
                 for (MarcaDescansos md : marcaDescansosList) {
-                    if (md.getHoraFin()==null) {//Si no ha finalizado el descanso
+                    if (md.getHoraFin() == null) {//Si no ha finalizado el descanso
                         miMJ.setMarca(md.getHoraInicio());
-                        miMJ.setDescripcion("Inicio "+md.getDescansos().getDescripcion());
+                        miMJ.setDescripcion("Inicio " + md.getDescansos().getDescripcion());
                         marcasJornadasList.add(miMJ);//Solo agrega el inicio de descanso
                         miMJ = new MarcasJornada();
 
                     } else {//Si el descanso si finalizo es decir el campo getHoraFin tiene algo se carga
                         miMJ.setMarca(md.getHoraInicio());
-                        miMJ.setDescripcion("Inicio "+md.getDescansos().getDescripcion());
-                        marcasJornadasList.add(miMJ);//el inicio
+                        miMJ.setDescripcion("Inicio " + md.getDescansos().getDescripcion());
+                        marcasJornadasList.add(miMJ);//Se agrega el inicio de descanso
                         miMJ = new MarcasJornada();
 
                         miMJ.setMarca(md.getHoraFin());
-                        miMJ.setDescripcion("Finalizo "+md.getDescansos().getDescripcion());
-                        marcasJornadasList.add(miMJ);//el fin
+                        miMJ.setDescripcion("Finalizo " + md.getDescansos().getDescripcion());
+                        marcasJornadasList.add(miMJ);//y el fin del descanso
                         miMJ = new MarcasJornada();
                     }
                 }
             }
             miMJ.setMarca(mLaborada.getHoraSalida());
             miMJ.setDescripcion("Salida");
-            marcasJornadasList.add(miMJ);
+            marcasJornadasList.add(miMJ);//Y por ultimo se carga la marca de salida
         }
-        current.ajax().update("f1:marcaJornadaTabla");
+        current.ajax().update("f1:marcaJornadaTabla");//Se actualiza la tabla
     }
 
     public void habilitarAccion()//Funcion que valida si el colaborador al mostrar el qr tiene un horario asignado
@@ -747,7 +751,7 @@ public class ColaboradorBean {
         asignaciones = asignacionesServices.buscarHorario(colaboradorMarca);//Busca si exite una asignacion con el id del colaborador
         if (asignaciones == null)//Si no tiene horario asignado se muestra el mensaje
         {
-            mensaje="El colaborador no tiene horario asignado";
+            mensaje = "El colaborador no tiene horario asignado";
             current.ajax().update("msj");
 
             colaboradorMarca = new Colaborador();
@@ -760,17 +764,17 @@ public class ColaboradorBean {
             Date date = new Date();
             MarcaLaboradas marcaLa = marcaLaboradaService.buscaMarcaPorColaboradoYEstado(colaboradorMarca, "Entrada");//Se busca si ya marco la entrada por medio de la fecha del dia
             java.sql.Date fechahoy = new java.sql.Date(date.getTime());
-            if (marcaLaboradaService.validaMarcaDia(colaboradorMarca, fechahoy)!=null&&marcaLaboradaService.validaMarcaDia(colaboradorMarca, fechahoy).getEstado().equals("Finalizado")) {
-                mensaje="Ya realizo sus marcas del dia de hoy";
+            if (marcaLaboradaService.validaMarcaDia(colaboradorMarca, fechahoy) != null && marcaLaboradaService.validaMarcaDia(colaboradorMarca, fechahoy).getEstado().equals("Finalizado")) {
+                mensaje = "Ya realizo sus marcas del dia de hoy";
                 current.ajax().update("msj");
             } else {
                 if (marcaLa == null) {//si no encuentra la marca con el colaborador y el estado Entrada se habilita el boton de entrada
                     if ((!asignaciones.getDiadescanso().equals(verificaDiaLibre(c1.get(Calendar.DAY_OF_WEEK)))
-                            && !asignaciones.getSegundodiades().equals(verificaDiaLibre(c1.get(Calendar.DAY_OF_WEEK))))
-                    || (!asignaciones.getDiadescanso().equals(verificaDiaLibre(c1.get(Calendar.DAY_OF_WEEK)))
-                            && asignaciones.getSegundodiades().equals("N/A"))) {//Pero primero valida que no sea el dia libre del cola
+                            && !asignaciones.getSegundodiades().equals(verificaDiaLibre(c1.get(Calendar.DAY_OF_WEEK))))//Si no es el primer ni el segundo dia de descanso
+                            || (!asignaciones.getDiadescanso().equals(verificaDiaLibre(c1.get(Calendar.DAY_OF_WEEK)))//O si no es el primer y es el segundo dia N/A
+                            && asignaciones.getSegundodiades().equals("N/A"))) {//Pero primero valida que no sea el dia libre del colaborador
                         botonEntrada = false;
-                        current.ajax().update("bot");
+                        current.ajax().update("bot");//Puede realizar la marca
                     } else {//Si el dia de hoy y el dia de descanso son iguales se muestra el mensaje de que es dia libre
                         addMessage("Aviso", "" + colaboradorMarca.getNombre() + " es su día libre");
                         botonEntrada = true;
@@ -779,7 +783,7 @@ public class ColaboradorBean {
                         current.ajax().update("info:nom");// se limpia el nombre
                         current.ajax().update("info:ced");
                     }
-                } else {//Si la encuentra se habilita el boton de salida y descanso
+                } else {//Si la encuentra se habilita el boton de salida y descanso por que quiere decir que ya habia marcado entrada
                     botonSalida = false;
                     validacionMarcaDes();
                     current.ajax().update("bot:sali");
@@ -787,10 +791,11 @@ public class ColaboradorBean {
             }
         }
     }
+
     public String verificaDiaLibre(int a)//Funcion que verifica segun el dia por numero el dia en string
     {
         String day = null;
-        switch (a) {
+        switch (a) {//Se hace un cambio de formato segun el numero del dia a letras
             case 1:
                 day = "DO";
                 break;
@@ -816,7 +821,7 @@ public class ColaboradorBean {
         return day;
     }
 
-    public void marcaEntrada() {//funcion para el boton marcar Entrada
+    public void marcaEntrada() {//funcion para el boton marcar Entrada para guardar marca en la base de datos
         PrimeFaces current2 = PrimeFaces.current();
         Calendar c1 = Calendar.getInstance();
         c2 = Calendar.getInstance();
@@ -824,15 +829,15 @@ public class ColaboradorBean {
         c1.set(YEAR, c2.get(YEAR));
         c1.set(Calendar.MONTH, c2.get(Calendar.MONTH));
         c1.set(Calendar.DAY_OF_MONTH, c2.get(Calendar.DAY_OF_MONTH));//se carga la fecha actual
-        if (c1.compareTo(c2) == 1) //  antes de entrada madrugo el colaborador
+        if (c1.compareTo(c2) == 1) //Valida si es antes de entrada el colaborador llego antes
         {
             long resultado = (Math.abs(c1.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));
-            if (resultado <= 15) {//Valida si ya puede marcar
+            if (resultado <= 15) {//Valida si ya puede marcar se dan 15 minutos de marca antes
                 mensaje = "marca de la entrada";
                 current2.ajax().update("msj");
                 marcaEn();//Aca se llama la funcion para realizar la marca en la base de datos
             } else {//Si no se le avisa que aun no puede marcar por que es muy temprano
-                mensaje= "Es muy temprano, no le correponde realizar la marca";
+                mensaje = "Es muy temprano, no le correponde realizar la marca";
                 current2.ajax().update("msj");
                 botonEntrada = true;
                 current2.ajax().update("bot:ent");//Se vuelven a bloquear los botones
@@ -846,11 +851,11 @@ public class ColaboradorBean {
             c3.add(Calendar.HOUR, 1);
             long resultado = (Math.abs(c3.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));
             if (resultado <= 60) {//Aca se esta dando un tiempo de colchon para realizar la marca tarde despues del tiempo de un 1 de la hora de entrada segun horario
-                mensaje= "marca tarde";//Como es tarde pero todavia es valido que marque puede justificar su tardia
+                mensaje = "marca tarde";//Como es tarde pero todavia es valido que marque puede justificar su tardia
                 current2.ajax().update("msj");
-                current2.executeScript("PF('just').show();");//
+                current2.executeScript("PF('just').show();");//Se despliega form para justifica llegada tardia
             } else {//Si es demasiado tarde se muestra el mensaje de que ya no puede marca
-                mensaje="Demasiado tarde, no puede realizar marca, tiempo limite agotado";
+                mensaje = "Demasiado tarde, no puede realizar marca, tiempo limite agotado";
                 current2.ajax().update("msj");
                 botonEntrada = true;
                 current2.ajax().update("bot:ent");//Se vuelven a bloquear los botones
@@ -862,67 +867,64 @@ public class ColaboradorBean {
     }
 
 
-    public void diasDisponibles(Colaborador colaborador) {
+    public void diasDisponibles(Colaborador colaborador) {//Funcion para calcular los dias disponible de vacaciones
 
         Vacaciones disponibles = new Vacaciones();
         vacaciones.setColaborador(colaborador);
-        disponibles = vacacionesService.diasDisponibles(colaborador);
-        int anios = calculaAnios(colaborador);
+        disponibles = vacacionesService.diasDisponibles(colaborador);//Se consulta los dia disponibles
+        int anios = calculaAnios(colaborador);//Se consulta los years que este laborando el cola en la empresa
         PrimeFaces current2 = PrimeFaces.current();
 
 
         if (disponibles == null) {
             vacaciones.setDiasdisponibles(0);
             vacacionesService.createVacaciones(vacaciones);
-            vacaciones=new Vacaciones();
+            vacaciones = new Vacaciones();
             asignaDiasVacaciones(anios);
         } else {
-          asignaDiasVacaciones(anios);
-            vacaciones=new Vacaciones();
-
+            asignaDiasVacaciones(anios);
+            vacaciones = new Vacaciones();
         }
 
     }
 
-    public int calculaAnios(Colaborador colaborador){
+    public int calculaAnios(Colaborador colaborador) {//Funcion para calcular la cantidad de year que lleva el colaborador laborando
         Calendar c1 = Calendar.getInstance();
         c2 = Calendar.getInstance();
         c1.setTime(colaborador.getFechaInicioLaboral());
         vacaciones.setColaborador(colaborador);
         int anios = c2.get(YEAR) - c1.get(YEAR);
-        if (c1.get(Calendar.MONTH+1) > c2.get(Calendar.MONTH) ||
-                (c1.get(Calendar.MONTH+1) == c2.get(Calendar.MONTH) && c1.get(Calendar.DATE) > c2.get(Calendar.DATE))) {
+        if (c1.get(Calendar.MONTH + 1) > c2.get(Calendar.MONTH) ||
+                (c1.get(Calendar.MONTH + 1) == c2.get(Calendar.MONTH) && c1.get(Calendar.DATE) > c2.get(Calendar.DATE))) {
             anios--;
         }//funcion para calcular los annos de trabajo en la empresa
         return anios;
     }
 
-    public void asignaDiasVacaciones(int anios){
+    public void asignaDiasVacaciones(int anios) {//Funcion que calcula la cantidad de dias disponibles segun los anio que lleva laborando
 
-        if (anios == 1||anios==2||anios == 3) {//dependiendo de la cantidad de anios se le asigna los dias de vacaciones
+        if (anios == 1 || anios == 2 || anios == 3) {//dependiendo de la cantidad de anios se le asigna los dias de vacaciones
             vacaciones.setDiasdisponibles(12);
             vacacionesService.updateVacaciones(vacaciones);
-        } else if (anios == 3 ||anios==4|| anios == 5) {
+        } else if (anios == 3 || anios == 4 || anios == 5) {
             vacaciones.setDiasdisponibles(15);
             vacacionesService.updateVacaciones(vacaciones);
         } else if (anios > 5) {
             vacaciones.setDiasdisponibles(18);
             vacacionesService.updateVacaciones(vacaciones);
         }
-
-
     }
 
-    public void reset() {
+    public void reset() {//Funcion para limpiar botones , tabla y forms de la pantalla de inicio
         PrimeFaces current = PrimeFaces.current();
-        mensaje="";
-        colaboradorMarca=new Colaborador();
+        mensaje = "";
+        colaboradorMarca = new Colaborador();
         marcasJornadasList = new ArrayList<>();
         asignacionDescansos = new AsignacionDescansos();
         marcaLa = new MarcaLaboradas();
-        botonEntrada=true;
-        botonSalida=true;
-        botonDesSali=true;
+        botonEntrada = true;
+        botonSalida = true;
+        botonDesSali = true;
         current.ajax().update("bot:ent");//Se desabilita el boton de descanso y el de salida
         current.ajax().update("bot:des");//Se desabilita el boton de descanso y el de salida
         current.ajax().update("bot:sali");
@@ -961,7 +963,7 @@ public class ColaboradorBean {
         PrimeFaces current = PrimeFaces.current();
         marcaEn();//se marca en la base de datos la entrada aunque sea tarde
         current.executeScript("PF('just').hide();");// y se enconde el form
-        mensaje="Marca realizada con exito";
+        mensaje = "Marca realizada con exito";
         current.ajax().update("msj");
     }
 
@@ -992,70 +994,68 @@ public class ColaboradorBean {
 
                 long resultado = (Math.abs(c1.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));
                 if (resultado <= 15) {
-                    mensaje="Marca de la salida";
+                    mensaje = "Marca de la salida";
                     current.ajax().update("msj");
                     marcaSal();
                 } else {//Si no es que salio demasiado mas temprano por ello debe justificar
-
-                    mensaje="Es antes de su hora de salida, justifique ";
+                    mensaje = "Es antes de su hora de salida, justifique ";
                     current.ajax().update("msj");
                     current.executeScript("PF('just2').show();");
                 }
-            } else if (fechaME < fechaMS)// salio tarde el colaborador hizo mas tiempo champion
+            } else if (fechaME < fechaMS)// salio tarde el colaborador hizo mas tiempo
             {
                 Calendar c3 = c1;
                 long resultado = (Math.abs(c3.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));
                 if (resultado >= 30) {//Aca esta dando que si esta saliendo 30 minutos o mas tarde de la hora de salida pida justificacion de tiempo extra
-                    mensaje="Marco salida mas tarde según su horario realizo Tiempo Extra";
+                    mensaje = "Marco salida mas tarde según su horario realizo Tiempo Extra";
                     current.ajax().update("msj");
-                    current.executeScript("PF('just3').show();");
+                    current.executeScript("PF('just3').show();");//Se despliega form de que justifique que realizo tiempo extra
                 } else {//Si no es mayor o igual el tiempo de media hora extra se depliega el siguiente mensaje
-
-                    mensaje="Marco salida mas tarde, sin embargo no se toma como Tiempo Extra";
+                    mensaje = "Marco salida mas tarde, sin embargo no se toma como Tiempo Extra";
                     current.ajax().update("msj");
-                    marcaSal();
+                    marcaSal();//Aca se marca la salida en la base
                 }
             }
-        } else if (idH == 12 || idH == 14) {
+        } else if (idH == 12 || idH == 14) {//Validacion de salida para horarios de dos dias
             System.out.println("Entro al if para horarios de DOS DIAS");
             if ((c1.before(c2) && fechaME == fechaMS) || (c1.after(c2) && fechaME == fechaMS)) //  antes de salida madrugo el colaborador para salir c1.compareTo(c2) < 0
             {
                 long resultado = (Math.abs(c1.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));
                 if (resultado <= 15 && fechaME < fechaMS) {//Valida si ya puede marcar la salida a la hora establecida por horario
-                    mensaje="Marca de la salida";
+                    mensaje = "Marca de la salida";
                     current.ajax().update("msj");
                     marcaSal();
                 } else {//Si no es que salio demasiado mas temprano por ello debe justificar
 
-                    mensaje="Es antes de su hora de salida, justifique";
+                    mensaje = "Es antes de su hora de salida, justifique";
                     current.ajax().update("msj");
-                    current.executeScript("PF('just2').show();");
+                    current.executeScript("PF('just2').show();");//Se despliega form para que justifique por que sale antes
                 }
             } else if (c1.after(c2) || fechaME < fechaMS)// salio tarde el colaborador hizo mas tiempo champion
             {
                 Calendar c3 = c1;
                 long resultado = (Math.abs(c3.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));
                 if (resultado >= 30) {//Aca esta dando que si esta saliendo 30 minutos o mas tarde de la hora de salida pida justificacion de tiempo extra
-                    mensaje="Marcó salida más tarde, según su horario realizó Tiempo Extra";
+                    mensaje = "Marcó salida más tarde, según su horario realizó Tiempo Extra";
                     current.ajax().update("msj");
                     current.executeScript("PF('just3').show();");//Se despliega el dialogo con el campo para que justifique por que hizo Tiempo extra
                 } else {//Si no es mayor o igual el tiempo de media hora extra se depliega el siguiente mensaje
-                    mensaje="Marcó salida más tarde, sin embargo, no se toma como Tiempo Extra";
+                    mensaje = "Marcó salida más tarde, sin embargo, no se toma como Tiempo Extra";
                     current.ajax().update("msj");
-                    marcaSal();
+                    marcaSal();//Se marca sin justificar tiempo extra
                 }
             }
         } else {
             System.out.println("Entro al if para horarios de un Dia");
-            if (c1.compareTo(c2) == 1 && fechaME >= fechaMS) //  antes de salida madrugo el colaborador para salir
+            if (c1.compareTo(c2) == 1 && fechaME >= fechaMS) //antes de salida madrugo el colaborador para salir
             {
                 long resultado = (Math.abs(c1.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));
                 if (resultado <= 15) {//Valida si ya puede marcar la salida a la hora establecida por horario
-                    mensaje="Se realiza la marca de salida";
+                    mensaje = "Se realiza la marca de salida";
                     current.ajax().update("msj");
                     marcaSal();//Aca se llama la funcion para realizar la marca de salida en la base de datos
                 } else {//Si no es que salio demasiado mas temprano por ello debe justificar
-                    mensaje="Es antes de su hora de salida, Justifique";
+                    mensaje = "Es antes de su hora de salida, Justifique";
                     current.ajax().update("msj");
                     current.executeScript("PF('just2').show();");
                 }
@@ -1064,11 +1064,11 @@ public class ColaboradorBean {
                 Calendar c3 = c1;
                 long resultado = (Math.abs(c3.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));
                 if (resultado >= 30 || fechaME < fechaMS) {//Aca esta dando que si esta saliendo 30 minutos o mas tarde de la hora de salida pida justificacion de tiempo extra
-                    mensaje="Marcó salida más tarde según su horario realizo Tiempo Extra";
+                    mensaje = "Marcó salida más tarde según su horario realizo Tiempo Extra";
                     current.ajax().update("msj");
                     current.executeScript("PF('just3').show();");//Se despliega el dialogo con el campo para que justifique por que hizo Tiempo extra
                 } else {//Si no es mayor o igual el tiempo de media hora extra se depliega el siguiente mensaje
-                    mensaje="Marcó salida más tarde, sin embargo no se toma como Tiempo Extra";
+                    mensaje = "Marcó salida más tarde, sin embargo no se toma como Tiempo Extra";
                     current.ajax().update("msj");
                     marcaSal();
                 }
@@ -1107,8 +1107,8 @@ public class ColaboradorBean {
     {
         PrimeFaces current = PrimeFaces.current();
         marcaSal();//se marca en la base de datos la entrada aunque sea tarde
-        current.executeScript("PF('just2').hide();");// y se enconde el form
-        mensaje="Marca salida prematura realizada con exito";
+        current.executeScript("PF('just2').hide();");//y se enconde el form
+        mensaje = "Marca salida prematura realizada con exito";
         current.ajax().update("msj");
         justST = null;
     }
@@ -1119,7 +1119,7 @@ public class ColaboradorBean {
         PrimeFaces current = PrimeFaces.current();
         marcaSal();//se marca en la base de datos la entrada aunque sea tarde
         current.executeScript("PF('just3').hide();");// y se enconde el form
-        mensaje="Marca de tiempo extra realizada con exito";
+        mensaje = "Marca de tiempo extra realizada con exito";
         current.ajax().update("msj");
         justTE = null;
     }
@@ -1144,7 +1144,7 @@ public class ColaboradorBean {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
-    public void marcaIniDes() {
+    public void marcaIniDes() {//Funcion para marcar en la base el inicio de un descanso
         MarcaLaboradas marcaLa = marcaLaboradaService.buscaMarcaPorColaboradoYEstado(colaboradorMarca, "Entrada");
         MarcaDescansos marcaDescansos = new MarcaDescansos();
         marcaDescansos.setColaborador(colaboradorMarca);
@@ -1153,90 +1153,87 @@ public class ColaboradorBean {
         Time time = new Time(now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), now.get(Calendar.SECOND));
         marcaDescansos.setHoraInicio(time);
         marcaDescansoService.crearMarcaDescanso(marcaDescansos);
-        saveImage();
+        saveImage();//Funcion para guardar imagen
         listaMarcasPorJornada();
     }
 
-    public void marcaFindes() {
+    public void marcaFindes() {//Funcion para marcar en la base el fin de descanso
         MarcaDescansos marcaDescansos = marcaDescansoService.buscarMdescanso(asignacionDescansos.getDescanso(), marcaLa);
         Time time = new Time(now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), now.get(Calendar.SECOND));
         marcaDescansos.setHoraFin(time);
         marcaDescansoService.updateMarcaDescanso(marcaDescansos);
-        saveImage();
+        saveImage();//Funcion para guardar imagen
         listaMarcasPorJornada();
     }
 
-    public void validacionMarcaDes()
-    {
+    public void validacionMarcaDes() {//Funcion para validar si puede marca descanso inicio y fin
 
-        List<AsignacionDescansos> asignacionesList=asignacionDescansosService.buscarDescansosAsignadosPorColaborador(colaboradorMarca);//numero de descansos que tiene el colaborador
-        marcaLa = marcaLaboradaService.buscaMarcaPorColaboradoYEstado(colaboradorMarca,"Entrada");//para sacar el id de la marca que esta asociada a la marca de descanso por dia
+        List<AsignacionDescansos> asignacionesList = asignacionDescansosService.buscarDescansosAsignadosPorColaborador(colaboradorMarca);//numero de descansos que tiene el colaborador
+        marcaLa = marcaLaboradaService.buscaMarcaPorColaboradoYEstado(colaboradorMarca, "Entrada");//para sacar el id de la marca que esta asociada a la marca de descanso por dia
         List<MarcaDescansos> marcaDescansosList = marcaDescansoService.buscarMarcaPorMarcaLab(marcaLa);
         PrimeFaces current = PrimeFaces.current();
-        boolean encontrado=false;
-        Calendar calendar=Calendar.getInstance();
-        Calendar calendar2=Calendar.getInstance();
-        now=Calendar.getInstance();
-        for (AsignacionDescansos asignacionDescansos1 : asignacionesList)
-        {
-            String time=asignacionDescansos1.getDescanso().getHorainicio().toString();
+        boolean encontrado = false;
+        Calendar calendar = Calendar.getInstance();
+        Calendar calendar2 = Calendar.getInstance();
+        now = Calendar.getInstance();
+        for (AsignacionDescansos asignacionDescansos1 : asignacionesList) {
+            String time = asignacionDescansos1.getDescanso().getHorainicio().toString();
             String[] timeArrayInicio = time.split(":");
-            String time2=asignacionDescansos1.getDescanso().getHorafinalizacion().toString();
+            String time2 = asignacionDescansos1.getDescanso().getHorafinalizacion().toString();
             String[] timeArrayFin = time2.split(":");
-            if(timeArrayFin[0].equals("01")){timeArrayFin[0]="24";timeArrayFin[1]="59";}
-            calendar.set(Calendar.HOUR_OF_DAY,Integer.parseInt(timeArrayInicio[0]));
-            calendar.set(Calendar.MINUTE,Integer.parseInt(timeArrayInicio[1]));
-            calendar.set(Calendar.SECOND,Integer.parseInt(timeArrayInicio[2]));
-            calendar2.set(Calendar.HOUR_OF_DAY,Integer.parseInt(timeArrayFin[0]));
-            calendar2.set(Calendar.MINUTE,Integer.parseInt(timeArrayFin[1]));
-            calendar2.set(Calendar.SECOND,Integer.parseInt(timeArrayFin[2]));
-            if(now.get(Calendar.HOUR)==0)
-            {
-                now.set(Calendar.HOUR_OF_DAY,24);
+            if (timeArrayFin[0].equals("01")) {
+                timeArrayFin[0] = "24";
+                timeArrayFin[1] = "59";
             }
-            if((now.compareTo(calendar) >= 0) && ( now.compareTo(calendar2) <= 0)){
-                asignacionDescansos=asignacionDescansos1;
-                if(marcaDescansoService.buscarMdescanso(asignacionDescansos1.getDescanso(),marcaLa)==null)
+            calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeArrayInicio[0]));
+            calendar.set(Calendar.MINUTE, Integer.parseInt(timeArrayInicio[1]));
+            calendar.set(Calendar.SECOND, Integer.parseInt(timeArrayInicio[2]));
+            calendar2.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeArrayFin[0]));
+            calendar2.set(Calendar.MINUTE, Integer.parseInt(timeArrayFin[1]));
+            calendar2.set(Calendar.SECOND, Integer.parseInt(timeArrayFin[2]));
+            if (now.get(Calendar.HOUR) == 0) {
+                now.set(Calendar.HOUR_OF_DAY, 24);
+            }
+            if ((now.compareTo(calendar) >= 0) && (now.compareTo(calendar2) <= 0)) {
+                asignacionDescansos = asignacionDescansos1;
+                if (marcaDescansoService.buscarMdescanso(asignacionDescansos1.getDescanso(), marcaLa) == null) {
+                    botonDesSali = false;
+                    variable = "Inicio Descanso";
+                } else if (marcaDescansoService.buscarMdescanso(asignacionDescansos1.getDescanso(), marcaLa).getHoraFin() == null) //hacer debug con lo que agrego pablo ya que no pasa de aqui
                 {
-                    botonDesSali=false;
-                    variable="Inicio Descanso";
+                    botonDesSali = false;
+                    variable = "Fin Descanso";
                 }
-                else if(marcaDescansoService.buscarMdescanso(asignacionDescansos1.getDescanso(),marcaLa).getHoraFin()==null) //hacer debug con lo que agrego pablo ya que no pasa de aqui
-                {
-                    botonDesSali=false;
-                    variable="Fin Descanso";
-                }
-                encontrado=true;
+                encontrado = true;
                 current.ajax().update("bot");
                 break;
             }
         }
-        if(encontrado==false)
-        {
-            mensaje="No puede marcar descanso";
+        if (encontrado == false) {
+            mensaje = "No puede marcar descanso";
             current.ajax().update("msj");
 
         }
     }
 
-    public void marcaDescanso() {
+    public void marcaDescanso() {//Funcion para manejo de botones en el front end
         if (variable.equals("Inicio Descanso")) {
             PrimeFaces current = PrimeFaces.current();
-            mensaje="Marca descanso";
+            mensaje = "Marca descanso";
             current.ajax().update("msj");
-            marcaIniDes();
+            marcaIniDes();//Se llama la funcion para marcar inicio
             limpia();
         } else {
-            marcaFindes();
+            marcaFindes();//Se marca fin de descanso
             limpia();
             PrimeFaces current = PrimeFaces.current();
-            mensaje="Marca fin del descanso";
+            mensaje = "Marca fin del descanso";
             current.ajax().update("msj");
 
         }
     }
 
-    public void limpia() {
+    public void limpia() {//Funcion para limpiar mensajes objetos y form botones de la pagina inicial
         PrimeFaces current = PrimeFaces.current();
         colaboradorMarca = new Colaborador();
         asignacionDescansos = new AsignacionDescansos();
@@ -1244,31 +1241,30 @@ public class ColaboradorBean {
         botonSalida = true;
         botonDesSali = true;
         variable = "Descanso";
-        mensaje="";
+        mensaje = "";
         current.ajax().update("msj");
         current.ajax().update("bot:des");//Se desabilita el boton de descanso y el de salida
         current.ajax().update("bot:sali");
         current.ajax().update("info:nom");// se limpia el nombre
         current.ajax().update("info:ced");//y cedula del colaborador que marca
     }
-    public void resetMsj()
-    {
+
+    public void resetMsj() {
         PrimeFaces current = PrimeFaces.current();
-        mensaje="";
+        mensaje = "";
         current.ajax().update("msj");
     }
 
-    public void createDirectory() {
-        Calendar can= Calendar.getInstance();
-        String date=""+(can.get(Calendar.MONTH)+1 )+"-"+can.get(Calendar.DATE)+"-"+can.get(YEAR);
-        File file = new File("C:\\"+date);
+    public void createDirectory() {//Funcion para crear direcctorio para guarda la imagen
+        Calendar can = Calendar.getInstance();
+        String date = "" + (can.get(Calendar.MONTH) + 1) + "-" + can.get(Calendar.DATE) + "-" + can.get(YEAR);
+        File file = new File("C:\\" + date);
         if (!file.exists()) {
-            file.mkdir();
+            file.mkdir();//Aca se crea el dir
         }
     }
 
-    public void saveImage()
-    {
+    public void saveImage() {//Funcion para tomar la foto
 
         String[] strings = base64Image.split(",");
         String extension;
@@ -1283,11 +1279,12 @@ public class ColaboradorBean {
                 extension = "jpg";
                 break;
         }
-        Calendar can= Calendar.getInstance();
-        String date=""+(can.get(Calendar.MONTH)+1 )+"-"+can.get(Calendar.DATE)+"-"+can.get(YEAR);
+        Calendar can = Calendar.getInstance();
+        String date = "" + (can.get(Calendar.MONTH) + 1) + "-" + can.get(Calendar.DATE) + "-" + can.get(YEAR);
+        //Se le da el nombre de el dia y la hora al archivo de imagen que se guarda
         //convert base64 string to binary data
         byte[] data = DatatypeConverter.parseBase64Binary(strings[1]);
-        String path = "C:\\"+date+"\\"+colaboradorMarca.getPk_idColaborador()+"_"+can.get(Calendar.HOUR)+"_"+can.get(Calendar.MINUTE)+"_"+can.get(Calendar.SECOND)+"."+ extension;
+        String path = "C:\\" + date + "\\" + colaboradorMarca.getPk_idColaborador() + "_" + can.get(Calendar.HOUR) + "_" + can.get(Calendar.MINUTE) + "_" + can.get(Calendar.SECOND) + "." + extension;
         File file = new File(path);
         try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file))) {
             outputStream.write(data);

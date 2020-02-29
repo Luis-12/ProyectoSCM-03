@@ -12,6 +12,7 @@ import java.util.List;
 @Component
 @ManagedBean
 public class HorarioBean {
+    //Controlador que conecta el front end con el backend para IO para manejar horarios.
 
     @Autowired
     HorarioService horarioService;
@@ -53,7 +54,7 @@ public class HorarioBean {
         this.horarios = horarios;
     }
 
-    public Horarios obtieneHorarios(String horario)
+    public Horarios obtieneHorarios(String horario)//Funcion para buscar horarios por id
     {
         if(horario == null){
             throw new IllegalArgumentException("no se provee el id");

@@ -11,7 +11,7 @@ import java.util.List;
 @Component
 @ManagedBean
 public class JornadaBean {
-
+    //Controlador que conecta el front end con el backend para IO para consultas de jornadas.
     @Autowired
     JornadaService jornadaService;
     private Jornadas jornada = new Jornadas();
@@ -54,7 +54,7 @@ public class JornadaBean {
         this.jornada = jornada;
     }
 
-    public Jornadas obtieneJornadas(String jornada)
+    public Jornadas obtieneJornadas(String jornada)//Funcion para buscar horarios por jornada
     {
         if(jornada == null){
             throw new IllegalArgumentException("no se provee el id");
