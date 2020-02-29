@@ -41,6 +41,7 @@ public class AsignacionesBean {
     private List<Asignaciones> asignaciones = new ArrayList<>();
     private List<AsignacionDescansos>asignacionesDescansos = new ArrayList<>();
     private List<Descansos>listDescansos = new ArrayList<Descansos>();
+    public boolean habilitar=true;
 
     public String getTiempoDescanso() {
         return tiempoDescanso;
@@ -94,6 +95,10 @@ public class AsignacionesBean {
 
     public void setDescansosPorColaborador(List<Descansos> descansosPorColaborador) {
         this.descansosPorColaborador = descansosPorColaborador;
+    }
+
+    public boolean isHabilitar() {
+        return habilitar;
     }
 
     public DescansosService getDescansosService() {
@@ -461,6 +466,19 @@ public class AsignacionesBean {
             FacesContext.getCurrentInstance().addMessage(null, msg);
 
         }
+    }
+
+    public void enable()//para habilitar el segundo día de descanso
+    {
+        PrimeFaces current = PrimeFaces.current();
+        habilitar=false;
+        current.ajax().update("horaio:descanso3");
+    }
+    public void disable()//para deshabilitar el segundo día de descanso
+    {
+        PrimeFaces current = PrimeFaces.current();
+        habilitar=true;
+        current.ajax().update("horaio:descanso3");
     }
 
 }
