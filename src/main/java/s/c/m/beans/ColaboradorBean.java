@@ -764,9 +764,11 @@ public class ColaboradorBean {
                 mensaje="Ya realizo sus marcas del dia de hoy";
                 current.ajax().update("msj");
             } else {
-
                 if (marcaLa == null) {//si no encuentra la marca con el colaborador y el estado Entrada se habilita el boton de entrada
-                    if (!asignaciones.getDiadescanso().equals(verificaDiaLibre(c1.get(Calendar.DAY_OF_WEEK)))) {//Pero primero valida que no sea el dia libre del cola
+                    if ((!asignaciones.getDiadescanso().equals(verificaDiaLibre(c1.get(Calendar.DAY_OF_WEEK)))
+                            && !asignaciones.getSegundodiades().equals(verificaDiaLibre(c1.get(Calendar.DAY_OF_WEEK))))
+                    || (!asignaciones.getDiadescanso().equals(verificaDiaLibre(c1.get(Calendar.DAY_OF_WEEK)))
+                            && asignaciones.getSegundodiades().equals("N/A"))) {//Pero primero valida que no sea el dia libre del cola
                         botonEntrada = false;
                         current.ajax().update("bot");
                     } else {//Si el dia de hoy y el dia de descanso son iguales se muestra el mensaje de que es dia libre

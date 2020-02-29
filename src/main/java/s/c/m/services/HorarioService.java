@@ -18,10 +18,10 @@ public class HorarioService {
     @Autowired
     private HorarioRepository horarioRepository;
 
-    public List<Horarios> getAllHorarios()
+    public List<Horarios> getAllHorarios()//Funcion para consultar todos los horarios
     {
         List<Horarios> list = new ArrayList<Horarios>();
-        horarioRepository.findAll().forEach(e -> list.add(e));
+        horarioRepository.findAll().forEach(e -> list.add(e));//Se carga la lista de horarios con la funcion del repository
         return list;
     }
 
@@ -31,14 +31,14 @@ public class HorarioService {
         return horarioRepository.findById(jornada);
     }
 
-    public List<Horarios> findHorariosPorJornada(Jornadas idJornada){
-        if(idJornada.equals(null)){
+    public List<Horarios> findHorariosPorJornada(Jornadas idJornada){//Funcion para consultar horarios por jornada
+        if(idJornada.equals(null)){//Si la jornada es null quiere decir que no hay horarios para esa jornada
             System.out.println("No hay horarios para esa jornada");
             List<Horarios> horarios = new ArrayList<Horarios>();
-            horarioRepository.findAll().forEach(e -> horarios.add(e));
+            horarioRepository.findAll().forEach(e -> horarios.add(e));//Se listan todos
             return horarios;
         }
-        return horarioRepository.findByJornada(idJornada);
+        return horarioRepository.findByJornada(idJornada);//Aca si se retorna la lista de horarios por jornada
     }
 
 }

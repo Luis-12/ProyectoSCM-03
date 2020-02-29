@@ -160,15 +160,28 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                 </p:selectOneMenu>
 
                                 <p:outputLabel  value="  Horario:  " />
-                                <p:selectOneMenu id="horario2" style="min-width: 150px" value="#{asignacionesBean.selectAsignacion.horario}" converter="horarioConverter">
+                                <p:selectOneMenu id="horario2" style="min-width: 150px" value="#{asignacionesBean.selectAsignacion.horario}" converter="horarioConverter" onchange="prueba2()">
                                     <f:selectItem itemLabel="-- #{asignacionesBean.selectAsignacion.horario.horaentrada} #{asignacionesBean.selectAsignacion.horario.horasalida} --" itemValue="#{asignacionesBean.selectAsignacion.horario}"/>
                                     <f:selectItems value="#{asignacionesBean.horariosTemp}" var="horario"
                                                    itemValue="#{horario}" itemLabel="#{horario.horaentrada} #{horario.horasalida}"/>
                                 </p:selectOneMenu>
 
-                                <p:outputLabel  value="  Descanso:  " />
+                                <p:outputLabel  value="Día Libre:  " />
                                 <p:selectOneMenu value="#{asignacionesBean.selectAsignacion.diadescanso}" id="descanso2" style="min-width: 150px" >
                                     <f:selectItem itemLabel="-- #{asignacionesBean.selectAsignacion.diadescanso} --" itemValue="#{asignacionesBean.selectAsignacion.diadescanso}"/>
+                                    <f:selectItem itemValue="LU" itemLabel="Lunes"  />
+                                    <f:selectItem itemValue="MA" itemLabel="Martes"  />
+                                    <f:selectItem itemValue="MI" itemLabel="Miércoles" />
+                                    <f:selectItem itemValue="JU" itemLabel="Jueves" />
+                                    <f:selectItem itemValue="VI" itemLabel="Viernes" />
+                                    <f:selectItem itemValue="SA" itemLabel="Sábado" />
+                                    <f:selectItem itemValue="DO" itemLabel="Domingo" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel  value="Segundo Día Libre:" />
+                                <p:selectOneMenu value="#{asignacionesBean.selectAsignacion.segundodiades}" id="descanso4" style="min-width: 165px" disabled="#{asignacionesBean.habilitar2}">
+                                    <f:selectItem itemLabel="- Seleccione el día -" itemValue=""/>
+                                    <f:selectItem itemLabel="-- #{asignacionesBean.selectAsignacion.segundodiades} --" itemValue="#{asignacionesBean.selectAsignacion.segundodiades}"/>
                                     <f:selectItem itemValue="LU" itemLabel="Lunes"  />
                                     <f:selectItem itemValue="MA" itemLabel="Martes"  />
                                     <f:selectItem itemValue="MI" itemLabel="Miércoles" />
@@ -197,8 +210,10 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                             <h:outputText value="#{asignacionesBean.selectAsignacion.horario.jornada.descripcion}"/>
                             <h:outputText value="Horario:" />
                             <h:outputText value="#{asignacionesBean.selectAsignacion.horario.horaentrada} #{asignacionesBean.selectAsignacion.horario.horasalida}"/>
-                            <h:outputText value="Descanso:" />
+                            <h:outputText value="Día libre:" />
                             <h:outputText value="#{asignacionesBean.selectAsignacion.diaDescanso}"/>
+                            <h:outputText value="Segundo día libre:" />
+                            <h:outputText value="#{asignacionesBean.selectAsignacion.segundodiades}"/>
                         </p:panelGrid>
                     </p:dialog>
 
@@ -217,6 +232,8 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                     </p:dialog>
                     <p:commandButton id="hdnBtn3" actionListener="#{asignacionesBean.enable}"  style="display: none"/>
                     <p:commandButton id="hdnBtn4" actionListener="#{asignacionesBean.disable}"  style="display: none"/>
+                    <p:commandButton id="hdnBtn5" actionListener="#{asignacionesBean.enable2}"  style="display: none"/>
+                    <p:commandButton id="hdnBtn6" actionListener="#{asignacionesBean.disable2}"  style="display: none"/>
                     <div id="footer">
                         <br/>
                         <h:outputLink  value="../acerca.xhtml" >©</h:outputLink>  <p:outputLabel value=" SISTEMA CONTROL DE MARCAS WYNDHAM HERRA" />
@@ -231,6 +248,14 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                 document.getElementById('hdnBtn4').click();
                             }
 
+                        }
+                        function prueba2() {
+                            var s=document.getElementById('horaio2'+':horario2_label').textContent;
+                            if(s == "08:00:00 17:30:00"){
+                                document.getElementById('hdnBtn5').click();
+                            }else{
+                                document.getElementById('hdnBtn6').click();
+                            }
                         }
                     </script>
                 </h:body>
