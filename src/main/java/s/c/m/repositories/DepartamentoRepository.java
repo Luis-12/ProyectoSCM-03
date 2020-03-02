@@ -9,4 +9,6 @@ import java.util.List;
 
 @Repository
 public interface DepartamentoRepository extends CrudRepository<Departamento, String> {
+    /*Interfaz para acceder a las funciones que ofrece spring JPA data para transaciones y consultas a la base para
+    la tabla Departamento.*/
 }

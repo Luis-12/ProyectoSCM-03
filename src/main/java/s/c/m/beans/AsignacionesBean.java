@@ -17,6 +17,7 @@ import java.util.List;
 @Component
 @ManagedBean
 public class AsignacionesBean {
+    //Controlador que conecta el front end con el backend en las asignaciones.
     @Autowired
     AsignacionesServices asignacionesService;
 
@@ -39,8 +40,34 @@ public class AsignacionesBean {
     private String descanso;
     private String tiempoDescanso;
     private List<Asignaciones> asignaciones = new ArrayList<>();
-    private List<AsignacionDescansos>asignacionesDescansos = new ArrayList<>();
-    private List<Descansos>listDescansos = new ArrayList<Descansos>();
+    private List<AsignacionDescansos> asignacionesDescansos = new ArrayList<>();
+    private List<Descansos> listDescansos = new ArrayList<Descansos>();
+    public boolean habilitar = true;//Parametros para habilitar y deshabilitar combos de segundo dia de descanso
+    public boolean habilitar2 = true;
+
+    private List<Jornadas> jornadas;
+    private List<Horarios> horarios;
+    private List<Horarios> horariosTemp;
+    private List<Descansos> descansosPorColaborador = new ArrayList<>();
+
+    private Asignaciones asignacion = new Asignaciones();
+    private Asignaciones selectAsignacion = new Asignaciones();
+    private AsignacionDescansos asignacionDescansos = new AsignacionDescansos();
+
+
+    @PostConstruct
+    public void init() {
+        jornadas = jornadaService.getAllJornadas();
+        horarios = horarioService.getAllHorarios();
+
+    }
+
+    public void handleJornadaChange() {//Funcion para cargar combobox de horarios por jornada seleccionada
+        if (this.jornada != null && this.jornada.getPk_idjornada() != null) {
+            this.horariosTemp = new ArrayList<>();
+            this.horariosTemp = horarioService.findHorariosPorJornada(jornada);//Se invoca la funcion del service que encuentra los horarios por jornada
+        }
+    }
 
     public String getTiempoDescanso() {
         return tiempoDescanso;
@@ -48,36 +75,6 @@ public class AsignacionesBean {
 
     public void setTiempoDescanso(String tiempoDescanso) {
         this.tiempoDescanso = tiempoDescanso;
-    }
-
-    private List<Jornadas>jornadas;
-    private List<Horarios>horarios;
-    private List<Horarios>horariosTemp;
-    private List<Descansos>descansosPorColaborador = new ArrayList<>();
-
-
-
-    private Asignaciones asignacion = new Asignaciones();
-    private Asignaciones selectAsignacion = new Asignaciones();
-    private AsignacionDescansos asignacionDescansos = new AsignacionDescansos();
-
-
-
-
-    @PostConstruct
-    public void init()
-    {
-        jornadas = jornadaService.getAllJornadas();
-        horarios = horarioService.getAllHorarios();
-
-    }
-
-    public void handleJornadaChange(){
-        if(this.jornada!=null && this.jornada.getPk_idjornada()!=null){
-            this.horariosTemp = new ArrayList<>();
-
-            this.horariosTemp = horarioService.findHorariosPorJornada(jornada);
-        }
     }
 
     public List<Descansos> getListDescansos() {
@@ -94,6 +91,14 @@ public class AsignacionesBean {
 
     public void setDescansosPorColaborador(List<Descansos> descansosPorColaborador) {
         this.descansosPorColaborador = descansosPorColaborador;
+    }
+
+    public boolean isHabilitar() {
+        return habilitar;
+    }
+
+    public boolean isHabilitar2() {
+        return habilitar2;
     }
 
     public DescansosService getDescansosService() {
@@ -120,24 +125,21 @@ public class AsignacionesBean {
         this.asignacionesDescansos = asignacionesDescansos;
     }
 
-    public void  listarDescansos()
-    {
+    public void listarDescansos() {//Funcion para listar descansos por el colaborador
         listDescansos.clear();
         PrimeFaces current = PrimeFaces.current();
+        //Aca se cargan las asignaciones de descansos que tiene el colaborador
         asignacionesDescansos = asignacionDescansosService.buscarDescansosAsignadosPorColaborador(selectAsignacion.getColaborador());
 
-        if(asignacionesDescansos.isEmpty())
-        {
+        if (asignacionesDescansos.isEmpty()) {//Si no encuentra nada quiere decir que el colaborador no tiene descansos asignados
             FacesMessage msg = new FacesMessage("Aviso", "El colaborador no tiene descansos asignados");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-        }else {
-            System.out.println("Descripcion de descanso: "+asignacionesDescansos.get(0).getDescanso().getDescripcion());
-            for(int i=0; i < asignacionesDescansos.size(); i++){//Se va recorriendo la lista de asignaciones
+        } else {//Si encuentra descansos asignados los enlista para imprimirlos en la tabla
+            for (int i = 0; i < asignacionesDescansos.size(); i++) {//Se va recorriendo la lista de asignaciones
                 listDescansos.add(asignacionesDescansos.get(i).getDescanso());//luego se van sacando los descanso que tenga asignados el colaborador
                 //Con esta lista de Descansos se podra imprimir los datos de los Descansos que tiene asignados el colaborador en la tabla asignacionDescansos
             }
-            System.out.println("Los descansos que tiene asignados el colaborador son: " + asignacionesDescansos.size());
-            current.executeScript("PF('dD').show();"); //si no esta vacío muestra el dialogo
+            current.executeScript("PF('dD').show();"); //se muestra el dialogo con los descansos activados
         }
     }
 
@@ -161,9 +163,7 @@ public class AsignacionesBean {
         return asignacionDescansos;
     }
 
-    public void setAsignacionDescansos(AsignacionDescansos asignacionDescansos) {
-        this.asignacionDescansos = asignacionDescansos;
-    }
+    public void setAsignacionDescansos(AsignacionDescansos asignacionDescansos) { this.asignacionDescansos = asignacionDescansos; }
 
     public Horarios getHorario() {
         return horario;
@@ -180,7 +180,6 @@ public class AsignacionesBean {
     public void setDescanso(String descanso) {
         this.descanso = descanso;
     }
-
 
     public Colaborador getColaborador() {
         return colaborador;
@@ -246,192 +245,216 @@ public class AsignacionesBean {
         return asignacionDescansosService;
     }
 
-    public void setAsignacionDescansosService(AsignacionDescansosService asignacionDescansosService) {
-        this.asignacionDescansosService = asignacionDescansosService;
-    }
+    public void setAsignacionDescansosService(AsignacionDescansosService asignacionDescansosService) { this.asignacionDescansosService = asignacionDescansosService; }
 
     public void setSelectAsignacion(Asignaciones selectAsignacion) {
         this.selectAsignacion = selectAsignacion;
     }
 
-    public void checkSelection()
-    {
+    public void checkSelection() {//Funcion para validar si selecciono un colaborador desde el form
         PrimeFaces current = PrimeFaces.current();
+        disable();//Se desactiva el combo de segundo dia libre
 
-         if(selectAsignacion.getColaborador() == null) {
+        if (selectAsignacion.getColaborador() == null) {//Si el objeto esta vacio quiere decir que no selecciono ningun colaborador
             FacesMessage msg = new FacesMessage("Aviso", "Debe seleccionar un colaborador");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-        } else {
-             if (asignacionesService.buscarHorario(selectAsignacion.getColaborador())==null) {
-                 current.executeScript("PF('datos').show();"); //si no esta vacío muestra el dialogo
-             }
-             else {
-                 FacesMessage msg = new FacesMessage("Aviso", "¡Ya tiene un horario asignado!");
-                 FacesContext.getCurrentInstance().addMessage(null, msg);
-             }
+        } else {//Si lo selecciono
+            if (asignacionesService.buscarHorario(selectAsignacion.getColaborador()) == null) {//Y no tiene horario asignado
+                current.executeScript("PF('datos').show();"); //Muestra el dialogo con el form para asignarle uno
+            } else {//Sino quiere decir que ya tiene horario asignado
+                FacesMessage msg = new FacesMessage("Aviso", "¡Ya tiene un horario asignado!");
+                FacesContext.getCurrentInstance().addMessage(null, msg);
+            }
         }
     }
 
-    public void checkSelectionD()
-    {
+    public void checkSelectionD() {//Funcion para validar que se puedan consultar descanso asignados
         PrimeFaces current = PrimeFaces.current();
 
-        if(selectAsignacion.getColaborador() == null) {
+        if (selectAsignacion.getColaborador() == null) {//Se valida que se haya seleccionado un colaborador
             FacesMessage msg = new FacesMessage("Aviso", "Debe seleccionar un colaborador");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-        }else if(asignacionDescansosService.buscarDescansosAsignadosPorColaborador(selectAsignacion.getColaborador())==null){
+        } else if (asignacionDescansosService.buscarDescansosAsignadosPorColaborador(selectAsignacion.getColaborador()) == null) {
+            //Si se selecciono uno se busca si tiene o no descansos asignados
             FacesMessage msg = new FacesMessage("Aviso", "El colaborador no tiene descansos asignados");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-        } else{
-            listarDescansos();
+        } else {//Si tiene descansos asignados
+            listarDescansos();//Se listan los mismo
         }
     }
 
-    public void checkSelectionC()
-    {
+    public void checkSelectionC() {//Funcion para consultar horario asignado
         PrimeFaces current = PrimeFaces.current();
 
-        if(selectAsignacion.getColaborador() == null) {
+        if (selectAsignacion.getColaborador() == null) {//Se valida si el colaborador fue seleccionado
             FacesMessage msg = new FacesMessage("Aviso", "Debe seleccionar un colaborador");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-        }else if(asignacionesService.buscarHorario(selectAsignacion.getColaborador())==null){
+        } else if (asignacionesService.buscarHorario(selectAsignacion.getColaborador()) == null) {
+            //Si se selecciono un colaborador se busca si tiene horarios asignados
             FacesMessage msg = new FacesMessage("Aviso", "El colaborador no tiene horario asignado");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-        } else{
-            buscaHorarioAsignado();
-            current.executeScript("PF('dH').show();"); //si no esta vacío muestra el dialogo
+        } else {//Si tiene horario asignado
+            buscaHorarioAsignado();//Se lista el mismo
+            current.executeScript("PF('dH').show();"); //Y se muestra en el dialogo
         }
     }
 
-    public void buscaHorarioAsignado(){
+    public void buscaHorarioAsignado() {//Funcion para cargar horario en objeto para imprimirlo en la tabla de consulta
         Horarios horarioAux = new Horarios();
-        String diaDescanso= null;
+        String diaDescanso = null;
+        String diaDescanso2 = null;
 
-        if(asignacionesService.buscarHorario(selectAsignacion.getColaborador())!=null){
-            selectAsignacion = asignacionesService.buscarHorario(selectAsignacion.getColaborador());
-            if(selectAsignacion.getDiaDescanso().equals("LU")){
-                diaDescanso="Lunes";
-            }else if(selectAsignacion.getDiaDescanso().equals("MA")){
-                diaDescanso="Martes";
-            }else if(selectAsignacion.getDiaDescanso().equals("MI")){
-                diaDescanso="Miércoles";
-            }else if(selectAsignacion.getDiaDescanso().equals("JU")){
-                diaDescanso="Jueves";
-            }else if(selectAsignacion.getDiaDescanso().equals("VI")){
-                diaDescanso="Viernes";
-            }else if(selectAsignacion.getDiaDescanso().equals("SA")){
-                diaDescanso="Sábado";
-            }else if(selectAsignacion.getDiaDescanso().equals("DO")){
-                diaDescanso="Domingo";
+        if (asignacionesService.buscarHorario(selectAsignacion.getColaborador()) != null) {//Se valida si se encuentra el horario
+            selectAsignacion = asignacionesService.buscarHorario(selectAsignacion.getColaborador());//De ser asi se guarda
+            if (selectAsignacion.getDiaDescanso().equals("LU")) {//Y se hace un cambio de formato para le dia para mostrarlo en la tabla de manera mas legible
+                diaDescanso = "Lunes";
+            } else if (selectAsignacion.getDiaDescanso().equals("MA")) {
+                diaDescanso = "Martes";
+            } else if (selectAsignacion.getDiaDescanso().equals("MI")) {
+                diaDescanso = "Miércoles";
+            } else if (selectAsignacion.getDiaDescanso().equals("JU")) {
+                diaDescanso = "Jueves";
+            } else if (selectAsignacion.getDiaDescanso().equals("VI")) {
+                diaDescanso = "Viernes";
+            } else if (selectAsignacion.getDiaDescanso().equals("SA")) {
+                diaDescanso = "Sábado";
+            } else if (selectAsignacion.getDiaDescanso().equals("DO")) {
+                diaDescanso = "Domingo";
             }
-            selectAsignacion.setDiadescanso(diaDescanso);
-        }else{
+            selectAsignacion.setDiadescanso(diaDescanso);//Y por ultimo se carga el dia de descanso 1
+            if (selectAsignacion.getSegundodiades() == null) {//Si el segundo dia de descanso esta vacio
+                selectAsignacion.setSegundodiades("N/A");//Se carga el texto no aplica
+            } else {//Si tiene algo en el segundo dia
+                if (selectAsignacion.getSegundodiades().equals("LU")) {//Se hace el cambio de formato a uno mas legible
+                    diaDescanso2 = "Lunes";
+                } else if (selectAsignacion.getSegundodiades().equals("MA")) {
+                    diaDescanso2 = "Martes";
+                } else if (selectAsignacion.getSegundodiades().equals("MI")) {
+                    diaDescanso2 = "Miércoles";
+                } else if (selectAsignacion.getSegundodiades().equals("JU")) {
+                    diaDescanso2 = "Jueves";
+                } else if (selectAsignacion.getSegundodiades().equals("VI")) {
+                    diaDescanso2 = "Viernes";
+                } else if (selectAsignacion.getSegundodiades().equals("SA")) {
+                    diaDescanso2 = "Sábado";
+                } else if (selectAsignacion.getSegundodiades().equals("DO")) {
+                    diaDescanso2 = "Domingo";
+                }else if (selectAsignacion.getSegundodiades().equals("N/A")) {
+                    diaDescanso2 = "N/A";
+                }
+                selectAsignacion.setSegundodiades(diaDescanso2);//Y por ultimo se carga en el objeto el segundo dia de descanso
+            }
+        } else {
             System.out.println("No se encontro el horario");
         }
     }
 
 
-    public void convertirDia(){
-        String diaDescanso= null;
+    public void convertirDia() {//Funcion para convertir el dia de formato mas legible a el que se va a guardar en la base
+        String diaDescanso = null;
 
-            if(selectAsignacion.getDiaDescanso().equals("Lunes")){
-                diaDescanso="LU";
-            }else if(selectAsignacion.getDiaDescanso().equals("Martes")){
-                diaDescanso="MA";
-            }else if(selectAsignacion.getDiaDescanso().equals("Miércoles")){
-                diaDescanso="MI";
-            }else if(selectAsignacion.getDiaDescanso().equals("Jueves")){
-                diaDescanso="JU";
-            }else if(selectAsignacion.getDiaDescanso().equals("Viernes")){
-                diaDescanso="VI";
-            }else if(selectAsignacion.getDiaDescanso().equals("Sábado")){
-                diaDescanso="SA";
-            }else if(selectAsignacion.getDiaDescanso().equals("Domingo")){
-                diaDescanso="DO";
-            }
-            else{
-                diaDescanso=selectAsignacion.getDiaDescanso();
-            }
-            selectAsignacion.setDiadescanso(diaDescanso);
-
+        if (selectAsignacion.getDiaDescanso().equals("Lunes")) {//Se valida segun el dia lo que se va guardar
+            diaDescanso = "LU";
+        } else if (selectAsignacion.getDiaDescanso().equals("Martes")) {
+            diaDescanso = "MA";
+        } else if (selectAsignacion.getDiaDescanso().equals("Miércoles")) {
+            diaDescanso = "MI";
+        } else if (selectAsignacion.getDiaDescanso().equals("Jueves")) {
+            diaDescanso = "JU";
+        } else if (selectAsignacion.getDiaDescanso().equals("Viernes")) {
+            diaDescanso = "VI";
+        } else if (selectAsignacion.getDiaDescanso().equals("Sábado")) {
+            diaDescanso = "SA";
+        } else if (selectAsignacion.getDiaDescanso().equals("Domingo")) {
+            diaDescanso = "DO";
+        } else if (selectAsignacion.getDiaDescanso() == null) {
+            diaDescanso = "N/A";
+        }else {
+            diaDescanso = selectAsignacion.getDiaDescanso();
+        }
+        selectAsignacion.setDiadescanso(diaDescanso);//Y se carga el dia de descanso con el formato correcto para la base
     }
-    public void checkSelectionScheduleChange()
-    {
-        PrimeFaces current = PrimeFaces.current();
 
-        if(selectAsignacion.getColaborador() == null) {
+    public void checkSelectionScheduleChange() {//Funcion para validar si se puede cambiar el horario
+        PrimeFaces current = PrimeFaces.current();
+        disable2();//Se bloquea el combo de segundo dia
+
+        if (selectAsignacion.getColaborador() == null) {//Se valida si selecciono el colaborador
             FacesMessage msg = new FacesMessage("Aviso", "Debe seleccionar un colaborador");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-        } else {
-            if (asignacionesService.buscarHorario(selectAsignacion.getColaborador())==null) {//Quiere decir que no tiene horario asignado
+        } else {//Si se selecciono un colaborador
+            if (asignacionesService.buscarHorario(selectAsignacion.getColaborador()) == null) {//Se valida si tiene o no un horario asignado
                 FacesMessage msg = new FacesMessage("Aviso", "El colaborador no tiene horario asignado");
                 FacesContext.getCurrentInstance().addMessage(null, msg);
-            }
-            else {
-                buscaHorarioAsignado();
-                System.out.println("El colaborador ya tiene horario asignado y se desea cambiar");
-                current.executeScript("PF('datos2').show();"); //si no esta vacío muestra el dialogo
-                //selectAsignacion = new Asignaciones();
+            } else {//Si tiene horario asignado
+                buscaHorarioAsignado();//Se busca el mismo
+                current.executeScript("PF('datos2').show();"); //se muestra el dialogo con el form para actualizar el horario asignado
             }
         }
     }
 
     @Transactional
-    public void changeSchedule(){
+    public void changeSchedule() {//Funcion para actualizar el horario en la base de datos con sus descansos
         descansosPorColaborador.clear();
         FacesMessage mensaje = null;
         PrimeFaces current = PrimeFaces.current();
 
-        Asignaciones asignaChage = asignacionesService.buscarHorario(selectAsignacion.getColaborador());
-          try{
-                //Se procede a actualizar el nuevo horario asignado en la base
-                convertirDia();
-                asignacionesService.updateAsignacion(selectAsignacion);
-                System.out.println("Id colaborador: "+selectAsignacion.getColaborador().getPk_idColaborador());
-                //Seguidamente se procede a eliminar los descanso que tenia asignados el colaborador segun el horario anterior
-                asignacionDescansosService.deletePorColaborador(selectAsignacion.getColaborador());
-
-                //Y por ultimo volver a asignar los descanso por el nuevo horario
-                descansosPorColaborador = descansosService.buscarDescansosPorHorario(selectAsignacion.getHorario());//Aca se llena una lista de descansos
-                System.out.println("Los descansos que pertenecen al horario son: "+ descansosPorColaborador.size());
-                for(int i=0 ; i < descansosPorColaborador.size();i++){//Ciclo for para asignar los descansos al colaborador por el horario
-                    asignacionDescansos.setColaborador(selectAsignacion.getColaborador());
-                    asignacionDescansos.setDescanso(descansosPorColaborador.get(i));
-                    asignacionDescansosService.updateAsignacionDescanso(asignacionDescansos);
-                    asignacionDescansos = new AsignacionDescansos();
-                }
-
-                current.executeScript("PF('datos2').hide();");
-
-                FacesMessage msg = new FacesMessage("Aviso", "¡Horario actualizado correctamente!");
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-            } catch (Exception e) {
-                System.out.println("No se puedo actualizar el horario");
-            } finally {
-                selectAsignacion = new Asignaciones();
-                asignacion = new Asignaciones();
-                jornada = new Jornadas();
-                asignacionDescansos = new AsignacionDescansos();
-                descansosPorColaborador.clear();
+        Asignaciones asignaChage = asignacionesService.buscarHorario(selectAsignacion.getColaborador());//Se busca el horario que tiene asignado el colaborador actualmente
+        try {
+            //Se procede a actualizar el nuevo horario asignado en la base
+            convertirDia();
+            if (selectAsignacion.getSegundodiades().equals("Lunes")
+                    || selectAsignacion.getSegundodiades().equals("Martes")
+                    || selectAsignacion.getSegundodiades().equals("Miércoles")
+                    || selectAsignacion.getSegundodiades().equals("Jueves")
+                    || selectAsignacion.getSegundodiades().equals("Viernes")
+                    || selectAsignacion.getSegundodiades().equals("Sábado")
+                    || selectAsignacion.getSegundodiades().equals("Domingo")
+                    || selectAsignacion.getSegundodiades().equals("")) {
+                //Si el combo retorna un texto de dia
+                selectAsignacion.setSegundodiades("N/A");//Se carga segundo dia con N/A
             }
+            asignacionesService.updateAsignacion(selectAsignacion);//Aca se actualiza la asignacion del horario
+            //Seguidamente se procede a eliminar los descanso que tenia asignados el colaborador segun el horario anterior
+            asignacionDescansosService.deletePorColaborador(selectAsignacion.getColaborador());
+
+            //Y por ultimo volver a asignar los descanso por el nuevo horario
+            descansosPorColaborador = descansosService.buscarDescansosPorHorario(selectAsignacion.getHorario());//Aca se llena una lista de descansos
+            for (int i = 0; i < descansosPorColaborador.size(); i++) {//Ciclo for para asignar los descansos al colaborador por el horario
+                asignacionDescansos.setColaborador(selectAsignacion.getColaborador());
+                asignacionDescansos.setDescanso(descansosPorColaborador.get(i));
+                asignacionDescansosService.updateAsignacionDescanso(asignacionDescansos);//Aca se van asignado los descansos nuevamente al colaborador
+                asignacionDescansos = new AsignacionDescansos();
+            }
+            current.executeScript("PF('datos2').hide();");//Se esconde el form
+
+            FacesMessage msg = new FacesMessage("Aviso", "¡Horario actualizado correctamente!");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } catch (Exception e) {
+            System.out.println("No se puedo actualizar el horario");
+        } finally {//Finalmente se limpian los objetos
+            selectAsignacion = new Asignaciones();
+            asignacion = new Asignaciones();
+            jornada = new Jornadas();
+            asignacionDescansos = new AsignacionDescansos();
+            descansosPorColaborador.clear();
+        }
     }
 
-    public void create()
-    {
+    public void create() {//Funcion para asignar los horarios y descansos al colaborador
         descansosPorColaborador.clear();
         FacesMessage mensaje = null;
         PrimeFaces current = PrimeFaces.current();
 
-        if(jornada != null) {
+        if (jornada != null) {//Primero debe seleccionar una jornada
             try {
-
-                System.out.println("Nombre: "+selectAsignacion.getColaborador().getNombre());
-                System.out.println("Dia de Descanso: "+asignacion.getDiaDescanso());
-                System.out.println("Horario: "+ asignacion.getHorario().getPk_idhorario());
-
                 //Insersion de asignacion de horario en la tabla asignaciones
                 asignacion.setColaborador(selectAsignacion.getColaborador());
-                asignacionesService.createAsignacion(asignacion);
+                if (selectAsignacion.getSegundodiades() == null) {//Si el segundo dia es null
+                    selectAsignacion.setSegundodiades("N/A");//Se llena el campo segundo dia con N/A
+                    asignacion.setSegundodiades("N/A");//Se llena el campo segundo dia con N/A
+                }
+                asignacionesService.createAsignacion(asignacion);//Aca se agrega la nueva asignacion de horario
 
                 //Ahora se procede a hacer la insercion a la base de datos de las asignaciones de descansos
                 descansosPorColaborador = descansosService.buscarDescansosPorHorario(asignacion.getHorario());//Aca se llena una lista de descansos
@@ -439,28 +462,54 @@ public class AsignacionesBean {
                 for (int i = 0; i < descansosPorColaborador.size(); i++) {//Ciclo for para asignar los descansos al colaborador por el horario
                     asignacionDescansos.setColaborador(selectAsignacion.getColaborador());
                     asignacionDescansos.setDescanso(descansosPorColaborador.get(i));
-                    asignacionDescansosService.createAsignacionDescanso(asignacionDescansos);
+                    asignacionDescansosService.createAsignacionDescanso(asignacionDescansos);//Aca se agrega el descanso al colaborador
                     asignacionDescansos = new AsignacionDescansos();
                 }
-                current.executeScript("PF('datos').hide();");
+                current.executeScript("PF('datos').hide();");//Se esconde el formulario
                 System.out.println("Horario asignado");
 
                 FacesMessage msg = new FacesMessage("Aviso", "¡Asignación realizada correctamente!");
                 FacesContext.getCurrentInstance().addMessage(null, msg);
             } catch (Exception e) {
-            } finally {
+            } finally {//Finalmente se limpian los objetos
                 selectAsignacion = new Asignaciones();
                 asignacion = new Asignaciones();
                 jornada = new Jornadas();
                 asignacionDescansos = new AsignacionDescansos();
                 descansosPorColaborador.clear();
             }
-        }
-        else{
+        } else {
             FacesMessage msg = new FacesMessage("Aviso", "Debe seleccionar una jornada.");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-
         }
+    }
+
+    public void enable()//para habilitar el segundo día de descanso
+    {
+        PrimeFaces current = PrimeFaces.current();
+        habilitar = false;
+        current.ajax().update("horaio:descanso3");
+    }
+
+    public void enable2()//para habilitar el segundo día de descanso
+    {
+        PrimeFaces current = PrimeFaces.current();
+        habilitar2 = false;
+        current.ajax().update("horaio2:descanso4");
+    }
+
+    public void disable()//para deshabilitar el segundo día de descanso
+    {
+        PrimeFaces current = PrimeFaces.current();
+        habilitar = true;
+        current.ajax().update("horaio:descanso3");
+    }
+
+    public void disable2()//para deshabilitar el segundo día de descanso
+    {
+        PrimeFaces current = PrimeFaces.current();
+        habilitar2 = true;
+        current.ajax().update("horaio2:descanso4");
     }
 
 }

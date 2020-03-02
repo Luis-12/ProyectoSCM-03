@@ -6,5 +6,7 @@ import s.c.m.entities.Puesto;
 
 @Repository
 public interface PuestoRepository extends CrudRepository<Puesto, Integer> {
-    Puesto findByDescripcion(String descripcion);
+    /*Interfaz para acceder a las funciones que ofrece spring JPA data para transaciones y consultas a la base para
+    la tabla Puesto.*/
+    Puesto findByDescripcion(String descripcion);//Se declara funcion para consultar puestos por descripcion.
 }

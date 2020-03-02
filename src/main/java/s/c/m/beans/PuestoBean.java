@@ -13,7 +13,7 @@ import java.util.List;
 @Component
 @ManagedBean
 public class PuestoBean {
-
+    //Controlador que conecta el front end con el backend para IO para consultar puestos.
     @Autowired
     PuestoService puestoService;
     private Puesto puesto = new Puesto();
@@ -47,7 +47,7 @@ public class PuestoBean {
         this.puestos = puestos;
     }
 
-    public Puesto obtienePuestos(Integer id)
+    public Puesto obtienePuestos(Integer id)//Funcion para consultar puestos por su id
     {
         if(id == null){
             throw new IllegalArgumentException("no se provee el id");

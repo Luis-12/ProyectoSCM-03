@@ -23,6 +23,16 @@ public class Asignaciones implements Serializable {
 
     private String diadescanso;
 
+    private String segundodiades;
+
+    public String getSegundodiades() {
+        return segundodiades;
+    }
+
+    public void setSegundodiades(String segundodiades) {
+        this.segundodiades = segundodiades;
+    }
+
     public String getDiadescanso() {
         return diadescanso;
     }

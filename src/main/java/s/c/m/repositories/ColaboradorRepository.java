@@ -13,8 +13,10 @@ import java.util.List;
 
 @Repository
 public interface ColaboradorRepository extends CrudRepository<Colaborador, String> {
-    Colaborador findByDepartamentoAndPuestoAndEstado(Departamento idD,Puesto idP,String estado);
-    List<Colaborador> findByDepartamento(Departamento idD);
+    /*Interfaz para acceder a las funciones que ofrece spring JPA data para transaciones y consultas a la base para
+    la tabla Colaborador.*/
+    Colaborador findByDepartamentoAndPuestoAndEstado(Departamento idD,Puesto idP,String estado);//Se declara funcion para consultar el colaborador por estado y puesto
+    List<Colaborador> findByDepartamento(Departamento idD);//Se declara funcion para consultar colaboradores por departamento
 }
 
 

@@ -14,6 +14,7 @@ import java.util.WeakHashMap;
 
 @FacesConverter(value = "horarioConverter")
 public class HorarioConverter implements Converter {
+    //Clase para contruir combobox de Horarios
     private static Map<Object, String> entities = new WeakHashMap<Object, String>();
 
     @Override

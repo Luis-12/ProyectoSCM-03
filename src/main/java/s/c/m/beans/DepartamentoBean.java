@@ -20,6 +20,7 @@ import java.util.List;
 @Component
 @ManagedBean
 public class DepartamentoBean {
+    //Controlador que conecta el front end con el backend para IO para mantenimiento de departamento.
     @Autowired
     DepartamentoService departamentoService;
     @Autowired
@@ -78,7 +79,7 @@ public class DepartamentoBean {
         this.colaborador = colaborador;
     }
 
-    public Departamento obtieneDepartamento(String id)
+    public Departamento obtieneDepartamento(String id)//Funcion para encontrar departamento por id
     {
         if (id == null) {
             throw new IllegalArgumentException("no se provee el id");
@@ -91,39 +92,39 @@ public class DepartamentoBean {
         return null;
     }
 
-    public void checkSelection()
+    public void checkSelection()//Se valida si selecciono el departamento
     {
         PrimeFaces current = PrimeFaces.current();
 
         if (selectDepartamento == null) {
             addMessage("Aviso", "Debe seleccionar un Departamento"); //si esta vacío muestra este mensaje
-        } else {
-            current.executeScript("PF('dlUC').show();"); //si no esta vacío muestra el dialogo
+        } else {//Si se selecciono un dep
+            current.executeScript("PF('dlUC').show();"); //si no esta vacío muestra el dialogo para actualizar el departamento
         }
     }
 
-    public void checkSelectionD()
+    public void checkSelectionD()//Funcion para validar que se selecciono departamento y consultar encargado
     {
         PrimeFaces current = PrimeFaces.current();
 
         if (selectDepartamento == null) {
             addMessage("Aviso", "Debe seleccionar un Departamento"); //si esta vacío muestra este mensaje
-        } else {
-            buscaEncargado();
-            current.executeScript("PF('dE').show();"); //si no esta vacío muestra el dialogo
+        } else {//Si se selecciono un departamento
+            buscaEncargado();//Se invoca la funcion para consultar el encargado
+            current.executeScript("PF('dE').show();"); //si muestra el dialogo con la informacion o no del encargado
         }
     }
 
-    public void buscaEncargado()
+    public void buscaEncargado()//Funcion para consultar de la base de datos el encargado del departamento
     {
 
         String idDepSelc = selectDepartamento.getPk_idDepartamento();//Saco id dept
         int idPuesto = puestoService.findIdPuesto("Jefatura").getPk_idPuesto();//saco id puesto
         Puesto puesto = puestoService.findIdPuesto("Jefatura");
         Puesto puesto1 = puestoService.findIdPuesto("Gerencia");
-        if (colaboradorService.findColaboradorEncargado(selectDepartamento, puesto) != null) {
-            colaborador = colaboradorService.findColaboradorEncargado(selectDepartamento, puesto);
-        } else {
+        if (colaboradorService.findColaboradorEncargado(selectDepartamento, puesto) != null) {//Si se encuentra el encargado
+            colaborador = colaboradorService.findColaboradorEncargado(selectDepartamento, puesto);//Se llena el objeto para mostrarlo
+        } else {//De no ser asi se llena el objeto con datos quemado vacios
             colaborador.setPk_idColaborador("No hay un encargado asignado");
             colaborador.setNombre("Vacío");
             colaborador.setTelefono(0);
@@ -136,16 +137,16 @@ public class DepartamentoBean {
     }
 
 
-    public void showconfirm() {
+    public void showconfirm() {//Funcion para validar si mostrar validacion para eliminar el departamento
         PrimeFaces current = PrimeFaces.current();
 
-        if (selectDepartamento == null) {
+        if (selectDepartamento == null) {//Valida si se selecciono el departamento
             addMessage("Aviso", "Debe Seleccionar un Departamento."); //si esta vacio muetra este mensaje
-        } else {
+        } else {//Si se selecciono
             if(colaboradorService.findColaboradorDepartamento(selectDepartamento).size() != 0){
                 addMessage("Aviso", "No puede desactivar un departamento con colaboradores asignados."); //si esta vacio muetra este mensaje
             }else{
-            current.executeScript("PF('dlED').show();"); //si no esta vacio muestra el dialogo
+            current.executeScript("PF('dlED').show();"); //si no esta vacio muestra el dialogo de confirmacion de eliminacion
             }
         }
 
@@ -156,20 +157,20 @@ public class DepartamentoBean {
         departamento = new Departamento();
     }
 
-    public void delete()
+    public void delete()//Funcion para desactivar el departamento en la base de datos
     {
         departamentoService.deleteDepartamento(selectDepartamento);
         addMessage("Aviso", "Departamento desactivado correctamente.");
-        departamentos = departamentoService.getAllDepartamentosActivos();
+        departamentos = departamentoService.getAllDepartamentosActivos();//Se carga nuevamente los departementos restantes
         System.out.println("Eliminado");
     }
 
-    public void create()
+    public void create()//Funcion para crear un departamento
     {
         FacesMessage mensaje = null;
         PrimeFaces current = PrimeFaces.current();
         boolean existeDepartamento = false;
-        for (Departamento d : departamentos) {
+        for (Departamento d : departamentos) {//Se busca que no haya un departamento con ese id
             if (departamento.getPk_idDepartamento().equals(d.getPk_idDepartamento())) {
                 existeDepartamento = true;
                 break;
@@ -177,18 +178,18 @@ public class DepartamentoBean {
                 existeDepartamento = false;
             }
         }
-        if (!existeDepartamento) {
+        if (!existeDepartamento) {//Si no exite el departamento
             try {
                 System.out.println("No existe el departamento");
-                departamentoService.createDepartamento(departamento);
+                departamentoService.createDepartamento(departamento);//Se agrega el mismo a la base de datos
                 mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Departamento guardado correctamente.");
-                departamentos = departamentoService.getAllDepartamentosActivos();
-                current.executeScript("PF('dlAC').hide();");
+                departamentos = departamentoService.getAllDepartamentosActivos();//Y se vuelven a cargar los departmentos
+                current.executeScript("PF('dlAC').hide();");//Se oculta el form
             } catch (Exception e) {
             } finally {
                 departamento = new Departamento();
             }
-        } else if (existeDepartamento) {
+        } else if (existeDepartamento) {//Si ya existe un departamento con es id
             System.out.println("Si existe el departamento con ese cod");
             mensaje = new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "Ya existe un departamento con ese código, pruebe nuevamente.");
         }
@@ -196,13 +197,13 @@ public class DepartamentoBean {
         PrimeFaces.current().ajax().addCallbackParam("existeDepartamento", existeDepartamento);
     }
 
-    public void update()
+    public void update()//Funcion para actualizar el departamento
     {
         try {
             System.out.println("El departamento actualizado es" + selectDepartamento.getNombre());
-            departamentoService.updateDepartamento(selectDepartamento);
+            departamentoService.updateDepartamento(selectDepartamento);//Se actualiza el departamento en la base
             addMessage("Aviso", "Departamento actualizado correctamente");
-            departamentos = departamentoService.getAllDepartamentosActivos();
+            departamentos = departamentoService.getAllDepartamentosActivos();//Se cargan nuevamente los departamentos
         } catch (Exception e) {
         } finally {
             departamento = new Departamento();
@@ -215,7 +216,7 @@ public class DepartamentoBean {
         departamentos.clear();
         departamentos.add(departamentoService.findDepartamento(id));
     }
-    public void addMessage(String summary, String detail)
+    public void addMessage(String summary, String detail)//Funcion para construir mensajes
     {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
         FacesContext.getCurrentInstance().addMessage(null, message);

@@ -10,7 +10,10 @@ import java.util.List;
 
 @Repository
 public interface AsignacionDescansosRepository extends CrudRepository<AsignacionDescansos,Integer> {
-    List<AsignacionDescansos> findByColaborador(Colaborador idColaborador);
-    @Transactional
-    void deleteByColaborador(Colaborador idColaborador);
+    /*Interfaz para acceder a las funciones que ofrece spring JPA data para transaciones y consultas a la base para
+    la tabla AsignacionDescansos.*/
+
+    List<AsignacionDescansos> findByColaborador(Colaborador idColaborador);//Se declara la funcion para encontrar asignaciones por colaborador
+    @Transactional//Notacion que indica que se realizaran transacciones con la siguiente funcion
+    void deleteByColaborador(Colaborador idColaborador);//Se declara la funcion para eliminar las asignaciones de descansos que tenga el colaborador
 }

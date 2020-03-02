@@ -9,7 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class LoginFilter implements Filter {
-
+	/*Funcion para filtrar los accesos de ventanas por roles en el login
+	* */
 
 	@Override
 	public void doFilter(ServletRequest servletRequest,
@@ -23,7 +24,7 @@ public class LoginFilter implements Filter {
 
 		// managed bean name is exactly the session attribute name
 		ColaboradorBean userManager = (ColaboradorBean) httpServletRequest
-				.getSession().getAttribute("colaboradorBean");
+				.getSession().getAttribute("colaboradorBean");//Se indica el bean donde se ralizara la validacion de los usuarios y claves
 
 		if (userManager != null ) {
 			if (userManager.isLoggedIn()) {
@@ -31,7 +32,7 @@ public class LoginFilter implements Filter {
 				filterChain.doFilter(servletRequest, servletResponse);
 			} else {
 				httpServletResponse.sendRedirect(
-						httpServletRequest.getContextPath() + "/login.xhtml");
+						httpServletRequest.getContextPath() + "/login.xhtml");//Si no se logra loguear se vuelve redireccionar a la ventana de login
 			}
 		} else {
 

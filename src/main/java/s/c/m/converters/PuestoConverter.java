@@ -14,6 +14,7 @@ import java.util.WeakHashMap;
 
 @FacesConverter(value = "puestoConverter")
 public class PuestoConverter implements Converter {
+    //Clase para contruir combobox de puestos
     private static Map<Object, String> entities = new WeakHashMap<Object, String>();
 
     @Override

@@ -18,55 +18,58 @@ import java.util.*;
 
 @Service
 public class ColaboradorService {
+    //Es esta clase se implementan las funciones desclaradas en los repositorios para acceder
+    // y hacer transacciones en la tabla Colaborador
 
     @Autowired
-    private ColaboradorRepository colaboradorRepository;
+    private ColaboradorRepository colaboradorRepository;//Se instancia la objeto para invocar los metodos del repository de colaborador
     private  Colaborador colaborador;
 
-    public List<Colaborador> getAllColaboradores()
+    public List<Colaborador> getAllColaboradores()//Funcion para listar todos los colaboradores
     {
-        List<Colaborador> list = new ArrayList<Colaborador>();
-        colaboradorRepository.findAll().forEach(e -> list.add(e));
+        List<Colaborador> list = new ArrayList<Colaborador>();//Lista de colaboradores.
+        colaboradorRepository.findAll().forEach(e -> list.add(e));//se invoca la funcion de repository para llenar la lista de colaboradores
         return list;
     }
 
-    public List<Colaborador> getAllColaboradoresActivos()
+    public List<Colaborador> getAllColaboradoresActivos()//Funcion para listar todos lo colaboradores por estado activos.
     {
         Colaborador miC=new Colaborador();
-        List<Colaborador> list = new ArrayList<Colaborador>();
-        List<Colaborador> listA = new ArrayList<Colaborador>();
-        colaboradorRepository.findAll().forEach(e -> list.add(e));
+        List<Colaborador> list = new ArrayList<Colaborador>();//Se declara un la lista para consultar todos los colaboradores
+        List<Colaborador> listA = new ArrayList<Colaborador>();//Se declara lista para guardar los colaboradores por estado activos
+        colaboradorRepository.findAll().forEach(e -> list.add(e));//Se invoca la funcion del repository para llenar la lista
 
-            for (Colaborador c : list) {
-                if (c.getEstado().equals("Activo")) {
-                    listA.add(c);
+            for (Colaborador c : list) {//For para llenar la lista auxiliar solo con los colaboradores activos
+                if (c.getEstado().equals("Activo")) {//If que evalua si el colaborador esta activo
+                    listA.add(c);//Se agrega el colaborador a la lista
                 }
             }
             return listA;
-
     }
 
-    public List<Colaborador> getAllColaboradoresActivos(Colaborador a)
+    public List<Colaborador> getAllColaboradoresActivos(Colaborador a)//Funcion para listar todos lo colaboradores por estado activos.
+            //Y solo para los usuarios de Recursos humanos
     {
         Colaborador miC=new Colaborador();
-        List<Colaborador> list = new ArrayList<Colaborador>();
-        List<Colaborador> listA = new ArrayList<Colaborador>();
-        colaboradorRepository.findAll().forEach(e -> list.add(e));
+        List<Colaborador> list = new ArrayList<Colaborador>();//Se declara un la lista para consultar todos los colaboradores
+        List<Colaborador> listA = new ArrayList<Colaborador>();//Se declara lista para guardar los colaboradores por estado activos
+        colaboradorRepository.findAll().forEach(e -> list.add(e));//Se llena la lista con todos los colaboradores
 
-        if(a.getPuesto().getDescripcion().equals("Gerencia")&&a.getDepartamento().getNombre().equals("Recursos Humanos")) {
-            for (Colaborador c : list) {
-                if (c.getEstado().equals("Activo")) {
-                    listA.add(c);
+        if(a.getPuesto().getDescripcion().equals("Gerencia")&&a.getDepartamento().getNombre().equals("Recursos Humanos")) {//Si el rol del usuario es Gerencia y del departamento de RH
+            for (Colaborador c : list) {//Se procede a llenar la lista
+                if (c.getEstado().equals("Activo")) {//cuando el estado sea activo
+                    listA.add(c);//Se agrega a la lista
                 }
             }
 
-        }else {
-            for (Colaborador c : list) {
+        }else {//Si el rol no es gerencia ni rh
+            for (Colaborador c : list) {//Se lista
 
-                if (c.getEstado().equals("Activo")&&c.getDepartamento().getNombre().equals(a.getDepartamento().getNombre())) {
+                if (c.getEstado().equals("Activo")&&c.getDepartamento().getNombre().equals(a.getDepartamento().getNombre())) {//solo si los departamentos del
+                    //colaborador y del colaborador logueando son iguales
                     System.out.println(c.getDepartamento());
                     System.out.println(a.getDepartamento());
-                    listA.add(c);
+                    listA.add(c);//Se agregar el colaborador a la lista
                 }
 
             }
@@ -77,89 +80,89 @@ public class ColaboradorService {
     }
 
 
-    public Date calculaVencimiento() throws ParseException {
+    public Date calculaVencimiento() throws ParseException {//Funcion para calcular la fecha de vencimiento para guardar cuando se vencera la clave
 
-        Date fechaDeVencimiento =null;
+        Date fechaDeVencimiento =null;//Se declara un parametro de tipo date
         Calendar fechaDeVencimiento2 = Calendar.getInstance();
         Calendar horaActual = Calendar.getInstance();
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
 
-        int mes;
-        int dia;
-        int year;
+        int mes;//parametro que guarde el mes de la fecha actual
+        int dia;//parametro que guarde el dia de la fecha actual
+        int year;//parametro que guarde el year de la fecha actual
 
-        String dia2 = null;
-        String mes2 = null;
+        String dia2 = null;//atributos para dar formato al dia para guardar la fecha
+        String mes2 = null;//atributos para dar formato el mes para guardar la fecha
 
-        mes= horaActual.get(Calendar.MONTH) + 1;
-        dia= horaActual.get(Calendar.DAY_OF_MONTH);
-        year = horaActual.get(Calendar.YEAR);
+        mes= horaActual.get(Calendar.MONTH) + 1;//Se llena el mes
+        dia= horaActual.get(Calendar.DAY_OF_MONTH);//Se llena el dia
+        year = horaActual.get(Calendar.YEAR);//Se llena el year
 
-        if(dia==28 || dia==30||dia == 31){
-            dia2="0"+1;
+        if(dia==28 || dia==30||dia == 31){//Si el dia es casi fin de mes
+            dia2="0"+1;//se carga dia
         }
-        if(mes==10){
-            year = year +1;
-            mes=1;
+        if(mes==10){//si el mes es igual a 10
+            year = year +1;//Se le suma uno al year y cambia de anio.
+            mes=1;//Y vencera el primer mes
         }
-        if(mes==11){
-            year = year +1;
-            mes=2;
+        if(mes==11){//Se el mes es 11
+            year = year +1;//Se le suma uno al year y cambia de anio
+            mes=2;//Y vencera el segundo mes
         }
-        if(mes==12){
-            year = year +1;
-            mes=3;
+        if(mes==12){//Se el mes es 11
+            year = year +1;//Se le suma uno al year y cambia de anio
+            mes=3;//Y vencera el tercer mes
         }
-        else {
-            mes=mes+3;
+        else {//Sino es 10 ni 11 ni 12
+            mes=mes+3;//Solo cambia el mes sumandole 3
         }
 
-        if (mes < 10) {
+        if (mes < 10) {//Se da formato al string del mes si es menor a 10
             mes2 = "0" + mes;
         }else{
             mes2 = ""+mes;
         }
 
-        if (dia < 10) {
+        if (dia < 10) {//Se da formato al string del dia si es menor a 10
             dia2 = "0" + dia;
         }else{
             dia2 = ""+dia;
         }
-        String fVencimiento = year +"-"+mes2+"-"+dia2;
+        String fVencimiento = year +"-"+mes2+"-"+dia2;//Se da la concatenacion para formar el formato
         fechaDeVencimiento = formato.parse(fVencimiento);
-        return fechaDeVencimiento;
+        return fechaDeVencimiento;//Se retorna la fecha de vencimiento de la clave
     }
-    public void actualizaClave(Colaborador c) throws ParseException {
+    public void actualizaClave(Colaborador c) throws ParseException {//Funcion que se dispara cada vez que se actualiza la clave del colaborador
         c.setFechaVencimiento(calculaVencimiento());//Cuando se cambia la clave se vuelve a calcula la nueva fecha de vencimiento
-        colaboradorRepository.save(c);
+        colaboradorRepository.save(c);//Se guarda solo la nueva fecha en la base
     }
 
-    public void createColaborador(Colaborador colaborador) throws ParseException {
+    public void createColaborador(Colaborador colaborador) throws ParseException {//Funcion para agregar colaborador a la base
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
         Date fechaA = new Date();
 
         formato.format(fechaA);
         System.out.println("FECHA DE HOY: " + formato.format(fechaA));
-        colaborador.setEstado("Activo");
-        colaborador.setJustificacion("N/A");
-        colaborador.setFechaVencimiento(fechaA);
+        colaborador.setEstado("Activo");//Se llena el objeto colaborador en el campo estado
+        colaborador.setJustificacion("N/A");//Y la justificacion de despido no aplica
+        colaborador.setFechaVencimiento(fechaA);//se agrega la fecha de vencimiento que la primera vez es la actual de la incorporacion
         colaborador.setClave(colaborador.getPk_idColaborador());//Aca pongo de clave el mismo id del colaborador agregado
-        colaboradorRepository.save(colaborador);
+        colaboradorRepository.save(colaborador);//Aca se invoca la funcion para agregar el colaborador a la base
     }
 
 
-    public void deleteColaborador(Colaborador colaborador)
+    public void deleteColaborador(Colaborador colaborador)//Funcion para desvincular colaborador
     {
         colaborador.toString();
-        colaborador.setEstado("Inactivo");
-        colaboradorRepository.save(colaborador);
+        colaborador.setEstado("Inactivo");//Se le cambia el estado a Inactivo
+        colaboradorRepository.save(colaborador);//Se invoca funcion para actualizar estado del colaborador.
     }
 
-    public Colaborador findColaborador(String id) throws Exception
+    public Colaborador findColaborador(String id) throws Exception//Funcion para encontrar el colaborador por su id
     {
         try
         {
-            colaborador=colaboradorRepository.findById(id).get();
+            colaborador=colaboradorRepository.findById(id).get();//Se invoca funcion del repository para consultar el cola por id
         }catch (Exception ex)
         {
             colaborador=null;
@@ -169,28 +172,27 @@ public class ColaboradorService {
 
 
 
-    public void updateColaborador(Colaborador colaborador)
-    {
-        colaboradorRepository.save(colaborador);
+    public void updateColaborador(Colaborador colaborador) {//Funcion para actualizar al colaborador
+        colaboradorRepository.save(colaborador);//Se invoca funcion para actualizar datos en el colaborador en la base
     }
 
 
-    public Colaborador findColaboradorEncargado(Departamento idD, Puesto idP)
+    public Colaborador findColaboradorEncargado(Departamento idD, Puesto idP)//Funcion para encontrar el colaborador encargado del departamento
     {
-        if(colaboradorRepository.findByDepartamentoAndPuestoAndEstado(idD,idP,"Activo")==null){
+        if(colaboradorRepository.findByDepartamentoAndPuestoAndEstado(idD,idP,"Activo")==null){//Primero se busca si exite colaborador de ese departamento con es puesto
             System.out.println("No se encontro el encargado con rol " + idP.getDescripcion());
         }else{
             System.out.println("Si encontro el encargado con rol " + idP.getDescripcion());
         }
-        return colaboradorRepository.findByDepartamentoAndPuestoAndEstado(idD,idP,"Activo");
+        return colaboradorRepository.findByDepartamentoAndPuestoAndEstado(idD,idP,"Activo");//Si es asi se retorna el colaborador encargado
     }
 
-    public List<Colaborador> findColaboradorDepartamento(Departamento idD){
+    public List<Colaborador> findColaboradorDepartamento(Departamento idD){//Funcion para consultar colaborador por departamento
         List<Colaborador> list = new ArrayList<Colaborador>();
         List<Colaborador> listA = new ArrayList<Colaborador>();
-        colaboradorRepository.findByDepartamento(idD).forEach(e -> list.add(e));
-        for(Colaborador c: list){
-            if(c.getEstado().equals("Activo")){
+        colaboradorRepository.findByDepartamento(idD).forEach(e -> list.add(e));//Se invoca la funcion para buscar los colaboradores por departamento
+        for(Colaborador c: list){//Se lista de estos colaboradores encontrados
+            if(c.getEstado().equals("Activo")){//Solo los activos
                 listA.add(c);
             }
         }
