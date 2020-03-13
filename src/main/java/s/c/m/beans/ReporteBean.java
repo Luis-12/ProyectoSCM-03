@@ -328,7 +328,7 @@ public class ReporteBean {
         c2 = Calendar.getInstance();
         c1.setTime(colaborador.getFechaInicioLaboral());
         vacaciones.setColaborador(colaborador);
-        int anios = c2.get(YEAR) - c1.get(YEAR);
+        int anios = c2.get(YEAR) -get(YEAR);
         if (c1.get(Calendar.MONTH + 1) > c2.get(Calendar.MONTH) || (c1.get(Calendar.MONTH + 1) == c2.get(Calendar.MONTH)
                         && c1.get(Calendar.DATE) > c2.get(Calendar.DATE))) {
             anios--;
