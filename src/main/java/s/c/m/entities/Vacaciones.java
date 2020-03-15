@@ -19,7 +19,6 @@ public class Vacaciones implements Serializable {
 
     private Date fechainicio;
     private Date fechafinal;
-    private int diasdisponibles;
     private String estado;
     private String justificacion;
 
@@ -53,14 +52,6 @@ public class Vacaciones implements Serializable {
 
     public void setFechafinal(Date fechafinal) {
         this.fechafinal = fechafinal;
-    }
-
-    public int getDiasdisponibles() {
-        return diasdisponibles;
-    }
-
-    public void setDiasdisponibles(int diasdisponibles) {
-        this.diasdisponibles = diasdisponibles;
     }
 
     public String getEstado() {
