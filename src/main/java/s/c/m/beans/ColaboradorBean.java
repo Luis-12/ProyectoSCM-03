@@ -540,7 +540,7 @@ public class ColaboradorBean {
                     colaboradorService.createColaborador(colaborador);//Aca se agrega el colaborador a la base
                     current.executeScript("PF('dlAC').hide();");
                     current.ajax().update("form:tablaColaborador");
-                    mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Colaborador insertado correctamente.");
+                    mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Ingreso de colaborador exitoso.");
                     colaboradores = colaboradorService.getAllColaboradoresActivos(colaboradorlogueado);//Se refresca la lista de colaboradores
                 } catch (Exception e) {
                 } finally {
@@ -954,8 +954,8 @@ public class ColaboradorBean {
         colaboradorMarca = new Colaborador();
         botonEntrada = true;
         current.ajax().update("bot:ent");//Se vuelven a bloquear los botones
-        current.ajax().update("info:nom");// se limpia el nombre
         current.ajax().update("info:ced");//y cedula del colaborador que marca
+
     }
 
     public void marcaTarde()//funcion que se dispara con el boton de el formulario just
@@ -1092,6 +1092,7 @@ public class ColaboradorBean {
 
         listaMarcasPorJornadaFinalizada(marcaLaboradas);
         saveImage();
+        marcasJornadasList=new ArrayList<>();
         marcaLaboradas = new MarcaLaboradas();
         colaboradorMarca = new Colaborador();
         botonSalida = true;
@@ -1101,6 +1102,7 @@ public class ColaboradorBean {
         current.ajax().update("bot:sali");
         current.ajax().update("info:nom");// se limpia el nombre
         current.ajax().update("info:ced");//y cedula del colaborador que marca
+        current.ajax().update("f1:marcaJornadaTabla");
     }
 
     public void marcaSalidaAntes()//funcion que se dispara con el boton de el formulario just2
@@ -1191,10 +1193,14 @@ public class ColaboradorBean {
             calendar2.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeArrayFin[0]));
             calendar2.set(Calendar.MINUTE, Integer.parseInt(timeArrayFin[1]));
             calendar2.set(Calendar.SECOND, Integer.parseInt(timeArrayFin[2]));
-            if (now.get(Calendar.HOUR) == 0) {
+
+            if (now.get(Calendar.HOUR_OF_DAY) == 0) {
                 now.set(Calendar.HOUR_OF_DAY, 24);
             }
-            if ((now.compareTo(calendar) >= 0) && (now.compareTo(calendar2) <= 0)) {
+
+
+            long resultado = (Math.abs(calendar2.getTimeInMillis() - now.getTimeInMillis()) / (1000 * 60) );
+            if (((now.compareTo(calendar) >= 0) && (now.compareTo(calendar2) <= 0)) || resultado<=15) {
                 asignacionDescansos = asignacionDescansos1;
                 if (marcaDescansoService.buscarMdescanso(asignacionDescansos1.getDescanso(), marcaLa) == null) {
                     botonDesSali = false;
@@ -1222,10 +1228,10 @@ public class ColaboradorBean {
             mensaje = "Marca descanso";
             current.ajax().update("msj");
             marcaIniDes();//Se llama la funcion para marcar inicio
-            limpia();
+            reset();
         } else {
             marcaFindes();//Se marca fin de descanso
-            limpia();
+            reset();
             PrimeFaces current = PrimeFaces.current();
             mensaje = "Marca fin del descanso";
             current.ajax().update("msj");
@@ -1233,26 +1239,14 @@ public class ColaboradorBean {
         }
     }
 
-    public void limpia() {//Funcion para limpiar mensajes objetos y form botones de la pagina inicial
-        PrimeFaces current = PrimeFaces.current();
-        colaboradorMarca = new Colaborador();
-        asignacionDescansos = new AsignacionDescansos();
-        marcaLa = new MarcaLaboradas();
-        botonSalida = true;
-        botonDesSali = true;
-        variable = "Descanso";
-        mensaje = "";
-        current.ajax().update("msj");
-        current.ajax().update("bot:des");//Se desabilita el boton de descanso y el de salida
-        current.ajax().update("bot:sali");
-        current.ajax().update("info:nom");// se limpia el nombre
-        current.ajax().update("info:ced");//y cedula del colaborador que marca
-    }
 
     public void resetMsj() {
         PrimeFaces current = PrimeFaces.current();
         mensaje = "";
+        marcasJornadasList=new ArrayList<>();
+        current.ajax().update("f1:marcaJornadaTabla");
         current.ajax().update("msj");
+        current.ajax().update("info:nom");// se limpia el nombre
     }
 
     public void createDirectory() {//Funcion para crear direcctorio para guarda la imagen
