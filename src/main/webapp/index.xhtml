@@ -60,7 +60,7 @@
           </p:dataTable>
       </h:form>
   </div>
-        <div id="camara2"> <canvas id="canvas" width="100" height="50"></canvas> </div>
+        <div id="camara2"> <canvas id="canvas" width="150" height="75"></canvas> </div>
         <center>
         <div class="camara">
             <video  style="margin-bottom:10px; margin-left: 10px;margin-top: 10px" id="preview" width="350" autoplay="autoplay"/>
@@ -71,16 +71,16 @@
                 <p:growl id="msgs" showDetail="true" life="3000" rendered="#{not facesContext.validationFailed}" ><p:autoUpdate/></p:growl>
             <center>
                 <h:panelGrid columns="3" cellpadding="5">
-                    <p:commandButton styleClass="ui-commandant2" id="ent" value="Entrada" onclick="clearTimeout(myVar),setTimeout(myFunction2,3000),foto();" disabled="#{colaboradorBean.botonEntrada}" actionListener="#{colaboradorBean.marcaEntrada}" />
-                    <p:commandButton  styleClass="ui-commandant2" id="des" value="#{colaboradorBean.variable}" onclick="clearTimeout(myVar),setTimeout(myFunction2,3000),foto();" disabled="#{colaboradorBean.botonDesSali}" actionListener="#{colaboradorBean.marcaDescanso}"/>
-                    <p:commandButton styleClass="ui-commandant2" id="sali" value="Salida" onclick="clearTimeout(myVar),setTimeout(myFunction2,3000),foto();" disabled="#{colaboradorBean.botonSalida}" actionListener="#{colaboradorBean.marcaSalida}"/>
+                    <p:commandButton styleClass="ui-commandant2" id="ent" value="Entrada" onclick="clearTimeout(myVar),x,foto();" disabled="#{colaboradorBean.botonEntrada}" actionListener="#{colaboradorBean.marcaEntrada}" />
+                    <p:commandButton  styleClass="ui-commandant2" id="des" value="#{colaboradorBean.variable}" onclick="clearTimeout(myVar),x,foto();" disabled="#{colaboradorBean.botonDesSali}" actionListener="#{colaboradorBean.marcaDescanso}"/>
+                    <p:commandButton styleClass="ui-commandant2" id="sali" value="Salida" onclick="clearTimeout(myVar),x,foto();" disabled="#{colaboradorBean.botonSalida}" actionListener="#{colaboradorBean.marcaSalida}"/>
                 </h:panelGrid>
             </center>
             </h:form>
         </div>
 
-        <div id="mensajeP">
-                <p:outputLabel id="msj" value="#{colaboradorBean.mensaje}" />
+        <div id="mensajeP"  >
+                <p:outputLabel id="msj"  style="font-size: 20px" value="#{colaboradorBean.mensaje}" />
         </div>
 
 
@@ -209,6 +209,10 @@
                 console.error("No existe camara o dispositivo!");
             }
         });
+         var myVar;
+        function x() {
+           myVar=setTimeout(myFunction2,3000);
+        }
 
         function myFunction() {
             document.getElementById('frm'+':hdnBtn3').click();
@@ -325,7 +329,7 @@
         var canvas=document.getElementById("canvas");
         var context=canvas.getContext('2d');
         function foto() {
-            context.drawImage(preview,0,0,100,50);
+            context.drawImage(preview,0,0,150,75);
             var fullQuality = canvas.toDataURL('image/jpeg', 1.0);
             document.getElementById('frm'+':t2').value=fullQuality;
             document.getElementById('frm'+':hdnBtn5').click();
