@@ -17,6 +17,7 @@ import javax.faces.context.FacesContext;
 import javax.xml.bind.DatatypeConverter;
 import java.io.*;
 import java.sql.Time;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -49,6 +50,7 @@ public class ColaboradorBean {
 
     private Vacaciones vacaciones = new Vacaciones();
     private Vacaciones vacaciones1 = new Vacaciones();
+    private VacacionesPorColaborador vacacionesPorColaborador = new VacacionesPorColaborador();
 
 
     @Autowired
@@ -83,6 +85,9 @@ public class ColaboradorBean {
     @Autowired
     VacacionesService vacacionesService;
 
+    @Autowired
+    VacacionesPorColaboradorService vacacionesPorColaboradorService;
+
     private MarcaLaboradas marcaLaboradas = new MarcaLaboradas();
     public boolean botonEntrada = true;
     public boolean botonSalida = true;
@@ -93,6 +98,14 @@ public class ColaboradorBean {
     public String init() {
         Colaborador miC = new Colaborador();
         return "colaboradorList.xhtml";
+    }
+
+    public VacacionesPorColaborador getVacacionesPorColaborador() {
+        return vacacionesPorColaborador;
+    }
+
+    public void setVacacionesPorColaborador(VacacionesPorColaborador vacacionesPorColaborador) {
+        this.vacacionesPorColaborador = vacacionesPorColaborador;
     }
 
     public List<MarcasJornada> getMarcasJornadasList() {
@@ -370,9 +383,11 @@ public class ColaboradorBean {
                 colaboradorlogueado.setNombre(colaborador1.getNombre());
                 colaboradorlogueado.setPuesto(colaborador1.getPuesto());
                 colaboradorlogueado.setDepartamento(colaborador1.getDepartamento());
-                diasDisponibles(colaborador1);
-                vacaciones1 = vacacionesService.diasDisponibles(colaborador1);//Se llena las vacaciones con los dias disponibles del colaborador
 
+                diasDisponibles(colaborador1);
+                vacacionesPorColaborador = vacacionesPorColaboradorService.findVacacionesPorColaborador(colaborador1);
+
+                //vacaciones1 = vacacionesService.diasDisponibles(colaborador1);//Se llena las vacaciones con los dias disponibles del colaborador
                 if (validaVence(colaborador1.getFechaVencimiento())) {//Se valida si la fecha de vencimiento del cola que se loguea se vencio
                     current.executeScript("PF('dlCC').show();");//Si es asi se despliega el form para cambiar la clase
                 } else {//Si no
@@ -391,8 +406,10 @@ public class ColaboradorBean {
                 colaboradorlogueado.setNombre(colaborador1.getNombre());
                 colaboradorlogueado.setPuesto(colaborador1.getPuesto());
                 colaboradorlogueado.setDepartamento(colaborador1.getDepartamento());
+
                 diasDisponibles(colaborador1);
-                vacaciones1 = vacacionesService.diasDisponibles(colaborador1);
+                vacacionesPorColaborador = vacacionesPorColaboradorService.findVacacionesPorColaborador(colaborador1);
+                //vacaciones1 = vacacionesService.diasDisponibles(colaborador1);
 
                 if (validaVence(colaborador1.getFechaVencimiento())) {//Se valida si la clave vencio
                     current.executeScript("PF('dlCC').show();");//Si vencio se muestra el form para cambiar la clave
@@ -410,8 +427,10 @@ public class ColaboradorBean {
                 colaboradorlogueado.setNombre(colaborador1.getNombre());
                 colaboradorlogueado.setPuesto(colaborador1.getPuesto());
                 colaboradorlogueado.setDepartamento(colaborador1.getDepartamento());
+
                 diasDisponibles(colaborador1);
-                vacaciones1 = vacacionesService.diasDisponibles(colaborador1);
+                vacacionesPorColaborador = vacacionesPorColaboradorService.findVacacionesPorColaborador(colaborador1);
+                //vacaciones1 = vacacionesService.diasDisponibles(colaborador1);
 
                 if (validaVence(colaborador1.getFechaVencimiento())) {//Valida si la clave vencio
                     current.executeScript("PF('dlCC').show();");//Se muestra el dialogo para mostrar el form de cambio de clave
@@ -431,8 +450,10 @@ public class ColaboradorBean {
                 colaboradorlogueado.setNombre(colaborador1.getNombre());
                 colaboradorlogueado.setPuesto(colaborador1.getPuesto());
                 colaboradorlogueado.setDepartamento(colaborador1.getDepartamento());
+
                 diasDisponibles(colaborador1);
-                vacaciones1 = vacacionesService.diasDisponibles(colaborador1);
+                vacacionesPorColaborador = vacacionesPorColaboradorService.findVacacionesPorColaborador(colaborador1);
+                //vacaciones1 = vacacionesService.diasDisponibles(colaborador1);
 
                 if (validaVence(colaborador1.getFechaVencimiento())) {//Valida si la clave ya vencio
                     current.executeScript("PF('dlCC').show();");//Despliega el form de cambio de clave
@@ -538,13 +559,23 @@ public class ColaboradorBean {
                 try {
                     //System.out.println("No existe el colaborador");
                     colaboradorService.createColaborador(colaborador);//Aca se agrega el colaborador a la base
+
+                    //SE AGREGA A LA BASE EL REGISTRO DE VACACIONES POR COLABORADOR
+                    vacacionesPorColaborador.setColaborador(colaborador);
+                    vacacionesPorColaborador.setDiasdisponibles(0);
+                    vacacionesPorColaborador.setDiasdisfrutados(0);
+                    vacacionesPorColaborador.setFechaasignada(colaborador.getFechaInicioLaboral());
+                    vacacionesPorColaboradorService.createVacacionesPorColaborador(vacacionesPorColaborador);
+
                     current.executeScript("PF('dlAC').hide();");
                     current.ajax().update("form:tablaColaborador");
                     mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Ingreso de colaborador exitoso.");
                     colaboradores = colaboradorService.getAllColaboradoresActivos(colaboradorlogueado);//Se refresca la lista de colaboradores
+
                 } catch (Exception e) {
                 } finally {
                     colaborador = new Colaborador();
+                    vacacionesPorColaborador = new VacacionesPorColaborador();
                 }
             } else {//Si no se avisa que ya hay un jefe existente
                 mensaje = new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "El departamento " + colaborador.getDepartamento().getNombre() + " ya tiene un Gerente o Jefe Asignado");
@@ -664,41 +695,41 @@ public class ColaboradorBean {
         mLaborada = marcaLaboradaService.buscaMarcaPorColaboradoYEstado(colaboradorMarca, "Entrada");//Saco marca de entrada
 
         if (mLaborada == null) {//Si no ha marcado entro aca
-        //System.out.println("No ha marcado entrada");
+            //System.out.println("No ha marcado entrada");
         } else {//Lleno objeto con hora entrada y la descripcion de entrada
-        if (mLaborada.getHoraEntrada() != null) {//Si solo a marcado entrada
-            MarcasJornada miMJ = new MarcasJornada();
-            System.out.println("ENTRO A IF SIN MARCA SALIDA");
+            if (mLaborada.getHoraEntrada() != null) {//Si solo a marcado entrada
+                MarcasJornada miMJ = new MarcasJornada();
+                System.out.println("ENTRO A IF SIN MARCA SALIDA");
 
-            //Ingreso la entrada
-            miMJ.setMarca(mLaborada.getHoraEntrada());//Se agrega el objeto de entrada
-            miMJ.setDescripcion("Entrada");
-            marcasJornadasList.add(miMJ);//Se agrega a la lista a mostrar
-            miMJ = new MarcasJornada();
+                //Ingreso la entrada
+                miMJ.setMarca(mLaborada.getHoraEntrada());//Se agrega el objeto de entrada
+                miMJ.setDescripcion("Entrada");
+                marcasJornadasList.add(miMJ);//Se agrega a la lista a mostrar
+                miMJ = new MarcasJornada();
 
-            List<MarcaDescansos> marcaDescansosList = marcaDescansoService.buscarMarcaPorMarcaLab(mLaborada);//Se cargan los descansos
-            //Se buscan la marcas por descansos
-            if (!marcaDescansosList.isEmpty()) {//Si la marca descansos no esta vacia
-                for (MarcaDescansos md : marcaDescansosList) {//Se listan las marcas de descanso que tenga
-                    if (md.getHoraFin() == null) {//Si no ha finalizado el descanso
-                        miMJ.setMarca(md.getHoraInicio());
-                        miMJ.setDescripcion("Inicio " + md.getDescansos().getDescripcion());
-                        marcasJornadasList.add(miMJ);//Solo agrega el inicio de descanso
-                        miMJ = new MarcasJornada();
-                    } else {//Si el descanso si finalizo es decir el campo getHoraFin tiene algo se carga
-                        miMJ.setMarca(md.getHoraInicio());
-                        miMJ.setDescripcion("Inicio " + md.getDescansos().getDescripcion());
-                        marcasJornadasList.add(miMJ);//el inicio
-                        miMJ = new MarcasJornada();
+                List<MarcaDescansos> marcaDescansosList = marcaDescansoService.buscarMarcaPorMarcaLab(mLaborada);//Se cargan los descansos
+                //Se buscan la marcas por descansos
+                if (!marcaDescansosList.isEmpty()) {//Si la marca descansos no esta vacia
+                    for (MarcaDescansos md : marcaDescansosList) {//Se listan las marcas de descanso que tenga
+                        if (md.getHoraFin() == null) {//Si no ha finalizado el descanso
+                            miMJ.setMarca(md.getHoraInicio());
+                            miMJ.setDescripcion("Inicio " + md.getDescansos().getDescripcion());
+                            marcasJornadasList.add(miMJ);//Solo agrega el inicio de descanso
+                            miMJ = new MarcasJornada();
+                        } else {//Si el descanso si finalizo es decir el campo getHoraFin tiene algo se carga
+                            miMJ.setMarca(md.getHoraInicio());
+                            miMJ.setDescripcion("Inicio " + md.getDescansos().getDescripcion());
+                            marcasJornadasList.add(miMJ);//el inicio
+                            miMJ = new MarcasJornada();
 
-                        miMJ.setMarca(md.getHoraFin());
-                        miMJ.setDescripcion("Finalizo " + md.getDescansos().getDescripcion());
-                        marcasJornadasList.add(miMJ);//el fin
-                        miMJ = new MarcasJornada();
+                            miMJ.setMarca(md.getHoraFin());
+                            miMJ.setDescripcion("Finalizo " + md.getDescansos().getDescripcion());
+                            marcasJornadasList.add(miMJ);//el fin
+                            miMJ = new MarcasJornada();
+                        }
                     }
                 }
             }
-        }
             current.ajax().update("f1:marcaJornadaTabla");//Se actualiza la tabla
         }
 
@@ -743,6 +774,44 @@ public class ColaboradorBean {
         current.ajax().update("f1:marcaJornadaTabla");//Se actualiza la tabla
     }
 
+
+    void validaSalida() {//valida si el dia anterior marco la salida
+        MarcaLaboradas m = marcaLaboradaService.buscaMarcaSinSalida(colaboradorMarca);
+        Calendar c1 = Calendar.getInstance();
+        Calendar c2 = Calendar.getInstance();
+        try{
+        c1.setTime(m.getFechaMarca());
+        c1.set(Calendar.HOUR_OF_DAY, 0);
+        c1.set(Calendar.MINUTE, 0);
+        c1.set(Calendar.SECOND, 0);
+        c1.set(Calendar.MILLISECOND, 0);
+        c2.set(Calendar.HOUR_OF_DAY, 0);
+        c2.set(Calendar.MINUTE, 0);
+        c2.set(Calendar.SECOND, 0);
+        c2.set(Calendar.MILLISECOND, 0);
+        System.out.println(c1.getTime());
+        System.out.println(c2.getTime());
+        System.out.println(c1.compareTo(c2));
+        }catch (NullPointerException e){}
+
+        if (c1.compareTo(c2)==0) {
+        } else {
+            try {
+                // m.setHoraSalida(asignacionesServices.buscarHorario(colaboradorMarca).getHorario().getHorasalida());
+                m.setEstado("Finalizado");
+                marcaLaboradaService.updateMarcaLaborada(m);
+            } catch (NullPointerException e) {
+
+            }finally {
+                botonSalida=true;
+                botonDesSali=true;
+                botonEntrada=true;
+            }
+        }
+
+    }
+
+
     public void habilitarAccion()//Funcion que valida si el colaborador al mostrar el qr tiene un horario asignado
     {
         Calendar c1 = Calendar.getInstance();
@@ -760,10 +829,11 @@ public class ColaboradorBean {
 
             //ACA SE INVOCARA LA FUNCION PARA BUSCAR LAS MARCAS DEL COLABORADOR
             listaMarcasPorJornada();
-
             Date date = new Date();
-            MarcaLaboradas marcaLa = marcaLaboradaService.buscaMarcaPorColaboradoYEstado(colaboradorMarca, "Entrada");//Se busca si ya marco la entrada por medio de la fecha del dia
             java.sql.Date fechahoy = new java.sql.Date(date.getTime());
+            validaSalida();
+            MarcaLaboradas marcaLa = marcaLaboradaService.buscaMarcaPorColaboradoYEstado(colaboradorMarca, "Entrada");//Se busca si ya marco la entrada por medio de la fecha del dia
+
             if (marcaLaboradaService.validaMarcaDia(colaboradorMarca, fechahoy) != null && marcaLaboradaService.validaMarcaDia(colaboradorMarca, fechahoy).getEstado().equals("Finalizado")) {
                 mensaje = "Ya realizo sus marcas del dia de hoy";
                 current.ajax().update("msj");
@@ -867,50 +937,119 @@ public class ColaboradorBean {
     }
 
 
-    public void diasDisponibles(Colaborador colaborador) {//Funcion para calcular los dias disponible de vacaciones
+    public void diasDisponibles(Colaborador colaborador) throws ParseException {//Funcion para calcular los dias disponible de vacaciones
 
-        Vacaciones disponibles = new Vacaciones();
-        vacaciones.setColaborador(colaborador);
-        disponibles = vacacionesService.diasDisponibles(colaborador);//Se consulta los dia disponibles
+        VacacionesPorColaborador disponibles = new VacacionesPorColaborador();
+        disponibles = vacacionesPorColaboradorService.findVacacionesPorColaborador(colaborador);//Se consulta los dia disponibles
         int anios = calculaAnios(colaborador);//Se consulta los years que este laborando el cola en la empresa
-        PrimeFaces current2 = PrimeFaces.current();
+        //int meses = 0;
+        int diasDisf = disponibles.getDiasdisfrutados();
+        double diasLibresTotales = 0.0;
 
+        if (anios != 0) {//Si ha trabajado un anio ya se le pueden contar los dias libres
+            for (int i = 1; i <= anios; i++) {
+                //if (i == 1 || i == 2) {
+                if (i == 2) {
+                    diasLibresTotales = diasLibresTotales + (1 * 12);
+                } else if (i == 3 || i == 4) {
+                    diasLibresTotales = diasLibresTotales + (1.25 * 12);
+                } else if (i >= 5) {
+                    diasLibresTotales = diasLibresTotales + (1.50 * 12);
+                }
+            }
+            //PrimeFaces current2 = PrimeFaces.current();
+            diasLibresTotales = (diasLibresTotales + CalculaDiasMesesExtra(colaborador)) - diasDisf;
+            System.out.println("Dias totales disponibles: " + diasLibresTotales);
 
-        if (disponibles == null) {
-            vacaciones.setDiasdisponibles(0);
-            vacacionesService.createVacaciones(vacaciones);
-            vacaciones = new Vacaciones();
-            asignaDiasVacaciones(anios);
-        } else {
-            asignaDiasVacaciones(anios);
-            vacaciones = new Vacaciones();
+            disponibles.setDiasdisponibles((int) diasLibresTotales);
+            vacacionesPorColaboradorService.updateVacacionesPorColaborador(disponibles);
+
+            /*if (disponibles == null) {
+                //vacaciones.setDiasdisponibles(0);
+                vacacionesService.createVacaciones(vacaciones);
+                vacaciones = new Vacaciones();
+                asignaDiasVacaciones(anios);
+            } else {
+                asignaDiasVacaciones(anios);
+                vacaciones = new Vacaciones();
+            }*/
         }
-
     }
 
-    public int calculaAnios(Colaborador colaborador) {//Funcion para calcular la cantidad de year que lleva el colaborador laborando
+    public int CalculaDiasMesesExtra(Colaborador colaborador) throws ParseException {
+        int anio = calculaAnios(colaborador);
+        double dia = 1;
+        double cantidadDiasMesesExtra = 0.0;
+        int mesesExtra = 0;
+
         Calendar c1 = Calendar.getInstance();
+        c1.setTime(colaborador.getFechaInicioLaboral());
+        c2 = Calendar.getInstance();//FechaActual
+        if (anio != 0) {
+            if (anio == 1 || anio == 2) {
+                dia = 1;
+            } else if (anio == 3 || anio == 4) {
+                dia = 1.25;
+            } else if (anio >= 5) {
+                dia = 1.50;
+            }
+
+            if((c1.get(Calendar.MONTH)+1) == (c2.get(Calendar.MONTH)+1)){//Si no ha pasado el mes de entrada laboral
+                mesesExtra = 0;
+            }else if((c1.get(Calendar.MONTH)+1) > (c2.get(Calendar.MONTH)+1)){//Si paso el mes de entrada laboral ya hay mese extra
+                mesesExtra = (12-(c1.get(Calendar.MONTH)+1)) + (c2.get(Calendar.MONTH)+1);//Bien creo
+                System.out.println("Meses extra: " + mesesExtra);
+            }/*else if((c1.get(Calendar.MONTH)+1) < (c2.get(Calendar.MONTH)+1)){
+                mesesExtra = (c2.get(Calendar.MONTH)+1);// + (c1.get(Calendar.MONTH)+1);
+                System.out.println("Meses extra: " + mesesExtra);
+            }*/
+            cantidadDiasMesesExtra = mesesExtra * dia;
+        }
+
+        return (int) cantidadDiasMesesExtra;
+    }
+
+    public int calculaAnios(Colaborador colaborador) throws ParseException {//Funcion para calcular la cantidad de year que lleva el colaborador laborando
+ /*       Calendar c1 = Calendar.getInstance();
         c2 = Calendar.getInstance();
         c1.setTime(colaborador.getFechaInicioLaboral());
         vacaciones.setColaborador(colaborador);
         int anios = c2.get(YEAR) - c1.get(YEAR);
-        if (c1.get(Calendar.MONTH + 1) > c2.get(Calendar.MONTH) ||
-                (c1.get(Calendar.MONTH + 1) == c2.get(Calendar.MONTH) && c1.get(Calendar.DATE) > c2.get(Calendar.DATE))) {
+        if (c1.get(Calendar.MONTH + 1) > c2.get(Calendar.MONTH) || (c1.get(Calendar.MONTH + 1) == c2.get(Calendar.MONTH)
+                        && c1.get(Calendar.DATE) > c2.get(Calendar.DATE))) {
             anios--;
         }//funcion para calcular los annos de trabajo en la empresa
+ */
+        vacacionesPorColaborador = vacacionesPorColaboradorService.findVacacionesPorColaborador(colaborador);
+        Calendar cFechaDeUltimoCalculo = Calendar.getInstance();
+        //cFechaDeUltimoCalculo.setTime(vacacionesPorColaborador.getFechaasignada());
+        cFechaDeUltimoCalculo.setTime(colaborador.getFechaInicioLaboral());
+        c2 = Calendar.getInstance();//FechaActual
+        int anios = c2.get(YEAR) - cFechaDeUltimoCalculo.get(YEAR);
+
+        if (cFechaDeUltimoCalculo.get(Calendar.MONTH) + 1 >= c2.get(Calendar.MONTH) + 1) {//Si no se a pasado o cumplido la fecha de actualizacion no se suma anio
+            if ((cFechaDeUltimoCalculo.get(Calendar.MONTH) + 1 > c2.get(Calendar.MONTH) + 1)
+                    || (cFechaDeUltimoCalculo.get(Calendar.MONTH) + 1 == c2.get(Calendar.MONTH) + 1
+                    && cFechaDeUltimoCalculo.get(Calendar.DATE) > c2.get(Calendar.DATE))) {
+                anios--;
+            }
+        }
+        System.out.println("Cantidad de anios laborador: " + anios);
+
         return anios;
     }
+
 
     public void asignaDiasVacaciones(int anios) {//Funcion que calcula la cantidad de dias disponibles segun los anio que lleva laborando
 
         if (anios == 1 || anios == 2 || anios == 3) {//dependiendo de la cantidad de anios se le asigna los dias de vacaciones
-            vacaciones.setDiasdisponibles(12);
+            //vacaciones.setDiasdisponibles(12);
             vacacionesService.updateVacaciones(vacaciones);
         } else if (anios == 3 || anios == 4 || anios == 5) {
-            vacaciones.setDiasdisponibles(15);
+            //vacaciones.setDiasdisponibles(15);
             vacacionesService.updateVacaciones(vacaciones);
         } else if (anios > 5) {
-            vacaciones.setDiasdisponibles(18);
+            //vacaciones.setDiasdisponibles(18);
             vacacionesService.updateVacaciones(vacaciones);
         }
     }
@@ -1092,7 +1231,7 @@ public class ColaboradorBean {
 
         listaMarcasPorJornadaFinalizada(marcaLaboradas);
         saveImage();
-        marcasJornadasList=new ArrayList<>();
+        marcasJornadasList = new ArrayList<>();
         marcaLaboradas = new MarcaLaboradas();
         colaboradorMarca = new Colaborador();
         botonSalida = true;
@@ -1199,8 +1338,8 @@ public class ColaboradorBean {
             }
 
 
-            long resultado = (Math.abs(calendar2.getTimeInMillis() - now.getTimeInMillis()) / (1000 * 60) );
-            if (((now.compareTo(calendar) >= 0) && (now.compareTo(calendar2) <= 0)) || resultado<=15) {
+            long resultado = (Math.abs(calendar2.getTimeInMillis() - now.getTimeInMillis()) / (1000 * 60));
+            if (((now.compareTo(calendar) >= 0) && (now.compareTo(calendar2) <= 0)) || resultado <= 15) {
                 asignacionDescansos = asignacionDescansos1;
                 if (marcaDescansoService.buscarMdescanso(asignacionDescansos1.getDescanso(), marcaLa) == null) {
                     botonDesSali = false;
@@ -1243,7 +1382,7 @@ public class ColaboradorBean {
     public void resetMsj() {
         PrimeFaces current = PrimeFaces.current();
         mensaje = "";
-        marcasJornadasList=new ArrayList<>();
+        marcasJornadasList = new ArrayList<>();
         current.ajax().update("f1:marcaJornadaTabla");
         current.ajax().update("msj");
         current.ajax().update("info:nom");// se limpia el nombre

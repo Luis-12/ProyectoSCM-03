@@ -25,6 +25,16 @@ public class MarcaLaboradaService {
         return marcaLaboradas;
     }
 
+    public MarcaLaboradas buscaMarcaSinSalida(Colaborador colaborador)//Funcion para consultar la fecha en que no se marco salida
+    {
+        MarcaLaboradas marcaLaboradas=null;
+        try
+        {
+            marcaLaboradas=marcasLaboradasRepository.findTop1ByColaboradorOrderByFechaMarcaDesc(colaborador);//Se lista las marcas laboradas usando la funcion del repository
+        }catch (Exception ex){}
+        return marcaLaboradas;
+    }
+
     public MarcaLaboradas validaMarcaDia(Colaborador idColaborador, Date date)//Funcion que consulta la marca diaria por colaborador y fecha
     {
         MarcaLaboradas marcaLaboradas=null;

@@ -130,6 +130,7 @@ public class ColaboradorService {
         }
         String fVencimiento = year +"-"+mes2+"-"+dia2;//Se da la concatenacion para formar el formato
         fechaDeVencimiento = formato.parse(fVencimiento);
+        //System.out.println("La fecha de vencimiento es: " + fechaDeVencimiento);
         return fechaDeVencimiento;//Se retorna la fecha de vencimiento de la clave
     }
     public void actualizaClave(Colaborador c) throws ParseException {//Funcion que se dispara cada vez que se actualiza la clave del colaborador
