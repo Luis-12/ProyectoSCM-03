@@ -774,6 +774,44 @@ public class ColaboradorBean {
         current.ajax().update("f1:marcaJornadaTabla");//Se actualiza la tabla
     }
 
+
+    void validaSalida() {//valida si el dia anterior marco la salida
+        MarcaLaboradas m = marcaLaboradaService.buscaMarcaSinSalida(colaboradorMarca);
+        Calendar c1 = Calendar.getInstance();
+        Calendar c2 = Calendar.getInstance();
+        try{
+        c1.setTime(m.getFechaMarca());
+        c1.set(Calendar.HOUR_OF_DAY, 0);
+        c1.set(Calendar.MINUTE, 0);
+        c1.set(Calendar.SECOND, 0);
+        c1.set(Calendar.MILLISECOND, 0);
+        c2.set(Calendar.HOUR_OF_DAY, 0);
+        c2.set(Calendar.MINUTE, 0);
+        c2.set(Calendar.SECOND, 0);
+        c2.set(Calendar.MILLISECOND, 0);
+        System.out.println(c1.getTime());
+        System.out.println(c2.getTime());
+        System.out.println(c1.compareTo(c2));
+        }catch (NullPointerException e){}
+
+        if (c1.compareTo(c2)==0) {
+        } else {
+            try {
+                // m.setHoraSalida(asignacionesServices.buscarHorario(colaboradorMarca).getHorario().getHorasalida());
+                m.setEstado("Finalizado");
+                marcaLaboradaService.updateMarcaLaborada(m);
+            } catch (NullPointerException e) {
+
+            }finally {
+                botonSalida=true;
+                botonDesSali=true;
+                botonEntrada=true;
+            }
+        }
+
+    }
+
+
     public void habilitarAccion()//Funcion que valida si el colaborador al mostrar el qr tiene un horario asignado
     {
         Calendar c1 = Calendar.getInstance();
@@ -791,10 +829,11 @@ public class ColaboradorBean {
 
             //ACA SE INVOCARA LA FUNCION PARA BUSCAR LAS MARCAS DEL COLABORADOR
             listaMarcasPorJornada();
-
             Date date = new Date();
-            MarcaLaboradas marcaLa = marcaLaboradaService.buscaMarcaPorColaboradoYEstado(colaboradorMarca, "Entrada");//Se busca si ya marco la entrada por medio de la fecha del dia
             java.sql.Date fechahoy = new java.sql.Date(date.getTime());
+            validaSalida();
+            MarcaLaboradas marcaLa = marcaLaboradaService.buscaMarcaPorColaboradoYEstado(colaboradorMarca, "Entrada");//Se busca si ya marco la entrada por medio de la fecha del dia
+
             if (marcaLaboradaService.validaMarcaDia(colaboradorMarca, fechahoy) != null && marcaLaboradaService.validaMarcaDia(colaboradorMarca, fechahoy).getEstado().equals("Finalizado")) {
                 mensaje = "Ya realizo sus marcas del dia de hoy";
                 current.ajax().update("msj");
