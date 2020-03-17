@@ -135,10 +135,10 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                             </h:panelGrid>
 
                             <center>
-                                <p:commandButton value="Asignar"
+                                <p:commandButton value="Asignar" update="horaio"
                                                  action="#{asignacionesBean.create}"
                                                  style="margin-right:20px;margin-top: 20px"
-                                                 styleClass="ui-priority-primary" ajax="false"
+                                                 styleClass="ui-priority-primary"
                                 />
                             </center>
                         </h:form>
@@ -193,10 +193,10 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                             </h:panelGrid>
 
                             <center>
-                                <p:commandButton value="Asignar"
+                                <p:commandButton value="Asignar" update="horaio2"
                                                  action="#{asignacionesBean.changeSchedule}"
                                                  style="margin-right:20px;margin-top: 20px"
-                                                 styleClass="ui-priority-primary" ajax="false"
+                                                 styleClass="ui-priority-primary"
                                 />
                             </center>
                         </h:form>
@@ -244,6 +244,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                             var s=document.getElementById('horaio'+':horario_label').textContent;
                             if(s == "08:00:00 17:30:00"){
                                 document.getElementById('hdnBtn3').click();
+
                             }else{
                                 document.getElementById('hdnBtn4').click();
                             }

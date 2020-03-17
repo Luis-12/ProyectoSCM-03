@@ -393,6 +393,31 @@ public class AsignacionesBean {
         }
     }
 
+    public void actualizarHorario()
+    {
+        asignacionesService.updateAsignacion(selectAsignacion);//Aca se actualiza la asignacion del horario
+        //Seguidamente se procede a eliminar los descanso que tenia asignados el colaborador segun el horario anterior
+        asignacionDescansosService.deletePorColaborador(selectAsignacion.getColaborador());
+
+        asignacionesService.updateAsignacion(selectAsignacion);//Aca se actualiza la asignacion del horario
+        //Seguidamente se procede a eliminar los descanso que tenia asignados el colaborador segun el horario anterior
+        asignacionDescansosService.deletePorColaborador(selectAsignacion.getColaborador());
+
+        //Y por ultimo volver a asignar los descanso por el nuevo horario
+        descansosPorColaborador = descansosService.buscarDescansosPorHorario(selectAsignacion.getHorario());//Aca se llena una lista de descansos
+        for (int i = 0; i < descansosPorColaborador.size(); i++) {//Ciclo for para asignar los descansos al colaborador por el horario
+            asignacionDescansos.setColaborador(selectAsignacion.getColaborador());
+            asignacionDescansos.setDescanso(descansosPorColaborador.get(i));
+            asignacionDescansosService.updateAsignacionDescanso(asignacionDescansos);//Aca se van asignado los descansos nuevamente al colaborador
+            asignacionDescansos = new AsignacionDescansos();
+        }
+        selectAsignacion = new Asignaciones();
+        asignacion = new Asignaciones();
+        jornada = new Jornadas();
+        asignacionDescansos = new AsignacionDescansos();
+        descansosPorColaborador.clear();
+    }
+
     @Transactional
     public void changeSchedule() {//Funcion para actualizar el horario en la base de datos con sus descansos
         descansosPorColaborador.clear();
@@ -413,32 +438,41 @@ public class AsignacionesBean {
                     || selectAsignacion.getSegundodiades().equals("")) {
                 //Si el combo retorna un texto de dia
                 selectAsignacion.setSegundodiades("N/A");//Se carga segundo dia con N/A
-            }
-            asignacionesService.updateAsignacion(selectAsignacion);//Aca se actualiza la asignacion del horario
-            //Seguidamente se procede a eliminar los descanso que tenia asignados el colaborador segun el horario anterior
-            asignacionDescansosService.deletePorColaborador(selectAsignacion.getColaborador());
+            }if(selectAsignacion.getDiadescanso().equals(selectAsignacion.getSegundodiades())){
+                addMessage("Warning","Los días de desconso no pueden ser los mismos");
+            }else {
+                actualizarHorario();
+                //Y por ultimo volver a asignar los descanso por el nuevo horario
+                current.executeScript("PF('datos2').hide();");//Se esconde el form
 
-            //Y por ultimo volver a asignar los descanso por el nuevo horario
-            descansosPorColaborador = descansosService.buscarDescansosPorHorario(selectAsignacion.getHorario());//Aca se llena una lista de descansos
-            for (int i = 0; i < descansosPorColaborador.size(); i++) {//Ciclo for para asignar los descansos al colaborador por el horario
-                asignacionDescansos.setColaborador(selectAsignacion.getColaborador());
-                asignacionDescansos.setDescanso(descansosPorColaborador.get(i));
-                asignacionDescansosService.updateAsignacionDescanso(asignacionDescansos);//Aca se van asignado los descansos nuevamente al colaborador
-                asignacionDescansos = new AsignacionDescansos();
+                FacesMessage msg = new FacesMessage("Aviso", "¡Horario actualizado correctamente!");
+                FacesContext.getCurrentInstance().addMessage(null, msg);
             }
-            current.executeScript("PF('datos2').hide();");//Se esconde el form
-
-            FacesMessage msg = new FacesMessage("Aviso", "¡Horario actualizado correctamente!");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
         } catch (Exception e) {
             System.out.println("No se puedo actualizar el horario");
-        } finally {//Finalmente se limpian los objetos
-            selectAsignacion = new Asignaciones();
-            asignacion = new Asignaciones();
-            jornada = new Jornadas();
-            asignacionDescansos = new AsignacionDescansos();
-            descansosPorColaborador.clear();
         }
+    }
+
+    public void addMessage(String summary, String detail) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public  void addDescanso(){
+        //Ahora se procede a hacer la insercion a la base de datos de las asignaciones de descansos
+        descansosPorColaborador = descansosService.buscarDescansosPorHorario(asignacion.getHorario());//Aca se llena una lista de descansos
+        System.out.println("Los descansos que tiene pertenecen al horario son: " + descansosPorColaborador.size());
+        for (int i = 0; i < descansosPorColaborador.size(); i++) {//Ciclo for para asignar los descansos al colaborador por el horario
+            asignacionDescansos.setColaborador(selectAsignacion.getColaborador());
+            asignacionDescansos.setDescanso(descansosPorColaborador.get(i));
+            asignacionDescansosService.createAsignacionDescanso(asignacionDescansos);//Aca se agrega el descanso al colaborador
+            asignacionDescansos = new AsignacionDescansos();
+        }
+        selectAsignacion = new Asignaciones();
+        asignacion = new Asignaciones();
+        jornada = new Jornadas();
+        asignacionDescansos = new AsignacionDescansos();
+        descansosPorColaborador.clear();
     }
 
     public void create() {//Funcion para asignar los horarios y descansos al colaborador
@@ -450,33 +484,27 @@ public class AsignacionesBean {
             try {
                 //Insersion de asignacion de horario en la tabla asignaciones
                 asignacion.setColaborador(selectAsignacion.getColaborador());
-                if (selectAsignacion.getSegundodiades() == null) {//Si el segundo dia es null
+                if (asignacion.getSegundodiades() == null) {//Si el segundo dia es null
                     selectAsignacion.setSegundodiades("N/A");//Se llena el campo segundo dia con N/A
                     asignacion.setSegundodiades("N/A");//Se llena el campo segundo dia con N/A
+                    asignacionesService.createAsignacion(asignacion);//Aca se agrega la nueva asignacion de horario
+                    addDescanso();
+                    current.executeScript("PF('datos').hide();");//Se esconde el formulario
+                }else
+                {
+                    if(asignacion.getDiadescanso().equals(asignacion.getSegundodiades())){
+                       addMessage("Warning","Los días de desconso no pueden ser los mismos");
+                    }else
+                    {
+                        asignacionesService.createAsignacion(asignacion);//Aca se agrega la nueva asignacion de horario
+                        addDescanso();
+                        current.executeScript("PF('datos').hide();");//Se esconde el formulario
+                        System.out.println("Horario asignado");
+                        FacesMessage msg = new FacesMessage("Aviso", "¡Asignación realizada correctamente!");
+                        FacesContext.getCurrentInstance().addMessage(null, msg);
+                    }
                 }
-                asignacionesService.createAsignacion(asignacion);//Aca se agrega la nueva asignacion de horario
-
-                //Ahora se procede a hacer la insercion a la base de datos de las asignaciones de descansos
-                descansosPorColaborador = descansosService.buscarDescansosPorHorario(asignacion.getHorario());//Aca se llena una lista de descansos
-                System.out.println("Los descansos que tiene pertenecen al horario son: " + descansosPorColaborador.size());
-                for (int i = 0; i < descansosPorColaborador.size(); i++) {//Ciclo for para asignar los descansos al colaborador por el horario
-                    asignacionDescansos.setColaborador(selectAsignacion.getColaborador());
-                    asignacionDescansos.setDescanso(descansosPorColaborador.get(i));
-                    asignacionDescansosService.createAsignacionDescanso(asignacionDescansos);//Aca se agrega el descanso al colaborador
-                    asignacionDescansos = new AsignacionDescansos();
-                }
-                current.executeScript("PF('datos').hide();");//Se esconde el formulario
-                System.out.println("Horario asignado");
-
-                FacesMessage msg = new FacesMessage("Aviso", "¡Asignación realizada correctamente!");
-                FacesContext.getCurrentInstance().addMessage(null, msg);
             } catch (Exception e) {
-            } finally {//Finalmente se limpian los objetos
-                selectAsignacion = new Asignaciones();
-                asignacion = new Asignaciones();
-                jornada = new Jornadas();
-                asignacionDescansos = new AsignacionDescansos();
-                descansosPorColaborador.clear();
             }
         } else {
             FacesMessage msg = new FacesMessage("Aviso", "Debe seleccionar una jornada.");
