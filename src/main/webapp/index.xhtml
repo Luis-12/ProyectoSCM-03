@@ -71,9 +71,9 @@
                 <p:growl id="msgs" showDetail="true" life="3000" rendered="#{not facesContext.validationFailed}" ><p:autoUpdate/></p:growl>
             <center>
                 <h:panelGrid columns="3" cellpadding="5">
-                    <p:commandButton styleClass="ui-commandant2" id="ent" value="Entrada" onclick="clearTimeout(myVar),x,foto();" disabled="#{colaboradorBean.botonEntrada}" actionListener="#{colaboradorBean.marcaEntrada}" />
-                    <p:commandButton  styleClass="ui-commandant2" id="des" value="#{colaboradorBean.variable}" onclick="clearTimeout(myVar),x,foto();" disabled="#{colaboradorBean.botonDesSali}" actionListener="#{colaboradorBean.marcaDescanso}"/>
-                    <p:commandButton styleClass="ui-commandant2" id="sali" value="Salida" onclick="clearTimeout(myVar),x,foto();" disabled="#{colaboradorBean.botonSalida}" actionListener="#{colaboradorBean.marcaSalida}"/>
+                    <p:commandButton styleClass="ui-commandant2" id="ent" value="Entrada" onclick="clearTimeout(myVar),x(),foto();" disabled="#{colaboradorBean.botonEntrada}" actionListener="#{colaboradorBean.marcaEntrada}" />
+                    <p:commandButton  styleClass="ui-commandant2" id="des" value="#{colaboradorBean.variable}" onclick="x(),foto();" disabled="#{colaboradorBean.botonDesSali}" actionListener="#{colaboradorBean.marcaDescanso}"/>
+                    <p:commandButton styleClass="ui-commandant2" id="sali" value="Salida" onclick="clearTimeout(myVar),x(),foto();" disabled="#{colaboradorBean.botonSalida}" actionListener="#{colaboradorBean.marcaSalida}"/>
                 </h:panelGrid>
             </center>
             </h:form>
@@ -213,10 +213,12 @@
         function x() {
            myVar=setTimeout(myFunction2,3000);
         }
-
         function myFunction() {
             document.getElementById('frm'+':hdnBtn3').click();
         }
+        const canvas=document.getElementById("canvas");
+        const context=canvas.getContext('2d');
+
         function myFunction2() {
             document.getElementById('frm'+':hdnBtn4').click();
             context.clearRect(0, 0, canvas.width, canvas.height);
@@ -326,8 +328,7 @@
             $("#w2").show();
         }
 
-        var canvas=document.getElementById("canvas");
-        var context=canvas.getContext('2d');
+
         function foto() {
             context.drawImage(preview,0,0,150,75);
             var fullQuality = canvas.toDataURL('image/jpeg', 1.0);
