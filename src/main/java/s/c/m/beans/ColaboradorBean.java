@@ -843,10 +843,14 @@ public class ColaboradorBean {
                             && !asignaciones.getSegundodiades().equals(verificaDiaLibre(c1.get(Calendar.DAY_OF_WEEK))))//Si no es el primer ni el segundo dia de descanso
                             || (!asignaciones.getDiadescanso().equals(verificaDiaLibre(c1.get(Calendar.DAY_OF_WEEK)))//O si no es el primer y es el segundo dia N/A
                             && asignaciones.getSegundodiades().equals("N/A"))) {//Pero primero valida que no sea el dia libre del colaborador
+                       mensaje=null;
+                        current.ajax().update("msj");
                         botonEntrada = false;
                         current.ajax().update("bot");//Puede realizar la marca
-                    } else {//Si el dia de hoy y el dia de descanso son iguales se muestra el mensaje de que es dia libre
-                        addMessage("Aviso", "" + colaboradorMarca.getNombre() + " es su día libre");
+                    } else {
+                        //Si el dia de hoy y el dia de descanso son iguales se muestra el mensaje de que es dia libre
+                        mensaje = colaboradorMarca.getNombre() + " es su dia libre";
+                        current.ajax().update("msj");
                         botonEntrada = true;
                         current.ajax().update("bot:ent");//Se vuelven a bloquear los botones
                         colaboradorMarca = new Colaborador();
@@ -903,7 +907,7 @@ public class ColaboradorBean {
         {
             long resultado = (Math.abs(c1.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));
             if (resultado <= 15) {//Valida si ya puede marcar se dan 15 minutos de marca antes
-                mensaje = "marca de la entrada";
+                mensaje = "Marca de la entrada";
                 current2.ajax().update("msj");
                 marcaEn();//Aca se llama la funcion para realizar la marca en la base de datos
             } else {//Si no se le avisa que aun no puede marcar por que es muy temprano
@@ -921,7 +925,7 @@ public class ColaboradorBean {
             c3.add(Calendar.HOUR, 1);
             long resultado = (Math.abs(c3.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));
             if (resultado <= 60) {//Aca se esta dando un tiempo de colchon para realizar la marca tarde despues del tiempo de un 1 de la hora de entrada segun horario
-                mensaje = "marca tarde";//Como es tarde pero todavia es valido que marque puede justificar su tardia
+                mensaje = "Marca tarde";//Como es tarde pero todavia es valido que marque puede justificar su tardia
                 current2.ajax().update("msj");
                 current2.executeScript("PF('just').show();");//Se despliega form para justifica llegada tardia
             } else {//Si es demasiado tarde se muestra el mensaje de que ya no puede marca
