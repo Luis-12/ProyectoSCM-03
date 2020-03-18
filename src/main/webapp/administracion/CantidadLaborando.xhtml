@@ -7,6 +7,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
 
+
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
@@ -20,7 +21,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Analista'}">
     <link href="../css/style.css" rel="stylesheet" type="text/css" />
     <link href="../css/styleM.css" media='screen and (max-device-width: 480px)' rel="stylesheet" type="text/css" />
     <link href="//db.onlinewebfonts.com/c/f977213040abc486420980aae60e0db3?family=GestaW01-Medium" rel="stylesheet" type="text/css"/>
-    <title>Reporte en tiempo real de Colaboradores</title>
+    <title>Reporte de Colaboradores</title>
 </h:head>
 
 <div id="page">
@@ -49,28 +50,33 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Analista'}">
         <div>
             <h:form>
 
-                <p:contextMenu>
-                    <p:menuitem value="Convertir a Excel" icon="ui-icon-transfer-e-w">
-                    </p:menuitem>
 
-                </p:contextMenu>
+                <h:commandLink style="margin-left: 60px">
+                    <h:graphicImage url="imagen/exc.png" width="40"/>
+                    <p:dataExporter type="xls" target="tablaColaborador" fileName="Reporte Colaboradores Laborando" />
+                </h:commandLink>
 
-                <p:dataTable var="colaboradores"  reflow="true" responsive="true" style="margin-top: 25px"
-                             emptyMessage="No se han encontrado datos"
-                             resizableColumns="true"
-                             selectionMode="single"
-                             paginator="true"
-                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                             rowsPerPageTemplate="10,15,20"
-                             scrollable="true" scrollHeight="450">
-                    <p:autoUpdate />
+                <h:commandLink>
+                    <h:graphicImage url="imagen/png.jpg" width="40"/>
+                    <p:dataExporter type="pdf" target="tablaColaborador" fileName="Reporte Colaboradores Laborando"/>
+                </h:commandLink>
 
-                    <p:column headerText="Cédula" filterBy="">
-                        <h:outputText value="" />
+                <p:dataTable  var="colaborador" value="#{colaboradorBean.colaboradores}" rows="10" reflow="true" responsive="true" style="margin-top: 15px" id="tablaColaborador"
+                              emptyMessage="No se han encontrado colaboradores"
+                              resizableColumns="true"
+                              selectionMode="single"
+                              rowKey="#{colaborador.pk_idColaborador}"
+                              paginator="true"
+                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                              scrollable="true" scrollHeight="450">
+
+
+                    <p:column headerText="Cédula">
+                        <h:outputText value="#{colaborador.pk_idColaborador}" />
                     </p:column>
 
-                    <p:column headerText="Nombre Completo" filterBy="">
-                        <h:outputText value="" />
+                    <p:column headerText="Nombre Completo">
+                        <h:outputText value="#{colaborador.nombre}" />
                     </p:column>
 
 
