@@ -66,13 +66,17 @@
         <div>
             <h:form>
 
-                <p:contextMenu>
-                    <p:menuitem value="Convertir a Excel" icon="ui-icon-transfer-e-w">
-                    </p:menuitem>
+                <h:commandLink style="margin-left: 60px">
+                    <h:graphicImage url="imagen/exc.png" width="40"/>
+                    <p:dataExporter type="xls" target="infoHorario" fileName="Reporte de Horarios por Colaborador" />
+                </h:commandLink>
 
-                </p:contextMenu>
+                <h:commandLink>
+                    <h:graphicImage url="imagen/png.jpg" width="40"/>
+                    <p:dataExporter type="pdf" target="infoHorario" fileName="Reporte de Horarios por Colaborador"/>
+                </h:commandLink>
 
-                <p:dataTable var="informe" reflow="true" responsive="true" style="margin-top: 25px"
+                <p:dataTable var="informe" id="infoHorario" reflow="true" responsive="true" style="margin-top: 25px"
                              emptyMessage="No se han encontrado datos"
                              resizableColumns="true"
                              selectionMode="single"

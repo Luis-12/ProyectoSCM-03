@@ -68,13 +68,17 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
         <div>
             <h:form>
 
-                <p:contextMenu>
-                    <p:menuitem value="Convertir a Excel" icon="ui-icon-transfer-e-w">
-                    </p:menuitem>
+                <h:commandLink style="margin-left: 60px">
+                    <h:graphicImage url="imagen/exc.png" width="40"/>
+                    <p:dataExporter type="xls" target="colaDepa" fileName="Informe detallado de Colaborador por Departamento" />
+                </h:commandLink>
 
-                </p:contextMenu>
+                <h:commandLink>
+                    <h:graphicImage url="imagen/png.jpg" width="40"/>
+                    <p:dataExporter type="pdf" target="colaDepa" fileName="Informe detallado de Colaborador por Departamento"/>
+                </h:commandLink>
 
-                <p:dataTable var="informe"  style="margin-top: 25px"
+                <p:dataTable var="informe"  style="margin-top: 25px" id="colaDepa"
                              emptyMessage="No se han encontrado datos"
                              resizableColumns="true"
                              selectionMode="single"
@@ -84,12 +88,12 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                              scrollable="true" scrollHeight="450">
                     <p:autoUpdate />
 
-                    <p:column headerText="Nombre Completo" filterBy="#{departamento.nombre}">
-                        <h:outputText value="#{departamento.nombre}" />
+                    <p:column headerText="Nombre Completo" filterBy="#">
+                        <h:outputText value="" />
                     </p:column>
 
-                    <p:column headerText="Cédula" filterBy="#{colaborador.pk_idColaborador}">
-                        <h:outputText value="#{colaborador.pk_idColaborador}" />
+                    <p:column headerText="Cédula" filterBy="#">
+                        <h:outputText value=""/>
                     </p:column>
 
                     <p:column headerText="Tipo Jornada" filterBy="#">

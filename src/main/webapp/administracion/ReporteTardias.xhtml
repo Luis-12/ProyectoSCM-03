@@ -69,14 +69,17 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Analista' }">
         <div>
             <h:form>
 
-                <p:contextMenu>
-                    <p:menuitem value="Convertir a Excel" icon="ui-icon-transfer-e-w">
-                    </p:menuitem>
-                    <p:menuitem value="Mostrar Datos" oncomplete="PF('datos').show()" icon="ui-icon-document"/>
+                <h:commandLink style="margin-left: 60px">
+                    <h:graphicImage url="imagen/exc.png" width="40"/>
+                    <p:dataExporter type="xls" target="tardiaCola" fileName="Reporte de Llegadas Tardías" />
+                </h:commandLink>
 
-                </p:contextMenu>
+                <h:commandLink>
+                    <h:graphicImage url="imagen/png.jpg" width="40"/>
+                    <p:dataExporter type="pdf" target="tardiaCola" fileName="Reporte de Llegadas Tardías"/>
+                </h:commandLink>
 
-                <p:dataTable var="tardias" reflow="true" responsive="true" style="margin-top: 25px"
+                <p:dataTable var="tardias" id="tardiaCola" reflow="true" responsive="true" style="margin-top: 25px"
                              emptyMessage="No se han encontrado datos"
                              resizableColumns="true"
                              selectionMode="single"
