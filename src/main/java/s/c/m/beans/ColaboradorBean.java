@@ -939,9 +939,13 @@ public class ColaboradorBean {
             }
         } else //  despues de entrada llego tarde el colaborador
         {
-            Calendar c3 = c1;
-            c3.add(Calendar.HOUR, 1);
-            long resultado = (Math.abs(c3.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));
+            int a= c1.get(Calendar.HOUR_OF_DAY);
+            int b= c1.get(Calendar.MINUTE);
+            int c= c1.get(Calendar.SECOND);
+            int a1= c2.get(Calendar.HOUR_OF_DAY);
+            int b1= c2.get(Calendar.MINUTE);
+            int c6= c2.get(Calendar.SECOND);
+            long resultado = (Math.abs(c1.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));
             if (resultado <= 60) {//Aca se esta dando un tiempo de colchon para realizar la marca tarde despues del tiempo de un 1 de la hora de entrada segun horario
                 mensaje = "Marca tarde";//Como es tarde pero todavia es valido que marque puede justificar su tardia
                 current2.ajax().update("msj");
