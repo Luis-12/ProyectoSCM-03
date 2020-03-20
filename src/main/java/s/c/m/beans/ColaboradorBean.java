@@ -777,6 +777,7 @@ public class ColaboradorBean {
 
     void validaSalida() {//valida si el dia anterior marco la salida
         MarcaLaboradas m = marcaLaboradaService.buscaMarcaSinSalida(colaboradorMarca);
+        int horario=asignacionesServices.buscarHorario(colaboradorMarca).getHorario().getPk_idhorario();
         Calendar c1 = Calendar.getInstance();
         Calendar c2 = Calendar.getInstance();
         try{
@@ -789,12 +790,14 @@ public class ColaboradorBean {
         c2.set(Calendar.MINUTE, 0);
         c2.set(Calendar.SECOND, 0);
         c2.set(Calendar.MILLISECOND, 0);
-        System.out.println(c1.getTime());
-        System.out.println(c2.getTime());
-        System.out.println(c1.compareTo(c2));
+
         }catch (NullPointerException e){}
 
-        if (c1.compareTo(c2)==0) {
+        if (c1.compareTo(c2)==0||horario==11||horario==12||horario==14) {
+            if(c1.compareTo(c2)!=0&&(horario==11||horario==12||horario==14)){
+                m.setEstado("Finalizado");
+                marcaLaboradaService.updateMarcaLaborada(m);
+            }
         } else {
             try {
                 // m.setHoraSalida(asignacionesServices.buscarHorario(colaboradorMarca).getHorario().getHorasalida());
