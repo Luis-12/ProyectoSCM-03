@@ -794,9 +794,9 @@ public class ColaboradorBean {
         }catch (NullPointerException e){}
 
         if (c1.compareTo(c2)==0||horario==11||horario==12||horario==14) {
-            if(c1.compareTo(c2)!=0&&(horario==11||horario==12||horario==14)){
-                m.setEstado("Finalizado");
-                marcaLaboradaService.updateMarcaLaborada(m);
+            if(c1.compareTo(c2)!=0&&(horario==11||horario==12||horario==14)){//falta validar si se olvida marcar salida
+              //  m.setEstado("Finalizado");
+              //  marcaLaboradaService.updateMarcaLaborada(m);
             }
         } else {
             try {
