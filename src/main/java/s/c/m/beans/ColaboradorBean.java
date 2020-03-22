@@ -1373,10 +1373,9 @@ public class ColaboradorBean {
                 c3.add(Calendar.MINUTE,59);
                 Calendar c4=calendar;
                 c4.add(Calendar.HOUR,1);
-                int a=c4.get(Calendar.HOUR);
+                asignacionDescansos = asignacionDescansos1;
                 if(now.after(calendar) && now.before(c3))
                 {
-                    asignacionDescansos = asignacionDescansos1;
                     encontrado = isEncontrado(asignacionDescansos1);
                 }else if(marcaDescansoService.buscarMdescanso(asignacionDescansos1.getDescanso(), marcaLa) == null || marcaDescansoService.buscarMdescanso(asignacionDescansos1.getDescanso(), marcaLa).getHoraFin() == null )
                 {
