@@ -1366,27 +1366,25 @@ public class ColaboradorBean {
             if (now.get(Calendar.HOUR_OF_DAY) == 0) {
                 now.set(Calendar.HOUR_OF_DAY, 24);
             }
-
-            if((asignacionDescansos1.getDescanso().getHorario().getPk_idhorario()==14 && asignacionDescansos1.getDescanso().getPk_iddescanso()==28) || (asignacionDescansos1.getDescanso().getHorario().getPk_idhorario()==12 && asignacionDescansos1.getDescanso().getPk_iddescanso()==23) )
-            {
-                Calendar c3=calendar;
-                c3.add(Calendar.MINUTE,59);
-                Calendar c4=calendar;
-                c4.add(Calendar.HOUR,1);
+            Calendar c4=Calendar.getInstance();
+            c4.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeArrayInicio[0]));
+            c4.set(Calendar.MINUTE, Integer.parseInt(timeArrayInicio[1]));
+            c4.set(Calendar.SECOND, Integer.parseInt(timeArrayInicio[2]));
+            c4.add(Calendar.HOUR,1);
                 asignacionDescansos = asignacionDescansos1;
-                if(now.after(calendar) && now.before(c3))
-                {
-                    encontrado = isEncontrado(asignacionDescansos1);
-                }else if(marcaDescansoService.buscarMdescanso(asignacionDescansos1.getDescanso(), marcaLa) == null || marcaDescansoService.buscarMdescanso(asignacionDescansos1.getDescanso(), marcaLa).getHoraFin() == null )
-                {
-                    encontrado = isEncontrado(asignacionDescansos1);
-                }
-            }
-            else {long resultado = (Math.abs(calendar2.getTimeInMillis() - now.getTimeInMillis()) / (1000 * 60));
+            long resultado = (Math.abs(calendar2.getTimeInMillis() - now.getTimeInMillis()) / (1000 * 60));
             if (((now.compareTo(calendar) >= 0) && (now.compareTo(calendar2) <= 0)) || resultado <= 1) {
                 asignacionDescansos = asignacionDescansos1;
                 encontrado = isEncontrado(asignacionDescansos1);
-            }}
+                break;
+            }else if((asignacionDescansos1.getDescanso().getHorario().getPk_idhorario()==14 && asignacionDescansos1.getDescanso().getPk_iddescanso()==28) || (asignacionDescansos1.getDescanso().getHorario().getPk_idhorario()==12 && asignacionDescansos1.getDescanso().getPk_iddescanso()==23) )
+            {
+                if((c4.compareTo(now) == -1) && (now.compareTo(calendar2) == 1)){
+                    {
+                        encontrado = isEncontrado(asignacionDescansos1);
+                        break;
+                    }}
+            }
         }
         if (encontrado == false) {//Aca pasa lo del problema
             mensaje = "No puede marcar descanso";
