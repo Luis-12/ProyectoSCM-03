@@ -7,6 +7,7 @@ import s.c.m.entities.MarcaDescansos;
 import s.c.m.entities.MarcaLaboradas;
 import s.c.m.repositories.MarcaDescansosRepository;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,14 @@ public class MarcaDescansoService {
 
     public void crearMarcaDescanso(MarcaDescansos marcaDescansos)//Funcion para agregar la marca descanso a la base
     {
-        marcaDescansosRepository.save(marcaDescansos);//Se invoca la funcion para agregar marca des del repository
+        try
+        {
+            marcaDescansosRepository.save(marcaDescansos);//Se invoca la funcion para agregar marca des del repository
+        }catch (Exception ex)
+        {
+            System.out.println(ex);
+        }
+
     }
 
     public void updateMarcaDescanso(MarcaDescansos marcaDescansos)//Funcion para actualizar la marca descanso en la base

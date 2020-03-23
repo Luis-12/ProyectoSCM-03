@@ -1367,46 +1367,51 @@ public class ColaboradorBean {
                 now.set(Calendar.HOUR_OF_DAY, 24);
             }
 
-
-            long resultado = (Math.abs(calendar2.getTimeInMillis() - now.getTimeInMillis()) / (1000 * 60));
-            if (((now.compareTo(calendar) >= 0) && (now.compareTo(calendar2) <= 0)) || resultado <= 15) {
-                asignacionDescansos = asignacionDescansos1;
-                if (marcaDescansoService.buscarMdescanso(asignacionDescansos1.getDescanso(), marcaLa) == null) {
-                    botonDesSali = false;
-                    variable = "Inicio Descanso";
-                } else if (marcaDescansoService.buscarMdescanso(asignacionDescansos1.getDescanso(), marcaLa).getHoraFin() == null) //hacer debug con lo que agrego pablo ya que no pasa de aqui
+            if((asignacionDescansos1.getDescanso().getHorario().getPk_idhorario()==14 && asignacionDescansos1.getDescanso().getPk_iddescanso()==28) || (asignacionDescansos1.getDescanso().getHorario().getPk_idhorario()==12 && asignacionDescansos1.getDescanso().getPk_iddescanso()==23) )
+            {
+                Calendar c3=calendar;
+                c3.add(Calendar.MINUTE,59);
+                Calendar c4=calendar;
+                c4.add(Calendar.HOUR,1);
+                int a=c4.get(Calendar.HOUR);
+                if(now.after(calendar) && now.before(c3))
                 {
-                    botonDesSali = false;
-                    variable = "Fin Descanso";
+                    asignacionDescansos = asignacionDescansos1;
+                    encontrado = isEncontrado(asignacionDescansos1);
+                }else if(marcaDescansoService.buscarMdescanso(asignacionDescansos1.getDescanso(), marcaLa) == null || marcaDescansoService.buscarMdescanso(asignacionDescansos1.getDescanso(), marcaLa).getHoraFin() == null )
+                {
+                    encontrado = isEncontrado(asignacionDescansos1);
                 }
-                encontrado = true;
-                current.ajax().update("bot");
-                break;
             }
+            else {long resultado = (Math.abs(calendar2.getTimeInMillis() - now.getTimeInMillis()) / (1000 * 60));
+            if (((now.compareTo(calendar) >= 0) && (now.compareTo(calendar2) <= 0)) || resultado <= 1) {
+                asignacionDescansos = asignacionDescansos1;
+                encontrado = isEncontrado(asignacionDescansos1);
+            }}
         }
         if (encontrado == false) {//Aca pasa lo del problema
             mensaje = "No puede marcar descanso";
             current.ajax().update("msj");
 
         }
+        current.ajax().update("bot");
     }
 
-    /*public void marcaDescanso() {//Funcion para manejo de botones en el front end
-        if (variable.equals("Inicio Descanso")) {
-            PrimeFaces current = PrimeFaces.current();
-            mensaje = "Marca descanso";
-            current.ajax().update("msj");
-            marcaIniDes();//Se llama la funcion para marcar inicio
-            reset();
-        } else {
-            marcaFindes();//Se marca fin de descanso
-            reset();
-            PrimeFaces current = PrimeFaces.current();
-            mensaje = "Marca fin del descanso";
-            current.ajax().update("msj");
-
+    public boolean isEncontrado(AsignacionDescansos asignacionDescansos1) {
+       boolean encontrado=false;
+        if (marcaDescansoService.buscarMdescanso(asignacionDescansos1.getDescanso(), marcaLa) == null) {
+            botonDesSali = false;
+            variable = "Inicio Descanso";
+            encontrado=true;
+        } else if (marcaDescansoService.buscarMdescanso(asignacionDescansos1.getDescanso(), marcaLa).getHoraFin() == null) //hacer debug con lo que agrego pablo ya que no pasa de aqui
+        {
+            botonDesSali = false;
+            variable = "Fin Descanso";
+            encontrado = true;
         }
-    }*/
+        return encontrado;
+    }
+
 
     public void marcaDescanso() {//Funcion para manejo de botones en el front end
         if (variable.equals("Inicio Descanso")) {
