@@ -1114,9 +1114,9 @@ public class ColaboradorBean {
     }
 
     public void marcaSalida() {//funcion para el boton marcar Salida
-        Calendar c1 = Calendar.getInstance();
-        c2 = Calendar.getInstance();
-        c1.setTime(asignaciones.getHorario().getHorasalida());//c1 se convierte en horaSalida
+        Calendar c1 = Calendar.getInstance();//c1 aqui tiene horario de maquina
+        c2 = Calendar.getInstance();//c2 tiene horario de maquina
+        c1.setTime(asignaciones.getHorario().getHorasalida());//c1 se convierte en horaSalida le pongo la hora de salida
         c1.set(YEAR, c2.get(YEAR));
         c1.set(Calendar.MONTH, c2.get(Calendar.MONTH));
         c1.set(Calendar.DAY_OF_MONTH, c2.get(Calendar.DAY_OF_MONTH));//se carga la fecha actual
@@ -1129,8 +1129,8 @@ public class ColaboradorBean {
         int fechaME = Integer.parseInt(timeStampFME);//Paso la fecha de marca de entrada a int
         int fechaMS = Integer.parseInt(timeStampFMS);//Paso la fecha de marca de salida a int
         int idH = asignaciones.getHorario().getPk_idhorario();
-        if (idH == 11) {
-            if ((c1.before(c2) && fechaME == fechaMS) || (c1.after(c2) && fechaME <= fechaMS)) //  antes de salida madrugo el colaborador para salir c1.compareTo(c2) < 0
+        if (idH == 11) {//Jornada mixta de 18 a 24pm de 6 a 12pm
+            if ((c1.before(c2) && fechaME == fechaMS) || (c1.after(c2) && fechaME <= fechaMS))//antes de salida madrugo el colaborador para salir c1.compareTo(c2) < 0
             {
                 if (c1.get(Calendar.HOUR_OF_DAY) == 0 && c1.get(Calendar.HOUR_OF_DAY) == 0 && c1.get(Calendar.HOUR_OF_DAY) == 0) {
                     c1.set(Calendar.HOUR_OF_DAY, 24);
@@ -1162,9 +1162,11 @@ public class ColaboradorBean {
                     marcaSal();//Aca se marca la salida en la base
                 }
             }
-        } else if (idH == 12 || idH == 14) {//Validacion de salida para horarios de dos dias
+        } else if (idH == 12 || idH == 14) {//Validacion de salida para horarios de dos dias como el de 10pm a 6am
             System.out.println("Entro al if para horarios de DOS DIAS");
-            if ((c1.before(c2) && fechaME == fechaMS) || (c1.after(c2) && fechaME == fechaMS)) //  antes de salida madrugo el colaborador para salir c1.compareTo(c2) < 0
+            System.out.println("Fecha mentrada: "+ fechaME);
+            System.out.println("Fecha de mactual: "+fechaMS);
+            if ((c1.before(c2) && fechaME == fechaMS) || (c1.after(c2) && fechaME < fechaMS)) //  antes de salida madrugo el colaborador para salir c1.compareTo(c2) < 0
             {
                 long resultado = (Math.abs(c1.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));
                 if (resultado <= 15 && fechaME < fechaMS) {//Valida si ya puede marcar la salida a la hora establecida por horario
@@ -1177,10 +1179,12 @@ public class ColaboradorBean {
                     current.ajax().update("msj");
                     current.executeScript("PF('just2').show();");//Se despliega form para que justifique por que sale antes
                 }
-            } else if (c1.after(c2) || fechaME < fechaMS)// salio tarde el colaborador hizo mas tiempo champion
+            } else if (c1.before(c2) && fechaME < fechaMS)// salio tarde el colaborador hizo mas tiempo champion
             {
-                Calendar c3 = c1;
+                Calendar c3 = c1;//c3 tiene la fecha de hora de salida
+                //long resultado = (Math.abs(c3.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));
                 long resultado = (Math.abs(c3.getTimeInMillis() - c2.getTimeInMillis()) / (1000 * 60));
+                System.out.println("Resultado" + resultado);
                 if (resultado >= 30) {//Aca esta dando que si esta saliendo 30 minutos o mas tarde de la hora de salida pida justificacion de tiempo extra
                     mensaje = "Marcó salida más tarde, según su horario realizó Tiempo Extra";
                     current.ajax().update("msj");
@@ -1191,7 +1195,7 @@ public class ColaboradorBean {
                     marcaSal();//Se marca sin justificar tiempo extra
                 }
             }
-        } else {
+        } else {//If para horarios de un solo dia
             System.out.println("Entro al if para horarios de un Dia");
             if (c1.compareTo(c2) == 1 && fechaME >= fechaMS) //antes de salida madrugo el colaborador para salir
             {
@@ -1361,14 +1365,14 @@ public class ColaboradorBean {
                 break;
             }
         }
-        if (encontrado == false) {
+        if (encontrado == false) {//Aca pasa lo del problema
             mensaje = "No puede marcar descanso";
             current.ajax().update("msj");
 
         }
     }
 
-    public void marcaDescanso() {//Funcion para manejo de botones en el front end
+    /*public void marcaDescanso() {//Funcion para manejo de botones en el front end
         if (variable.equals("Inicio Descanso")) {
             PrimeFaces current = PrimeFaces.current();
             mensaje = "Marca descanso";
@@ -1382,6 +1386,21 @@ public class ColaboradorBean {
             mensaje = "Marca fin del descanso";
             current.ajax().update("msj");
 
+        }
+    }*/
+
+    public void marcaDescanso() {//Funcion para manejo de botones en el front end
+        if (variable.equals("Inicio Descanso")) {
+            PrimeFaces current = PrimeFaces.current();
+            marcaIniDes();//Se llama la funcion para marcar inicio
+            mensaje = "Marca descanso";
+            current.ajax().update("msj");
+        } else {
+            marcaFindes();//Se marca fin de descanso
+            reset();
+            PrimeFaces current = PrimeFaces.current();
+            mensaje = "Marca fin del descanso";
+            current.ajax().update("msj");
         }
     }
 
