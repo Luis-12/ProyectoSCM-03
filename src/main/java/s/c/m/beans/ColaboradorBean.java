@@ -1406,10 +1406,12 @@ public class ColaboradorBean {
 
     public void marcaDescanso() {//Funcion para manejo de botones en el front end
         if (variable.equals("Inicio Descanso")) {
-            PrimeFaces current = PrimeFaces.current();
             marcaIniDes();//Se llFama la funcion para marcar inicio
+            reset();
+            PrimeFaces current = PrimeFaces.current();
             mensaje = "Marca descanso";
             current.ajax().update("msj");
+
         } else {
             marcaFindes();//Se marca fin de descanso
             reset();
