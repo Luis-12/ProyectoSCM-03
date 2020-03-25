@@ -778,28 +778,44 @@ public class ColaboradorBean {
     void validaSalida() {//valida si el dia anterior marco la salida
         MarcaLaboradas m = marcaLaboradaService.buscaMarcaSinSalida(colaboradorMarca);
         int horario=asignacionesServices.buscarHorario(colaboradorMarca).getHorario().getPk_idhorario();
+        Time horaSalida= asignacionesServices.buscarHorario(colaboradorMarca).getHorario().getHorasalida();
         Calendar c1 = Calendar.getInstance();
         Calendar c2 = Calendar.getInstance();
         try{
-        c1.setTime(m.getFechaMarca());
-        c1.set(Calendar.HOUR_OF_DAY, 0);
-        c1.set(Calendar.MINUTE, 0);
-        c1.set(Calendar.SECOND, 0);
-        c1.set(Calendar.MILLISECOND, 0);
-        c2.set(Calendar.HOUR_OF_DAY, 0);
-        c2.set(Calendar.MINUTE, 0);
-        c2.set(Calendar.SECOND, 0);
-        c2.set(Calendar.MILLISECOND, 0);
+            c1.setTime(m.getFechaMarca());
+            c1.set(Calendar.HOUR_OF_DAY, 0);
+            c1.set(Calendar.MINUTE, 0);
+            c1.set(Calendar.SECOND, 0);
+            c1.set(Calendar.MILLISECOND, 0);
+            c2.set(Calendar.HOUR_OF_DAY, 0);
+            c2.set(Calendar.MINUTE, 0);
+            c2.set(Calendar.SECOND, 0);
+            c2.set(Calendar.MILLISECOND, 0);
 
         }catch (NullPointerException e){}
 
         if (c1.compareTo(c2)==0||horario==11||horario==12||horario==14) {
-            if(c1.compareTo(c2)!=0&&(horario==11||horario==12||horario==14)){//falta validar si se olvida marcar salida
-              //  m.setEstado("Finalizado");
-              //  marcaLaboradaService.updateMarcaLaborada(m);
+            Calendar cal = Calendar.getInstance();
+            Calendar cal2 = Calendar.getInstance();
+            cal.setTime(horaSalida);
+            cal.add(Calendar.HOUR_OF_DAY, 4); // tiene 4 horas mas despues de la hora de salida para realizar la marca
+            cal2.set(YEAR, 0);
+            cal2.set(Calendar.MONTH, 0);
+            cal2.set(Calendar.DAY_OF_MONTH, 0);
+            cal.set(YEAR, 0);
+            cal.set(Calendar.MONTH, 0);
+            cal.set(Calendar.DAY_OF_MONTH, 0);
+
+            if(c1.compareTo(c2)!=0&& cal2.getTime().after(cal.getTime()) &&(horario==11||horario==12||horario==14)){
+             //al realizar la siguiente marca de entrada
+             // cambia el estado a Finalizado a la ultima marca que quedo sin finalizar
+                marcasJornadasList = new ArrayList<MarcasJornada>();
+                m.setEstado("Finalizado");
+                marcaLaboradaService.updateMarcaLaborada(m);
             }
         } else {
             try {
+                marcasJornadasList = new ArrayList<MarcasJornada>();
                 // m.setHoraSalida(asignacionesServices.buscarHorario(colaboradorMarca).getHorario().getHorasalida());
                 m.setEstado("Finalizado");
                 marcaLaboradaService.updateMarcaLaborada(m);
@@ -811,7 +827,6 @@ public class ColaboradorBean {
                 botonEntrada=true;
             }
         }
-
     }
 
 
@@ -831,11 +846,11 @@ public class ColaboradorBean {
         } else {//Si tiene horario asignado
 
             //ACA SE INVOCARA LA FUNCION PARA BUSCAR LAS MARCAS DEL COLABORADOR
-            listaMarcasPorJornada();
             Date date = new Date();
             java.sql.Date fechahoy = new java.sql.Date(date.getTime());
             validaSalida();
             MarcaLaboradas marcaLa = marcaLaboradaService.buscaMarcaPorColaboradoYEstado(colaboradorMarca, "Entrada");//Se busca si ya marco la entrada por medio de la fecha del dia
+            listaMarcasPorJornada();
 
             if (marcaLaboradaService.validaMarcaDia(colaboradorMarca, fechahoy) != null && marcaLaboradaService.validaMarcaDia(colaboradorMarca, fechahoy).getEstado().equals("Finalizado")) {
                 mensaje = "Ya realizo sus marcas del dia de hoy";
@@ -1392,7 +1407,7 @@ public class ColaboradorBean {
     public void marcaDescanso() {//Funcion para manejo de botones en el front end
         if (variable.equals("Inicio Descanso")) {
             PrimeFaces current = PrimeFaces.current();
-            marcaIniDes();//Se llama la funcion para marcar inicio
+            marcaIniDes();//Se llFama la funcion para marcar inicio
             mensaje = "Marca descanso";
             current.ajax().update("msj");
         } else {
