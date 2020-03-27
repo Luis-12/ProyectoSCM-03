@@ -69,6 +69,7 @@
                             requiredMessage="Ingrese la Fecha"
                             value="#{vacacionesBean.solicitudVac.fechainicio}"
                             pattern="yyyy-MM-dd">
+                    <p:ajax event="dateSelect" update="fechaFinal" />
                 </p:calendar>
 
                 <p:watermark value="Ingrese la fecha " for="fechaVacaciones"/>
@@ -76,8 +77,7 @@
                 <br/>
                 <p:outputLabel value="Fecha Final de Vacaciones:  " indicateRequired="false" for="fechaFinal"/>
                 <p:calendar autocomplete="off"
-                            widgetVar="ff"
-                            mindate="ff.today()"
+                            mindate="#{vacacionesBean.solicitudVac.fechainicio}"
                             id="fechaFinal"
                             required="true"
                             requiredMessage="Ingrese la Fecha"
