@@ -72,32 +72,40 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                     </p:menuitem>
                     <p:menuitem value="Procesar Solicitud" oncomplete="PF('datos').show()" icon="ui-icon-document"/>
 
-
                 </p:contextMenu>
 
-                <p:dataTable var="solicitudes"  reflow="true" responsive="true" style="margin-top: 15px"
+                <p:dataTable var="solicitud"  reflow="true" responsive="true" style="margin-top: 15px"
+                             value="#{vacacionesBean.vacaciones}"
+                             id="tablaSolicitudesVacaciones"
+                             rows="10"
+                             widgetVar="solicitudesTabla"
                              emptyMessage="No se han encontrado solicitudes"
                              resizableColumns="true"
+                             rowKey="#{solicitud.pk_idVacaciones}"
                              selectionMode="single"
+                             selection="#{vacacionesBean.solicitudVac}"
                              paginator="true"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                              rowsPerPageTemplate="10,15,20"
                              scrollable="true" scrollHeight="450">
                     <p:autoUpdate />
 
-                    <p:column headerText="Cédula Solicitante" filterBy="#">
-                        <h:outputText value="#" />
+                    <p:column headerText="Cédula Solicitante" filterBy="#{solicitud.colaborador.pk_idColaborador}">
+                        <h:outputText value="#{solicitud.colaborador.pk_idColaborador}" />
                     </p:column>
 
-                    <p:column headerText="Fecha Inicio Vacaciones" filterBy="#">
-                        <h:outputText value="" />
+                    <p:column headerText="Fecha Inicio Vacaciones" filterBy="#{solicitud.fechainicio}">
+                        <h:outputText value="#{solicitud.fechainicio}" />
                     </p:column>
-                    <p:column headerText="Fecha Final Vacaciones" filterBy="#">
-                        <h:outputText value="" />
+                    <p:column headerText="Fecha Final Vacaciones" filterBy="#{solicitud.fechafinal}">
+                        <h:outputText value="#{solicitud.fechafinal}" />
+                    </p:column>
+                    <p:column headerText="Estado" filterBy="#{solicitud.estado}">
+                        <h:outputText value="#{solicitud.estado}" />
                     </p:column>
 
-                    <p:column headerText="Días Disponibles" filterBy="#">
-                        <h:outputText value="" />
+                    <p:column headerText="Días Solicitados" filterBy="#{solicitud.diasSolicitados}">
+                        <h:outputText value="#{solicitud.diasSolicitados}" />
                     </p:column>
 
 

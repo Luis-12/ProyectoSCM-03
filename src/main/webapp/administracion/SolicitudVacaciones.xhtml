@@ -7,31 +7,34 @@
       xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-    <link href="../css/style.css" rel="stylesheet" type="text/css" />
-    <link href="../css/styleM.css" media='screen and (max-device-width: 480px)' rel="stylesheet" type="text/css" />
-    <link href="//db.onlinewebfonts.com/c/f977213040abc486420980aae60e0db3?family=GestaW01-Medium" rel="stylesheet" type="text/css"/>
+    <link href="../css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="../css/styleM.css" media='screen and (max-device-width: 480px)' rel="stylesheet" type="text/css"/>
+    <link href="//db.onlinewebfonts.com/c/f977213040abc486420980aae60e0db3?family=GestaW01-Medium" rel="stylesheet"
+          type="text/css"/>
     <title>Solicitud de Vacaciones</title>
 
 </h:head>
 
-<h:body >
-<div id="header">
-    <div id="logoP">
-        <img srcset="imagen/logo.jpg 1535w, imagen/logR.PNG 480w"  src="imagen/logo.jpg" style="max-width: 43%; max-height: 77%; min-width: 43%; min-height:70%;  padding: 10px; "></img>
+<h:body>
+    <div id="header">
+        <div id="logoP">
+            <img srcset="imagen/logo.jpg 1535w, imagen/logR.PNG 480w" src="imagen/logo.jpg"
+                 style="max-width: 43%; max-height: 77%; min-width: 43%; min-height:70%;  padding: 10px; "></img>
+        </div>
     </div>
-</div>
 
     <div id="top">
-        <h:form>
-
-            <p:commandButton   id="dynaButton1" value="Salir" type="button"  icon="ui-icon-person"  style='float: right;'/>
-            <p:menu style='float: right;'  overlay="true" trigger="dynaButton1" my="left top" at="left bottom">
+        <h:form id="form">
+            <p:growl id="msgs" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
+            <p:commandButton id="dynaButton1" value="Salir" type="button" icon="ui-icon-person" style='float: right;'/>
+            <p:menu style='float: right;' overlay="true" trigger="dynaButton1" my="left top" at="left bottom">
                 <p:submenu label="#{colaboradorBean.colaboradorlogueado.nombre}">
-                    <p:menuitem value="Salir" action="#{colaboradorBean.doLogout}" icon="ui-icon-person" />
+                    <p:menuitem value="Salir" action="#{colaboradorBean.doLogout}" icon="ui-icon-person"/>
                 </p:submenu>
-           </p:menu>
-            <p:commandButton   id="dynaButton" value="Menu" type="button"  icon="ui-icon-person"  style='float: left;'/>
-            <p:tieredMenu autoDisplay="false" style="width: 17%;" overlay="true" trigger="dynaButton" my="left top" at="left bottom" model="#{colaboradorBean.model}"/>
+            </p:menu>
+            <p:commandButton id="dynaButton" value="Menu" type="button" icon="ui-icon-person" style='float: left;'/>
+            <p:tieredMenu autoDisplay="false" style="width: 17%;" overlay="true" trigger="dynaButton" my="left top"
+                          at="left bottom" model="#{colaboradorBean.model}"/>
         </h:form>
     </div>
 
@@ -40,9 +43,10 @@
 
     <div id="fecha">
 
-        <p:dataTable var="diasDisponibles"  style="width: 53%"  reflow="true" responsive="true" value="#{colaboradorBean.vacacionesPorColaborador}">
+        <p:dataTable var="diasDisponibles" style="width: 53%" reflow="true" responsive="true"
+                     value="#{colaboradorBean.vacacionesPorColaborador}">
             <p:column headerText="Días disponibles">
-                <h:outputText value="#{diasDisponibles.diasdisponibles}" />
+                <h:outputText value="#{diasDisponibles.diasdisponibles}"/>
 
             </p:column>
 
@@ -51,40 +55,55 @@
     <div id="solicitud">
 
 
-        <h:form>
-
+        <h:form id="AgregarSolicitud">
             <center>
                 <br/>
                 <br/>
+                <p:outputLabel value="Fecha de Inicio Vacaciones: " indicateRequired="false" for="fechaVacaciones"/>
 
-                <p:outputLabel value="Fecha de Inicio Vacaciones: "   indicateRequired="false" for="fechaVacaciones"/>
-            <p:calendar autocomplete="off"  id="fechaVacaciones" required="true" requiredMessage="Ingrese la Fecha" value="" pattern="yyyy-MM-dd">
-            </p:calendar>
-            <p:watermark value="Ingrese la fecha " for="fechaVacaciones"/>
-            <p:message for="fechaVacaciones"/>
+                <p:calendar autocomplete="off"
+                            widgetVar="fi"
+                            mindate="fi.today()"
+                            id="fechaVacaciones"
+                            required="true"
+                            requiredMessage="Ingrese la Fecha"
+                            value="#{vacacionesBean.solicitudVac.fechainicio}"
+                            pattern="yyyy-MM-dd">
+                </p:calendar>
+
+                <p:watermark value="Ingrese la fecha " for="fechaVacaciones"/>
+                <p:message for="fechaVacaciones"/>
                 <br/>
-            <p:outputLabel value="Fecha Final de Vacaciones:  "    indicateRequired="false" for="fechaFinal"/>
-            <p:calendar autocomplete="off"  id="fechaFinal"  required="true" requiredMessage="Ingrese la Fecha" value="" pattern="yyyy-MM-dd">
-            </p:calendar>
-            <p:watermark value="Ingrese la fecha " for="fechaFinal"/>
-            <p:message for="fechaFinal"/>
+                <p:outputLabel value="Fecha Final de Vacaciones:  " indicateRequired="false" for="fechaFinal"/>
+                <p:calendar autocomplete="off"
+                            widgetVar="ff"
+                            mindate="ff.today()"
+                            id="fechaFinal"
+                            required="true"
+                            requiredMessage="Ingrese la Fecha"
+                            value="#{vacacionesBean.solicitudVac.fechafinal}"
+                            pattern="yyyy-MM-dd">
+                </p:calendar>
+                <p:watermark value="Ingrese la fecha " for="fechaFinal"/>
+                <p:message for="fechaFinal"/>
 
                 <p:commandButton value="Enviar"
+                                 update="form:msgs, AgregarSolicitud"
                                  style="margin-right:20px;margin-top: 20px"
-                                 styleClass="ui-priority-primary" />
+                                 styleClass="ui-priority-primary"
+                                 actionListener="#{vacacionesBean.createSolicitud(colaboradorBean.colaboradorlogueado.pk_idColaborador)}">
+                    <p:resetInput target="AgregarSolicitud"/>
+                </p:commandButton>
             </center>
-
             <br/>
-
         </h:form>
-
     </div>
-
 
 
     <div id="footer">
         <br/>
-        <h:outputLink value="../acerca.xhtml" >©</h:outputLink>  <p:outputLabel value=" SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA" />
+        <h:outputLink value="../acerca.xhtml">©</h:outputLink> <p:outputLabel
+            value=" SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA"/>
     </div>
 
 </h:body>

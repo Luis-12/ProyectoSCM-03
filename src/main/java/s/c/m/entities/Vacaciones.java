@@ -6,7 +6,7 @@ import java.sql.Time;
 import java.util.Date;
 
 @Entity
-@Table(name = "VACACIONES")
+@Table(name = "vacaciones")
 public class Vacaciones implements Serializable {
 
     @Id
@@ -14,13 +14,14 @@ public class Vacaciones implements Serializable {
     private int pk_idVacaciones;
 
     @OneToOne
-    @JoinColumn(name = "fk_idColaborador", nullable = false)
+    @JoinColumn(name = "fk_idcolaborador", nullable = false)
     private Colaborador colaborador;
 
     private Date fechainicio;
     private Date fechafinal;
     private String estado;
     private String justificacion;
+    private int diasSolicitados;
 
     public int getPk_idVacaciones() {
         return pk_idVacaciones;
@@ -68,6 +69,14 @@ public class Vacaciones implements Serializable {
 
     public void setJustificacion(String justificacion) {
         this.justificacion = justificacion;
+    }
+
+    public int getDiasSolicitados() {
+        return diasSolicitados;
+    }
+
+    public void setDiasSolicitados(int diasSolicitados) {
+        this.diasSolicitados = diasSolicitados;
     }
 }
 

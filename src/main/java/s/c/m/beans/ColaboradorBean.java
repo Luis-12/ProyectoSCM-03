@@ -92,7 +92,7 @@ public class ColaboradorBean {
     public boolean botonEntrada = true;
     public boolean botonSalida = true;
     public boolean botonDesSali = true;
-
+    private List<Vacaciones> vacacionesList = new ArrayList<Vacaciones>();
 
     @PostConstruct
     public String init() {
@@ -114,6 +114,14 @@ public class ColaboradorBean {
 
     public void setMarcasJornadasList(List<MarcasJornada> marcasJornadasList) {
         this.marcasJornadasList = marcasJornadasList;
+    }
+
+    public List<Vacaciones> getVacacionesList() {
+        return vacacionesList;
+    }
+
+    public void setVacacionesList(List<Vacaciones> vacacionesList) {
+        this.vacacionesList = vacacionesList;
     }
 
     public Vacaciones getVacaciones() {
