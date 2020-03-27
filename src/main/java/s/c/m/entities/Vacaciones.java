@@ -21,9 +21,8 @@ public class Vacaciones implements Serializable {
     private Date fechafinal;
     private String estado;
     private String justificacion;
+    private int diasSolicitados;
 
-
-    /*diegoooooooo*/
 
     public int getPk_idVacaciones() {
         return pk_idVacaciones;
@@ -73,5 +72,12 @@ public class Vacaciones implements Serializable {
         this.justificacion = justificacion;
     }
 
+    public int getDiasSolicitados() {
+        return diasSolicitados;
+    }
+
+    public void setDiasSolicitados(int diasSolicitados) {
+        this.diasSolicitados = diasSolicitados;
+    }
 }
 
