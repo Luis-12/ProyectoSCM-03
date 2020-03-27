@@ -22,6 +22,9 @@ public class Vacaciones implements Serializable {
     private String estado;
     private String justificacion;
 
+
+    /*diegoooooooo*/
+
     public int getPk_idVacaciones() {
         return pk_idVacaciones;
     }
@@ -69,5 +72,6 @@ public class Vacaciones implements Serializable {
     public void setJustificacion(String justificacion) {
         this.justificacion = justificacion;
     }
+
 }
 
