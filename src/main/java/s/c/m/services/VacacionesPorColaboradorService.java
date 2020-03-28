@@ -30,10 +30,10 @@ public class VacacionesPorColaboradorService {
     public void updateVacacionesPorColaborador(VacacionesPorColaborador vacacionesPC) {//Funcion para actualizar las vacaciones en la base
         VacacionesPorColaborador v=new VacacionesPorColaborador();
         v=vacacionesPorColaboradorRepository.findByColaborador(vacacionesPC.getColaborador());//se consulta las vacaciones por colaborador
-
         v.setDiasdisponibles(vacacionesPC.getDiasdisponibles());//Se actualizan los dias disponibles
-        v.setFechaasignada(vacacionesPC.getFechaasignada());//Se actualiza la fecha asignada
+        v.setDiasdisfrutados(vacacionesPC.getDiasdisfrutados());//Se actualizan los dias disfrutados
         vacacionesPorColaboradorRepository.save(v);//Se guarda
+
     }
 
 }

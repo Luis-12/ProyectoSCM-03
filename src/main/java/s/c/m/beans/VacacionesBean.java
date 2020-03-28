@@ -1,5 +1,6 @@
 package s.c.m.beans;
 
+import org.primefaces.PrimeFaces;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import s.c.m.entities.Colaborador;
@@ -37,14 +38,35 @@ public class VacacionesBean {
     ColaboradorBean colaboradorBean = new ColaboradorBean();
     Colaborador colaboradorSolicitante = new Colaborador();
     Vacaciones solicitudVac = new Vacaciones();
+    Vacaciones seleccion;
+
+
     VacacionesPorColaborador vacacionesPorColaborador = new VacacionesPorColaborador();
     private List<Vacaciones> vacaciones;
     private Date fecha;
+    private String estado;
+
 
     @PostConstruct
     public void init() {
         Vacaciones miV = new Vacaciones();
         vacaciones = vacacionesService.getAllSolVacaciones();
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public Vacaciones getSeleccion() {
+        return seleccion;
+    }
+
+    public void setSeleccion(Vacaciones seleccion) {
+        this.seleccion = seleccion;
     }
 
     public ColaboradorBean getColaboradorBean() {
@@ -97,7 +119,6 @@ public class VacacionesBean {
     }
 
     public void createSolicitud(String idColaborador) throws Exception {
-        FacesMessage mensaje = null;
 
         colaboradorSolicitante = colaboradorService.findColaborador(idColaborador);
         vacacionesPorColaborador = vacacionesPorColaboradorService.findVacacionesPorColaborador(colaboradorSolicitante);
@@ -108,10 +129,10 @@ public class VacacionesBean {
         int fFinal = Integer.parseInt(fechaF);
 
         if (fechaI.equals(fechaF)) {
-            mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Las fechas no pueden ser iguales");
+            addMessage("Aviso", "Las fechas no pueden ser iguales");
         } else {
             if (fInicio >= fFinal) {
-                mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Las fecha final no puede ser menor que la de inicio");
+                addMessage("Aviso", "Las fecha final no puede ser menor que la de inicio");
             } else {
                 int diasSol = CalculaDiasSolicitados();
                 int diasDispo = vacacionesPorColaborador.getDiasdisponibles();
@@ -128,17 +149,16 @@ public class VacacionesBean {
                     System.out.println("Dias Disponibles: " + diasDispo);
                     //Aca despues de cargar los datos en el objeto
                     vacacionesService.createVacaciones(solicitudVac);//Se llama la funcion para agregar la solicitud a la base
-                    mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Solicitud realizada correctamente!!!");
+                    addMessage("Aviso", "Solicitud realizada correctamente!!!");
                     solicitudVac = new Vacaciones();
                     //Se refresca la tabla
                     vacaciones = vacacionesService.getAllSolVacaciones();
                 }else{
-                    mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "No puede solicitar mas dias de los que tiene disponibles");
+                    addMessage("Aviso", "No puede solicitar mas dias de los que tiene disponibles");
                 }
             }
         }
 
-        FacesContext.getCurrentInstance().addMessage(null, mensaje);
     }
 
     //Falta funcion que calcula los dias que pide el mae
@@ -177,4 +197,69 @@ public class VacacionesBean {
 
         return totalDiasSolicitados;
     }
-}
+
+    public void estadoSolicitud(){
+        PrimeFaces current = PrimeFaces.current();
+        int diasSolicitados=seleccion.getDiasSolicitados();
+        seleccion.setJustificacion(solicitudVac.getJustificacion());
+        seleccion.setEstado(solicitudVac.getEstado());
+
+        if(seleccion.getEstado().equals("Aceptada")) {
+            int diasRestantes=vacacionesPorColaboradorService.findVacacionesPorColaborador(seleccion.getColaborador()).getDiasdisponibles();
+            int diasDisfrutados=vacacionesPorColaboradorService.findVacacionesPorColaborador(seleccion.getColaborador()).getDiasdisfrutados();
+            diasDisfrutados=diasDisfrutados+diasSolicitados;
+            diasRestantes=diasRestantes-diasSolicitados;
+            System.out.println("Dias rest:"+diasRestantes);
+            vacacionesPorColaborador.setColaborador(seleccion.getColaborador());
+            vacacionesPorColaborador.setDiasdisponibles(diasRestantes);
+            vacacionesPorColaborador.setDiasdisfrutados(diasDisfrutados);
+            vacacionesPorColaboradorService.updateVacacionesPorColaborador(vacacionesPorColaborador);
+            vacacionesService.updateVacaciones(seleccion);
+            addMessage("Aviso", "Solicitud aceptada con exito!"); //si esta vacio muetra este mensaje
+
+            // vacacionesPorColaboradorService.updateVacacionesPorColaborador(vacacionesPorColaboradorService.);
+        }else {
+            vacacionesService.updateVacaciones(seleccion);
+            addMessage("Aviso", "Solicitud rechazada con exito!"); //si esta vacio muetra este mensaje
+        }
+        current.ajax().update("horaio:radioB");
+        seleccion=new Vacaciones();
+        solicitudVac=new Vacaciones();
+    }
+
+    public void close(){
+        PrimeFaces current = PrimeFaces.current();
+        current.ajax().update("horaio:radioB");
+        seleccion=new Vacaciones();
+        solicitudVac=new Vacaciones();
+    }
+
+    public void checkSelection() { //para verifiacar si el objeto esta vacio
+        PrimeFaces current = PrimeFaces.current();
+        FacesMessage mensaje = null;
+
+        if (seleccion == null) {
+            addMessage("Aviso", "Debe Seleccionar un Colaborador."); //si esta vacio muetra este mensaje
+        } else {
+            if (seleccion.getEstado().equals("Aceptada") || seleccion.getEstado().equals("Rechazada")) {
+                addMessage("Aviso", "Ya se proceso esa solicitud."); //si esta vacio muetra este mensaje
+            } else {
+                current.executeScript("PF('datos').show();"); //si no esta vacio muestra el dialogo para actualizar colaborador
+            }
+        }
+    }
+
+
+    public void addMessage(String summary, String detail) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+
+
+    public void buscarPorEstado(){
+        vacaciones= vacacionesService.buscarPorEstado(estado);
+    }
+ }
+
+

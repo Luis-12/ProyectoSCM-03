@@ -11,7 +11,7 @@ public class Vacaciones implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int pk_idVacaciones;
+    private int pk_idvacaciones;
 
     @OneToOne
     @JoinColumn(name = "fk_idColaborador", nullable = false)
@@ -24,12 +24,15 @@ public class Vacaciones implements Serializable {
     private int diasSolicitados;
 
 
+    public Vacaciones() {
+    }
+
     public int getPk_idVacaciones() {
-        return pk_idVacaciones;
+        return pk_idvacaciones;
     }
 
     public void setPk_idVacaciones(int pk_idVacaciones) {
-        this.pk_idVacaciones = pk_idVacaciones;
+        this.pk_idvacaciones = pk_idVacaciones;
     }
 
     public Colaborador getColaborador() {

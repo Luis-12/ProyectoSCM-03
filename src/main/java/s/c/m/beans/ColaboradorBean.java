@@ -67,6 +67,7 @@ public class ColaboradorBean {
     private AsignacionDescansos asignacionDescansos = new AsignacionDescansos();
     public String mensaje;
 
+
     @Autowired
     AsignacionesServices asignacionesServices;
 
@@ -95,10 +96,12 @@ public class ColaboradorBean {
     private List<Vacaciones> vacacionesList = new ArrayList<Vacaciones>();
 
     @PostConstruct
-    public String init() {
+    public void init() {
         Colaborador miC = new Colaborador();
-        return "colaboradorList.xhtml";
+        vacacionesPorColaborador = vacacionesPorColaboradorService.findVacacionesPorColaborador(colaborador1);
     }
+
+
 
     public VacacionesPorColaborador getVacacionesPorColaborador() {
         return vacacionesPorColaborador;
@@ -484,6 +487,8 @@ public class ColaboradorBean {
             return null;
         }
     }
+
+
 
 
     public boolean validaClave() {//Valida que la clave no sea igual a la anterior

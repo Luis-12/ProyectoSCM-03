@@ -55,10 +55,13 @@ public class VacacionesService {
     }
 
     public void updateVacaciones(Vacaciones vacaciones) {//Funcion para actualizar las vacaciones en la base
-        Vacaciones v=new Vacaciones();
-        v=vacacionesRepository.findByColaborador(vacaciones.getColaborador());//se consulta las vacaciones por colaborador
-        //v.setDiasdisponibles(vacaciones.getDiasdisponibles());//Se actualizan los dias disponibles
-        vacacionesRepository.save(v);//Se guarda
+
+        vacacionesRepository.save(vacaciones);//Se actualiza
+    }
+
+    public List<Vacaciones> buscarPorEstado(String estado) {//Funcion para actualizar las vacaciones en la base
+
+        return vacacionesRepository.findByEstado(estado);//Se actualiza
     }
 
 }
