@@ -91,7 +91,8 @@
                          rowKey="#{departamento.pk_idDepartamento}"
                          paginator="true"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         selection="#{departamentoBean.selectDepartamento}" style="margin-top: 20px">
+                         selection="#{departamentoBean.selectDepartamento}" style="margin-top: 20px"
+                         scrollable="true" scrollWidth="100%" scrollHeight="150">
                 <p:autoUpdate />
                 <p:column headerText="Código" filterBy="#{departamento.pk_idDepartamento}">
                     <h:outputText value="#{departamento.pk_idDepartamento}" />

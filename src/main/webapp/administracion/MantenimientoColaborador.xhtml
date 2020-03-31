@@ -91,7 +91,8 @@
                          rowKey="#{colaborador.pk_idColaborador}"
                          paginator="true"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         selection="#{colaboradorBean.selectcolaborador}" scrollable="true" scrollHeight="450">
+                         selection="#{colaboradorBean.selectcolaborador}"
+                          scrollable="true" scrollWidth="100%" scrollHeight="150">
 
                 <p:column styleClass="tamTable" headerText="Cédula" filterBy="#{colaborador.pk_idColaborador}">
                     <h:outputText value="#{colaborador.pk_idColaborador}" />

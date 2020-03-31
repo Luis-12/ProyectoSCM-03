@@ -76,9 +76,11 @@
                     <p:dataExporter type="pdf" target="infoHorario" fileName="Reporte de Horarios por Colaborador"/>
                 </h:commandLink>
 
-                <p:dataTable var="informe" id="infoHorario" reflow="true" responsive="true" style="margin-top: 25px"
+                <p:dataTable var="colaborador" id="infoHorario" reflow="true" responsive="true" style="margin-top: 25px"
+                             value="#{ColaboradorBean.colaboradores}"
                              emptyMessage="No se han encontrado datos"
                              resizableColumns="true"
+                             widgetVar="colaboradorTabla"
                              selectionMode="single"
                              paginator="true"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -86,20 +88,16 @@
                              scrollable="true" scrollHeight="450">
                     <p:autoUpdate />
 
-                    <p:column headerText="Nombre Completo" filterBy="#">
-                    <h:outputText value="" />
+                    <p:column headerText="Nombre Completo" >
+                    <h:outputText value="colaborador.colaborador.nombre" />
                 </p:column>
 
-                    <p:column headerText="Horario" filterBy="#">
-                        <h:outputText value="" />
+                    <p:column headerText="Horario">
+                        <h:outputText value="colaborador.asignaciones.fk_idHorario" />
                     </p:column>
 
-                    <p:column headerText="Cantidad de descansos" filterBy="#">
-                        <h:outputText value="" />
-                    </p:column>
-
-                    <p:column headerText="Día de descanso" filterBy="#">
-                        <h:outputText value="" />
+                    <p:column headerText="Día de descanso">
+                        <h:outputText value="colaborador.asignaciones.diadescanso" />
                     </p:column>
 
                 </p:dataTable>
