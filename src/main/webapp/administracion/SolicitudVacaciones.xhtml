@@ -66,7 +66,7 @@
                             id="fechaVacaciones"
                             required="true"
                             requiredMessage="Ingrese la Fecha"
-                            value="#{vacacionesBean.solicitudVac.fechainicio}"
+                            value="#{colaboradorBean.solicitudVac.fechainicio}"
                             pattern="yyyy-MM-dd">
                     <p:ajax event="dateSelect" update="fechaFinal" />
                 </p:calendar>
@@ -76,11 +76,11 @@
                 <br/>
                 <p:outputLabel value="Fecha Final de Vacaciones:  " indicateRequired="false" for="fechaFinal"/>
                 <p:calendar autocomplete="off"
-                            mindate="#{vacacionesBean.solicitudVac.fechainicio}"
+                            mindate="#{colaboradorBean.solicitudVac.fechainicio}"
                             id="fechaFinal"
                             required="true"
                             requiredMessage="Ingrese la Fecha"
-                            value="#{vacacionesBean.solicitudVac.fechafinal}"
+                            value="#{colaboradorBean.solicitudVac.fechafinal}"
                             pattern="yyyy-MM-dd">
                 </p:calendar>
                 <p:watermark value="Ingrese la fecha " for="fechaFinal"/>
@@ -90,7 +90,7 @@
                                  update="form:msgs, AgregarSolicitud"
                                  style="margin-right:20px;margin-top: 20px"
                                  styleClass="ui-priority-primary"
-                                 actionListener="#{vacacionesBean.createSolicitud(colaboradorBean.colaboradorlogueado.pk_idColaborador)}">
+                                 actionListener="#{colaboradorBean.createSolicitud(colaboradorBean.colaboradorlogueado.pk_idColaborador)}">
                     <p:resetInput target="AgregarSolicitud"/>
                 </p:commandButton>
             </center>

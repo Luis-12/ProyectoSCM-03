@@ -19,26 +19,29 @@ public class VacacionesService {
     @Autowired
     private VacacionesRepository vacacionesRepository;
 
-    public List<Vacaciones> getAllSolVacaciones()//Funcion para listar todas las vacaciones
+    public List<Vacaciones> getAllSolVacaciones(Colaborador a)//Funcion para listar todas las vacaciones
     {
         List<Vacaciones> list = new ArrayList<Vacaciones>();
-        vacacionesRepository.findAll().forEach(e -> list.add(e));//Aca se invoca funcion del repository de departamentos
-        return list;
-    }
+        List<Vacaciones> listA = new ArrayList<Vacaciones>();
+        vacacionesRepository.findAll().forEach(e -> list.add(e));//Aca se invoca funcion del repository de vacaciones
+        if (a.getPuesto().getDescripcion().equals("Gerencia") && a.getDepartamento().getNombre().equals("Recursos Humanos")) {
+            for (Vacaciones c : list) {
+                if (c.getEstado().equals("Pendiente")) {
+                    listA.add(c);
+                }
+            }
 
-    public List<Vacaciones> findByDepartamentoYPendiente(String idDepartamento){
-        List<Vacaciones> list = new ArrayList<Vacaciones>();
-        List<Vacaciones> listVPDepartamento = new ArrayList<>();
-        list = getAllSolVacaciones();
-        for (Vacaciones v : list) {//For para llenar la lista auxiliar solo con los colaboradores activos
-            if (v.getColaborador().getDepartamento().getPk_idDepartamento().equals(idDepartamento) &&
-                    v.getEstado().equals("Pendiente")) {//If que evalua si el colaborador esta activo
-                listVPDepartamento.add(v);//Se agrega el colaborador a la lista
+        } else {
+            for (Vacaciones c : list) {
+
+                if (c.getEstado().equals("Pendiente")&&c.getColaborador().getDepartamento().getNombre().equals(a.getDepartamento().getNombre())) {
+                    listA.add(c);
+                }
             }
         }
-        return listVPDepartamento;
-
+        return listA;
     }
+
 
     public Vacaciones diasDisponibles(Colaborador idColaborador){//Funcion para consultar las vaciones que tiene disponible el colaborador
         Vacaciones diasDisponibles=null;
@@ -59,9 +62,23 @@ public class VacacionesService {
         vacacionesRepository.save(vacaciones);//Se actualiza
     }
 
-    public List<Vacaciones> buscarPorEstado(String estado) {//Funcion para actualizar las vacaciones en la base
+    public List<Vacaciones> buscarPorEstado(String estado, Colaborador a) {//Funcion para actualizar las vacaciones en la base
 
-        return vacacionesRepository.findByEstado(estado);//Se actualiza
+        List<Vacaciones> list = new ArrayList<Vacaciones>();
+        List<Vacaciones> listA = new ArrayList<Vacaciones>();
+        vacacionesRepository.findByEstado(estado).forEach(e -> list.add(e));//Aca se invoca funcion del repository de vacaciones
+        if (a.getPuesto().getDescripcion().equals("Gerencia") && a.getDepartamento().getNombre().equals("Recursos Humanos")) {
+            listA.addAll(list);
+        } else {
+            for (Vacaciones c : list) {
+
+                if (c.getColaborador().getDepartamento().getNombre().equals(a.getDepartamento().getNombre())) {
+                    listA.add(c);
+                }
+            }
+        }
+        return listA;
+
     }
 
 }

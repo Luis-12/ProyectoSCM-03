@@ -17,6 +17,7 @@ import javax.faces.context.FacesContext;
 import javax.xml.bind.DatatypeConverter;
 import java.io.*;
 import java.sql.Time;
+import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,6 +42,8 @@ public class ColaboradorBean {
     private Colaborador colaboradorlogueado = new Colaborador();
     private Colaborador selectcolaborador = new Colaborador();
     private Colaborador colaboradorClave = new Colaborador();
+    private Colaborador colaboradorSolicitante = new Colaborador();
+
     private Departamento departamento = new Departamento();
     private Puesto puesto = new Puesto();
     private Asignaciones asignaciones = new Asignaciones();
@@ -67,6 +70,7 @@ public class ColaboradorBean {
     String variable = "Descanso";
     private AsignacionDescansos asignacionDescansos = new AsignacionDescansos();
     public String mensaje;
+    public String estado;
 
 
     @Autowired
@@ -100,7 +104,23 @@ public class ColaboradorBean {
     public void init() {
         Colaborador miC = new Colaborador();
         //vacacionesPorColaborador = vacacionesPorColaboradorService.findVacacionesPorColaborador(colaborador1);
-        vacacionesList = vacacionesService.getAllSolVacaciones();
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+
+    public Colaborador getColaboradorSolicitante() {
+        return colaboradorSolicitante;
+    }
+
+    public void setColaboradorSolicitante(Colaborador colaboradorSolicitante) {
+        this.colaboradorSolicitante = colaboradorSolicitante;
     }
 
 
@@ -413,6 +433,7 @@ public class ColaboradorBean {
                     construyeMenuDinamico(colaborador1.getPuesto().getDescripcion(), colaborador1.getDepartamento().getNombre());//Se contruye el menu dinamico
                     loggedIn = true;
                     colaboradores = colaboradorService.getAllColaboradoresActivos(colaboradorlogueado);
+                    vacacionesList = vacacionesService.getAllSolVacaciones(colaboradorlogueado);
 
                     return "/administracion/MantenimientoColaborador.xhtml?faces-redirect=true";
                 }
@@ -437,6 +458,8 @@ public class ColaboradorBean {
                     //Se construye el menu dinamico por rol y dept
                     loggedIn = true;//Se loguea
                     colaboradores = colaboradorService.getAllColaboradoresActivos(colaboradorlogueado);//Se cargan todos los cola
+                    vacacionesList = vacacionesService.getAllSolVacaciones(colaboradorlogueado);
+
                     return "/administracion/ListaSolicitud.xhtml?faces-redirect=true";
                 }
 
@@ -458,6 +481,7 @@ public class ColaboradorBean {
                     //Se construye el menu dinamico por puesto y departamento
                     loggedIn = true;
                     colaboradores = colaboradorService.getAllColaboradoresActivos(colaboradorlogueado);//Se listan todos los colaboradores
+                    vacacionesList = vacacionesService.getAllSolVacaciones(colaboradorlogueado);
                     return "/administracion/SolicitudVacaciones.xhtml?faces-redirect=true";//Se muestra el form de solicitud de vacaciones
                 }
             }
@@ -481,6 +505,7 @@ public class ColaboradorBean {
                     //Se construye el menu dinamico
                     loggedIn = true;//Se de acceso al logueo
                     colaboradores = colaboradorService.getAllColaboradoresActivos(colaboradorlogueado);//Se cargan todos los colaboradores
+                    vacacionesList = vacacionesService.getAllSolVacaciones(colaboradorlogueado);
 
                     return "/administracion/ListaSolicitud.xhtml?faces-redirect=true";//Se despliega la ventana de lista de solicitudes para estos roles
                 }
@@ -592,6 +617,7 @@ public class ColaboradorBean {
                     current.ajax().update("form:tablaColaborador");
                     mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Ingreso de Colaborador con Éxito.");
                     colaboradores = colaboradorService.getAllColaboradoresActivos(colaboradorlogueado);//Se refresca la lista de colaboradores
+                    vacacionesList = vacacionesService.getAllSolVacaciones(colaboradorlogueado);
 
                 } catch (Exception e) {
                 } finally {
@@ -1011,6 +1037,12 @@ public class ColaboradorBean {
         estadoSolicitud();
         diasDisponibles(colaborador1);
     }
+
+    public void buscarPorEstado(){
+        vacacionesList= vacacionesService.buscarPorEstado(estado,colaboradorlogueado);
+    }
+
+
     public void estadoSolicitud(){
         PrimeFaces current = PrimeFaces.current();
         int diasSolicitados=seleccion.getDiasSolicitados();
@@ -1035,6 +1067,8 @@ public class ColaboradorBean {
             vacacionesService.updateVacaciones(seleccion);
             addMessage("Aviso", "Solicitud rechazada con exito!"); //si esta vacio muetra este mensaje
         }
+        vacacionesList = vacacionesService.getAllSolVacaciones(colaboradorlogueado);
+        current.ajax().update("tabla:tablaSolicitudesVacaciones");//Actualizar tabla
         current.ajax().update("horaio:radioB");
         seleccion=new Vacaciones();
         solicitudVac=new Vacaciones();
@@ -1058,6 +1092,8 @@ public class ColaboradorBean {
                 addMessage("Aviso", "Ya se proceso esa solicitud."); //si esta vacio muetra este mensaje
             } else {
                 current.executeScript("PF('datos').show();"); //si no esta vacio muestra el dialogo para actualizar colaborador
+                System.out.println(colaboradorlogueado.getNombre());
+
             }
         }
     }
@@ -1185,6 +1221,87 @@ public class ColaboradorBean {
             vacacionesService.updateVacaciones(vacaciones);
         }
     }
+
+    public void createSolicitud(String idColaborador) throws Exception {
+
+        colaboradorSolicitante = colaboradorService.findColaborador(idColaborador);
+        vacacionesPorColaborador = vacacionesPorColaboradorService.findVacacionesPorColaborador(colaboradorSolicitante);
+        Format formateador = new SimpleDateFormat("yyyyMMdd");
+        String fechaI = formateador.format(solicitudVac.getFechainicio());
+        String fechaF = formateador.format(solicitudVac.getFechafinal());
+        int fInicio = Integer.parseInt(fechaI);
+        int fFinal = Integer.parseInt(fechaF);
+
+        if (fechaI.equals(fechaF)) {
+            addMessage("Aviso", "Las fechas no pueden ser iguales");
+        } else {
+            if (fInicio >= fFinal) {
+                addMessage("Aviso", "Las fecha final no puede ser menor que la de inicio");
+            } else {
+                int diasSol = CalculaDiasSolicitados();
+                int diasDispo = vacacionesPorColaborador.getDiasdisponibles();
+
+                if (diasSol <= diasDispo) {//Si los dias solicitados son menores a los disponibles puede realizar la solicitud
+                    solicitudVac.setColaborador(colaboradorSolicitante);
+                    solicitudVac.setEstado("Pendiente");
+                    solicitudVac.setDiasSolicitados(diasSol);
+                    solicitudVac.setJustificacion("Justifique la decisión");
+                    System.out.println("Colaborador Solicitante desde VB: " + colaboradorSolicitante.getPk_idColaborador());
+                    System.out.println("NOMBRE: " + colaboradorSolicitante.getNombre());
+                    System.out.println("Fecha inicio: " + solicitudVac.getFechainicio());
+                    System.out.println("Fecha final: " + solicitudVac.getFechafinal());
+                    System.out.println("Dias Disponibles: " + diasDispo);
+                    //Aca despues de cargar los datos en el objeto
+                    vacacionesService.createVacaciones(solicitudVac);//Se llama la funcion para agregar la solicitud a la base
+                    addMessage("Aviso", "Solicitud realizada correctamente!!!");
+                    solicitudVac = new Vacaciones();
+                    vacacionesList = vacacionesService.getAllSolVacaciones(colaboradorlogueado);
+                    //Se refresca la tabla
+                }else{
+                    addMessage("Aviso", "No puede solicitar mas dias de los que tiene disponibles");
+                }
+            }
+        }
+
+    }
+
+    //Falta funcion que calcula los dias que pide el mae
+    public int CalculaDiasSolicitados() {
+        int totalDiasSolicitados = 0;
+        Calendar finicio = Calendar.getInstance();
+        Calendar ffinal = Calendar.getInstance();
+
+        finicio.set(YEAR, solicitudVac.getFechainicio().getYear() + 1900);
+        finicio.set(Calendar.MONTH, solicitudVac.getFechainicio().getMonth() + 1);
+        finicio.set(Calendar.DAY_OF_MONTH, solicitudVac.getFechainicio().getDate());
+        finicio.set(Calendar.HOUR,0);
+        finicio.set(Calendar.HOUR_OF_DAY,0);
+        finicio.set(Calendar.MINUTE,0);
+        finicio.set(Calendar.SECOND,0);
+
+        ffinal.set(YEAR, solicitudVac.getFechafinal().getYear() + 1900);
+        ffinal.set(Calendar.MONTH, solicitudVac.getFechafinal().getMonth() + 1);
+        ffinal.set(Calendar.DAY_OF_MONTH, solicitudVac.getFechafinal().getDate());
+        ffinal.set(Calendar.HOUR,0);
+        ffinal.set(Calendar.HOUR_OF_DAY,0);
+        ffinal.set(Calendar.MINUTE,0);
+        ffinal.set(Calendar.SECOND,0);
+
+        Format formateador = new SimpleDateFormat("yyyy-MM-dd");
+        String fechaI = formateador.format(finicio.getTime());
+        String fechaF = formateador.format(ffinal.getTime());
+        System.out.println("Fecha inicio: " + fechaI);
+        System.out.println("Fecha final: " + fechaF);
+
+        long iniMS = finicio.getTimeInMillis();
+        long finMS = ffinal.getTimeInMillis();
+
+        totalDiasSolicitados = (int) ((Math.abs(finMS-iniMS))/ (1000 * 60 * 60 * 24));//86.400.000
+        totalDiasSolicitados++;
+
+        return totalDiasSolicitados;
+    }
+
 
     public void reset() {//Funcion para limpiar botones , tabla y forms de la pantalla de inicio
         PrimeFaces current = PrimeFaces.current();

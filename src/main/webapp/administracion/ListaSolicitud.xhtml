@@ -54,12 +54,12 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                 <center>
                     <h:panelGrid columns="3" >
                         <p:outputLabel value="Estado:"/>
-                        <p:selectOneMenu value="#{vacacionesBean.estado}" id="estado" style="width:110px; height: 31px;">
+                        <p:selectOneMenu value="#{colaboradorBean.estado}" id="estado" style="width:110px; height: 31px;">
                             <f:selectItem itemLabel="Aceptada" itemValue="Aceptada" />
                             <f:selectItem itemLabel="Rechazada" itemValue="Rechazada" />
                             <f:selectItem itemLabel="Pendiente" itemValue="Pendiente" />
                         </p:selectOneMenu>
-                        <p:commandButton value="Buscar" update="tabla:tablaSolicitudesVacaciones" style=" margin-right:20px;margin-top: 1px" action="#{vacacionesBean.buscarPorEstado}" />
+                        <p:commandButton value="Buscar" update="tabla:tablaSolicitudesVacaciones" style=" margin-right:20px;margin-top: 1px" action="#{colaboradorBean.buscarPorEstado}" />
                     </h:panelGrid>
                 </center>
             </h:form>
@@ -88,7 +88,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                              rowsPerPageTemplate="10,15,20"
                              scrollable="true" scrollHeight="450">
-
+                    <p:ajax event="cellEdit" listener="#{colaboradorBean.vacacionesList}" update="tabla:tablaSolicitudesVacaciones" />
                     <p:column headerText="Cédula Solicitante" filterBy="#{solicitud.colaborador.pk_idColaborador}">
                         <h:outputText value="#{solicitud.colaborador.pk_idColaborador}" />
                     </p:column>
@@ -136,7 +136,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
 
 
                     <p:commandButton value="Confirmar"
-                                     update="form:msgs, tabla:tablaSolicitudesVacaciones"
+                                     update="form:msgs"
                                      action="#{colaboradorBean.actualizarEstadoSolicitud}"
                                      style="margin-left:100px;margin-top: 20px"
                                      styleClass="ui-priority-primary" ajax="false" />
