@@ -51,6 +51,7 @@ public class ColaboradorBean {
     private Vacaciones vacaciones = new Vacaciones();
     private Vacaciones vacaciones1 = new Vacaciones();
     private VacacionesPorColaborador vacacionesPorColaborador = new VacacionesPorColaborador();
+    private VacacionesPorColaborador vacacionesPorColaboradorCreate = new VacacionesPorColaborador();
 
 
     @Autowired
@@ -98,11 +99,18 @@ public class ColaboradorBean {
     @PostConstruct
     public void init() {
         Colaborador miC = new Colaborador();
-        vacacionesPorColaborador = vacacionesPorColaboradorService.findVacacionesPorColaborador(colaborador1);
+        //vacacionesPorColaborador = vacacionesPorColaboradorService.findVacacionesPorColaborador(colaborador1);
         vacacionesList = vacacionesService.getAllSolVacaciones();
     }
 
 
+    public VacacionesPorColaborador getVacacionesPorColaboradorCreate() {
+        return vacacionesPorColaboradorCreate;
+    }
+
+    public void setVacacionesPorColaboradorCreate(VacacionesPorColaborador vacacionesPorColaboradorCreate) {
+        this.vacacionesPorColaboradorCreate = vacacionesPorColaboradorCreate;
+    }
 
     public VacacionesPorColaborador getVacacionesPorColaborador() {
         return vacacionesPorColaborador;
@@ -399,7 +407,6 @@ public class ColaboradorBean {
                 diasDisponibles(colaborador1);
                 vacacionesPorColaborador = vacacionesPorColaboradorService.findVacacionesPorColaborador(colaborador1);
 
-                //vacaciones1 = vacacionesService.diasDisponibles(colaborador1);//Se llena las vacaciones con los dias disponibles del colaborador
                 if (validaVence(colaborador1.getFechaVencimiento())) {//Se valida si la fecha de vencimiento del cola que se loguea se vencio
                     current.executeScript("PF('dlCC').show();");//Si es asi se despliega el form para cambiar la clase
                 } else {//Si no
@@ -575,11 +582,11 @@ public class ColaboradorBean {
                     colaboradorService.createColaborador(colaborador);//Aca se agrega el colaborador a la base
 
                     //SE AGREGA A LA BASE EL REGISTRO DE VACACIONES POR COLABORADOR
-                    vacacionesPorColaborador.setColaborador(colaborador);
-                    vacacionesPorColaborador.setDiasdisponibles(0);
-                    vacacionesPorColaborador.setDiasdisfrutados(0);
-                    vacacionesPorColaborador.setFechaasignada(colaborador.getFechaInicioLaboral());
-                    vacacionesPorColaboradorService.createVacacionesPorColaborador(vacacionesPorColaborador);
+                    vacacionesPorColaboradorCreate.setColaborador(colaborador);
+                    vacacionesPorColaboradorCreate.setDiasdisponibles(0);
+                    vacacionesPorColaboradorCreate.setDiasdisfrutados(0);
+                    vacacionesPorColaboradorCreate.setFechaasignada(colaborador.getFechaInicioLaboral());
+                    vacacionesPorColaboradorService.createVacacionesPorColaborador(vacacionesPorColaboradorCreate);
 
                     current.executeScript("PF('dlAC').hide();");
                     current.ajax().update("form:tablaColaborador");
@@ -589,7 +596,7 @@ public class ColaboradorBean {
                 } catch (Exception e) {
                 } finally {
                     colaborador = new Colaborador();
-                    vacacionesPorColaborador = new VacacionesPorColaborador();
+                    vacacionesPorColaboradorCreate = new VacacionesPorColaborador();
                 }
             } else {//Si no se avisa que ya hay un jefe existente
                 mensaje = new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "El departamento " + colaborador.getDepartamento().getNombre() + " ya tiene un Gerente o Jefe Asignado");
@@ -602,6 +609,10 @@ public class ColaboradorBean {
         }
         FacesContext.getCurrentInstance().addMessage(null, mensaje); //CON MI VALIDACION DE QUE NO SE ASIGNE DOS JEFES A UN DEPT , SE ME CAE POR ESTA LINEA NO SE NI LO QUE HACE
         PrimeFaces.current().ajax().addCallbackParam("existeColaborador", existeColaborador);
+    }
+
+    public void addVacacionesPorColaborador(){
+
     }
 
     public void checkDepartamento() {//Se valida existe un dept al cual se pueden agregar colaboradores

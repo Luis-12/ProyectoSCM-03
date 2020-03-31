@@ -137,7 +137,7 @@ public class VacacionesBean {
                 int diasSol = CalculaDiasSolicitados();
                 int diasDispo = vacacionesPorColaborador.getDiasdisponibles();
 
-                if (diasSol < diasDispo) {//Si los dias solicitados son menores a los disponibles puede realizar la solicitud
+                if (diasSol <= diasDispo) {//Si los dias solicitados son menores a los disponibles puede realizar la solicitud
                     solicitudVac.setColaborador(colaboradorSolicitante);
                     solicitudVac.setEstado("Pendiente");
                     solicitudVac.setDiasSolicitados(diasSol);
@@ -249,7 +249,7 @@ public class VacacionesBean {
             }
         }
     }
-*/
+*/ 
 
     public void addMessage(String summary, String detail) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
