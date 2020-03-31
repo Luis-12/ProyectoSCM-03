@@ -70,20 +70,20 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
 
                 <p:contextMenu >
 
-                    <p:menuitem value="Procesar Solicitud" update="datos" action="#{vacacionesBean.checkSelection}" icon="ui-icon-document"/>
+                    <p:menuitem value="Procesar Solicitud" update="datos" action="#{colaboradorBean.checkSelectionSolicitud}" icon="ui-icon-document"/>
 
                 </p:contextMenu>
 
                 <p:dataTable var="solicitud"  reflow="true" responsive="true" style="margin-top: 15px"
-                             value="#{vacacionesBean.vacaciones}"
+                             value="#{colaboradorBean.vacacionesList}"
                              id="tablaSolicitudesVacaciones"
                              rows="10"
                              widgetVar="solicitudesTabla"
                              emptyMessage="No se han encontrado solicitudes"
                              resizableColumns="true"
-                             rowKey="#{solicitud.pk_idVacaciones}"
+                             rowKey="#{solicitud.pk_idVacaciones}" 
                              selectionMode="single"
-                             selection="#{vacacionesBean.seleccion}"
+                             selection="#{colaboradorBean.seleccion}"
                              paginator="true"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                              rowsPerPageTemplate="10,15,20"
@@ -113,14 +113,14 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
         <p:dialog id="datos" header="Solicitud de Vacaciones"  showEffect="fade" hideEffect="fade"
                   widgetVar="datos" modal="true" resizable="false" minWidth="200" style="width: 250px;"
                   visible="#{facesContext.validationFailed}" >
-            <p:ajax event="close" update="datos" resetValues="true"  listener="#{vacacionesBean.close}"  />
+            <p:ajax event="close" update="datos" resetValues="true"  listener="#{colaboradorBean.closeAON}"  />
             <h:form id="horaio">
                 <p:growl id="msgs2" showDetail="true" />
                 <h:panelGrid columns="2"  id="panel2">
                     <p:outputLabel  value="Nombre:" />
-                    <p:inputText disabled="true" value="#{vacacionesBean.seleccion.colaborador.nombre}"/>
+                    <p:inputText disabled="true" value="#{colaboradorBean.seleccion.colaborador.nombre}"/>
                     <p:outputLabel id="just"  value="Justificación:" />
-                    <p:inputText maxlength="50" value="#{vacacionesBean.solicitudVac.justificacion}"  id="justificacion" requiredMessage="Ingrese una justificación" validatorMessage="Solo letras" required="true" style="height:60px;">
+                    <p:inputText maxlength="50" value="#{colaboradorBean.solicitudVac.justificacion}"  id="justificacion" requiredMessage="Ingrese una justificación" validatorMessage="Solo letras" required="true" style="height:60px;">
                     <f:ajax event="blur" execute="@this" render="@this Nomessage" />
                     <p:ajax update="just"/>
                     <f:validateRegex  pattern="^[a-zA-Z-ÑñáéíóúÁÉÍÓÚ,]+(\s{0,1}[a-zA-Z-ÑñáéíóúÁÉÍÓÚ, ])*$" />
@@ -129,7 +129,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                     <p:message id="Nomessage"  for="justificacion"/>
                 </h:panelGrid>
                 <p:outputLabel value="¿La solicitud ha sido?" indicateRequired="false" styleClass="required" />
-                <p:selectOneRadio required="true"  requiredMessage="Debe selecionar una opción" value="#{vacacionesBean.solicitudVac.estado}" unselectable="true">
+                <p:selectOneRadio required="true"  requiredMessage="Debe selecionar una opción" value="#{colaboradorBean.solicitudVac.estado}" unselectable="true">
                     <f:selectItem itemLabel="Aceptada" itemValue="Aceptada" />
                     <f:selectItem itemLabel="Rechazada" itemValue="Rechazada" />
                 </p:selectOneRadio>
@@ -137,7 +137,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
 
                     <p:commandButton value="Confirmar"
                                      update="form:msgs, tabla:tablaSolicitudesVacaciones"
-                                     action="#{vacacionesBean.estadoSolicitud}"
+                                     action="#{colaboradorBean.actualizarEstadoSolicitud}"
                                      style="margin-left:100px;margin-top: 20px"
                                      styleClass="ui-priority-primary" ajax="false" />
             </h:form>

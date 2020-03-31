@@ -99,6 +99,7 @@ public class ColaboradorBean {
     public void init() {
         Colaborador miC = new Colaborador();
         vacacionesPorColaborador = vacacionesPorColaboradorService.findVacacionesPorColaborador(colaborador1);
+        vacacionesList = vacacionesService.getAllSolVacaciones();
     }
 
 
@@ -975,6 +976,87 @@ public class ColaboradorBean {
         }
     }
 
+    //////////////////////////////////////////*
+    Vacaciones solicitudVac = new Vacaciones();
+    Vacaciones seleccion;
+
+    public Vacaciones getSolicitudVac() {
+        return solicitudVac;
+    }
+
+    public void setSolicitudVac(Vacaciones solicitudVac) {
+        this.solicitudVac = solicitudVac;
+    }
+
+    public Vacaciones getSeleccion() {
+        return seleccion;
+    }
+
+    public void setSeleccion(Vacaciones seleccion) {
+        this.seleccion = seleccion;
+    }
+
+    public void actualizarEstadoSolicitud() throws ParseException {
+        estadoSolicitud();
+        diasDisponibles(colaborador1);
+    }
+    public void estadoSolicitud(){
+        PrimeFaces current = PrimeFaces.current();
+        int diasSolicitados=seleccion.getDiasSolicitados();
+        seleccion.setJustificacion(solicitudVac.getJustificacion());
+        seleccion.setEstado(solicitudVac.getEstado());
+
+        if(seleccion.getEstado().equals("Aceptada")) {
+            int diasRestantes=vacacionesPorColaboradorService.findVacacionesPorColaborador(seleccion.getColaborador()).getDiasdisponibles();
+            int diasDisfrutados=vacacionesPorColaboradorService.findVacacionesPorColaborador(seleccion.getColaborador()).getDiasdisfrutados();
+            diasDisfrutados=diasDisfrutados+diasSolicitados;
+            diasRestantes=diasRestantes-diasSolicitados;
+            System.out.println("Dias rest:"+diasRestantes);
+            vacacionesPorColaborador.setColaborador(seleccion.getColaborador());
+            vacacionesPorColaborador.setDiasdisponibles(diasRestantes);
+            vacacionesPorColaborador.setDiasdisfrutados(diasDisfrutados);
+            vacacionesPorColaboradorService.updateVacacionesPorColaborador(vacacionesPorColaborador);
+            vacacionesService.updateVacaciones(seleccion);
+            addMessage("Aviso", "Solicitud aceptada con exito!"); //si esta vacio muetra este mensaje
+
+            // vacacionesPorColaboradorService.updateVacacionesPorColaborador(vacacionesPorColaboradorService.);
+        }else {
+            vacacionesService.updateVacaciones(seleccion);
+            addMessage("Aviso", "Solicitud rechazada con exito!"); //si esta vacio muetra este mensaje
+        }
+        current.ajax().update("horaio:radioB");
+        seleccion=new Vacaciones();
+        solicitudVac=new Vacaciones();
+    }
+
+    public void closeAON(){
+        PrimeFaces current = PrimeFaces.current();
+        current.ajax().update("horaio:radioB");
+        seleccion=new Vacaciones();
+        solicitudVac=new Vacaciones();
+    }
+
+    public void checkSelectionSolicitud() { //para verifiacar si el objeto esta vacio
+        PrimeFaces current = PrimeFaces.current();
+        FacesMessage mensaje = null;
+
+        if (seleccion == null) {
+            addMessage("Aviso", "Debe Seleccionar un Colaborador."); //si esta vacio muetra este mensaje
+        } else {
+            if (seleccion.getEstado().equals("Aceptada") || seleccion.getEstado().equals("Rechazada")) {
+                addMessage("Aviso", "Ya se proceso esa solicitud."); //si esta vacio muetra este mensaje
+            } else {
+                current.executeScript("PF('datos').show();"); //si no esta vacio muestra el dialogo para actualizar colaborador
+            }
+        }
+    }
+
+
+    /*public void addMessage(String summary, String detail) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }*/
+    //////////////////////////*/
 
     public void diasDisponibles(Colaborador colaborador) throws ParseException {//Funcion para calcular los dias disponible de vacaciones
 

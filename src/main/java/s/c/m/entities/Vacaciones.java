@@ -17,7 +17,7 @@ public class Vacaciones implements Serializable {
     @JoinColumn(name = "fk_idColaborador", nullable = false)
     private Colaborador colaborador;
 
-    private Date fechainicio;
+    private Date fechainicio; 
     private Date fechafinal;
     private String estado;
     private String justificacion;

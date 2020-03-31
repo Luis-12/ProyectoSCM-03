@@ -50,7 +50,7 @@ public class VacacionesBean {
     @PostConstruct
     public void init() {
         Vacaciones miV = new Vacaciones();
-        vacaciones = vacacionesService.getAllSolVacaciones();
+        //vacaciones = vacacionesService.getAllSolVacaciones();
     }
 
     public String getEstado() {
@@ -198,6 +198,7 @@ public class VacacionesBean {
         return totalDiasSolicitados;
     }
 
+    /*
     public void estadoSolicitud(){
         PrimeFaces current = PrimeFaces.current();
         int diasSolicitados=seleccion.getDiasSolicitados();
@@ -248,13 +249,12 @@ public class VacacionesBean {
             }
         }
     }
-
+*/
 
     public void addMessage(String summary, String detail) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-
 
 
     public void buscarPorEstado(){
