@@ -68,10 +68,15 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
         <div>
             <h:form id="tabla">
 
-                <p:contextMenu >
+                <h:commandLink style="margin-left: 1250px;">
+                    <h:graphicImage url="imagen/png.jpg" width="40"/>
+                    <p:dataExporter type="pdf" target="tablaSolicitudesVacaciones"  fileName="Reporte Vacaciones" encoding="ISO-8859-1"
+                                    preProcessor="#{colaboradorBean.preProcessPDF}"  selectionOnly="true"/>
+                </h:commandLink>
 
+
+                <p:contextMenu>
                     <p:menuitem value="Procesar Solicitud" update="datos" action="#{colaboradorBean.checkSelectionSolicitud}" icon="ui-icon-document"/>
-
                 </p:contextMenu>
 
                 <p:dataTable var="solicitud"  reflow="true" responsive="true" style="margin-top: 15px"
@@ -89,15 +94,20 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                              rowsPerPageTemplate="10,15,20"
                              scrollable="true" scrollWidth="100%" scrollHeight="150">
                     <p:ajax event="cellEdit" listener="#{colaboradorBean.vacacionesList}" update="tabla:tablaSolicitudesVacaciones" />
+
                     <p:column headerText="Cédula Solicitante" filterBy="#{solicitud.colaborador.pk_idColaborador}">
                         <h:outputText value="#{solicitud.colaborador.pk_idColaborador}" />
                     </p:column>
 
                     <p:column headerText="Fecha Inicio Vacaciones" filterBy="#{solicitud.fechainicio}">
-                        <h:outputText value="#{solicitud.fechainicio}" />
+                        <h:outputText value="#{solicitud.fechainicio}" >
+                        <f:convertDateTime type="date" pattern="yyyy-MM-dd"/>
+                        </h:outputText>
                     </p:column>
                     <p:column headerText="Fecha Final Vacaciones" filterBy="#{solicitud.fechafinal}">
-                        <h:outputText value="#{solicitud.fechafinal}" />
+                        <h:outputText value="#{solicitud.fechafinal}" >
+                        <f:convertDateTime type="date" pattern="yyyy-MM-dd"/>
+                        </h:outputText>
                     </p:column>
                     <p:column headerText="Estado" filterBy="#{solicitud.estado}">
                         <h:outputText value="#{solicitud.estado}" />
@@ -144,6 +154,8 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
 
 
         </p:dialog>
+
+
 
 
         <div id="footer">

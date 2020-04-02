@@ -1,6 +1,7 @@
 package s.c.m.beans;
 
 
+import com.lowagie.text.*;
 import org.primefaces.PrimeFaces;
 import org.primefaces.model.menu.MenuModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import s.c.m.services.*;
 import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.xml.bind.DatatypeConverter;
 import java.io.*;
@@ -1098,12 +1100,28 @@ public class ColaboradorBean {
         }
     }
 
+    public void preProcessPDF(Object document) throws IOException, BadElementException, DocumentException {
+        Document pdf = (Document) document;
+        pdf.addTitle("Respuesta de Solicitud de Vacaciones");
+        pdf.open();
+        pdf.setPageSize(PageSize.A4);
 
-    /*public void addMessage(String summary, String detail) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
-        FacesContext.getCurrentInstance().addMessage(null, message);
-    }*/
-    //////////////////////////*/
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        String logo = externalContext.getRealPath("") + File.separator + "css" + File.separator + "imagen"  + File.separator + "logo1.jpg";
+
+        pdf.add(Image.getInstance(logo));
+        Paragraph p2 = new Paragraph("---------------------------------------------------------------------------");
+        p2.setAlignment("center");
+        pdf.add(p2);
+        Paragraph p = new Paragraph("Firma:_______________________________.");
+        p.setAlignment("center");
+        pdf.add(p);
+        Paragraph p3 = new Paragraph("---------------------------------------------------------------------------");
+        p3.setAlignment("center");
+        pdf.add(p3);
+
+    }
+
 
     public void diasDisponibles(Colaborador colaborador) throws ParseException {//Funcion para calcular los dias disponible de vacaciones
 

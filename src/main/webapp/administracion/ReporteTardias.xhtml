@@ -76,7 +76,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Analista' }">
 
                 <h:commandLink>
                     <h:graphicImage url="imagen/png.jpg" width="40"/>
-                    <p:dataExporter type="pdf" target="tardiaCola" fileName="Reporte de Llegadas Tardías"/>
+                    <p:dataExporter type="pdf" target="tardiaCola" encoding="ISO-8859-1" fileName="Reporte de Llegadas Tardías"/>
                 </h:commandLink>
 
                 <p:dataTable var="tardias" id="tardiaCola" reflow="true" responsive="true" style="margin-top: 25px"

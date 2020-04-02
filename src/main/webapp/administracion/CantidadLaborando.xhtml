@@ -58,7 +58,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Analista'}">
 
                 <h:commandLink>
                     <h:graphicImage url="imagen/png.jpg" width="40"/>
-                    <p:dataExporter type="pdf" target="tablaColaborador" fileName="Reporte Colaboradores Laborando"/>
+                    <p:dataExporter type="pdf" target="tablaColaborador" encoding="ISO-8859-1" fileName="Reporte Colaboradores Laborando"/>
                 </h:commandLink>
 
                 <p:dataTable  var="colaborador" value="#{colaboradorBean.colaboradores}" rows="10" reflow="true" responsive="true" style="margin-top: 15px" id="tablaColaborador"
