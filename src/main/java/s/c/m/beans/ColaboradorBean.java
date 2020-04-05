@@ -16,15 +16,16 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.xml.bind.DatatypeConverter;
 import java.io.*;
 import java.sql.Time;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
 
 
@@ -1044,6 +1045,57 @@ public class ColaboradorBean {
         vacacionesList= vacacionesService.buscarPorEstado(estado,colaboradorlogueado);
     }
 
+    public void  sendEmail()
+    {
+        final String username = "asistencia@wyndhamherradura.com";
+        final String password = "=N=CULErgK&z";
+        String toEmail = seleccion.getColaborador().getCorreo();
+
+
+        Properties prop = new Properties();
+        prop.put("mail.smtp.host", "wyn.wyndhamherradura.com");
+        prop.put("mail.smtp.port", "465");
+        prop.put("mail.smtp.auth", "true");
+        prop.put("mail.smtp.socketFactory.port", "465");
+        prop.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+
+
+        Session session = Session.getInstance(prop, new javax.mail.Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(username,password);
+            }
+        });
+        //Start our mail message
+        MimeMessage msg = new MimeMessage(session);
+        try {
+            msg.setFrom(new InternetAddress(username));
+            msg.addRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));
+
+            String estado=solicitudVac.getEstado();
+            String justificacion=solicitudVac.getJustificacion();
+            String nombre=seleccion.getColaborador().getNombre()+",";
+            msg.setSubject("Solicitud de vacaciones");
+            if(estado.equals("Aceptada"))
+            {
+                msg.setText(""+nombre+ "\\n\\n Su solicitud de vacaciones fue "+ estado
+                        + "\n\n favor dirigirse a firmar la aprobación");
+            }
+            else
+            {
+
+                msg.setText(""+nombre +"\\n\\n Su solicitud de vacaciones fue "+ estado
+                        +" por "+justificacion+".Para mayor infromación comunicarse con su jefe de departamento");
+            }
+
+            Transport.send(msg);
+        }catch (MessagingException e) {
+            e.printStackTrace();
+            addMessage("Aviso",  e.getMessage());
+        }
+    }
+
+
 
     public void estadoSolicitud(){
         PrimeFaces current = PrimeFaces.current();
@@ -1072,6 +1124,7 @@ public class ColaboradorBean {
         vacacionesList = vacacionesService.getAllSolVacaciones(colaboradorlogueado);
         current.ajax().update("tabla:tablaSolicitudesVacaciones");//Actualizar tabla
         current.ajax().update("horaio:radioB");
+        sendEmail();
         seleccion=new Vacaciones();
         solicitudVac=new Vacaciones();
     }
