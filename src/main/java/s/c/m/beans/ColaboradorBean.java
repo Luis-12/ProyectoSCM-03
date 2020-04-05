@@ -1078,14 +1078,14 @@ public class ColaboradorBean {
             msg.setSubject("Solicitud de vacaciones");
             if(estado.equals("Aceptada"))
             {
-                msg.setText(""+nombre+ "\\n\\n Su solicitud de vacaciones fue "+ estado
-                        + "\n\n favor dirigirse a firmar la aprobación");
+                msg.setText(""+nombre+ "Su solicitud de vacaciones fue "+ estado
+                        + "favor dirigirse a firmar la aprobación");
             }
             else
             {
 
-                msg.setText(""+nombre +"\\n\\n Su solicitud de vacaciones fue "+ estado
-                        +" por "+justificacion+".Para mayor infromación comunicarse con su jefe de departamento");
+                msg.setText(""+nombre +" Su solicitud de vacaciones fue "+ estado
+                        +" por el siguiente motivo:"+justificacion+".Para mayor infromación comunicarse con su jefe de departamento");
             }
 
             Transport.send(msg);
