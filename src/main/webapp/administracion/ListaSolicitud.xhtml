@@ -67,16 +67,12 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
 
         <div>
             <h:form id="tabla">
-
-                <h:commandLink style="margin-left: 1250px;">
-                    <h:graphicImage url="imagen/png.jpg" width="40"/>
-                    <p:dataExporter type="pdf" target="tablaSolicitudesVacaciones"  fileName="Reporte Vacaciones" encoding="ISO-8859-1"
-                                    preProcessor="#{colaboradorBean.preProcessPDF}"  selectionOnly="true"/>
-                </h:commandLink>
-
-
                 <p:contextMenu>
-                    <p:menuitem value="Procesar Solicitud" update="datos" action="#{colaboradorBean.checkSelectionSolicitud}" icon="ui-icon-document"/>
+                    <p:menuitem value="Procesar Solicitud" update="datos" action="#{colaboradorBean.checkSelectionSolicitud}"/>
+                    <p:menuitem ajax="false" value="Imprimir">
+                        <p:dataExporter type="pdf" target="tablaSolicitudesVacaciones"  fileName="Reporte Vacaciones" encoding="ISO-8859-1"
+                                        preProcessor="#{colaboradorBean.preProcessPDF}"  selectionOnly="true"/>
+                    </p:menuitem>
                 </p:contextMenu>
 
                 <p:dataTable var="solicitud"  reflow="true" responsive="true" style="margin-top: 15px"
