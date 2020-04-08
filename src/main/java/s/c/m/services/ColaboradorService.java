@@ -171,6 +171,25 @@ public class ColaboradorService {
         return colaborador;
     }
 
+    public Colaborador findColaboradorYEstado(String id) throws Exception//Funcion para encontrar el colaborador por su id
+    {
+        Colaborador colaboradorId = new Colaborador();
+        colaboradorId.setPk_idColaborador(id);
+        try
+        {
+            colaborador=colaboradorRepository.findById(id).get();//Se invoca funcion del repository para consultar el cola por id
+            if(colaborador.getEstado().equals("Activo")){//Si el colaborador esta activio
+                colaboradorId = colaborador;//Llena el objeto que retorna con el colaborador encontrado
+            }else{
+                colaboradorId = null;//Si no retorna null
+            }
+        }catch (Exception ex)
+        {
+            colaboradorId=null;
+        }
+        return colaboradorId;
+    }
+
 
 
     public void updateColaborador(Colaborador colaborador) {//Funcion para actualizar al colaborador

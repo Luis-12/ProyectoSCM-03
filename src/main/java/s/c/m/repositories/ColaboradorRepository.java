@@ -17,6 +17,7 @@ public interface ColaboradorRepository extends CrudRepository<Colaborador, Strin
     la tabla Colaborador.*/
     Colaborador findByDepartamentoAndPuestoAndEstado(Departamento idD,Puesto idP,String estado);//Se declara funcion para consultar el colaborador por estado y puesto
     List<Colaborador> findByDepartamento(Departamento idD);//Se declara funcion para consultar colaboradores por departamento
+
 }
 
 

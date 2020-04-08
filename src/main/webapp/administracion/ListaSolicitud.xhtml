@@ -135,7 +135,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                     <p:message id="Nomessage"  for="justificacion"/>
                 </h:panelGrid>
                 <p:outputLabel value="¿La solicitud ha sido?" indicateRequired="false" styleClass="required" />
-                <p:selectOneRadio required="true"  requiredMessage="Debe selecionar una opción" value="#{colaboradorBean.solicitudVac.estado}" unselectable="true">
+                <p:selectOneRadio required="true" id="radioB" requiredMessage="Debe selecionar una opción" value="#{colaboradorBean.solicitudVac.estado}" unselectable="true">
                     <f:selectItem itemLabel="Aceptada" itemValue="Aceptada" />
                     <f:selectItem itemLabel="Rechazada" itemValue="Rechazada" />
                 </p:selectOneRadio>

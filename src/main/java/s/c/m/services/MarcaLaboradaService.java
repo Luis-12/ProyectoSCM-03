@@ -6,7 +6,9 @@ import s.c.m.entities.Colaborador;
 import s.c.m.entities.MarcaLaboradas;
 import s.c.m.repositories.MarcasLaboradasRepository;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class MarcaLaboradaService {
@@ -62,5 +64,19 @@ public class MarcaLaboradaService {
     public void updateMarcaLaborada(MarcaLaboradas marcaLaboradas)//Funcion para modificar una marca laborada ya existente
     {
         marcasLaboradasRepository.save(marcaLaboradas);//Aca se invoca la funcion para actualizar del repository
+    }
+
+    public List<MarcaLaboradas> findMarcasLaboradasPorRango(Date fechaInicioR, Date fechaFinalR, Colaborador idColaborador){
+        List<MarcaLaboradas> marcasEncontradas = new ArrayList<>();
+        List<MarcaLaboradas> marcasEAux = new ArrayList<>();
+        marcasEncontradas = marcasLaboradasRepository.findByFechaMarcaBetween(fechaInicioR,fechaFinalR);
+        for(MarcaLaboradas mc : marcasEncontradas){
+           if(mc.getEstado().equals("Finalizado") && mc.getColaborador().getPk_idColaborador().equals(idColaborador.getPk_idColaborador())){
+            marcasEAux.add(mc);
+            System.out.println("Colaborador que marco: " + mc.getColaborador().getPk_idColaborador());
+           }
+        }
+        System.out.println("CANTIDAD DE MARCAS ENCONTRADAS DEL COLABORADOR: " + marcasEAux.size());
+        return marcasEAux;
     }
 }
