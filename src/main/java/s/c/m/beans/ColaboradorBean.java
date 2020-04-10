@@ -1484,7 +1484,7 @@ public class ColaboradorBean {
             } else {
 
                 msg.setText("" + nombre + " su Solicitud de Vacaciones fue " + estado
-                        + " por el siguiente motivo: " + justificacion + ".Para mayor información, comunicarse con su Encargado");
+                        + " por el siguiente motivo: " + justificacion + ". Para mayor información, comunicarse con su encargado");
             }
 
             Transport.send(msg);
