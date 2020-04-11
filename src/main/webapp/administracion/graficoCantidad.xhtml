@@ -21,7 +21,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Analista'}">
     <link href="../css/style.css" rel="stylesheet" type="text/css" />
     <link href="../css/styleM.css" media='screen and (max-device-width: 480px)' rel="stylesheet" type="text/css" />
     <link href="//db.onlinewebfonts.com/c/f977213040abc486420980aae60e0db3?family=GestaW01-Medium" rel="stylesheet" type="text/css"/>
-    <title>Reporte de Colaboradores</title>
+    <title>Gráfico Cantidad Laborando</title>
 </h:head>
 
 <div id="page">
@@ -46,49 +46,23 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Analista'}">
             </h:form>
         </div>
 
-        <h1 id="h1Centro">Reporte de Colaboradores Laborando</h1>
+        <h1 id="h1Centro">Gráfico Cantidad Laborando</h1>
 
         <div>
             <h:form>
-
-                <h:commandLink style="margin-left: 60px">
-                    <h:graphicImage url="imagen/exc.png" width="40"/>
-                    <p:dataExporter type="xls" target="tablaColaborador" fileName="Reporte Colaboradores Laborando" />
-                </h:commandLink>
-
-                <h:commandLink>
-                    <h:graphicImage url="imagen/png.jpg" width="40"/>
-                    <p:dataExporter type="pdf" target="tablaColaborador" encoding="ISO-8859-1" fileName="Reporte Colaboradores Laborando"/>
-                </h:commandLink>
-
-                <h:outputLink value="graficoCantidad.xhtml" >
-                    <h:graphicImage url="imagen/gra.png" width="40"/>
-                </h:outputLink>
-
-                <p:dataTable  var="colaborador" value="#{colaboradorBean.colaboradores}" rows="10" reflow="true" responsive="true" style="margin-top: 15px" id="tablaColaborador"
-                              emptyMessage="No se han encontrado colaboradores"
-                              resizableColumns="true"
-                              selectionMode="single"
-                              rowKey="#{colaborador.pk_idColaborador}"
-                              paginator="true"
-                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                              scrollable="true" scrollWidth="100%" scrollHeight="200">
-
-
-                    <p:column headerText="Cédula">
-                        <h:outputText value="#{colaborador.pk_idColaborador}" />
-                    </p:column>
-
-                    <p:column headerText="Nombre Completo">
-                        <h:outputText value="#{colaborador.nombre}" />
-                    </p:column>
-
-
-                </p:dataTable>
+                <p:commandButton style="margin-left: 580px" value="Graficar" id="graficar" update="grafico" actionListener="#{colaboradorBean.GraficarColaboradoresLaborando()}" />
+                <p:commandButton type="button" value="Exportar" onclick="exportChart()"/>
+                <h:panelGrid id="grafico" style="width: 490px; height: 340px; margin-left: 430px" >
+                    <p:chart type="pie" widgetVar="chart" model="#{colaboradorBean.torta}" style="width: 490px; height: 340px; " rendered="#{colaboradorBean.torta != null}"/>
+                </h:panelGrid>
 
 
             </h:form>
         </div>
+
+        <p:dialog widgetVar="dlg" showEffect="fade" modal="true" header="Gráfico como imagen" resizable="false">
+            <p:outputPanel id="output" layout="block" style="width:490px;height:350px"/>
+        </p:dialog>
 
 
         <div id="footer">
@@ -97,6 +71,14 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Analista'}">
         </div>
 
     </h:body>
+
+    <script type="text/javascript">
+        function exportChart() {
+            $('#output').empty().append(PF('chart').exportAsImage());
+
+            PF('dlg').show();
+        }
+    </script>
 
 </div>
 </c:when>

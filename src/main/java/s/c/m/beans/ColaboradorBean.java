@@ -6,6 +6,7 @@ import com.lowagie.text.Font;
 import com.lowagie.text.Image;
 import com.lowagie.text.pdf.BaseFont;
 import org.primefaces.PrimeFaces;
+import org.primefaces.model.chart.PieChartModel;
 import org.primefaces.model.menu.MenuModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -44,6 +45,9 @@ public class ColaboradorBean {
     ColaboradorService colaboradorService;
     private Colaborador colaborador = new Colaborador();
     private Colaborador colaboradorMarca = new Colaborador();
+
+    private List<Colaborador> listaGrafico;
+    private PieChartModel torta;
 
     private Colaborador colaborador1 = new Colaborador();
     private Colaborador colaboradorlogueado = new Colaborador();
@@ -138,6 +142,22 @@ public class ColaboradorBean {
 
     public List<ReporteColaboradorDetallado> getReporteColaboradorDetalladosList() {
         return reporteColaboradorDetalladosList;
+    }
+
+    public PieChartModel getTorta() {
+        return torta;
+    }
+
+    public void setTorta(PieChartModel torta) {
+        this.torta = torta;
+    }
+
+    public List<Colaborador> getListaGrafico() {
+        return listaGrafico;
+    }
+
+    public void setListaGrafico(List<Colaborador> listaGrafico) {
+        this.listaGrafico = listaGrafico;
     }
 
     public void setReporteColaboradorDetalladosList(List<ReporteColaboradorDetallado> reporteColaboradorDetalladosList) {
@@ -406,6 +426,31 @@ public class ColaboradorBean {
     }
 
      //-------------------------finaliza Set y Get-----------------------------
+    //-----------------------Inican métodos del grafico--------------------------
+    public void listarColaboradorGrafico(){
+        //solo para probar si funciona
+        colaboradorService.getAllColaboradoresActivos();
+        GraficarColaboradoresLaborando();
+    }
+
+    public void GraficarColaboradoresLaborando(){
+        torta=new PieChartModel();
+
+        for (Colaborador cola: colaboradorService.getAllColaboradoresActivos() )
+        {
+            torta.set(cola.getNombre(), cola.getTelefono()); //se necesita un numero
+        }
+        torta.setLegendPosition("bottom");
+        torta.setFill(true);
+        torta.setDataLabelFormatString("%d%%");
+        //torta.setShowDataLabels(true);
+        torta.setDiameter(190);
+    }
+
+    //-----------------------Finaliza método del grafico-----------------------
+
+
+
     //-----------------------Inica método del menú--------------------------
 
     public void construyeMenuDinamico(String rol, String nombreDept) {//Funcion para crear el menu dinamico segun el departamento y rol
