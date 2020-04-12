@@ -51,51 +51,64 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Analista'}">
         <div>
             <h:form>
 
-                <h:commandLink style="margin-left: 60px">
-                    <h:graphicImage url="imagen/exc.png" width="40"/>
-                    <p:dataExporter type="xls" target="tablaColaborador" fileName="Reporte Colaboradores Laborando" />
-                </h:commandLink>
+                <p:tabView>
+                    <p:tab title="Tabla">
+                        <h:commandLink style="margin-left: 60px">
+                            <h:graphicImage url="imagen/exc.png" width="40"/>
+                            <p:dataExporter type="xls" target="tablaColaborador" fileName="Reporte Colaboradores Laborando" />
+                        </h:commandLink>
 
-                <h:commandLink>
-                    <h:graphicImage url="imagen/png.jpg" width="40"/>
-                    <p:dataExporter type="pdf" target="tablaColaborador" encoding="ISO-8859-1" fileName="Reporte Colaboradores Laborando"/>
-                </h:commandLink>
+                        <h:commandLink>
+                            <h:graphicImage url="imagen/png.jpg" width="40"/>
+                            <p:dataExporter type="pdf" target="tablaColaborador" encoding="ISO-8859-1" fileName="Reporte Colaboradores Laborando"/>
+                        </h:commandLink>
 
-                <h:outputLink value="graficoCantidad.xhtml" >
-                    <h:graphicImage url="imagen/gra.png" width="40"/>
-                </h:outputLink>
+                      <!--  <h:outputLink value="graficoCantidad.xhtml" >
+                            <h:graphicImage url="imagen/gra.png" width="40"/>
+                        </h:outputLink> -->
 
-                <p:dataTable  var="colaborador" value="#{colaboradorBean.colaboradores}" rows="10" reflow="true" responsive="true" style="margin-top: 15px" id="tablaColaborador"
-                              emptyMessage="No se han encontrado colaboradores"
-                              resizableColumns="true"
-                              selectionMode="single"
-                              rowKey="#{colaborador.pk_idColaborador}"
-                              paginator="true"
-                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                              scrollable="true" scrollWidth="100%" scrollHeight="200">
-
-
-                    <p:column headerText="Cédula">
-                        <h:outputText value="#{colaborador.pk_idColaborador}" />
-                    </p:column>
-
-                    <p:column headerText="Nombre Completo">
-                        <h:outputText value="#{colaborador.nombre}" />
-                    </p:column>
+                        <p:dataTable  var="colaborador" value="#{colaboradorBean.colaboradores}" rows="10" reflow="true" responsive="true" style="margin-top: 15px" id="tablaColaborador"
+                                      emptyMessage="No se han encontrado colaboradores"
+                                      resizableColumns="true"
+                                      selectionMode="single"
+                                      rowKey="#{colaborador.pk_idColaborador}"
+                                      paginator="true"
+                                      paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                      scrollable="true" scrollWidth="100%" scrollHeight="200">
 
 
-                </p:dataTable>
+                            <p:column headerText="Cédula">
+                                <h:outputText value="#{colaborador.pk_idColaborador}" />
+                            </p:column>
+
+                            <p:column headerText="Nombre Completo">
+                                <h:outputText value="#{colaborador.nombre}" />
+                            </p:column>
+
+
+                        </p:dataTable>
+                    </p:tab>
+                    <p:tab title="Grafica">
+                        <h1 style="text-align: center;font-size: 18px">Gráfico Cantidad Laborando</h1>
+
+                        <h:panelGrid id="grafico" style="width: 490px; height: 380px; margin-left: 430px" >
+                            <p:chart type="pie" widgetVar="chart" model="#{colaboradorBean.torta}" style="width: 490px; height: 340px; " rendered="#{colaboradorBean.torta != null}"/>
+                        </h:panelGrid>
+
+                        <br/>
+                    </p:tab>
+
+                </p:tabView>
 
 
             </h:form>
         </div>
 
 
-        <div id="footer">
+        <div id="footer" style="margin-top: 3%">
             <br/>
             <h:outputLink value="../acerca.xhtml" >©</h:outputLink>  <p:outputLabel value=" SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA" />
         </div>
-
     </h:body>
 
 </div>

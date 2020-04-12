@@ -139,7 +139,7 @@ public class ColaboradorBean {
 
     @PostConstruct
     public void init() {
-        Colaborador miC = new Colaborador();
+        Colaborador miC = new Colaborador();GraficarColaboradoresLaborando();
     }
 
     /*--Set y Get--*/
