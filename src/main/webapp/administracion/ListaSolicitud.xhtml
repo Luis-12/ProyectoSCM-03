@@ -87,6 +87,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                              selection="#{colaboradorBean.seleccion}"
                              paginator="true"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="10,15,20"
                              scrollable="true" scrollWidth="100%" scrollHeight="200">
                     <p:ajax event="cellEdit" listener="#{colaboradorBean.vacacionesList}" update="tabla:tablaSolicitudesVacaciones" />
 

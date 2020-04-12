@@ -166,6 +166,9 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                     </div>
 
                     <div>
+                        <center>
+                            <p:commandButton type="button" value="Descargar como Imagen" onclick="exportChart()"/>
+                        </center>
                     <h:panelGrid id="grafico" style="width: 500px; height: 400px; margin-left: 430px" >
                         <p:autoUpdate/>
                         <p:barChart  widgetVar="chart" model="#{colaboradorBean.barModel}" style="width: 490px; height: 340px; " rendered="#{colaboradorBean.barModel != null}"/>
@@ -176,6 +179,21 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                         <h:outputLink value="../acerca.xhtml">©</h:outputLink> <p:outputLabel
                             value=" SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA"/>
                     </div>
+
+                    <script type="text/javascript">
+                        function exportChart() {
+                            var image = PF('chart').exportAsImage();
+                            var imageSrc = $(image).attr('src');
+                            var url = imageSrc.replace(/^data:image\/[^;]+/, 'data:application/octet-stream');
+                            var link = document.createElement('a');
+                            link.download = "Reporte.png";
+                            link.href = url;
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                            return false;
+                        }
+                    </script>
 
                 </h:body>
 

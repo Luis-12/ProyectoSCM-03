@@ -51,7 +51,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Analista'}">
         <div>
             <h:form >
 
-                <p:tabView>
+                <p:tabView style="width: 98%">
                     <p:tab title="Tabla">
                         <h:commandLink style="margin-left: 60px">
                             <h:graphicImage url="imagen/exc.png" width="40"/>
@@ -63,11 +63,8 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Analista'}">
                             <p:dataExporter type="pdf" target="tablaColaborador" encoding="ISO-8859-1" fileName="Reporte Colaboradores Laborando"/>
                         </h:commandLink>
 
-                      <!--  <h:outputLink value="graficoCantidad.xhtml" >
-                            <h:graphicImage url="imagen/gra.png" width="40"/>
-                        </h:outputLink> -->
 
-                        <p:dataTable  var="colaborador" value="#{colaboradorBean.colaboradores}" rows="10" reflow="true" responsive="true" style="margin-top: 15px" id="tablaColaborador"
+                        <p:dataTable  var="colaborador" value="#{colaboradorBean.colaboradores}" rows="10" reflow="true" responsive="true" style="margin-top: 15px; width: 97%" id="tablaColaborador"
                                       emptyMessage="No se han encontrado colaboradores"
                                       resizableColumns="true"
                                       selectionMode="single"
@@ -77,13 +74,14 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Analista'}">
                                       scrollable="true" scrollWidth="100%" scrollHeight="200">
 
 
-                            <p:column headerText="Cédula">
-                                <h:outputText value="#{colaborador.pk_idColaborador}" />
+                            <p:column style="width: 47%" headerText="Cédula">
+                                <h:outputText style="width: 47%" value="#{colaborador.pk_idColaborador}" />
                             </p:column>
 
-                            <p:column headerText="Nombre Completo">
-                                <h:outputText value="#{colaborador.nombre}" />
+                            <p:column style="width: 47%" headerText="Nombre Completo">
+                                <h:outputText style="width: 47%" value="#{colaborador.nombre}" />
                             </p:column>
+
 
 
                         </p:dataTable>
