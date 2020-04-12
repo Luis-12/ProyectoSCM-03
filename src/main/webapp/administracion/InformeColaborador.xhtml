@@ -165,6 +165,12 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                         </h:form>
                     </div>
 
+                    <div>
+                    <h:panelGrid id="grafico" style="width: 500px; height: 400px; margin-left: 430px" >
+                        <p:autoUpdate/>
+                        <p:barChart  widgetVar="chart" model="#{colaboradorBean.barModel}" style="width: 490px; height: 340px; " rendered="#{colaboradorBean.barModel != null}"/>
+                    </h:panelGrid></div>
+                    <br/><br/>
                     <div id="footer">
                         <br/>
                         <h:outputLink value="../acerca.xhtml">©</h:outputLink> <p:outputLabel

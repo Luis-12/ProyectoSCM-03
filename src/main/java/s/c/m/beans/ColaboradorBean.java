@@ -7,6 +7,16 @@ import com.lowagie.text.Image;
 import com.lowagie.text.pdf.BaseFont;
 import org.primefaces.PrimeFaces;
 import org.primefaces.model.chart.PieChartModel;
+import org.primefaces.model.charts.ChartData;
+import org.primefaces.model.charts.axes.cartesian.CartesianScales;
+import org.primefaces.model.charts.axes.cartesian.linear.CartesianLinearAxes;
+import org.primefaces.model.charts.axes.cartesian.linear.CartesianLinearTicks;
+import org.primefaces.model.charts.bar.BarChartDataSet;
+import org.primefaces.model.charts.bar.BarChartModel;
+import org.primefaces.model.charts.bar.BarChartOptions;
+import org.primefaces.model.charts.optionconfig.legend.Legend;
+import org.primefaces.model.charts.optionconfig.legend.LegendLabel;
+import org.primefaces.model.charts.optionconfig.title.Title;
 import org.primefaces.model.menu.MenuModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -48,6 +58,7 @@ public class ColaboradorBean {
 
     private List<Colaborador> listaGrafico;
     private PieChartModel torta;
+    private BarChartModel barModel=null;
 
     private Colaborador colaborador1 = new Colaborador();
     private Colaborador colaboradorlogueado = new Colaborador();
@@ -138,6 +149,14 @@ public class ColaboradorBean {
 
     public void setColaboradorR(Colaborador colaboradorR) {
         this.colaboradorR = colaboradorR;
+    }
+
+    public BarChartModel getBarModel() {
+        return barModel;
+    }
+
+    public void setBarModel(BarChartModel barModel) {
+        this.barModel = barModel;
     }
 
     public List<ReporteColaboradorDetallado> getReporteColaboradorDetalladosList() {
@@ -450,6 +469,75 @@ public class ColaboradorBean {
     //-----------------------Finaliza método del grafico-----------------------
 
 
+    //-----------------------Inican métodos del grafico colaborador detallado--------------------------
+    public void GraphicColaboradorDetallado(){
+
+
+        ReporteColaboradorDetallado reporte=reporteColaboradorDetalladosList.get(0);
+
+        barModel = new BarChartModel();
+        ChartData data = new ChartData();
+
+        BarChartDataSet barDataSet = new BarChartDataSet();
+        barDataSet.setLabel("Colaborador Detallado");
+
+        List<Number> values = new ArrayList<>();
+        values.add(reporte.getCantHorasLaboradas());
+        values.add(reporte.getCantLlegadasTardias());
+        values.add(reporte.getDiasDispoVacaciones());
+        barDataSet.setData(values);
+
+        List<String> bgColor = new ArrayList<>();
+        bgColor.add("rgba(255, 99, 132, 0.2)");
+        bgColor.add("rgba(54, 162, 235, 0.2)");
+        bgColor.add("rgba(255, 205, 86, 0.2)");
+
+        barDataSet.setBackgroundColor(bgColor);
+
+        List<String> borderColor = new ArrayList<>();
+        borderColor.add("rgb(255, 99, 132)");
+        borderColor.add("rgb(54, 162, 235)");
+        borderColor.add("rgb(255, 205, 86)");
+        barDataSet.setBorderColor(borderColor);
+        barDataSet.setBorderWidth(1);
+
+        data.addChartDataSet(barDataSet);
+
+        List<String> labels = new ArrayList<>();
+        labels.add("Horas Laboradas");
+        labels.add("Llegadas Tardías");
+        labels.add("Vacaciones Disponibles");
+        data.setLabels(labels);
+
+        //Data
+        barModel.setData(data);
+
+        //Options
+        BarChartOptions options = new BarChartOptions();
+        CartesianScales cScales = new CartesianScales();
+        CartesianLinearAxes linearAxes = new CartesianLinearAxes();
+        CartesianLinearTicks ticks = new CartesianLinearTicks();
+        ticks.setBeginAtZero(true);
+        linearAxes.setTicks(ticks);
+        cScales.addYAxesData(linearAxes);
+        options.setScales(cScales);
+
+
+        Legend legend = new Legend();
+        legend.setDisplay(true);
+        legend.setPosition("top");
+        LegendLabel legendLabels = new LegendLabel();
+        legendLabels.setFontStyle("bold");
+        legendLabels.setFontColor("#2980B9");
+        legendLabels.setFontSize(24);
+        legend.setLabels(legendLabels);
+        options.setLegend(legend);
+
+        barModel.setOptions(options);
+
+    }
+
+//-----------------------Finaliza métodos del grafico colaborador detallado--------------------------
 
     //-----------------------Inica método del menú--------------------------
 
@@ -1867,6 +1955,7 @@ public class ColaboradorBean {
                     miRC.setDiasDispoVacaciones(diasDisponibles);
 
                     reporteColaboradorDetalladosList.add(miRC);//Se llena la lista de la tabla
+                    GraphicColaboradorDetallado();
                     addMessage("Aviso", "Horas Laboradas: " + totalHorasLaboradas +
                             " Horas Descansadas: " + totalHorasDescansadas + " Total H fin: " + horasFinal);
                 } else {
@@ -1876,6 +1965,7 @@ public class ColaboradorBean {
         } else {
             addMessage("Aviso", "NO se encontró el Colaborador con la cédula: " + cedulaReporte);
         }
+
     }
 
     public double calculaHorasEntreDosTiempos(Time tInicio, Time tFinal) {
