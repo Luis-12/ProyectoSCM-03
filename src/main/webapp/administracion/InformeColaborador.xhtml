@@ -73,6 +73,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                                indicateRequired="false" for="fecha2"/>
                                 <p:calendar autocomplete="off" required="true"
                                             value="#{colaboradorBean.fechaFinalR}"
+                                            maxdate="#{colaboradorBean.fecha}"
                                             requiredMessage="Ingrese la Fecha final"
                                             id="fecha2" pattern="yyyy-MM-dd">
                                     <f:ajax event="dateSelect" execute="@this" render="@this FFRmessage"/>
@@ -105,7 +106,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                 <h:commandLink style="margin-left: 60px">
                                     <h:graphicImage url="imagen/exc.png" width="40"/>
                                     <p:dataExporter type="xls" target="formRCDetallado:tablaReporteDetallado"
-                                                    fileName="Informe Colaborador #{colaboradorBean.colaboradorR.nombre}"/>
+                                                    fileName="Reporte Detallado de Colaborador #{colaboradorBean.colaboradorR.nombre}"/>
                                 </h:commandLink>
 
                                 <h:commandLink>
@@ -113,7 +114,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                     <p:dataExporter type="pdf" encoding="ISO-8859-1"
                                                     target="formRCDetallado:tablaReporteDetallado"
                                                     preProcessor="#{colaboradorBean.preProcessPDFReporteCD}"
-                                                    fileName="Informe Colaborador #{colaboradorBean.colaboradorR.nombre}"/>
+                                                    fileName="Reporte Detallado de Colaborador #{colaboradorBean.colaboradorR.nombre}"/>
                                 </h:commandLink>
                             </h:panelGrid>
                         </h:form>
@@ -129,7 +130,6 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                          widgetVar="tablaReporteDetallado"
                                          paginator="true"
                                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                         rowsPerPageTemplate="10,15,20"
                                          scrollable="true" scrollWidth="100%" scrollHeight="150">
                                 <p:autoUpdate/>
 
@@ -157,7 +157,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                     <h:outputText value="#{reporte.cantLlegadasTardias}"/>
                                 </p:column>
 
-                                <p:column headerText="Vacaciones">
+                                <p:column headerText="Vacaciones Disponibles">
                                     <h:outputText value="#{reporte.diasDispoVacaciones}"/>
                                 </p:column>
 

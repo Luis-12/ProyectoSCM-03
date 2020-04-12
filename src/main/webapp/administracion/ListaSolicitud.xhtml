@@ -54,12 +54,12 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                 <center>
                     <h:panelGrid columns="3" >
                         <p:outputLabel value="Estado:"/>
-                        <p:selectOneMenu value="#{colaboradorBean.estado}" id="estado" style="width:110px; height: 31px;">
+                        <p:selectOneMenu value="#{colaboradorBean.estado}" id="estado" style="width:105px; height: 25px; text-align: justify-all; font-size: 19px; margin-top: 1px; text-emphasis-position: over;">
                             <f:selectItem itemLabel="Aceptada" itemValue="Aceptada" />
                             <f:selectItem itemLabel="Rechazada" itemValue="Rechazada" />
                             <f:selectItem itemLabel="Pendiente" itemValue="Pendiente" />
                         </p:selectOneMenu>
-                        <p:commandButton value="Buscar" update="tabla:tablaSolicitudesVacaciones" style=" margin-right:20px;margin-top: 1px" action="#{colaboradorBean.buscarPorEstado}" />
+                        <p:commandButton value="Buscar" update="tabla:tablaSolicitudesVacaciones" style="width:auto; height: auto; margin-right:10px; font-size: 16px;" action="#{colaboradorBean.buscarPorEstado}" />
                     </h:panelGrid>
                 </center>
             </h:form>
@@ -70,7 +70,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                 <p:contextMenu>
                     <p:menuitem value="Procesar Solicitud" update="datos" action="#{colaboradorBean.checkSelectionSolicitud}"/>
                     <p:menuitem ajax="false" value="Imprimir">
-                        <p:dataExporter type="pdf" target="tablaSolicitudesVacaciones"  fileName="Reporte Vacaciones" encoding="ISO-8859-1"
+                        <p:dataExporter type="pdf" target="tablaSolicitudesVacaciones"  fileName="Reporte de Solicitud de Vacaciones" encoding="ISO-8859-1"
                                         preProcessor="#{colaboradorBean.preProcessPDF}"  selectionOnly="true"/>
                     </p:menuitem>
                 </p:contextMenu>
@@ -88,7 +88,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                              paginator="true"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                              rowsPerPageTemplate="10,15,20"
-                             scrollable="true" scrollWidth="100%" scrollHeight="150">
+                             scrollable="true" scrollWidth="100%" scrollHeight="200">
                     <p:ajax event="cellEdit" listener="#{colaboradorBean.vacacionesList}" update="tabla:tablaSolicitudesVacaciones" />
 
                     <p:column headerText="Cédula Solicitante" filterBy="#{solicitud.colaborador.pk_idColaborador}">

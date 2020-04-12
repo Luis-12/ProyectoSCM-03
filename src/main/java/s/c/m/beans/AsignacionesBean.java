@@ -132,7 +132,7 @@ public class AsignacionesBean {
         asignacionesDescansos = asignacionDescansosService.buscarDescansosAsignadosPorColaborador(selectAsignacion.getColaborador());
 
         if (asignacionesDescansos.isEmpty()) {//Si no encuentra nada quiere decir que el colaborador no tiene descansos asignados
-            FacesMessage msg = new FacesMessage("Aviso", "El colaborador no tiene descansos asignados");
+            FacesMessage msg = new FacesMessage("Aviso", "El Colaborador NO tiene Descansos Asignados");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } else {//Si encuentra descansos asignados los enlista para imprimirlos en la tabla
             for (int i = 0; i < asignacionesDescansos.size(); i++) {//Se va recorriendo la lista de asignaciones
@@ -262,7 +262,7 @@ public class AsignacionesBean {
             if (asignacionesService.buscarHorario(selectAsignacion.getColaborador()) == null) {//Y no tiene horario asignado
                 current.executeScript("PF('datos').show();"); //Muestra el dialogo con el form para asignarle uno
             } else {//Sino quiere decir que ya tiene horario asignado
-                FacesMessage msg = new FacesMessage("Aviso", "¡Ya tiene un horario asignado!");
+                FacesMessage msg = new FacesMessage("Aviso", "¡Ya tiene un Horario Asignado!");
                 FacesContext.getCurrentInstance().addMessage(null, msg);
             }
         }
@@ -276,7 +276,7 @@ public class AsignacionesBean {
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } else if (asignacionDescansosService.buscarDescansosAsignadosPorColaborador(selectAsignacion.getColaborador()) == null) {
             //Si se selecciono uno se busca si tiene o no descansos asignados
-            FacesMessage msg = new FacesMessage("Aviso", "El colaborador no tiene descansos asignados");
+            FacesMessage msg = new FacesMessage("Aviso", "El colaborador NO tiene Descansos Asignados");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } else {//Si tiene descansos asignados
             listarDescansos();//Se listan los mismo
@@ -291,7 +291,7 @@ public class AsignacionesBean {
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } else if (asignacionesService.buscarHorario(selectAsignacion.getColaborador()) == null) {
             //Si se selecciono un colaborador se busca si tiene horarios asignados
-            FacesMessage msg = new FacesMessage("Aviso", "El colaborador no tiene horario asignado");
+            FacesMessage msg = new FacesMessage("Aviso", "El colaborador NO tiene Horario Asignado");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } else {//Si tiene horario asignado
             buscaHorarioAsignado();//Se lista el mismo
@@ -384,7 +384,7 @@ public class AsignacionesBean {
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } else {//Si se selecciono un colaborador
             if (asignacionesService.buscarHorario(selectAsignacion.getColaborador()) == null) {//Se valida si tiene o no un horario asignado
-                FacesMessage msg = new FacesMessage("Aviso", "El colaborador no tiene horario asignado");
+                FacesMessage msg = new FacesMessage("Aviso", "El colaborador NO tiene Horario Asignado");
                 FacesContext.getCurrentInstance().addMessage(null, msg);
             } else {//Si tiene horario asignado
                 buscaHorarioAsignado();//Se busca el mismo
@@ -439,17 +439,17 @@ public class AsignacionesBean {
                 //Si el combo retorna un texto de dia
                 selectAsignacion.setSegundodiades("N/A");//Se carga segundo dia con N/A
             }if(selectAsignacion.getDiadescanso().equals(selectAsignacion.getSegundodiades())){
-                addMessage("Warning","Los días de desconso no pueden ser los mismos");
+                addMessage("Warning","Los días de Descanso NO pueden ser los Mismos");
             }else {
                 actualizarHorario();
                 //Y por ultimo volver a asignar los descanso por el nuevo horario
                 current.executeScript("PF('datos2').hide();");//Se esconde el form
 
-                FacesMessage msg = new FacesMessage("Aviso", "¡Horario actualizado correctamente!");
+                FacesMessage msg = new FacesMessage("Aviso", "Asignación Actualizada con Éxito.");
                 FacesContext.getCurrentInstance().addMessage(null, msg);
             }
         } catch (Exception e) {
-            System.out.println("No se puedo actualizar el horario");
+            System.out.println("No se puede actualizar el horario");
         }
     }
 
@@ -493,14 +493,14 @@ public class AsignacionesBean {
                 }else
                 {
                     if(asignacion.getDiadescanso().equals(asignacion.getSegundodiades())){
-                       addMessage("Warning","Los días de desconso no pueden ser los mismos");
+                       addMessage("Warning","Los días de Descanso NO pueden ser los Mismos");
                     }else
                     {
                         asignacionesService.createAsignacion(asignacion);//Aca se agrega la nueva asignacion de horario
                         addDescanso();
                         current.executeScript("PF('datos').hide();");//Se esconde el formulario
                         System.out.println("Horario asignado");
-                        FacesMessage msg = new FacesMessage("Aviso", "¡Asignación realizada correctamente!");
+                        FacesMessage msg = new FacesMessage("Aviso", "Asignación Realizada con Éxito.");
                         FacesContext.getCurrentInstance().addMessage(null, msg);
                     }
                 }

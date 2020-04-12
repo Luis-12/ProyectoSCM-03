@@ -83,7 +83,8 @@
 
 
 
-            <p:dataTable  var="colaborador" value="#{colaboradorBean.colaboradores}" rows="10" reflow="true" responsive="true" style="margin-top: 15px" id="tablaColaborador"
+            <p:dataTable  var="colaborador" value="#{colaboradorBean.colaboradores}" rows="10" reflow="true"
+                          responsive="true" style="margin-top: 15px; " id="tablaColaborador"
                          emptyMessage="No se han encontrado colaboradores"
                          widgetVar="colaboradorTabla"
                          resizableColumns="true"
@@ -92,7 +93,7 @@
                          paginator="true"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                          selection="#{colaboradorBean.selectcolaborador}"
-                          scrollable="true" scrollWidth="100%" scrollHeight="150">
+                          scrollable="true" scrollWidth="100%" scrollHeight="200">
 
                 <p:column styleClass="tamTable" headerText="Cédula" filterBy="#{colaborador.pk_idColaborador}">
                     <h:outputText value="#{colaborador.pk_idColaborador}" />
@@ -111,7 +112,7 @@
                 </p:column>
 
 
-                <p:column styleClass="tamTable" headerText="Fecha de Inicio Laboral" filterBy="#{colaborador.fechaInicioLaboral}">
+                <p:column styleClass="tamTable" headerText="Inicio Laboral" filterBy="#{colaborador.fechaInicioLaboral}">
                     <h:outputText value="#{colaborador.fechaInicioLaboral}" >
                         <f:convertDateTime type="date" pattern="yyyy-MM-dd"/>
                     </h:outputText>

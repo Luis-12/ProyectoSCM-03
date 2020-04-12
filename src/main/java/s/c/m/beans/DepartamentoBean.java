@@ -125,7 +125,7 @@ public class DepartamentoBean {
         if (colaboradorService.findColaboradorEncargado(selectDepartamento, puesto) != null) {//Si se encuentra el encargado
             colaborador = colaboradorService.findColaboradorEncargado(selectDepartamento, puesto);//Se llena el objeto para mostrarlo
         } else {//De no ser asi se llena el objeto con datos quemado vacios
-            colaborador.setPk_idColaborador("No hay un encargado asignado");
+            colaborador.setPk_idColaborador("No hay un Encargado Asignado");
             colaborador.setNombre("Vacío");
             colaborador.setTelefono(0);
             colaborador.setCorreo("Vacío");
@@ -144,7 +144,7 @@ public class DepartamentoBean {
             addMessage("Aviso", "Debe Seleccionar un Departamento."); //si esta vacio muetra este mensaje
         } else {//Si se selecciono
             if(colaboradorService.findColaboradorDepartamento(selectDepartamento).size() != 0){
-                addMessage("Aviso", "No puede desactivar un departamento con colaboradores asignados."); //si esta vacio muetra este mensaje
+                addMessage("Aviso", "NO puede Desactivar un Departamento con Colaboradores Asignados."); //si esta vacio muetra este mensaje
             }else{
             current.executeScript("PF('dlED').show();"); //si no esta vacio muestra el dialogo de confirmacion de eliminacion
             }
@@ -160,7 +160,7 @@ public class DepartamentoBean {
     public void delete()//Funcion para desactivar el departamento en la base de datos
     {
         departamentoService.deleteDepartamento(selectDepartamento);
-        addMessage("Aviso", "Departamento desactivado correctamente.");
+        addMessage("Aviso", "Departamento Desactivado con Éxito.");
         departamentos = departamentoService.getAllDepartamentosActivos();//Se carga nuevamente los departementos restantes
         System.out.println("Eliminado");
     }
@@ -182,7 +182,7 @@ public class DepartamentoBean {
             try {
                 System.out.println("No existe el departamento");
                 departamentoService.createDepartamento(departamento);//Se agrega el mismo a la base de datos
-                mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Departamento guardado correctamente.");
+                mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Ingreso de Departamento con Éxito");
                 departamentos = departamentoService.getAllDepartamentosActivos();//Y se vuelven a cargar los departmentos
                 current.executeScript("PF('dlAC').hide();");//Se oculta el form
             } catch (Exception e) {
@@ -202,7 +202,7 @@ public class DepartamentoBean {
         try {
             System.out.println("El departamento actualizado es" + selectDepartamento.getNombre());
             departamentoService.updateDepartamento(selectDepartamento);//Se actualiza el departamento en la base
-            addMessage("Aviso", "Departamento actualizado correctamente");
+            addMessage("Aviso", "Departamento Actualizado con Éxito");
             departamentos = departamentoService.getAllDepartamentosActivos();//Se cargan nuevamente los departamentos
         } catch (Exception e) {
         } finally {
