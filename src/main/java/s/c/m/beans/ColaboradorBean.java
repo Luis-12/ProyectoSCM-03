@@ -527,9 +527,9 @@ public class ColaboradorBean {
         legend.setDisplay(true);
         legend.setPosition("top");
         LegendLabel legendLabels = new LegendLabel();
-        legendLabels.setFontStyle("bold");
-        legendLabels.setFontColor("#2980B9");
-        legendLabels.setFontSize(24);
+        legendLabels.setFontStyle("Bold");
+        legendLabels.setFontColor("#0c0b0b");
+        legendLabels.setFontSize(14);
         legend.setLabels(legendLabels);
         options.setLegend(legend);
 
