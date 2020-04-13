@@ -103,6 +103,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                                  styleClass="ui-priority-primary"
                                                  action="#{colaboradorBean.buscarDatosColaboradorRDetallado}"
                                 />
+
                                 <h:commandLink style="margin-left: 60px">
                                     <h:graphicImage url="imagen/exc.png" width="40"/>
                                     <p:dataExporter type="xls" target="formRCDetallado:tablaReporteDetallado"
@@ -116,6 +117,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                                     preProcessor="#{colaboradorBean.preProcessPDFReporteCD}"
                                                     fileName="Reporte Detallado de Colaborador #{colaboradorBean.colaboradorR.nombre}"/>
                                 </h:commandLink>
+                                <p:commandButton value="Basic" type="button" onclick="PF('graf').show();" />
                             </h:panelGrid>
                         </h:form>
                     </center>
@@ -164,16 +166,17 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                             </p:dataTable>
                         </h:form>
                     </div>
-
-                    <div>
-                        <center>
-                            <p:commandButton type="button" value="Descargar como Imagen" onclick="exportChart()"/>
-                        </center>
-                    <h:panelGrid id="grafico" style="width: 500px; height: 400px; margin-left: 430px" >
-                        <p:autoUpdate/>
-                        <p:barChart  widgetVar="chart" model="#{colaboradorBean.barModel}" style="width: 490px; height: 340px; " rendered="#{colaboradorBean.barModel != null}"/>
-                    </h:panelGrid></div>
-                    <br/><br/>
+                  <p:dialog id="graf" header="Grafico"  showEffect="fade" hideEffect="fade"
+                            widgetVar="graf" resizable="false" minWidth="200">
+                      <div>
+                          <center>
+                              <p:commandButton type="button" value="Descargar como Imagen" onclick="exportChart()"/>
+                          </center>
+                          <h:panelGrid id="grafico" style="width: 500px; height: 400px; margin-left: 430px" >
+                              <p:autoUpdate/>
+                              <p:barChart  widgetVar="chart" model="#{colaboradorBean.barModel}" style="width: 490px; height: 340px; " rendered="#{colaboradorBean.barModel != null}"/>
+                          </h:panelGrid></div>
+                  </p:dialog>
                     <div id="footer">
                         <br/>
                         <h:outputLink value="../acerca.xhtml">©</h:outputLink> <p:outputLabel
