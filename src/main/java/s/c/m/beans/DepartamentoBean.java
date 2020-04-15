@@ -31,6 +31,7 @@ public class DepartamentoBean {
     private Departamento selectDepartamento = new Departamento();
     private Colaborador colaborador = new Colaborador();
     private List<Departamento> departamentos;
+    String idD;
 
     @PostConstruct
     public String init()
@@ -137,13 +138,14 @@ public class DepartamentoBean {
     }
 
 
-    public void showconfirm() {//Funcion para validar si mostrar validacion para eliminar el departamento
+    public void showconfirm() throws Exception {//Funcion para validar si mostrar validacion para eliminar el departamento
         PrimeFaces current = PrimeFaces.current();
+
 
         if (selectDepartamento == null) {//Valida si se selecciono el departamento
             addMessage("Aviso", "Debe Seleccionar un Departamento."); //si esta vacio muetra este mensaje
         } else {//Si se selecciono
-            if(colaboradorService.findColaboradorDepartamento(selectDepartamento).size() != 0){
+            if(colaboradorService.findColaboradorDepartamento(selectDepartamento.getPk_idDepartamento()).size()!= 0){
                 addMessage("Aviso", "NO puede Desactivar un Departamento con Colaboradores Asignados."); //si esta vacio muetra este mensaje
             }else{
             current.executeScript("PF('dlED').show();"); //si no esta vacio muestra el dialogo de confirmacion de eliminacion

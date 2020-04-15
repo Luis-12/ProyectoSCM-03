@@ -60,7 +60,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                 <p:outputLabel value="Desde:" styleClass="required" id="FIRLabel"
                                                indicateRequired="false" for="fecha1"/>
                                 <p:calendar autocomplete="off" required="true"
-                                            value="#{colaboradorBean.fechaInicioR}"
+                                            value="#{reportesBean.fechaInicioR}"
                                             requiredMessage="Ingrese la Fecha inicio"
                                             id="fecha1" pattern="yyyy-MM-dd">
                                     <f:ajax event="dateSelect" execute="@this" render="@this fIRmessage"/>
@@ -72,7 +72,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                 <p:outputLabel value="Hasta: " styleClass="required" id="FFRLabel"
                                                indicateRequired="false" for="fecha2"/>
                                 <p:calendar autocomplete="off" required="true"
-                                            value="#{colaboradorBean.fechaFinalR}"
+                                            value="#{reportesBean.fechaFinalR}"
                                             maxdate="#{colaboradorBean.fecha}"
                                             requiredMessage="Ingrese la Fecha final"
                                             id="fecha2" pattern="yyyy-MM-dd">
@@ -87,7 +87,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                 <p:inputText autocomplete="off" maxlength="20" required="true"
                                              requiredMessage="Ingrese la Cedula" id="cedula"
                                              validatorMessage="La cédula debe tener mínimo 9 caracteres numéricos, y sin guiones"
-                                             value="#{colaboradorBean.cedulaReporte}">
+                                             value="#{reportesBean.cedulaReporte}">
                                     <f:validateRegex pattern="[0-9]{9,20}"/>
                                     <f:ajax event="blur" execute="@this" render="@this Cedmessage"/>
                                     <p:ajax update="cedRLabel"/>
@@ -101,21 +101,21 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                                  style="margin-right:30px;margin-top: 20px;"
                                                  update="formIC:msgsIC, reporteDetalladoC, formRCDetallado:tablaReporteDetallado"
                                                  styleClass="ui-priority-primary"
-                                                 action="#{colaboradorBean.buscarDatosColaboradorRDetallado}"
+                                                 action="#{reportesBean.buscarDatosColaboradorRDetallado}"
                                 />
 
                                 <h:commandLink style="margin-left: 60px">
                                     <h:graphicImage url="imagen/exc.png" width="40"/>
                                     <p:dataExporter type="xls" target="formRCDetallado:tablaReporteDetallado"
-                                                    fileName="Reporte Detallado de Colaborador #{colaboradorBean.colaboradorR.nombre}"/>
+                                                    fileName="Reporte Detallado de Colaborador #{reportesBean.colaboradorR.nombre}"/>
                                 </h:commandLink>
 
                                 <h:commandLink>
                                     <h:graphicImage url="imagen/png.jpg" width="40"/>
                                     <p:dataExporter type="pdf" encoding="ISO-8859-1"
                                                     target="formRCDetallado:tablaReporteDetallado"
-                                                    preProcessor="#{colaboradorBean.preProcessPDFReporteCD}"
-                                                    fileName="Reporte Detallado de Colaborador #{colaboradorBean.colaboradorR.nombre}"/>
+                                                    preProcessor="#{reportesBean.preProcessPDFReporteCD}"
+                                                    fileName="Reporte Detallado de Colaborador #{reportesBean.colaboradorR.nombre}"/>
                                 </h:commandLink>
 
                                 <p:commandLink onclick="PF('graf').show();">
@@ -129,7 +129,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                         <h:form id="formRCDetallado">
                             <p:dataTable var="reporte" reflow="true" responsive="true"
                                          style="margin-top: 25px"
-                                         value="#{colaboradorBean.reporteColaboradorDetalladosList}"
+                                         value="#{reportesBean.reporteColaboradorDetalladosList}"
                                          emptyMessage="No se han encontrado datos"
                                          resizableColumns="true"
                                          id="tablaReporteDetallado"
@@ -176,7 +176,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                           <center>
                           <h:panelGrid id="grafico" style="width: 470px; height: 410px;">
                               <p:autoUpdate/>
-                                  <p:barChart  widgetVar="chart" model="#{colaboradorBean.barModel}" style="width: 490px; height: 420px;" rendered="#{colaboradorBean.barModel != null}"/>
+                                  <p:barChart  widgetVar="chart" model="#{reportesBean.barModel}" style="width: 490px; height: 420px;" rendered="#{reportesBean.barModel != null}"/>
                           </h:panelGrid>
                           </center>
                           <center>

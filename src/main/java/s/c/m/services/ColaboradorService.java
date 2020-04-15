@@ -9,6 +9,7 @@ import s.c.m.entities.Colaborador;
 import s.c.m.entities.Departamento;
 import s.c.m.entities.Puesto;
 import s.c.m.repositories.ColaboradorRepository;
+import s.c.m.repositories.DepartamentoRepository;
 
 import java.sql.DatabaseMetaData;
 import java.text.DateFormat;
@@ -24,6 +25,10 @@ public class ColaboradorService {
     @Autowired
     private ColaboradorRepository colaboradorRepository;//Se instancia la objeto para invocar los metodos del repository de colaborador
     private  Colaborador colaborador;
+
+    @Autowired
+    private DepartamentoRepository departamentoRepository;
+    private Departamento departamento;
 
     public List<Colaborador> getAllColaboradores()//Funcion para listar todos los colaboradores
     {
@@ -207,17 +212,30 @@ public class ColaboradorService {
         return colaboradorRepository.findByDepartamentoAndPuestoAndEstado(idD,idP,"Activo");//Si es asi se retorna el colaborador encargado
     }
 
-    public List<Colaborador> findColaboradorDepartamento(Departamento idD){//Funcion para consultar colaborador por departamento
+
+    public List<Colaborador> findColaboradorDepartamento(String idD) throws Exception{
+        Departamento departamentoId = new Departamento();
+        departamentoId.setPk_idDepartamento(idD);
         List<Colaborador> list = new ArrayList<Colaborador>();
         List<Colaborador> listA = new ArrayList<Colaborador>();
-        colaboradorRepository.findByDepartamento(idD).forEach(e -> list.add(e));//Se invoca la funcion para buscar los colaboradores por departamento
-        for(Colaborador c: list){//Se lista de estos colaboradores encontrados
-            if(c.getEstado().equals("Activo")){//Solo los activos
-                listA.add(c);
+
+        try {
+            departamento = departamentoRepository.findById(idD).get();
+            if(departamento.getEstado().equals("Activo")){
+                departamentoId = departamento;
+                colaboradorRepository.findByDepartamento(departamentoId).forEach(e -> list.add(e));//Se invoca la funcion para buscar los colaboradores por departamento
+                for(Colaborador c: list){//Se lista de estos colaboradores encontrados
+                    if(c.getEstado().equals("Activo")){//Solo los activos
+                        listA.add(c);
+                    }
+                }
+            }else {
+                departamentoId=null;
             }
+        }catch (Exception ex){
+            departamentoId=null;
         }
         return listA;
     }
-
 
 }

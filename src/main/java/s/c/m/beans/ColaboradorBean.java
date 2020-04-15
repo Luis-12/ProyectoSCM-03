@@ -58,7 +58,7 @@ public class ColaboradorBean {
 
     private List<Colaborador> listaGrafico;
     private PieChartModel torta;
-    private BarChartModel barModel=null;
+
 
     private Colaborador colaborador1 = new Colaborador();
     private Colaborador colaboradorlogueado = new Colaborador();
@@ -94,38 +94,21 @@ public class ColaboradorBean {
     public String mensaje;
     public String estado;
 
-    //PARAMETROS PARA HACER REPORTE DETALLADO CONFORME A COLABORADOR ESPECIFICO
-    private Date fechaInicioR;
-    private Date fechaFinalR;
-    private String cedulaReporte;
-    private Colaborador colaboradorR;
-    List<MarcaLaboradas> marcaLaboradasPorCYR;
-    List<MarcaDescansos> marcaDescansosPorCYR;
-    List<MarcaLaboradas> marcaLaboradasTardias;
-    private List<ReporteColaboradorDetallado> reporteColaboradorDetalladosList = new ArrayList<>();
-    private Asignaciones asignacionesDelColaReporte;
 
-
+    @Autowired
+    AsignacionDescansosService asignacionDescansosService;
+    @Autowired
+    DepartamentoService departamentoService;
+    private Date fecha;
+    @Autowired
+    VacacionesService vacacionesService;
     @Autowired
     AsignacionesServices asignacionesServices;
 
     @Autowired
     MarcaDescansoService marcaDescansoService;
-
-    @Autowired
-    AsignacionDescansosService asignacionDescansosService;
-
-    @Autowired
-    DepartamentoService departamentoService;
-    private Date fecha;
     @Autowired
     MarcaLaboradaService marcaLaboradaService;
-
-    @Autowired
-    VacacionesService vacacionesService;
-
-    @Autowired
-    VacacionesPorColaboradorService vacacionesPorColaboradorService;
 
     private MarcaLaboradas marcaLaboradas = new MarcaLaboradas();
     public boolean botonEntrada = true;
@@ -135,7 +118,8 @@ public class ColaboradorBean {
 
     Vacaciones solicitudVac = new Vacaciones();
     Vacaciones seleccion;
-
+    @Autowired
+    VacacionesPorColaboradorService vacacionesPorColaboradorService;
 
     @PostConstruct
     public void init() {
@@ -143,25 +127,7 @@ public class ColaboradorBean {
     }
 
     /*--Set y Get--*/
-    public Colaborador getColaboradorR() {
-        return colaboradorR;
-    }
 
-    public void setColaboradorR(Colaborador colaboradorR) {
-        this.colaboradorR = colaboradorR;
-    }
-
-    public BarChartModel getBarModel() {
-        return barModel;
-    }
-
-    public void setBarModel(BarChartModel barModel) {
-        this.barModel = barModel;
-    }
-
-    public List<ReporteColaboradorDetallado> getReporteColaboradorDetalladosList() {
-        return reporteColaboradorDetalladosList;
-    }
 
     public PieChartModel getTorta() {
         return torta;
@@ -178,35 +144,6 @@ public class ColaboradorBean {
     public void setListaGrafico(List<Colaborador> listaGrafico) {
         this.listaGrafico = listaGrafico;
     }
-
-    public void setReporteColaboradorDetalladosList(List<ReporteColaboradorDetallado> reporteColaboradorDetalladosList) {
-        this.reporteColaboradorDetalladosList = reporteColaboradorDetalladosList;
-    }
-
-    public Date getFechaInicioR() {
-        return fechaInicioR;
-    }
-
-    public void setFechaInicioR(Date fechaInicioR) {
-        this.fechaInicioR = fechaInicioR;
-    }
-
-    public Date getFechaFinalR() {
-        return fechaFinalR;
-    }
-
-    public void setFechaFinalR(Date fechaFinalR) {
-        this.fechaFinalR = fechaFinalR;
-    }
-
-    public String getCedulaReporte() {
-        return cedulaReporte;
-    }
-
-    public void setCedulaReporte(String cedulaReporte) {
-        this.cedulaReporte = cedulaReporte;
-    }
-
     public String getEstado() {
         return estado;
     }
@@ -467,77 +404,6 @@ public class ColaboradorBean {
     }
 
     //-----------------------Finaliza método del grafico-----------------------
-
-
-    //-----------------------Inican métodos del grafico colaborador detallado--------------------------
-    public void GraphicColaboradorDetallado(){
-
-
-        ReporteColaboradorDetallado reporte=reporteColaboradorDetalladosList.get(0);
-
-        barModel = new BarChartModel();
-        ChartData data = new ChartData();
-
-        BarChartDataSet barDataSet = new BarChartDataSet();
-        barDataSet.setLabel("Colaborador Detallado");
-
-        List<Number> values = new ArrayList<>();
-        values.add(reporte.getCantHorasLaboradas());
-        values.add(reporte.getCantLlegadasTardias());
-        values.add(reporte.getDiasDispoVacaciones());
-        barDataSet.setData(values);
-
-        List<String> bgColor = new ArrayList<>();
-        bgColor.add("rgba(255, 99, 132, 0.2)");
-        bgColor.add("rgba(54, 162, 235, 0.2)");
-        bgColor.add("rgba(255, 205, 86, 0.2)");
-
-        barDataSet.setBackgroundColor(bgColor);
-
-        List<String> borderColor = new ArrayList<>();
-        borderColor.add("rgb(255, 99, 132)");
-        borderColor.add("rgb(54, 162, 235)");
-        borderColor.add("rgb(255, 205, 86)");
-        barDataSet.setBorderColor(borderColor);
-        barDataSet.setBorderWidth(1);
-
-        data.addChartDataSet(barDataSet);
-
-        List<String> labels = new ArrayList<>();
-        labels.add("Horas Laboradas");
-        labels.add("Llegadas Tardías");
-        labels.add("Vacaciones Disponibles");
-        data.setLabels(labels);
-
-        //Data
-        barModel.setData(data);
-
-        //Options
-        BarChartOptions options = new BarChartOptions();
-        CartesianScales cScales = new CartesianScales();
-        CartesianLinearAxes linearAxes = new CartesianLinearAxes();
-        CartesianLinearTicks ticks = new CartesianLinearTicks();
-        ticks.setBeginAtZero(true);
-        linearAxes.setTicks(ticks);
-        cScales.addYAxesData(linearAxes);
-        options.setScales(cScales);
-
-
-        Legend legend = new Legend();
-        legend.setDisplay(true);
-        legend.setPosition("top");
-        LegendLabel legendLabels = new LegendLabel();
-        legendLabels.setFontStyle("Bold");
-        legendLabels.setFontColor("#0c0b0b");
-        legendLabels.setFontSize(14);
-        legend.setLabels(legendLabels);
-        options.setLegend(legend);
-
-        barModel.setOptions(options);
-
-    }
-
-//-----------------------Finaliza métodos del grafico colaborador detallado--------------------------
 
     //-----------------------Inica método del menú--------------------------
 
@@ -866,7 +732,6 @@ public class ColaboradorBean {
             current.executeScript("PF('dlUC').show();"); //si no esta vacio muestra el dialogo para actualizar colaborador
         }
     }
-
     public void showconfirm() {//Funcion para mostrar confirmacion de desactivar el colaborador
         PrimeFaces current = PrimeFaces.current();
 
@@ -1890,236 +1755,6 @@ public class ColaboradorBean {
     }
 
 //---------------------------Fin  métodos de Vacaciones ----------------------------------------------
-//---------------------------Inicio  métodos de Reportes ----------------------------------------------
-
-    //reporte colaborador detallado
-    public void buscarDatosColaboradorRDetallado() throws Exception {//Funcion para generar y consultar datos de colaborador detallado
-
-        marcaLaboradasPorCYR = new ArrayList<>();
-        marcaDescansosPorCYR = new ArrayList<>();
-        marcaLaboradasTardias = new ArrayList<>();
-        reporteColaboradorDetalladosList = new ArrayList<>();
-        List<MarcaDescansos> mdAux = new ArrayList<>();
-        ReporteColaboradorDetallado miRC = new ReporteColaboradorDetallado();
-        asignacionesDelColaReporte = new Asignaciones();
-        double totalHorasLaboradas = 0;
-        double totalHorasDescansadas = 0;
-        double horasFinal = 0;
-        double diasDisponibles = 0.0;
-
-        Format formateador = new SimpleDateFormat("yyyyMMdd");
-        String fechaI = formateador.format(fechaInicioR);
-        String fechaF = formateador.format(fechaFinalR);
-        int fInicio = Integer.parseInt(fechaI);
-        int fFinal = Integer.parseInt(fechaF);
-        colaboradorR = colaboradorService.findColaboradorYEstado(cedulaReporte);
-
-        if (colaboradorR != null) {//Quiere decir que se encontro el colaborador
-            if (fInicio >= fFinal) {
-                addMessage("Aviso", "La Fecha Final debe ser mayor a la Fecha Inicial");
-            } else {
-                marcaLaboradasPorCYR = marcaLaboradaService.findMarcasLaboradasPorRango(fechaInicioR, fechaFinalR, colaboradorR);
-                if (marcaLaboradasPorCYR.size() != 0) {//Si se encontro alguna marca se hace el reporte
-                    //Aca empiezan los calculos y la magia
-                    diasDisponibles = diasDisponibles(colaboradorR);
-                    for (MarcaLaboradas ml : marcaLaboradasPorCYR) {//Por cada marca laborada
-                        mdAux = marcaDescansoService.buscarMarcaPorMarcaLab(ml);//Busca descansos
-                        for (MarcaDescansos md : mdAux) {//For para validar descansos terminados
-                            if (md.getHoraFin() != null) {//If para llenar decansos por C y R finalizados
-                                marcaDescansosPorCYR.add(md);
-                                totalHorasDescansadas = totalHorasDescansadas +
-                                        calculaHorasEntreDosTiempos(md.getHoraInicio(), md.getHoraFin());
-                            }
-                        }
-                        totalHorasLaboradas = totalHorasLaboradas +
-                                calculaHorasEntreDosTiempos(ml.getHoraEntrada(), ml.getHoraSalida());
-                        if (ml.getDescripcion() != null) {//Si es diferente de null quiere decir que justifico por lo tanto llego tarde
-                            marcaLaboradasTardias.add(ml);
-                        }
-                    }
-                    //System.out.println("CANTIDAD DE DESCANSO ENCONTRADOS:" + marcaDescansosPorCYR.size());
-                    System.out.println("CANTIDAD DE TARDIAS:" + marcaLaboradasTardias.size());
-                    System.out.println("Dias Disponibles:" + diasDisponibles);
-
-                    horasFinal = totalHorasLaboradas - totalHorasDescansadas;
-                    //Se carga el objeto del reporte para agregarlo a la lista
-                    //Se debe buscar tambien la asignacion del horario
-                    asignacionesDelColaReporte = asignacionesServices.buscarHorario(colaboradorR);
-                    miRC.setCedula(colaboradorR.getPk_idColaborador());
-                    miRC.setNombre(colaboradorR.getNombre());
-                    miRC.setTipoJornada(asignacionesDelColaReporte.getHorario().getJornada().getDescripcion());
-                    miRC.setHorario(" " + asignacionesDelColaReporte.getHorario().getHoraentrada() + " " +
-                            asignacionesDelColaReporte.getHorario().getHorasalida() + " ");
-                    miRC.setCantHorasLaboradas(horasFinal);
-                    miRC.setCantLlegadasTardias(marcaLaboradasTardias.size());
-                    miRC.setDiasDispoVacaciones(diasDisponibles);
-
-                    reporteColaboradorDetalladosList.add(miRC);//Se llena la lista de la tabla
-                    GraphicColaboradorDetallado();
-                    addMessage("Aviso", "Horas Laboradas: " + totalHorasLaboradas +
-                            " Horas Descansadas: " + totalHorasDescansadas + " Total H fin: " + horasFinal);
-                } else {
-                    addMessage("Aviso", "NO se encontraron Marcas Laboradas con ese Rango");
-                }
-            }
-        } else {
-            addMessage("Aviso", "NO se encontró el Colaborador con la cédula: " + cedulaReporte);
-        }
-
-    }
-
-    public double calculaHorasEntreDosTiempos(Time tInicio, Time tFinal) {
-        double horasTotales = 0.0;
-        long iniM = tInicio.getTime();
-        long finM = tFinal.getTime();
-
-        if (finM < iniM) {//Si la fecha de marca fin es menor a la fecha de marca inicio quiere decir que marco el otro dia
-            finM = finM + 86400000;//Por lo tanto se le suman los milisegundos de un dia
-            horasTotales = (double) ((Math.abs(finM - iniM)) / (1000 * 60 * 60));//Se hace le calculo normal
-            System.out.println("Horas Calculadas Para dos dias: " + horasTotales);
-        } else {//Si no es menor la fecha fin que la ini
-            horasTotales = (double) ((Math.abs(finM - iniM)) / (1000 * 60 * 60));//Se hace le calculo normal
-            System.out.println("Horas Calculadas: " + horasTotales);
-        }
-        return horasTotales;
-    }
-
-    public void preProcessPDFReporteCD(Object document) throws IOException, BadElementException, DocumentException {
-        Format formateador = new SimpleDateFormat("yyyy-MM-dd");
-        String fechaI = formateador.format(fechaInicioR);
-        String fechaF = formateador.format(fechaFinalR);
-        List<MarcaDescansos> auxMD = new ArrayList<>();
-        Color azul = new Color(31, 97, 141);
-        Color azulC = new Color(46, 134, 193);
-
-        Document pdf = (Document) document;
-        pdf.addTitle("Reporte Detallado por Colaborador " + colaboradorR.getNombre()
-                + "\n" + colaboradorR.getPk_idColaborador());
-        pdf.open();
-        pdf.setPageSize(PageSize.A4);
-
-        //Preparo fuentes
-        BaseFont bfTitulos = BaseFont.createFont(BaseFont.HELVETICA_BOLDOBLIQUE,BaseFont.WINANSI,BaseFont.EMBEDDED);
-        Font fuenteTitulos = new Font(bfTitulos);
-        Font informacion = new Font(bfTitulos);
-        fuenteTitulos.setSize(14);
-        fuenteTitulos.setColor(azul);
-        informacion.setColor(Color.BLACK);
-        informacion.setSize(14);
-
-
-        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-        String logo = externalContext.getRealPath("") + File.separator + "css" + File.separator + "imagen" + File.separator + "logo1.jpg";
-
-        pdf.add(Image.getInstance(logo));
-
-        Paragraph pTC = new Paragraph("Reporte Detallado del Colaborador: ", fuenteTitulos);
-        Paragraph pTC1 = new Paragraph( colaboradorR.getNombre() + "  " + colaboradorR.getPk_idColaborador(),informacion);
-        pTC.setAlignment("left");
-        pTC.setSpacingBefore(30);
-        pTC.setSpacingBefore(20);
-        pTC1.setAlignment("center");
-        pdf.add(pTC);
-        pdf.add(pTC1);
-
-        Paragraph pT = new Paragraph("Datos de Marcas Realizadas en el Rango de: " , fuenteTitulos);
-        Paragraph pt1 = new Paragraph(fechaI + " a " + fechaF,informacion);
-        pT.setAlignment("left");
-        pTC.setSpacingBefore(15);
-        pt1.setAlignment("center");
-        pdf.add(pT);
-        pdf.add(pt1);
-
-        Paragraph titulo = new Paragraph("Información del Horario" , fuenteTitulos);
-        titulo.setAlignment("left");
-        titulo.setSpacingBefore(10);
-        pdf.add(titulo);
-
-        BaseFont bfMarca = BaseFont.createFont(BaseFont.TIMES_ROMAN,BaseFont.WINANSI,BaseFont.EMBEDDED);
-        Font marcaft = new Font(bfMarca);
-        marcaft.setSize(14);
-        marcaft.setColor(Color.BLACK);
-
-        BaseFont bfDes = BaseFont.createFont(BaseFont.TIMES_BOLDITALIC,BaseFont.WINANSI,BaseFont.EMBEDDED);
-        Font subt = new Font(bfDes);
-        subt.setSize(14);
-        subt.setColor(azulC);
-
-        BaseFont bfNot = BaseFont.createFont(BaseFont.TIMES_ROMAN,BaseFont.WINANSI,BaseFont.EMBEDDED);
-        Font not = new Font(bfDes);
-        not.setSize(14);
-        not.setColor(Color.red);
-
-        Paragraph par = new Paragraph("Jornada: " + asignacionesDelColaReporte.getHorario().getJornada().getDescripcion()
-                +"\n"+ " Horario: " + asignacionesDelColaReporte.getHorario().getHoraentrada() + " " +
-                asignacionesDelColaReporte.getHorario().getHorasalida(),marcaft);
-        par.setAlignment("left");
-        pdf.add(par);
-
-        Paragraph tk = new Paragraph("Información de las Marcas" , fuenteTitulos);
-        tk.setAlignment("left");
-        tk.setSpacingBefore(8);
-        pdf.add(tk);
-
-        for (MarcaLaboradas ml : marcaLaboradasPorCYR) {//Se hace el proceso de carga en el pdf para cada marca laborada
-            Paragraph parML = new Paragraph( "Fecha de la Marca: "+ formateador.format(ml.getFechaMarca()) +"\n Hora de Entrada " + ml.getHoraEntrada()
-                    + "\n Hora de Salida: " + ml.getHoraSalida()
-                    + "\n Horas Realizadas en Jornada Aprox: " + calculaHorasEntreDosTiempos(ml.getHoraEntrada(),ml.getHoraSalida()), marcaft);
-            parML.setAlignment("left");
-            parML.setSpacingBefore(1);
-            pdf.add(parML);
-
-            for (MarcaDescansos md : marcaDescansosPorCYR) {//Se buscan las marca descanso de la marca laborada en cuestion
-                if(md.getMarcaLaboradas().getPk_idMarcasLaboradas() == ml.getPk_idMarcasLaboradas()){
-                    auxMD.add(md);//LLeno con los descanso de la marca
-                }
-            }
-            if(auxMD.size() > 0){
-                Paragraph parTI = new Paragraph("Descansos Realizados en la Jornada: ",subt);
-                parTI.setAlignment("left");
-                parTI.setSpacingAfter(5);
-                pdf.add(parTI);
-            }else{
-                Paragraph parND = new Paragraph("    No Registró Descansos",not);
-                parND.setAlignment("left");
-                parND.setSpacingAfter(5);
-                pdf.add(parND);
-            }
-            for(MarcaDescansos mdDmL : auxMD){//Luego de haber llenado la lista con los descansos de la marca
-                //Se ingresan al pdf
-                Paragraph parMD = new Paragraph("   Descripción: " + mdDmL.getDescansos().getDescripcion() + "\n"
-                        + "    Hora de Inicio: " + mdDmL.getHoraInicio() + "\n"
-                        + "    Hora de Finalización: " + mdDmL.getHoraFin() + "\n"
-                        + "    Horas Disfrutadas en el Descanso Aprox: " + calculaHorasEntreDosTiempos(mdDmL.getHoraInicio(),mdDmL.getHoraFin()), marcaft);
-                parMD.setAlignment("left");
-                parMD.setSpacingAfter(5);
-                pdf.add(parMD);
-            }
-            //Se limpia la lista de descansos para que no jale los de la marca laborada anterior
-            auxMD.clear();
-        }
-
-        Paragraph p = new Paragraph("Marcas de Llegadas Tardías",subt);
-        p.setAlignment("left");
-        pdf.add(p);
-        //System.out.println("CANTIDAD DE LLEGADAS TARDIAS PDF: " + marcaLaboradasTardias);
-        for (MarcaLaboradas mt : marcaLaboradasTardias) {
-            Paragraph p3 = new Paragraph("Fecha de Marca Tardía: "+ formateador.format(mt.getFechaMarca())+"\n"
-                    + "Justificación: "+ mt.getDescripcion(), marcaft);
-            p3.setAlignment("left");
-            p3.setSpacingAfter(5);
-            pdf.add(p3);
-        }
-
-        Paragraph pR = new Paragraph("Resumen de la Tabla",fuenteTitulos);
-        pR.setAlignment("center");
-        pR.setSpacingAfter(50);
-        pR.setSpacingAfter(10);
-        pdf.add(pR);
-    }
-  //----------------------------------
-    // reporte......
-
 
  //------------------Metodos extras necesarios--------------------------
  public void find() throws Exception {

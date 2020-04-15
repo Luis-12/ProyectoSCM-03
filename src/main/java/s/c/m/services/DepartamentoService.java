@@ -14,8 +14,10 @@ public class DepartamentoService {
     //Es esta clase se implementan las funciones desclaradas en los repositorios para acceder
     // y hacer transacciones en la tabla Departamento
 
+
     @Autowired
     private DepartamentoRepository departamentoRepository;
+    private Departamento departamento;
     public List<Departamento> getAllDepartamentos()//Funcion para listar todos los departamentos
     {
         List<Departamento> list = new ArrayList<Departamento>();
@@ -60,5 +62,6 @@ public class DepartamentoService {
         departamento.setEstado("Activo");//Se le asigna es estado activo
         departamentoRepository.save(departamento);//Se ingresan los nuevos datos a la base
     }
+
 
 }
