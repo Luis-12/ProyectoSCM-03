@@ -79,4 +79,11 @@ public class MarcaLaboradaService {
         System.out.println("CANTIDAD DE MARCAS ENCONTRADAS DEL COLABORADOR: " + marcasEAux.size());
         return marcasEAux;
     }
-}
+
+    public List<MarcaLaboradas> findLlegadasTardias(Date fechaInicioR, Date fechaFinalR) {
+
+       return marcasLaboradasRepository.findByFechaMarcaBetween(fechaInicioR,fechaFinalR);
+    }
+
+
+    }

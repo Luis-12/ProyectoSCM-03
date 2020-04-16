@@ -3,6 +3,10 @@ package s.c.m.beans;
 import com.lowagie.text.*;
 import com.lowagie.text.Font;
 import com.lowagie.text.pdf.BaseFont;
+import org.primefaces.model.chart.Axis;
+import org.primefaces.model.chart.AxisType;
+import org.primefaces.model.chart.ChartSeries;
+import org.primefaces.model.chart.HorizontalBarChartModel;
 import org.primefaces.model.charts.ChartData;
 import org.primefaces.model.charts.axes.cartesian.CartesianScales;
 import org.primefaces.model.charts.axes.cartesian.linear.CartesianLinearAxes;
@@ -12,6 +16,7 @@ import org.primefaces.model.charts.bar.BarChartModel;
 import org.primefaces.model.charts.bar.BarChartOptions;
 import org.primefaces.model.charts.optionconfig.legend.Legend;
 import org.primefaces.model.charts.optionconfig.legend.LegendLabel;
+import org.primefaces.model.charts.optionconfig.title.Title;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import s.c.m.entities.*;
@@ -28,10 +33,9 @@ import java.sql.Time;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.Calendar.YEAR;
 
@@ -54,9 +58,11 @@ public class ReporteBean {
     List<MarcaLaboradas> marcaLaboradasPorCYR;
     List<MarcaDescansos> marcaDescansosPorCYR;
     List<MarcaLaboradas> marcaLaboradasTardias;
+    List<ReporteLlegadasTardias> llegadasTardias;
     private List<ReporteColaboradorDetallado> reporteColaboradorDetalladosList = new ArrayList<>();
     private Asignaciones asignacionesDelColaReporte;
     private BarChartModel barModel=null;
+    private HorizontalBarChartModel model=null;
 
     @Autowired
     VacacionesPorColaboradorService vacacionesPorColaboradorService;
@@ -74,6 +80,22 @@ public class ReporteBean {
     }
     public BarChartModel getBarModel() {
         return barModel;
+    }
+
+    public HorizontalBarChartModel getModel() {
+        return model;
+    }
+
+    public void setModel(HorizontalBarChartModel model) {
+        this.model = model;
+    }
+
+    public List<ReporteLlegadasTardias> getLlegadasTardias() {
+        return llegadasTardias;
+    }
+
+    public void setLlegadasTardias(List<ReporteLlegadasTardias> llegadasTardias) {
+        this.llegadasTardias = llegadasTardias;
     }
 
     public void setBarModel(BarChartModel barModel) {
@@ -229,7 +251,55 @@ public class ReporteBean {
         return anios;
     }
 
-    //reporte colaborador detallado
+    //reporte llegadas tardias
+    public void buscarDatosLlegadasTardias() throws Exception {//Funcion para generar y consultar datos de colaborador detallado
+        Format formateador = new SimpleDateFormat("yyyyMMdd");
+        String fechaI = formateador.format(fechaInicioR);
+        String fechaF = formateador.format(fechaFinalR);
+        int fInicio = Integer.parseInt(fechaI);
+        int fFinal = Integer.parseInt(fechaF);
+
+        colaboradorR=new Colaborador();
+        llegadasTardias = new ArrayList<>();
+        marcaLaboradasPorCYR=new ArrayList<>();
+
+
+            if (fInicio >= fFinal) {
+                addMessage("Aviso", "La Fecha Final debe ser mayor a la Fecha Inicial");
+            } else {
+                marcaLaboradasPorCYR = marcaLaboradaService.findLlegadasTardias(fechaInicioR, fechaFinalR);
+                if (marcaLaboradasPorCYR.size() != 0) {//Si se encontro alguna marca tardia se hace el reporte
+                    for (MarcaLaboradas ml : marcaLaboradasPorCYR) {//Por cada marca laborada
+
+                        if (ml.getDescripcion() != null) {//Si es diferente de null quiere decir que justifico por lo tanto llego tarde
+                            ReporteLlegadasTardias miRT = new ReporteLlegadasTardias();
+                            Calendar c = Calendar.getInstance();
+                            c.setTime(ml.getFechaMarca());
+                            c.set(Calendar.HOUR_OF_DAY, ml.getHoraEntrada().getHours());
+                            c.set(Calendar.MINUTE, ml.getHoraEntrada().getMinutes());
+                            c.set(Calendar.SECOND, ml.getHoraEntrada().getSeconds());
+                            colaboradorR = colaboradorService.findColaboradorYEstado(ml.getColaborador().getPk_idColaborador());
+                            miRT.setCedula(colaboradorR.getPk_idColaborador());
+                            miRT.setNombre(colaboradorR.getNombre());
+                            SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                            String fecha = DATE_FORMAT.format(c.getTime());
+                            miRT.setFecha(fecha);
+                            miRT.setJustificacion(ml.getDescripcion());
+                            llegadasTardias.add(miRT);
+                        }
+                    }
+                   // GraphicColaboradorDetallado();
+                    GraphicLlegadasTardias();
+
+                } else {
+                    addMessage("Aviso", "NO se encontraron Marcas Laboradas con ese Rango");
+                }
+            }
+    }
+
+
+
+        //reporte colaborador detallado
     public void buscarDatosColaboradorRDetallado() throws Exception {//Funcion para generar y consultar datos de colaborador detallado
 
         marcaLaboradasPorCYR = new ArrayList<>();
@@ -454,6 +524,69 @@ public class ReporteBean {
         pR.setSpacingAfter(10);
         pdf.add(pR);
     }
+
+
+    public void preProcessPDFReporteTardias(Object document) throws IOException, BadElementException, DocumentException {
+        Format formateador = new SimpleDateFormat("yyyy-MM-dd");
+        String fechaI = formateador.format(fechaInicioR);
+        String fechaF = formateador.format(fechaFinalR);
+        List<MarcaDescansos> auxMD = new ArrayList<>();
+        Color azul = new Color(31, 97, 141);
+        Color azulC = new Color(46, 134, 193);
+
+        Document pdf = (Document) document;
+        pdf.addTitle("Reporte llegadas tardias");
+        pdf.open();
+        pdf.setPageSize(PageSize.A4);
+
+        //Preparo fuentes
+        BaseFont bfTitulos = BaseFont.createFont(BaseFont.HELVETICA_BOLDOBLIQUE,BaseFont.WINANSI,BaseFont.EMBEDDED);
+        com.lowagie.text.Font fuenteTitulos = new com.lowagie.text.Font(bfTitulos);
+        com.lowagie.text.Font informacion = new com.lowagie.text.Font(bfTitulos);
+        fuenteTitulos.setSize(14);
+        fuenteTitulos.setColor(azul);
+        informacion.setColor(Color.BLACK);
+        informacion.setSize(14);
+
+
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        String logo = externalContext.getRealPath("") + File.separator + "css" + File.separator + "imagen" + File.separator + "logo1.jpg";
+
+        pdf.add(com.lowagie.text.Image.getInstance(logo));
+
+        Paragraph pTC = new Paragraph("Reporte llegadas tardías ", fuenteTitulos);
+        pTC.setAlignment("center");
+        pTC.setSpacingBefore(30);
+        pTC.setSpacingAfter(20);
+        pdf.add(pTC);
+
+        Paragraph pT = new Paragraph("Datos de llegadas tardías en el Rango de: " , fuenteTitulos);
+        Paragraph pt1 = new Paragraph(fechaI + " a " + fechaF,informacion);
+        pT.setAlignment("center");
+        pTC.setSpacingBefore(15);
+        pt1.setAlignment("center");
+        pt1.setSpacingAfter(20);
+
+        pdf.add(pT);
+        pdf.add(pt1);
+
+
+        BaseFont bfMarca = BaseFont.createFont(BaseFont.TIMES_ROMAN,BaseFont.WINANSI,BaseFont.EMBEDDED);
+        com.lowagie.text.Font marcaft = new com.lowagie.text.Font(bfMarca);
+        marcaft.setSize(14);
+        marcaft.setColor(Color.BLACK);
+
+        BaseFont bfDes = BaseFont.createFont(BaseFont.TIMES_BOLDITALIC,BaseFont.WINANSI,BaseFont.EMBEDDED);
+        com.lowagie.text.Font subt = new com.lowagie.text.Font(bfDes);
+        subt.setSize(14);
+        subt.setColor(azulC);
+
+        BaseFont bfNot = BaseFont.createFont(BaseFont.TIMES_ROMAN,BaseFont.WINANSI,BaseFont.EMBEDDED);
+        com.lowagie.text.Font not = new Font(bfDes);
+        not.setSize(14);
+        not.setColor(Color.red);
+    }
+
     public void GraphicColaboradorDetallado(){ //métodos del grafico colaborador detallado
 
 
@@ -521,6 +654,29 @@ public class ReporteBean {
 
     }
 
+    public void GraphicLlegadasTardias(){ //métodos del grafico colaborador detallado
+        model = new HorizontalBarChartModel();
+        ChartSeries tardias = new ChartSeries();
+        tardias.setLabel("Tardias");
+
+        for(ReporteLlegadasTardias ml : llegadasTardias){
+            tardias.set(ml.getCedula(),ausencias(ml.getCedula()));
+        }
+        model.addSeries(tardias);
+        model.setTitle("Llegadas Tardias");
+        Axis xAxis = model.getAxis(AxisType.X);
+        xAxis.setLabel("Tardias");
+        Axis yAxis = model.getAxis(AxisType.Y);
+        yAxis.setLabel("Cedula");
+    }
+
+    int ausencias(String id){
+        List<ReporteLlegadasTardias> result = llegadasTardias.stream()
+                .filter(item -> item.getCedula().equals(id))
+                .collect(Collectors.toList());
+        return result.size();
+    }
+
 
     public void buscarDatosColaboradorDetalladoPorDepartamento() throws Exception {//Funcion para generar y consultar datos de colaborador detallado
         marcaLaboradasPorCYR = new ArrayList<>();
@@ -529,7 +685,8 @@ public class ReporteBean {
         reporteColaboradorDetalladosList = new ArrayList<>();
         List<MarcaDescansos> mdAux = new ArrayList<>();
         ReporteColaboradorDetallado miRC = new ReporteColaboradorDetallado();
-        asignacionesDelColaReporte = new Asignaciones();
+
+            asignacionesDelColaReporte = new Asignaciones();
         double totalHorasLaboradas = 0;
         double totalHorasDescansadas = 0;
         double horasFinal = 0;
