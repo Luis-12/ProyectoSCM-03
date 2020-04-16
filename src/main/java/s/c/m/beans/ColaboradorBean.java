@@ -1741,21 +1741,28 @@ public class ColaboradorBean {
                 int diasDispo = vacacionesPorColaborador.getDiasdisponibles();
 
                 if (diasSol <= diasDispo) {//Si los dias solicitados son menores a los disponibles puede realizar la solicitud
-                    solicitudVac.setColaborador(colaboradorSolicitante);
-                    solicitudVac.setEstado("Pendiente");
-                    solicitudVac.setDiasSolicitados(diasSol);
-                    solicitudVac.setJustificacion("Justifique la Decisión");
-                    System.out.println("Colaborador Solicitante desde VB: " + colaboradorSolicitante.getPk_idColaborador());
-                    System.out.println("NOMBRE: " + colaboradorSolicitante.getNombre());
-                    System.out.println("Fecha inicio: " + solicitudVac.getFechainicio());
-                    System.out.println("Fecha final: " + solicitudVac.getFechafinal());
-                    System.out.println("Dias Disponibles: " + diasDispo);
-                    //Aca despues de cargar los datos en el objeto
-                    vacacionesService.createVacaciones(solicitudVac);//Se llama la funcion para agregar la solicitud a la base
-                    addMessage("Aviso", "Solicitud Realizada con Éxito.");
-                    solicitudVac = new Vacaciones();
-                    vacacionesList = vacacionesService.getAllSolVacaciones(colaboradorlogueado);
-                    //Se refresca la tabla
+
+                   if(vacacionesService.buscarPendientes("Pendiente",colaboradorSolicitante)!=null)
+                   {
+                       addMessage("Aviso", "¡Tiene una solicitud pendiente. Espere a que se procese!");
+                   }
+                   else {
+                       solicitudVac.setColaborador(colaboradorSolicitante);
+                       solicitudVac.setEstado("Pendiente");
+                       solicitudVac.setDiasSolicitados(diasSol);
+                       solicitudVac.setJustificacion("Justifique la Decisión");
+                       System.out.println("Colaborador Solicitante desde VB: " + colaboradorSolicitante.getPk_idColaborador());
+                       System.out.println("NOMBRE: " + colaboradorSolicitante.getNombre());
+                       System.out.println("Fecha inicio: " + solicitudVac.getFechainicio());
+                       System.out.println("Fecha final: " + solicitudVac.getFechafinal());
+                       System.out.println("Dias Disponibles: " + diasDispo);
+                       //Aca despues de cargar los datos en el objeto
+                       vacacionesService.createVacaciones(solicitudVac);//Se llama la funcion para agregar la solicitud a la base
+                       addMessage("Aviso", "Solicitud Realizada con Éxito.");
+                       solicitudVac = new Vacaciones();
+                       vacacionesList = vacacionesService.getAllSolVacaciones(colaboradorlogueado);
+                       //Se refresca la tabla
+                   }
                 } else {
                     addMessage("Aviso", "¡NO puede solicitar más días de los que Dispone!");
                 }
