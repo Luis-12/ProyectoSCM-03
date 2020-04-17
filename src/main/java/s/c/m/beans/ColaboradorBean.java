@@ -1575,14 +1575,16 @@ public class ColaboradorBean {
         VacacionesPorColaborador disponibles = new VacacionesPorColaborador();
         disponibles = vacacionesPorColaboradorService.findVacacionesPorColaborador(colaborador);//Se consulta los dia disponibles
         int anios = calculaAnios(colaborador);//Se consulta los years que este laborando el cola en la empresa
-        //int meses = 0;
         int diasDisf = disponibles.getDiasdisfrutados();
         double diasLibresTotales = 0.0;
 
-        if (anios != 0) {//Si ha trabajado un anio ya se le pueden contar los dias libres
-            for (int i = 1; i <= anios; i++) {
-                //if (i == 1 || i == 2) {
-                if (i == 2) {
+        if(anios == 0){//Si solo ha trabajado meses
+            diasLibresTotales = calculaMesesMinimos(colaborador) - diasDisf;//Los meses que tenga laborados cuentan como dias libres
+        }
+        else if(anios > 0) {//Si ha trabajado mas de un year
+            for (int i = 1; i <= anios; i++) {//El for inicia desde el year 1
+                if (i == 1 || i == 2) {//If que incluye el primer año laborado
+                    //if (i == 2) {
                     diasLibresTotales = diasLibresTotales + (1 * 12);
                 } else if (i == 3 || i == 4) {
                     diasLibresTotales = diasLibresTotales + (1.25 * 12);
@@ -1592,10 +1594,11 @@ public class ColaboradorBean {
             }
             diasLibresTotales = (diasLibresTotales + CalculaDiasMesesExtra(colaborador)) - diasDisf;
             System.out.println("Dias totales disponibles: " + diasLibresTotales);
-
+        }
+            System.out.println("Dias totales disponibles: " + diasLibresTotales);
             disponibles.setDiasdisponibles((int) diasLibresTotales);
             vacacionesPorColaboradorService.updateVacacionesPorColaborador(disponibles);
-        }
+        //}
         return diasLibresTotales;
     }
 
@@ -1633,16 +1636,6 @@ public class ColaboradorBean {
     }
 
     public int calculaAnios(Colaborador colaborador) throws ParseException {//Funcion para calcular la cantidad de year que lleva el colaborador laborando
- /*       Calendar c1 = Calendar.getInstance();
-        c2 = Calendar.getInstance();
-        c1.setTime(colaborador.getFechaInicioLaboral());
-        vacaciones.setColaborador(colaborador);
-        int anios = c2.get(YEAR) - c1.get(YEAR);
-        if (c1.get(Calendar.MONTH + 1) > c2.get(Calendar.MONTH) || (c1.get(Calendar.MONTH + 1) == c2.get(Calendar.MONTH)
-                        && c1.get(Calendar.DATE) > c2.get(Calendar.DATE))) {
-            anios--;
-        }//funcion para calcular los annos de trabajo en la empresa
- */
         vacacionesPorColaborador = vacacionesPorColaboradorService.findVacacionesPorColaborador(colaborador);
         Calendar cFechaDeUltimoCalculo = Calendar.getInstance();
         //cFechaDeUltimoCalculo.setTime(vacacionesPorColaborador.getFechaasignada());
@@ -1676,6 +1669,52 @@ public class ColaboradorBean {
         }
     }
 
+    public int calculaMesesMinimos(Colaborador c){
+        int meses = 0;
+        Date fechaInicioL = c.getFechaInicioLaboral();
+        Calendar fechaInicio = Calendar.getInstance();
+        fechaInicio.setTime(fechaInicioL);//Cargo la fecha de inicio laboral al calendar
+
+        Calendar fechaActual = Calendar.getInstance();
+
+        //Saco los meses de la fecha de inicio y de la actual
+        int mesIni = fechaInicio.get(Calendar.MONTH) +1;
+        //System.out.println("Mes ini: " + mesIni);
+        int mesAct = fechaActual.get(Calendar.MONTH) +1;
+        //System.out.println("Mes act: " + mesAct);
+
+        //Saco los dias de la fecha de inicio y de la actual
+        int diaIni = fechaInicio.get(Calendar.DAY_OF_MONTH);
+        int diaAct = fechaActual.get(Calendar.DAY_OF_MONTH);
+
+        //Saco los years de la fecha de inicio y de la actual
+        int yearIni = fechaInicio.get(Calendar.YEAR);
+        //System.out.println("Year ini: " + yearIni);
+        int yearAct = fechaActual.get(Calendar.YEAR);
+        //System.out.println("Year act: " + yearAct);
+        int yearDiferencia = yearAct - yearIni;
+        if(diaAct >= diaIni && yearIni == yearAct){//Si es el mismo year
+            meses = mesAct - mesIni;//Si el dia es mayor o igual se resta normal
+        }
+        else if(diaAct >= diaIni && yearIni <= yearAct){//Si es un year mayor
+            mesAct = mesAct + (yearDiferencia * 12);//Se le suman los meses del year
+            meses = mesAct - mesIni;//Si el dia es mayor o igual se resta normal
+        }
+        else if(diaAct < diaIni && yearIni == yearAct){
+            meses = mesAct - mesIni;
+            meses--;//Si el dia de entrada no se cumple se resta un mes
+        }
+        else if(diaAct < diaIni && yearIni <= yearAct){
+            mesAct = mesAct + (yearDiferencia * 12);//Se le suman los meses del year
+            meses = mesAct - mesIni;
+            meses--;//Si el dia de entrada no se cumple se resta un mes
+        }
+
+        System.out.println("Meses laborados hasta el momento: "+ meses);
+        return meses;
+    }
+
+
     public void createSolicitud(String idColaborador) throws Exception {
 
         colaboradorSolicitante = colaboradorService.findColaborador(idColaborador);
@@ -1686,12 +1725,17 @@ public class ColaboradorBean {
         int fInicio = Integer.parseInt(fechaI);
         int fFinal = Integer.parseInt(fechaF);
 
+        System.out.println("Meses desde CSolicitud: " + calculaMesesMinimos(colaboradorSolicitante));
         if (fechaI.equals(fechaF)) {
             addMessage("Aviso", "¡Las fechas NO pueden ser iguales!");
         } else {
             if (fInicio >= fFinal) {
                 addMessage("Aviso", "Las fecha final de vacaciones NO puede ser menor que la de fecha de inicio de vacaciones");
-            } else {
+            }
+            else if(calculaMesesMinimos(colaboradorSolicitante)<6) {//ACA VA LA VALIDACION DE 6 MESES LABORANDO si es menor de 6
+                addMessage("Aviso", "No a laborado los meses suficientes para poder solicitar vacaciones");
+            }
+            else{//Si cumple con la condicion de 6 mese laborado puede hacer la solicitud
                 int diasSol = CalculaDiasSolicitados();
                 int diasDispo = vacacionesPorColaborador.getDiasdisponibles();
 

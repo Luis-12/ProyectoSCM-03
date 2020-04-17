@@ -159,19 +159,67 @@ public class ReporteBean {
         this.departamentoReporte = departamentoReporte;
     }
 
+    public int calculaMesesMinimos(Colaborador c){
+        int meses = 0;
+        Date fechaInicioL = c.getFechaInicioLaboral();
+        Calendar fechaInicio = Calendar.getInstance();
+        fechaInicio.setTime(fechaInicioL);//Cargo la fecha de inicio laboral al calendar
+
+        Calendar fechaActual = Calendar.getInstance();
+
+        //Saco los meses de la fecha de inicio y de la actual
+        int mesIni = fechaInicio.get(Calendar.MONTH) +1;
+        //System.out.println("Mes ini: " + mesIni);
+        int mesAct = fechaActual.get(Calendar.MONTH) +1;
+        //System.out.println("Mes act: " + mesAct);
+
+        //Saco los dias de la fecha de inicio y de la actual
+        int diaIni = fechaInicio.get(Calendar.DAY_OF_MONTH);
+        int diaAct = fechaActual.get(Calendar.DAY_OF_MONTH);
+
+        //Saco los years de la fecha de inicio y de la actual
+        int yearIni = fechaInicio.get(Calendar.YEAR);
+        //System.out.println("Year ini: " + yearIni);
+        int yearAct = fechaActual.get(Calendar.YEAR);
+        //System.out.println("Year act: " + yearAct);
+        int yearDiferencia = yearAct - yearIni;
+        if(diaAct >= diaIni && yearIni == yearAct){//Si es el mismo year
+            meses = mesAct - mesIni;//Si el dia es mayor o igual se resta normal
+        }
+        else if(diaAct >= diaIni && yearIni <= yearAct){//Si es un year mayor
+            mesAct = mesAct + (yearDiferencia * 12);//Se le suman los meses del year
+            meses = mesAct - mesIni;//Si el dia es mayor o igual se resta normal
+        }
+        else if(diaAct < diaIni && yearIni == yearAct){
+            meses = mesAct - mesIni;
+            meses--;//Si el dia de entrada no se cumple se resta un mes
+        }
+        else if(diaAct < diaIni && yearIni <= yearAct){
+            mesAct = mesAct + (yearDiferencia * 12);//Se le suman los meses del year
+            meses = mesAct - mesIni;
+            meses--;//Si el dia de entrada no se cumple se resta un mes
+        }
+
+        System.out.println("Meses laborados hasta el momento: "+ meses);
+        return meses;
+    }
+
+
     public double diasDisponibles(Colaborador colaborador) throws ParseException {//Funcion para calcular los dias disponible de vacaciones
 
         VacacionesPorColaborador disponibles = new VacacionesPorColaborador();
         disponibles = vacacionesPorColaboradorService.findVacacionesPorColaborador(colaborador);//Se consulta los dia disponibles
         int anios = calculaAnios(colaborador);//Se consulta los years que este laborando el cola en la empresa
-        //int meses = 0;
         int diasDisf = disponibles.getDiasdisfrutados();
         double diasLibresTotales = 0.0;
 
-        if (anios != 0) {//Si ha trabajado un anio ya se le pueden contar los dias libres
-            for (int i = 1; i <= anios; i++) {
-                //if (i == 1 || i == 2) {
-                if (i == 2) {
+        if(anios == 0){//Si solo ha trabajado meses
+            diasLibresTotales = calculaMesesMinimos(colaborador) - diasDisf;//Los meses que tenga laborados cuentan como dias libres
+        }
+        else if(anios > 0) {//Si ha trabajado un anio ya se le pueden contar los dias libres
+            for (int i = 1; i <= anios; i++) {//Cambio aqui
+                if (i == 1 || i == 2) {//IF QUE INCLUYE TAMBIEN EL PRIMER DIA
+                    //if (i == 2) {
                     diasLibresTotales = diasLibresTotales + (1 * 12);
                 } else if (i == 3 || i == 4) {
                     diasLibresTotales = diasLibresTotales + (1.25 * 12);
@@ -181,10 +229,11 @@ public class ReporteBean {
             }
             diasLibresTotales = (diasLibresTotales + CalculaDiasMesesExtra(colaborador)) - diasDisf;
             System.out.println("Dias totales disponibles: " + diasLibresTotales);
-
+        }
+            System.out.println("Dias totales disponibles: " + diasLibresTotales);
             disponibles.setDiasdisponibles((int) diasLibresTotales);
             vacacionesPorColaboradorService.updateVacacionesPorColaborador(disponibles);
-        }
+        //}
         return diasLibresTotales;
     }
 
@@ -198,7 +247,7 @@ public class ReporteBean {
         c1.setTime(colaborador.getFechaInicioLaboral());
         c2 = Calendar.getInstance();//FechaActual
         if (anio != 0) {
-            if (anio == 1 || anio == 2) {
+            if (anio == 1 || anio == 2) {//
                 dia = 1;
             } else if (anio == 3 || anio == 4) {
                 dia = 1.25;
@@ -390,6 +439,7 @@ public class ReporteBean {
         }
         return horasTotales;
     }
+
 
     public void preProcessPDFReporteCD(Object document) throws IOException, BadElementException, DocumentException {
         Format formateador = new SimpleDateFormat("yyyy-MM-dd");
