@@ -924,6 +924,7 @@ public class ColaboradorBean {
                 // cambia el estado a Finalizado a la ultima marca que quedo sin finalizar
                 marcasJornadasList = new ArrayList<MarcasJornada>();
                 m.setEstado("Finalizado");
+                m.setHoraSalida(horaSalida);
                 marcaLaboradaService.updateMarcaLaborada(m);
             }
         } else {

@@ -54,7 +54,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
 
                     <h1 id="h1Centro"> Reporte de Llegadas Tardías</h1>
                     <center>
-                        <h:form id="reporteDetalladoC">
+                        <h:form id="reporteTardias">
                             <h:panelGrid columns="12">
 
                                 <p:outputLabel value="Desde:" styleClass="required" id="FIRLabel"
@@ -84,21 +84,21 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
 
                                 <p:commandButton value="Buscar"
                                                  style="margin-right:30px;margin-top: 20px;margin-bottom: 18px;"
-                                                 update="formIC:msgsIC, reporteDetalladoC, formRCDetallado:tablaReporteDetallado"
+                                                 update="formIC:msgsIC, reporteTardias, formTardias:tablaReporteTardias"
                                                  styleClass="ui-priority-primary"
                                                  action="#{reporteBean.buscarDatosLlegadasTardias}"
                                 />
 
                                 <h:commandLink style="margin-left: 60px">
                                     <h:graphicImage url="imagen/exc.png" width="40"/>
-                                    <p:dataExporter type="xls" target="formRCDetallado:tablaReporteDetallado"
+                                    <p:dataExporter type="xls" target="formTardias:tablaReporteTardias"
                                                     fileName="Reporte llegadas tardías"/>
                                 </h:commandLink>
 
                                 <h:commandLink>
                                     <h:graphicImage url="imagen/png.jpg" width="40"/>
                                     <p:dataExporter type="pdf" encoding="ISO-8859-1"
-                                                    target="formRCDetallado:tablaReporteDetallado"
+                                                    target="formTardias:tablaReporteTardias"
                                                     preProcessor="#{reporteBean.preProcessPDFReporteTardias}"
                                                     fileName="Reporte llegadas tardías"/>
                                 </h:commandLink>
@@ -111,25 +111,25 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                         </h:form>
                     </center>
                     <div>
-                        <h:form id="formRCDetallado">
+                        <h:form id="formTardias">
                             <p:dataTable var="reporte" reflow="true" responsive="true"
                                          style="margin-top: 25px"
                                          value="#{reporteBean.llegadasTardias}"
                                          emptyMessage="No se han encontrado datos"
                                          resizableColumns="true"
-                                         id="tablaReporteDetallado"
-                                         widgetVar="tablaReporteDetallado"
+                                         id="tablaReporteTardias"
+                                         widgetVar="tablaReporteTardias"
                                          rows="10"
                                          paginator="true"
                                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                          scrollable="true" scrollWidth="100%" scrollHeight="150">
                                 <p:autoUpdate/>
 
-                                <p:column headerText="Cédula" filterBy="#{reporte.cedula}" >
+                                <p:column headerText="Cédula" >
                                     <h:outputText value="#{reporte.cedula}"/>
                                 </p:column>
 
-                                <p:column headerText="Nombre Completo"  filterBy="#{reporte.nombre}" >
+                                <p:column headerText="Nombre Completo" >
                                     <h:outputText value="#{reporte.nombre}"/>
                                 </p:column>
 
@@ -140,8 +140,6 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                 <p:column headerText="Justificación">
                                     <h:outputText value="#{reporte.justificacion}"/>
                                 </p:column>
-
-
                             </p:dataTable>
                         </h:form>
                     </div>
