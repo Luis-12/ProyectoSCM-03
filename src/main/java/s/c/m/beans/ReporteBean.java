@@ -67,7 +67,7 @@ public class ReporteBean {
 
 
 
-    private HorizontalBarChartModel modelD;
+    private HorizontalBarChartModel modelD=null;
 
 
     @Autowired
@@ -90,6 +90,10 @@ public class ReporteBean {
 
     public HorizontalBarChartModel getModelD() {
         return modelD;
+    }
+
+    public void setModelD(HorizontalBarChartModel modelD) {
+        this.modelD = modelD;
     }
 
     public HorizontalBarChartModel getModel() {
@@ -797,7 +801,7 @@ public class ReporteBean {
                         miRC.setDiasDispoVacaciones(diasDisponibles);
 
                         reporteColaboradorDetalladosList.add(miRC);//Se llena la lista de la tabla
-                        //GraphicColaboradorDetallado();
+
                     }
                 }
                 GraphicColaboradorxDepartamento();
@@ -811,31 +815,27 @@ public class ReporteBean {
     public void GraphicColaboradorxDepartamento(){
 
         modelD = new HorizontalBarChartModel();
-        //for(ReporteColaboradorDetallado miRC : reporteColaboradorDetalladosList){
+        for(ReporteColaboradorDetallado miRC : reporteColaboradorDetalladosList){
             ChartSeries horas= new ChartSeries();
             ChartSeries tardias = new ChartSeries();
             ChartSeries vacaciones = new ChartSeries();
             horas.setLabel("Horas Laboradas");
             tardias.setLabel("Marcas Tardías");
             vacaciones.setLabel("Vacaciones Disponibles");
-
-            horas.set("Horas Laboradas", 1);
-            tardias.set("Marcas Tardías", 1);
-            vacaciones.set("Vacaciones Disponibles", 1);
-
-
+            horas.set(miRC.getCedula(), miRC.getCantHorasLaboradas());
+            tardias.set(miRC.getCedula(), miRC.getCantLlegadasTardias());
+            vacaciones.set(miRC.getCedula(), miRC.getDiasDispoVacaciones());
             modelD.addSeries(horas);
             modelD.addSeries(tardias);
             modelD.addSeries(vacaciones);
-        //}
+        }
 
         modelD.setTitle("Gráfica");
         modelD.setLegendPosition("e");
         modelD.setStacked(true);
         Axis xAxis = modelD.getAxis(AxisType.X);
-        xAxis.setMin(0);
-        xAxis.setMax(200);
         Axis yAxis = modelD.getAxis(AxisType.Y);
+        yAxis.setLabel("Cedula");
 
     }
 

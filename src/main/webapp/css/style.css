@@ -162,7 +162,10 @@ h1{
     margin-left: -50px;
 }
 
-
+.jqplot-highlighter-tooltip
+{
+    width: 20%;
+}
 
 clearing {
     clear: both;
