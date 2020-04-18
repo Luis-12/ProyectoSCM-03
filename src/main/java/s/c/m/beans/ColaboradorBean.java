@@ -932,6 +932,7 @@ public class ColaboradorBean {
                 marcasJornadasList = new ArrayList<MarcasJornada>();
                 // m.setHoraSalida(asignacionesServices.buscarHorario(colaboradorMarca).getHorario().getHorasalida());
                 m.setEstado("Finalizado");
+                m.setHoraSalida(horaSalida);
                 marcaLaboradaService.updateMarcaLaborada(m);
             } catch (NullPointerException e) {
 
