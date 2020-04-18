@@ -98,7 +98,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                             </h:panelGrid>
                             <h:panelGrid columns="4">
                                 <p:commandButton value="Buscar"
-                                                 style="margin-right:30px;margin-top: 20px;"
+                                                 style="margin-right:30px;margin-top: 10px;"
                                                  update="formIC:msgsIC, reporteDetalladoC, formRCDetallado:tablaReporteDetallado"
                                                  styleClass="ui-priority-primary"
                                                  action="#{reporteBean.buscarDatosColaboradorRDetallado}"
@@ -128,7 +128,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                     <div>
                         <h:form id="formRCDetallado">
                             <p:dataTable var="reporte" reflow="true" responsive="true"
-                                         style="margin-top: 25px"
+                                         style="margin-top: 10px"
                                          value="#{reporteBean.reporteColaboradorDetalladosList}"
                                          emptyMessage="No se han encontrado datos"
                                          resizableColumns="true"

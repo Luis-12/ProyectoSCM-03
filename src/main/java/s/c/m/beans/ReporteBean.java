@@ -59,8 +59,11 @@ public class ReporteBean {
     List<MarcaDescansos> marcaDescansosPorCYR;
     List<MarcaLaboradas> marcaLaboradasTardias;
     List<ReporteLlegadasTardias> llegadasTardias;
+    List<AsignacionDescansos> descansosCantidad;
+    private List<ReporteColaboradorH> reporteColaboradorHorarioList = new ArrayList<>();
     private List<ReporteColaboradorDetallado> reporteColaboradorDetalladosList = new ArrayList<>();
     private Asignaciones asignacionesDelColaReporte;
+    private AsignacionDescansos asignacionDescansos;
     private BarChartModel barModel=null;
     private HorizontalBarChartModel model=null;
 
@@ -75,6 +78,9 @@ public class ReporteBean {
 
     @Autowired
     AsignacionesServices asignacionesServices;
+
+    @Autowired
+    AsignacionDescansosService asignacionDescansosService;
 
     @Autowired
     MarcaDescansoService marcaDescansoService;
@@ -110,6 +116,13 @@ public class ReporteBean {
 
     public void setLlegadasTardias(List<ReporteLlegadasTardias> llegadasTardias) {
         this.llegadasTardias = llegadasTardias;
+    }
+
+    public List<ReporteColaboradorH> getReporteColaboradorHorarioList() {
+        return reporteColaboradorHorarioList;
+    }
+    public void setReporteColaboradorHorarioList(List<ReporteColaboradorH> reporteColaboradorHorarioList) {
+        this.reporteColaboradorHorarioList = reporteColaboradorHorarioList;
     }
 
     public void setBarModel(BarChartModel barModel) {
@@ -839,7 +852,123 @@ public class ReporteBean {
 
     }
 
-//-----------------------Finaliza métodos del colaborador detallado--------------------------
+    public void buscarDatosHorarioPorDepartamento() throws Exception {
+        ReporteColaboradorH miRC;
+        reporteColaboradorHorarioList = new ArrayList<>();
+        asignacionesDelColaReporte = new Asignaciones();
+        asignacionDescansos = new AsignacionDescansos();
+        colaboradorDepartamento = colaboradorService.findColaboradorDepartamento(departamentoReporte.getPk_idDepartamento());
+
+        if (colaboradorDepartamento.size() != 0) {
+
+            for(Colaborador colaborador : colaboradorDepartamento){
+                asignacionesDelColaReporte = asignacionesServices.buscarHorario(colaborador);
+                descansosCantidad = asignacionDescansosService.buscarDescansosAsignadosPorColaborador(colaborador);
+                convertirDia();
+                convertirDia2();
+                miRC= new ReporteColaboradorH();
+                miRC.setCedula(colaborador.getPk_idColaborador());
+                miRC.setNombre(colaborador.getNombre());
+                miRC.setHorario(" " + asignacionesDelColaReporte.getHorario().getHoraentrada() + " " +
+                        asignacionesDelColaReporte.getHorario().getHorasalida() + " ");
+                miRC.setCantidadDescansos(descansosCantidad.size());
+                miRC.setDiaDescanso(asignacionesDelColaReporte.getDiaDescanso());
+                miRC.setDia2(asignacionesDelColaReporte.getSegundodiades());
+
+                reporteColaboradorHorarioList.add(miRC);//Se llena la lista de la tabla
+            }
+        }
+    }
+
+    public void convertirDia() {//Convierte el formato del día
+        String diaDescanso = null;
+
+        if (asignacionesDelColaReporte.getDiaDescanso().equals("LU")) {
+            diaDescanso = "Lunes";
+        } else if (asignacionesDelColaReporte.getDiaDescanso().equals("MA")) {
+            diaDescanso = "Martes";
+        } else if (asignacionesDelColaReporte.getDiaDescanso().equals("MI")) {
+            diaDescanso = "Miércoles";
+        } else if (asignacionesDelColaReporte.getDiaDescanso().equals("JU")) {
+            diaDescanso = "Jueves";
+        } else if (asignacionesDelColaReporte.getDiaDescanso().equals("VI")) {
+            diaDescanso = "Viernes";
+        } else if (asignacionesDelColaReporte.getDiaDescanso().equals("SA")) {
+            diaDescanso = "Sábado";
+        } else if (asignacionesDelColaReporte.getDiaDescanso().equals("DO")) {
+            diaDescanso = "Domingo";
+        } else {
+            diaDescanso = asignacionesDelColaReporte.getDiaDescanso();
+        }
+        asignacionesDelColaReporte.setDiadescanso(diaDescanso);
+    }
+    public void convertirDia2() {//Convierte el formato del día
+        String diaDescanso2 = null;
+
+        if (asignacionesDelColaReporte.getSegundodiades().equals("LU")) {
+            diaDescanso2 = "Lunes";
+        } else if (asignacionesDelColaReporte.getSegundodiades().equals("MA")) {
+            diaDescanso2 = "Martes";
+        } else if (asignacionesDelColaReporte.getSegundodiades().equals("MI")) {
+            diaDescanso2 = "Miércoles";
+        } else if (asignacionesDelColaReporte.getSegundodiades().equals("JU")) {
+            diaDescanso2 = "Jueves";
+        } else if (asignacionesDelColaReporte.getSegundodiades().equals("VI")) {
+            diaDescanso2 = "Viernes";
+        } else if (asignacionesDelColaReporte.getSegundodiades().equals("SA")) {
+            diaDescanso2 = "Sábado";
+        } else if (asignacionesDelColaReporte.getSegundodiades().equals("DO")) {
+            diaDescanso2 = "Domingo";
+        } else {
+            diaDescanso2 = asignacionesDelColaReporte.getSegundodiades();
+        }
+        asignacionesDelColaReporte.setSegundodiades(diaDescanso2);
+    }
+
+
+    public void preProcessPDFReporteHorarios(Object document) throws IOException, BadElementException, DocumentException {
+
+        Color azul = new Color(31, 97, 141);
+        Color azulC = new Color(46, 134, 193);
+
+        Document pdf = (Document) document;
+        pdf.addTitle("Reporte Horarios por Departamento" + departamentoReporte.getNombre());
+        pdf.open();
+        pdf.setPageSize(PageSize.A4);
+
+        //Preparo fuentes
+        BaseFont bfTitulos = BaseFont.createFont(BaseFont.HELVETICA_BOLDOBLIQUE,BaseFont.WINANSI,BaseFont.EMBEDDED);
+        com.lowagie.text.Font fuenteTitulos = new com.lowagie.text.Font(bfTitulos);
+        com.lowagie.text.Font informacion = new com.lowagie.text.Font(bfTitulos);
+        fuenteTitulos.setSize(14);
+        fuenteTitulos.setColor(azul);
+        informacion.setColor(Color.BLACK);
+        informacion.setSize(14);
+
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        String logo = externalContext.getRealPath("") + File.separator + "css" + File.separator + "imagen" + File.separator + "logo1.jpg";
+
+        pdf.add(com.lowagie.text.Image.getInstance(logo));
+
+        Paragraph pTC = new Paragraph("Reporte Horarios Del Departamento " + departamentoReporte.getNombre(), fuenteTitulos);
+        pTC.setAlignment("center");
+        pTC.setSpacingBefore(30);
+        pTC.setSpacingAfter(20);
+        pdf.add(pTC);
+
+
+        BaseFont bfDes = BaseFont.createFont(BaseFont.TIMES_BOLDITALIC,BaseFont.WINANSI,BaseFont.EMBEDDED);
+        com.lowagie.text.Font subt = new com.lowagie.text.Font(bfDes);
+        subt.setSize(14);
+        subt.setColor(azulC);
+
+        BaseFont bfNot = BaseFont.createFont(BaseFont.TIMES_ROMAN,BaseFont.WINANSI,BaseFont.EMBEDDED);
+        com.lowagie.text.Font not = new Font(bfDes);
+        not.setSize(14);
+        not.setColor(Color.red);
+    }
+
+//-------------------------------------------------------------------------------------------------------
 
 
     public void addMessage(String summary, String detail) {

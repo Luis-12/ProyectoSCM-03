@@ -10,125 +10,188 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
-<c:choose>
-    <c:when test="${colaboradorBean.colaboradorlogueado.puesto.descripcion=='Gerencia'
+    <c:choose>
+        <c:when test="${colaboradorBean.colaboradorlogueado.puesto.descripcion=='Gerencia'
  or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporativa'
  or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Analista' }">
 
 
 
-    <h:head>
-    <link href="../css/style.css" rel="stylesheet" type="text/css" />
-        <link href="../css/styleM.css" media='screen and (max-device-width: 480px)' rel="stylesheet" type="text/css" />
-    <link href="//db.onlinewebfonts.com/c/f977213040abc486420980aae60e0db3?family=GestaW01-Medium" rel="stylesheet" type="text/css"/>
-    <title>Reporte de Horarios por Colaborador </title>
-</h:head>
+            <h:head>
+                <link href="../css/style.css" rel="stylesheet" type="text/css" />
+                <link href="../css/styleM.css" media='screen and (max-device-width: 480px)' rel="stylesheet" type="text/css" />
+                <link href="//db.onlinewebfonts.com/c/f977213040abc486420980aae60e0db3?family=GestaW01-Medium" rel="stylesheet" type="text/css"/>
+                <title>Reporte de Horarios por Departamento </title>
+            </h:head>
 
-<div id="page">
+            <div id="page">
 
-    <h:body>
-        <div id="header">
-            <div id="logoP">
-                <img srcset="imagen/logo.jpg 1535w, imagen/logR.PNG 480w"  src="imagen/logo.jpg" style="max-width: 43%; max-height: 77%; min-width: 43%; min-height:70%;  padding: 10px; "></img>
+                <h:body>
+                    <div id="header">
+                        <div id="logoP">
+                            <img srcset="imagen/logo.jpg 1535w, imagen/logR.PNG 480w"  src="imagen/logo.jpg" style="max-width: 43%; max-height: 77%; min-width: 43%; min-height:70%;  padding: 10px; "></img>
+                        </div>
+                    </div>
+                    <div id="top">
+                        <h:form id="formIC">
+                            <p:growl id="msgsIC" showDetail="true" rendered="#{not facesContext.validationFailed}"/>
+                            <p:commandButton id="dynaButton" value="Menú" type="button"  icon="ui-icon-home"/>
+                            <p:tieredMenu autoDisplay="false" style="width: 17%;" overlay="true" trigger="dynaButton" my="left top" at="left bottom" model="#{colaboradorBean.model}"/>
+                            <p:commandButton style='float: right;'  id="dynaButton1" value="Salir" type="button"  icon="ui-icon-person"/>
+                            <p:menu style='float: right;'  overlay="true" trigger="dynaButton1" my="left top" at="left bottom">
+                                <p:submenu label="#{colaboradorBean.colaboradorlogueado.nombre}">
+                                    <p:menuitem value="Salir" action="#{colaboradorBean.doLogout}" icon="ui-icon-person" />
+                                </p:submenu>
+                            </p:menu>
+                        </h:form>
+                    </div>
+
+                    <h1 id="h1Centro" style="margin-top: 1px">Reporte de Horarios por Departamento</h1>
+                    <h:form id="reporteH" >
+                        <center>
+                            <h:panelGrid columns="2" style="margin-top: 10px;" >
+                                <p:outputLabel value="Departamento:"/>
+                                <p:selectOneMenu style="min-width: 197px" value="#{reporteBean.departamentoReporte}" converter="departamentoConverter">
+                                    <f:selectItems value="#{departamentoBean.departamentos}" var="departamento"
+                                                   itemValue="#{departamento}"
+                                                   itemLabel="#{departamento.nombre}"/>
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+
+                            <h:panelGrid columns="4" style="margin-top: 2px;" >
+                                <p:commandButton value="Buscar"
+                                                 style="margin-right:23px;"
+                                                 update="formIC:msgsIC, reporteH, ReporteHorarios:tablaReporteHorario"
+                                                 styleClass="ui-priority-primary"
+                                                 action="#{reporteBean.buscarDatosHorarioPorDepartamento}"  />
+
+                                <h:commandLink style="margin-left: 40px">
+                                    <h:graphicImage url="imagen/exc.png" width="40"/>
+                                    <p:dataExporter type="xls" target="ReporteHorarios:tablaReporteHorario"
+                                                    fileName="Reporte Horario Departamento #{reporteBean.departamentoReporte.getNombre()}"/>
+                                </h:commandLink>
+
+                                <h:commandLink>
+                                    <h:graphicImage url="imagen/png.jpg" width="40"/>
+                                    <p:dataExporter type="pdf" encoding="ISO-8859-1"
+                                                    target="ReporteHorarios:tablaReporteHorario"
+                                                    preProcessor="#{reporteBean.preProcessPDFReporteHorarios}"
+                                                    fileName="Reporte Horario Departamento #{reporteBean.departamentoReporte.getNombre()}"/>
+                                </h:commandLink>
+
+                                <p:commandLink onclick="PF('graf').show();">
+                                    <h:graphicImage url="imagen/gra.png" width="50"/>
+                                </p:commandLink>
+                            </h:panelGrid>
+
+                        </center></h:form>
+
+
+
+                    <div>
+                        <h:form id="ReporteHorarios">
+
+                            <p:dataTable var="reporte" id="tablaReporteHorario" rows="4" reflow="true" responsive="true"
+                                         style="margin-top: 3px;"
+                                         value="#{reporteBean.reporteColaboradorHorarioList}"
+                                         emptyMessage="No se han encontrado colaboradores"
+                                         resizableColumns="true"
+                                         widgetVar="tablaReporteHorario"
+                                         selectionMode="single"
+                                         rowKey="#{reporte.cedula}"
+                                         paginator="true"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                                         scrollable="true" scrollWidth="100%" scrollHeight="200">
+                                <p:autoUpdate/>
+
+                                <p:column headerText="Cédula" filterBy="#{reporte.cedula}">
+                                    <h:outputText value="#{reporte.cedula}" />
+                                </p:column>
+
+                                <p:column headerText="Nombre Completo" filterBy= "#{reporte.nombre}" >
+                                    <h:outputText value="#{reporte.nombre}" />
+                                </p:column>
+
+                                <p:column headerText="Horario">
+                                    <h:outputText value="#{reporte.horario}" />
+                                </p:column>
+
+                                <p:column headerText="Cant. Descansos">
+                                    <h:outputText value="#{reporte.cantidadDescansos}" />
+                                </p:column>
+
+                                <p:column headerText="Día Descanso">
+                                    <h:outputText value="#{reporte.diaDescanso}" />
+                                </p:column>
+
+                                <p:column headerText="Segundo Día Descanso">
+                                    <h:outputText value="#{reporte.dia2}" />
+                                </p:column>
+
+                            </p:dataTable>
+
+                        </h:form>
+                    </div>
+
+                    <p:dialog id="graf" header="Gráfico Horarios Departamento" style="text-align:center; width: 35%"  showEffect="fade" hideEffect="fade"
+                              widgetVar="graf" resizable="false" minWidth="110" >
+                        <div>
+                            <center>
+                                <h:panelGrid id="grafico" style="width: 470px; height: 410px;">
+                                    <p:autoUpdate/>
+                                    <p:barChart  widgetVar="chart" model="#{reporteBean.barModel}" style="width: 490px; height: 420px;" rendered="#{reportesBean.barModel != null}"/>
+                                </h:panelGrid>
+                            </center>
+                            <center>
+                                <p:commandButton type="button" value="Descargar como Imagen" onclick="exportChart()"/>
+                            </center>
+                        </div>
+
+                    </p:dialog>
+
+                    <div id="footer">
+                        <br/>
+                        <h:outputLink value="../acerca.xhtml" >©</h:outputLink>  <p:outputLabel value=" SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA" />
+                    </div>
+
+
+                    <script type="text/javascript">
+                        function exportChart() {
+                            var image = PF('chart').exportAsImage();
+                            var imageSrc = $(image).attr('src');
+                            var url = imageSrc.replace(/^data:image\/[^;]+/, 'data:application/octet-stream');
+                            var link = document.createElement('a');
+                            link.download = "Reporte.png";
+                            link.href = url;
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                            return false;
+                        }
+
+                    </script>
+
+                </h:body>
+
             </div>
-        </div>
-        <div id="top">
-            <h:form>
-                <p:commandButton id="dynaButton" value="Menú" type="button"  icon="ui-icon-home"/>
-                <p:tieredMenu autoDisplay="false" style="width: 17%;" overlay="true" trigger="dynaButton" my="left top" at="left bottom" model="#{colaboradorBean.model}"/>
-                <p:commandButton style='float: right;'  id="dynaButton1" value="Salir" type="button"  icon="ui-icon-person"/>
-                <p:menu style='float: right;'  overlay="true" trigger="dynaButton1" my="left top" at="left bottom">
-                    <p:submenu label="#{colaboradorBean.colaboradorlogueado.nombre}">
-                        <p:menuitem value="Salir" action="#{colaboradorBean.doLogout}" icon="ui-icon-person" />
-                    </p:submenu>
-                </p:menu>
-            </h:form>
-        </div>
 
-        <h1 id="h1Centro">Reporte de Horarios por Colaborador </h1>
-        <h:form >
-            <center>
-                <h:panelGrid columns="5" >
-                    <p:outputLabel value="Cédula: " styleClass="required"  indicateRequired="cedula" for="cedula"/>
-                    <p:inputText autocomplete="off" required="true" requiredMessage="Ingrese la Cedula"  id="cedula"/>
-                    <p:outputLabel value="Departamento:"/>
-                    <p:selectOneMenu id="departamento" style="width:110px; height: 27px;">
-                        <f:selectItem itemLabel="RHH" itemValue="" />
-                        <f:selectItem itemLabel="Limpieza"  />
-                        <f:selectItem itemLabel="Informatica" />
-                        <f:selectItem itemLabel="Todos" />
-                    </p:selectOneMenu>
-                </h:panelGrid>
-                <p:commandButton value="Buscar" style="margin-right:20px;margin-top: 20px" ajax="false"  />
-            </center>
-        </h:form>
+        </c:when>
+        <c:otherwise>
+            <h:head>
+                <link href="../css/style.css" rel="stylesheet" type="text/css"/>
+                <link href="//db.onlinewebfonts.com/c/f977213040abc486420980aae60e0db3?family=GestaW01-Medium"
+                      rel="stylesheet" type="text/css"/>
+                <title>Acceso denegado</title>
 
-        <div>
-            <h:form>
+            </h:head>
 
-                <h:commandLink style="margin-left: 60px">
-                    <h:graphicImage url="imagen/exc.png" width="40"/>
-                    <p:dataExporter type="xls" target="infoHorario" fileName="Reporte de Horarios por Colaborador" />
-                </h:commandLink>
-
-                <h:commandLink>
-                    <h:graphicImage url="imagen/png.jpg" width="40"/>
-                    <p:dataExporter type="pdf" target="infoHorario" encoding="ISO-8859-1" fileName="Reporte de Horarios por Colaborador"/>
-                </h:commandLink>
-
-                <p:dataTable var="colaborador" id="infoHorario" reflow="true" responsive="true" style="margin-top: 25px"
-                             value="#{ColaboradorBean.colaboradores}"
-                             emptyMessage="No se han encontrado datos"
-                             resizableColumns="true"
-                             widgetVar="colaboradorTabla"
-                             selectionMode="single"
-                             paginator="true"
-                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                             rowsPerPageTemplate="10,15,20"
-                             scrollable="true" scrollWidth="100%" scrollHeight="200">
-                    <p:autoUpdate />
-
-                    <p:column headerText="Nombre Completo" >
-                    <h:outputText value="colaborador.colaborador.nombre" />
-                </p:column>
-
-                    <p:column headerText="Horario">
-                        <h:outputText value="colaborador.asignaciones.fk_idHorario" />
-                    </p:column>
-
-                    <p:column headerText="Día de descanso">
-                        <h:outputText value="colaborador.asignaciones.diadescanso" />
-                    </p:column>
-
-                </p:dataTable>
-
-
-            </h:form>
-        </div>
-
-        <div id="footer">
-            <br/>
-            <h:outputLink value="../acerca.xhtml" >©</h:outputLink>  <p:outputLabel value=" SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA" />
-        </div>
-
-    </h:body>
-
-</div>
-</c:when>
-    <c:otherwise>
-        <h:head>
-            <link href="../css/style.css" rel="stylesheet" type="text/css" />
-            <link href="//db.onlinewebfonts.com/c/f977213040abc486420980aae60e0db3?family=GestaW01-Medium" rel="stylesheet" type="text/css"/>
-            <title>Acceso denegado</title>
-
-        </h:head>
-
-        <h:body >
-            <div class="error">
-                Acceso denegado
-            </div>
-        </h:body>
-    </c:otherwise>
-</c:choose>
+            <h:body>
+                <div class="error">
+                    Acceso denegado
+                </div>
+            </h:body>
+        </c:otherwise>
+    </c:choose>
 </ui:composition>
 </html>
+
