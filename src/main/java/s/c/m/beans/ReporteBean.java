@@ -64,6 +64,12 @@ public class ReporteBean {
     private BarChartModel barModel=null;
     private HorizontalBarChartModel model=null;
 
+
+
+
+    private HorizontalBarChartModel modelD;
+
+
     @Autowired
     VacacionesPorColaboradorService vacacionesPorColaboradorService;
 
@@ -80,6 +86,10 @@ public class ReporteBean {
     }
     public BarChartModel getBarModel() {
         return barModel;
+    }
+
+    public HorizontalBarChartModel getModelD() {
+        return modelD;
     }
 
     public HorizontalBarChartModel getModel() {
@@ -734,7 +744,7 @@ public class ReporteBean {
         marcaLaboradasTardias = new ArrayList<>();
         reporteColaboradorDetalladosList = new ArrayList<>();
         List<MarcaDescansos> mdAux = new ArrayList<>();
-        ReporteColaboradorDetallado miRC = new ReporteColaboradorDetallado();
+        ReporteColaboradorDetallado miRC;
 
             asignacionesDelColaReporte = new Asignaciones();
         double totalHorasLaboradas = 0;
@@ -749,15 +759,12 @@ public class ReporteBean {
         int fFinal = Integer.parseInt(fechaF);
         colaboradorDepartamento = colaboradorService.findColaboradorDepartamento(departamentoReporte.getPk_idDepartamento());
 
-        System.out.println("prue: " + colaboradorDepartamento);
         if (colaboradorDepartamento.size() != 0) {//Quiere decir que se encontro el colaborador
-            System.out.println("prueba: " + colaboradorDepartamento);
             if (fInicio >= fFinal) {
                 addMessage("Aviso", "La Fecha Final debe ser mayor a la Fecha Inicial");
             }
             else {
                 for(Colaborador colaborador : colaboradorDepartamento){
-                    System.out.println("prueba2" + colaborador);
                     marcaLaboradasPorCYR = marcaLaboradaService.findMarcasLaboradasPorRango(fechaInicioR, fechaFinalR, colaborador);
                     if (marcaLaboradasPorCYR.size() != 0) {//Si se encontro alguna marca se hace el reporte
                         //Aca empiezan los calculos y la magia
@@ -779,6 +786,7 @@ public class ReporteBean {
                         }
                         horasFinal = totalHorasLaboradas - totalHorasDescansadas;
                         asignacionesDelColaReporte = asignacionesServices.buscarHorario(colaborador);
+                        miRC = new ReporteColaboradorDetallado();
                         miRC.setCedula(colaborador.getPk_idColaborador());
                         miRC.setNombre(colaborador.getNombre());
                         miRC.setTipoJornada(asignacionesDelColaReporte.getHorario().getJornada().getDescripcion());
@@ -792,8 +800,42 @@ public class ReporteBean {
                         //GraphicColaboradorDetallado();
                     }
                 }
+                GraphicColaboradorxDepartamento();
             }
         }
+
+    }
+
+
+
+    public void GraphicColaboradorxDepartamento(){
+
+        modelD = new HorizontalBarChartModel();
+        //for(ReporteColaboradorDetallado miRC : reporteColaboradorDetalladosList){
+            ChartSeries horas= new ChartSeries();
+            ChartSeries tardias = new ChartSeries();
+            ChartSeries vacaciones = new ChartSeries();
+            horas.setLabel("Horas Laboradas");
+            tardias.setLabel("Marcas Tardías");
+            vacaciones.setLabel("Vacaciones Disponibles");
+
+            horas.set("Horas Laboradas", 1);
+            tardias.set("Marcas Tardías", 1);
+            vacaciones.set("Vacaciones Disponibles", 1);
+
+
+            modelD.addSeries(horas);
+            modelD.addSeries(tardias);
+            modelD.addSeries(vacaciones);
+        //}
+
+        modelD.setTitle("Gráfica");
+        modelD.setLegendPosition("e");
+        modelD.setStacked(true);
+        Axis xAxis = modelD.getAxis(AxisType.X);
+        xAxis.setMin(0);
+        xAxis.setMax(200);
+        Axis yAxis = modelD.getAxis(AxisType.Y);
 
     }
 

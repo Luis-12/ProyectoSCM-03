@@ -91,21 +91,21 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                             <h:panelGrid columns="4">
                                 <p:commandButton value="Buscar"
                                                  style="margin-right:30px;margin-top: 20px;"
-                                                 update="formIC:msgsIC, reporteDetalladoC, formRCDetallado:tablaReporteDetallado"
+                                                 update="formIC:msgsIC, reporteDetalladoC, formRCDetallado:tablaReporteDetalladoDEPAR"
                                                  styleClass="ui-priority-primary"
                                                  action="#{reporteBean.buscarDatosColaboradorDetalladoPorDepartamento}"
                                 />
 
                                 <h:commandLink style="margin-left: 60px">
                                     <h:graphicImage url="imagen/exc.png" width="40"/>
-                                    <p:dataExporter type="xls" target="formRCDetallado:tablaReporteDetallado"
+                                    <p:dataExporter type="xls" target="formRCDetallado:tablaReporteDetalladoDEPAR"
                                                     fileName="Reporte Detallado de Colaborador #{reportesBean.colaboradorR.nombre}"/>
                                 </h:commandLink>
 
                                 <h:commandLink>
                                     <h:graphicImage url="imagen/png.jpg" width="40"/>
                                     <p:dataExporter type="pdf" encoding="ISO-8859-1"
-                                                    target="formRCDetallado:tablaReporteDetallado"
+                                                    target="formRCDetallado:tablaReporteDetalladoDEPAR"
                                                     preProcessor="#{reporteBean.preProcessPDFReporteCD}"
                                                     fileName="Reporte Detallado de Colaborador #{reporteBean.colaboradorR.nombre}"/>
                                 </h:commandLink>
@@ -119,13 +119,13 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                     </center>
                     <div>
                         <h:form id="formRCDetallado">
-                            <p:dataTable var="reporte" reflow="true" responsive="true"
+                            <p:dataTable var="reporte" reflow="true" rows="10" responsive="true"
                                          style="margin-top: 25px"
                                          value="#{reporteBean.reporteColaboradorDetalladosList}"
                                          emptyMessage="No se han encontrado datos"
                                          resizableColumns="true"
-                                         id="tablaReporteDetallado"
-                                         widgetVar="tablaReporteDetallado"
+                                         id="tablaReporteDetalladoDEPAR"
+                                         widgetVar="tablaReporteDetalladoDEPAR"
                                          paginator="true"
                                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                          scrollable="true" scrollWidth="100%" scrollHeight="150">
@@ -168,7 +168,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                             <center>
                                 <h:panelGrid id="grafico" style="width: 470px; height: 410px;">
                                     <p:autoUpdate/>
-                                    <p:barChart  widgetVar="chart" model="#{reporteBean.barModel}" style="width: 490px; height: 420px;" rendered="#{reportesBean.barModel != null}"/>
+                                    <p:chart type="bar"  widgetVar="chart" model="#{reporteBean.modelD}" style="width: 490px; height: 420px;" rendered="#{reportesBean.modelD != null}"/>
                                 </h:panelGrid>
                             </center>
                             <center>
