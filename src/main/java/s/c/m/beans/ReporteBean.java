@@ -233,7 +233,7 @@ public class ReporteBean {
 
 
     public double diasDisponibles(Colaborador colaborador) throws ParseException {//Funcion para calcular los dias disponible de vacaciones
-
+ 
         VacacionesPorColaborador disponibles = new VacacionesPorColaborador();
         disponibles = vacacionesPorColaboradorService.findVacacionesPorColaborador(colaborador);//Se consulta los dia disponibles
         int anios = calculaAnios(colaborador);//Se consulta los years que este laborando el cola en la empresa
@@ -242,7 +242,7 @@ public class ReporteBean {
 
         if(anios == 0){//Si solo ha trabajado meses
             diasLibresTotales = calculaMesesMinimos(colaborador) - diasDisf;//Los meses que tenga laborados cuentan como dias libres
-        }
+        } 
         else if(anios > 0) {//Si ha trabajado un anio ya se le pueden contar los dias libres
             for (int i = 1; i <= anios; i++) {//Cambio aqui
                 if (i == 1 || i == 2) {//IF QUE INCLUYE TAMBIEN EL PRIMER DIA
@@ -366,7 +366,6 @@ public class ReporteBean {
                     }
                    // GraphicColaboradorDetallado();
                     GraphicLlegadasTardias();
-
                 } else {
                     addMessage("Aviso", "NO se encontraron Marcas Laboradas con ese Rango");
                 }
@@ -444,7 +443,7 @@ public class ReporteBean {
                 } else {
                     addMessage("Aviso", "NO se encontraron Marcas Laboradas con ese Rango");
                 }
-            }
+            } 
         } else {
             addMessage("Aviso", "NO se encontró el Colaborador con la cédula: " + cedulaReporte);
         }
