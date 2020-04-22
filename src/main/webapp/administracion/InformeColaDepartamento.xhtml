@@ -61,10 +61,12 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                                indicateRequired="false" for="fecha1"/>
                                 <p:calendar autocomplete="off" required="true"
                                             value="#{reporteBean.fechaInicioR}"
+                                            maxdate="#{colaboradorBean.fecha}"
                                             requiredMessage="Ingrese la Fecha inicio"
                                             id="fecha1" pattern="yyyy-MM-dd">
                                     <f:ajax event="dateSelect" execute="@this" render="@this fIRmessage"/>
                                     <p:ajax update="FIRLabel"/>
+                                    <p:ajax event="dateSelect" update="fecha2" />
                                 </p:calendar>
                                 <p:watermark value="Ingrese la fecha inicial" for="fecha1"/>
                                 <p:message id="fIRmessage" for="fecha1"/>
@@ -74,7 +76,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                 <p:calendar autocomplete="off" required="true"
                                             value="#{reporteBean.fechaFinalR}"
                                             maxdate="#{colaboradorBean.fecha}"
-                                            requiredMessage="Ingrese la Fecha final"
+                                            mindate="#{reporteBean.fechaInicioR}"                                            requiredMessage="Ingrese la Fecha final"
                                             id="fecha2" pattern="yyyy-MM-dd">
                                     <f:ajax event="dateSelect" execute="@this" render="@this FFRmessage"/>
                                     <p:ajax update="FFRLabel"/>

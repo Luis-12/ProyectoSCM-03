@@ -451,16 +451,24 @@ public class ReporteBean {
     public double calculaHorasEntreDosTiempos(Time tInicio, Time tFinal) {
         double horasTotales = 0.0;
         long iniM = tInicio.getTime();
-        long finM = tFinal.getTime();
+        long finM=0;
+        try {
+             finM = tFinal.getTime();
+        }catch (Exception e){}
 
-        if (finM < iniM) {//Si la fecha de marca fin es menor a la fecha de marca inicio quiere decir que marco el otro dia
-            finM = finM + 86400000;//Por lo tanto se le suman los milisegundos de un dia
-            horasTotales = (double) ((Math.abs(finM - iniM)) / (1000 * 60 * 60));//Se hace le calculo normal
-            System.out.println("Horas Calculadas Para dos dias: " + horasTotales);
-        } else {//Si no es menor la fecha fin que la ini
-            horasTotales = (double) ((Math.abs(finM - iniM)) / (1000 * 60 * 60));//Se hace le calculo normal
-            System.out.println("Horas Calculadas: " + horasTotales);
+        if(finM!=0) {
+            if (finM < iniM) {//Si la fecha de marca fin es menor a la fecha de marca inicio quiere decir que marco el otro dia
+                finM = finM + 86400000;//Por lo tanto se le suman los milisegundos de un dia
+                horasTotales = (double) ((Math.abs(finM - iniM)) / (1000 * 60 * 60));//Se hace le calculo normal
+                System.out.println("Horas Calculadas Para dos dias: " + horasTotales);
+            } else {//Si no es menor la fecha fin que la ini
+                horasTotales = (double) ((Math.abs(finM - iniM)) / (1000 * 60 * 60));//Se hace le calculo normal
+                System.out.println("Horas Calculadas: " + horasTotales);
+            }
+        }else {
+            horasTotales=0.0;
         }
+
         return horasTotales;
     }
 
