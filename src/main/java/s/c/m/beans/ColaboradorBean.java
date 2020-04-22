@@ -56,10 +56,6 @@ public class ColaboradorBean {
     private Colaborador colaborador = new Colaborador();
     private Colaborador colaboradorMarca = new Colaborador();
 
-    private List<Colaborador> listaGrafico;
-    private PieChartModel torta;
-
-
     private Colaborador colaborador1 = new Colaborador();
     private Colaborador colaboradorlogueado = new Colaborador();
     private Colaborador selectcolaborador = new Colaborador();
@@ -124,27 +120,9 @@ public class ColaboradorBean {
     @PostConstruct
     public void init() {
         Colaborador miC = new Colaborador();
-        GraficarColaboradoresLaborando();
     }
 
     /*--Set y Get--*/
-
-
-    public PieChartModel getTorta() {
-        return torta;
-    }
-
-    public void setTorta(PieChartModel torta) {
-        this.torta = torta;
-    }
-
-    public List<Colaborador> getListaGrafico() {
-        return listaGrafico;
-    }
-
-    public void setListaGrafico(List<Colaborador> listaGrafico) {
-        this.listaGrafico = listaGrafico;
-    }
 
     public String getEstado() {
         return estado;
@@ -384,27 +362,6 @@ public class ColaboradorBean {
     }
 
     //-------------------------finaliza Set y Get-----------------------------
-    //-----------------------Inican métodos del grafico--------------------------
-    public void listarColaboradorGrafico() {
-        //solo para probar si funciona
-        colaboradorService.getAllColaboradoresActivos();
-        GraficarColaboradoresLaborando();
-    }
-
-    public void GraficarColaboradoresLaborando() {
-        torta = new PieChartModel();
-
-        for (Colaborador cola : colaboradorService.getAllColaboradoresActivos()) {
-            torta.set(cola.getNombre(), cola.getTelefono()); //se necesita un numero
-        }
-        torta.setLegendPosition("bottom");
-        torta.setFill(true);
-        torta.setDataLabelFormatString("%d%%");
-        //torta.setShowDataLabels(true);
-        torta.setDiameter(190);
-    }
-
-    //-----------------------Finaliza método del grafico-----------------------
 
     //-----------------------Inica método del menú--------------------------
 

@@ -364,8 +364,6 @@ public class ReporteBean {
                             llegadasTardias.add(miRT);
                         }
                     }
-                   // GraphicColaboradorDetallado();
-                    GraphicLlegadasTardias();
                 } else {
                     addMessage("Aviso", "NO se encontraron Marcas Laboradas con ese Rango");
                 }
@@ -730,22 +728,6 @@ public class ReporteBean {
 
     }
 
-    public void GraphicLlegadasTardias(){ //métodos del grafico colaborador detallado
-        model = new HorizontalBarChartModel();
-        ChartSeries tardias = new ChartSeries();
-        tardias.setLabel("Tardias");
-
-        for(ReporteLlegadasTardias ml : llegadasTardias){
-            tardias.set(ml.getCedula(),ausencias(ml.getCedula()));
-        }
-        model.addSeries(tardias);
-        model.setTitle("Llegadas Tardias");
-        Axis xAxis = model.getAxis(AxisType.X);
-        xAxis.setLabel("Tardias");
-        Axis yAxis = model.getAxis(AxisType.Y);
-        yAxis.setLabel("Cedula");
-    }
-
     int ausencias(String id){
         List<ReporteLlegadasTardias> result = llegadasTardias.stream()
                 .filter(item -> item.getCedula().equals(id))
@@ -816,38 +798,9 @@ public class ReporteBean {
 
                     }
                 }
-                GraphicColaboradorxDepartamento();
+
             }
         }
-
-    }
-
-
-
-    public void GraphicColaboradorxDepartamento(){
-
-        modelD = new HorizontalBarChartModel();
-        for(ReporteColaboradorDetallado miRC : reporteColaboradorDetalladosList){
-            ChartSeries horas= new ChartSeries();
-            ChartSeries tardias = new ChartSeries();
-            ChartSeries vacaciones = new ChartSeries();
-            horas.setLabel("Horas Laboradas");
-            tardias.setLabel("Marcas Tardías");
-            vacaciones.setLabel("Vacaciones Disponibles");
-            horas.set(miRC.getCedula(), miRC.getCantHorasLaboradas());
-            tardias.set(miRC.getCedula(), miRC.getCantLlegadasTardias());
-            vacaciones.set(miRC.getCedula(), miRC.getDiasDispoVacaciones());
-            modelD.addSeries(horas);
-            modelD.addSeries(tardias);
-            modelD.addSeries(vacaciones);
-        }
-
-        modelD.setTitle("Gráfica");
-        modelD.setLegendPosition("e");
-        modelD.setStacked(true);
-        Axis xAxis = modelD.getAxis(AxisType.X);
-        Axis yAxis = modelD.getAxis(AxisType.Y);
-        yAxis.setLabel("Cedula");
 
     }
 
