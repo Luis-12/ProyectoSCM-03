@@ -799,10 +799,11 @@ public class ColaboradorBean {
             addMessage("Aviso", "No se encuentra el Colaborador");
             mensaje = "No se Encuentra el Colaborador";
             current.ajax().update("msj");
-        } else//Si es asi se pasa a validar que tenga horario asignado
+        } else//Si es asi se pasa a validar que el colaborador este activo y tenga horario
         {
             habilitarAccion();
         }
+        colaboradorMarca = new Colaborador();
     }
 
     public void listaMarcasPorJornada() {//Funcion para listar las marcas que tiene el colaborador en la jornada
@@ -1732,44 +1733,41 @@ public class ColaboradorBean {
         int fFinal = Integer.parseInt(fechaF);
 
         System.out.println("Meses desde CSolicitud: " + calculaMesesMinimos(colaboradorSolicitante));
-        if (fechaI.equals(fechaF)) {
-            addMessage("Aviso", "¡Las fechas NO pueden ser iguales!");
-        } else {
-            if (fInicio >= fFinal) {
-                addMessage("Aviso", "Las fecha final de vacaciones NO puede ser menor que la de fecha de inicio de vacaciones");
-            } else if (calculaMesesMinimos(colaboradorSolicitante) < 6) {//ACA VA LA VALIDACION DE 6 MESES LABORANDO si es menor de 6
-                addMessage("Aviso", "No a laborado los meses suficientes para poder solicitar vacaciones");
-            } else {//Si cumple con la condicion de 6 mese laborado puede hacer la solicitud
-                int diasSol = CalculaDiasSolicitados();
-                int diasDispo = vacacionesPorColaborador.getDiasdisponibles();
 
-                if (diasSol <= diasDispo) {//Si los dias solicitados son menores a los disponibles puede realizar la solicitud
+        if (fInicio > fFinal) {
+            addMessage("Aviso", "Las fecha final de vacaciones NO puede ser menor que la de fecha de inicio de vacaciones");
+        } else if (calculaMesesMinimos(colaboradorSolicitante) < 6) {//ACA VA LA VALIDACION DE 6 MESES LABORANDO si es menor de 6
+            addMessage("Aviso", "No a laborado los meses suficientes para poder solicitar vacaciones");
+        } else {//Si cumple con la condicion de 6 mese laborado puede hacer la solicitud
+            int diasSol = CalculaDiasSolicitados();
+            int diasDispo = vacacionesPorColaborador.getDiasdisponibles();
 
-                    if (vacacionesService.buscarPendientes("Pendiente", colaboradorSolicitante) != null) {
-                        addMessage("Aviso", "¡Tiene una solicitud pendiente. Espere a que se procese!");
-                    } else {
-                        solicitudVac.setColaborador(colaboradorSolicitante);
-                        solicitudVac.setEstado("Pendiente");
-                        solicitudVac.setDiasSolicitados(diasSol);
-                        solicitudVac.setJustificacion("Justifique la Decisión");
-                        System.out.println("Colaborador Solicitante desde VB: " + colaboradorSolicitante.getPk_idColaborador());
-                        System.out.println("NOMBRE: " + colaboradorSolicitante.getNombre());
-                        System.out.println("Fecha inicio: " + solicitudVac.getFechainicio());
-                        System.out.println("Fecha final: " + solicitudVac.getFechafinal());
-                        System.out.println("Dias Disponibles: " + diasDispo);
-                        //Aca despues de cargar los datos en el objeto
-                        vacacionesService.createVacaciones(solicitudVac);//Se llama la funcion para agregar la solicitud a la base
-                        addMessage("Aviso", "Solicitud Realizada con Éxito.");
-                        solicitudVac = new Vacaciones();
-                        vacacionesList = vacacionesService.getAllSolVacaciones(colaboradorlogueado);
-                        //Se refresca la tabla
-                    }
+            //Aca borre la validacion de dias iguales
+            if (diasSol <= diasDispo) {//Si los dias solicitados son menores a los disponibles puede realizar la solicitud
+                if (vacacionesService.buscarPendientes("Pendiente", colaboradorSolicitante) != null) {
+                    addMessage("Aviso", "¡Tiene una solicitud pendiente. Espere a que se procese!");
                 } else {
-                    addMessage("Aviso", "¡NO puede solicitar más días de los que Dispone!");
+                    solicitudVac.setColaborador(colaboradorSolicitante);
+                    solicitudVac.setEstado("Pendiente");
+                    solicitudVac.setDiasSolicitados(diasSol);
+                    solicitudVac.setJustificacion("Justifique la Decisión");
+                    System.out.println("Colaborador Solicitante desde VB: " + colaboradorSolicitante.getPk_idColaborador());
+                    System.out.println("NOMBRE: " + colaboradorSolicitante.getNombre());
+                    System.out.println("Fecha inicio: " + solicitudVac.getFechainicio());
+                    System.out.println("Fecha final: " + solicitudVac.getFechafinal());
+                    System.out.println("Dias Disponibles: " + diasDispo);
+                    //Aca despues de cargar los datos en el objeto
+                    vacacionesService.createVacaciones(solicitudVac);//Se llama la funcion para agregar la solicitud a la base
+                    addMessage("Aviso", "Solicitud Realizada con Éxito.");
+                    solicitudVac = new Vacaciones();
+                    vacacionesList = vacacionesService.getAllSolVacaciones(colaboradorlogueado);
+                    //Se refresca la tabla
                 }
+            } else {
+                addMessage("Aviso", "¡NO puede solicitar más días de los que Dispone!");
             }
         }
-
+        solicitudVac = new Vacaciones();
     }
 
     //Falta funcion que calcula los dias que pide el mae
