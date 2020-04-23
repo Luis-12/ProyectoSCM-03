@@ -161,6 +161,9 @@ h1{
 #just3_title{
     margin-left: -50px;
 }
+.ui-message-error{
+  width: 56%;
+}
 
 .jqplot-highlighter-tooltip
 {

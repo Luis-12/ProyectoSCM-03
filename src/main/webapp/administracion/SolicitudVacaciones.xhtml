@@ -45,7 +45,7 @@
         <p:dataTable id="diasDisponibles" var="diasDisponibles" style="width: 53%" reflow="true" responsive="true"
                      value="#{colaboradorBean.vacacionesPorColaborador}">
                 <p:column  headerText="Días disponibles">
-                <h:outputText value="#{diasDisponibles.diasdisponibles}"/>
+                <h:outputText value="#{diasDisponibles.diasdisponibles}" id="dias"/>
                 </p:column>
         </p:dataTable>
     </div>
@@ -87,6 +87,7 @@
                 <p:message for="fechaFinal"/>
 
                 <p:commandButton value="Enviar"
+                                 widgetVar="btn"
                                  update="form:msgs, AgregarSolicitud"
                                  style="margin-right:20px;margin-top: 20px"
                                  styleClass="ui-priority-primary"
@@ -104,6 +105,19 @@
         <h:outputLink value="../acerca.xhtml">©</h:outputLink> <p:outputLabel
             value=" SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA"/>
     </div>
+    <script>
+        function habilitar() {
+
+           var s= document.getElementById('diasDisponibles'+':0'+':dias');
+
+           if(s.textContent == '0'){
+               $("button[type=submit]").prop("disabled", false).addClass('ui-state-disabled');
+               $("input[type=text]").prop("disabled", false).addClass('ui-state-disabled');
+
+           }
+        }
+        habilitar();
+    </script>
 
 </h:body>
 </html>
