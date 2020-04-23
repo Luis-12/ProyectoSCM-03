@@ -51,7 +51,7 @@
     </div>
 
 
-
+<p:outputLabel id="mes" value="#{colaboradorBean.cantidadmes}" style="display: none;"/>
     <div id="solicitud">
 
         <h:form id="AgregarSolicitud">
@@ -98,7 +98,7 @@
             <br/>
         </h:form>
     </div>
-
+  <p:outputLabel />
 
     <div id="footer">
         <br/>
@@ -109,8 +109,8 @@
         function habilitar() {
 
            var s= document.getElementById('diasDisponibles'+':0'+':dias');
-
-           if(s.textContent == '0'){
+           var a=document.getElementById('mes');
+           if(s.textContent == '0' || a.textContent == "no"){
                $("button[type=submit]").prop("disabled", false).addClass('ui-state-disabled');
                $("input[type=text]").prop("disabled", false).addClass('ui-state-disabled');
 

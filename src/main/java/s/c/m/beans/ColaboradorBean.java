@@ -6,17 +6,6 @@ import com.lowagie.text.Font;
 import com.lowagie.text.Image;
 import com.lowagie.text.pdf.BaseFont;
 import org.primefaces.PrimeFaces;
-import org.primefaces.model.chart.PieChartModel;
-import org.primefaces.model.charts.ChartData;
-import org.primefaces.model.charts.axes.cartesian.CartesianScales;
-import org.primefaces.model.charts.axes.cartesian.linear.CartesianLinearAxes;
-import org.primefaces.model.charts.axes.cartesian.linear.CartesianLinearTicks;
-import org.primefaces.model.charts.bar.BarChartDataSet;
-import org.primefaces.model.charts.bar.BarChartModel;
-import org.primefaces.model.charts.bar.BarChartOptions;
-import org.primefaces.model.charts.optionconfig.legend.Legend;
-import org.primefaces.model.charts.optionconfig.legend.LegendLabel;
-import org.primefaces.model.charts.optionconfig.title.Title;
 import org.primefaces.model.menu.MenuModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -68,6 +57,7 @@ public class ColaboradorBean {
     Calendar c2;
     private String base64Image = "";
     private MarcaLaboradas marcaLa = new MarcaLaboradas();
+    public String cantidadmes;
 
     private Vacaciones vacaciones = new Vacaciones();
     private Vacaciones vacaciones1 = new Vacaciones();
@@ -138,6 +128,14 @@ public class ColaboradorBean {
 
     public void setColaboradorSolicitante(Colaborador colaboradorSolicitante) {
         this.colaboradorSolicitante = colaboradorSolicitante;
+    }
+
+    public String getCantidadmes() {
+        return cantidadmes;
+    }
+
+    public void setCantidadmes(String cantidadmes) {
+        this.cantidadmes = cantidadmes;
     }
 
     public VacacionesPorColaborador getVacacionesPorColaboradorCreate() {
@@ -451,6 +449,15 @@ public class ColaboradorBean {
             FacesContext context = FacesContext.getCurrentInstance();
             colaboradorClave.setPk_idColaborador(colaboradorlogueado.getPk_idColaborador());
             colaboradorClave.setClave(colaboradorlogueado.getClave());
+            if(calculaMesesMinimos(colaborador1)<6)
+            {
+               cantidadmes="no";
+               current.ajax().update("mes");
+            }else
+            {
+                cantidadmes="si";
+                current.ajax().update("mes");
+            }
 
             if (colaboradorlogueado.getPk_idColaborador().equals(dbUsername)
                     && colaboradorlogueado.getClave().equals(dbPassword)
