@@ -1706,9 +1706,6 @@ public class ColaboradorBean {
 
             //Aca borre la validacion de dias iguales
             if (diasSol <= diasDispo) {//Si los dias solicitados son menores a los disponibles puede realizar la solicitud
-                if (vacacionesService.buscarPendientes("Pendiente", colaboradorSolicitante) != null) {
-                    addMessage("Aviso", "¡Tiene una solicitud pendiente. Espere a que se procese!");
-                } else {
                     solicitudVac.setColaborador(colaboradorSolicitante);
                     solicitudVac.setEstado("Pendiente");
                     solicitudVac.setDiasSolicitados(diasSol);
@@ -1724,7 +1721,6 @@ public class ColaboradorBean {
                     solicitudVac = new Vacaciones();
                     vacacionesList = vacacionesService.getAllSolVacaciones(colaboradorlogueado);
                     //Se refresca la tabla
-                }
             } else {
                 addMessage("Aviso", "¡NO puede solicitar más días de los que Dispone!");
             }

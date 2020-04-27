@@ -15,7 +15,6 @@ public interface VacacionesRepository extends CrudRepository<Vacaciones, Integer
     la tabla Vacaciones.*/
     Vacaciones findByColaborador(Colaborador idColaborador);//Se declara la funcion para consultar la vacaciones por colaborador.
    List<Vacaciones> findByEstado(String estado);//Se declara la funcion para consultar la vacaciones por colaborador.
-    Vacaciones findByEstadoAndAndColaborador(String estado, Colaborador idColaborador);//Se declara la funcion para consultar si hay solicitudes pendiestes
 
 
 }
