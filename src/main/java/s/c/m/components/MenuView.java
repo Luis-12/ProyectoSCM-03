@@ -46,11 +46,6 @@ public class MenuView {
         item.setCommand("CantidadLaborando.xhtml");
         tercerSubmenu.addElement(item);
 
-        item = new DefaultMenuItem("Colaboradores Laborando en un Lapso de Tiempo");
-        item.setIcon("ui-icon-clipboard");
-        item.setCommand("ColaboradorLapso.xhtml");
-        tercerSubmenu.addElement(item);
-
         item = new DefaultMenuItem("Colaborador Detallado");
         item.setIcon("ui-icon-clipboard");
         item.setCommand("InformeColaborador.xhtml");
