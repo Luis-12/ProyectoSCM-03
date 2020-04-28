@@ -231,11 +231,6 @@ public class ReporteBean {
         return meses;
     }
 
-    public List<Colaborador> buscarLaborando()
-    {
-        Calendar calendar=Calendar.getInstance();
-        return  marcaLaboradaService.buscarLaborando();
-    }
 
     public double diasDisponibles(Colaborador colaborador) throws ParseException {//Funcion para calcular los dias disponible de vacaciones
  

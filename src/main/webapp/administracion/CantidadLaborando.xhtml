@@ -50,6 +50,9 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Analista'}">
 
         <div>
             <h:form >
+
+                <p:tabView style="width: 98%">
+                    <p:tab title="Tabla">
                         <h:commandLink style="margin-left: 60px">
                             <h:graphicImage url="imagen/exc.png" width="40"/>
                             <p:dataExporter type="xls" target="tablaColaborador" fileName="Reporte Colaboradores Laborando" />
@@ -61,7 +64,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Analista'}">
                         </h:commandLink>
 
 
-                        <p:dataTable  var="colaborador" value="#{reporteBean.buscarLaborando()}" rows="10" reflow="true" responsive="true" style="margin-top: 15px; width: 97%" id="tablaColaborador"
+                        <p:dataTable  var="colaborador" value="#{colaboradorBean.colaboradores}" rows="10" reflow="true" responsive="true" style="margin-top: 15px; width: 97%" id="tablaColaborador"
                                       emptyMessage="No se han encontrado colaboradores"
                                       resizableColumns="true"
                                       selectionMode="single"
@@ -82,6 +85,23 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Analista'}">
 
 
                         </p:dataTable>
+                    </p:tab>
+                    <p:tab title="Grafica">
+                        <h1 style="text-align: center;font-size: 18px">Gráfico Cantidad Laborando</h1>
+                        <center>
+                            <p:commandButton type="button" value="Descargar como Imagen" onclick="exportChart()"/>
+                        </center>
+
+                        <h:panelGrid id="grafico" style="width: 490px; height: 380px; margin-left: 430px" >
+
+                        </h:panelGrid>
+                        <p:dialog widgetVar="dlg" showEffect="fade" modal="true" header="Gráfico como imagen" resizable="false">
+                            <p:outputPanel id="output" layout="block" style="width:490px;height:350px"/>
+                        </p:dialog>
+                        <br/>
+                    </p:tab>
+
+                </p:tabView>
 
 
             </h:form>
