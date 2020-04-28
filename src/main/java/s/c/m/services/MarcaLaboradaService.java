@@ -7,6 +7,7 @@ import s.c.m.entities.MarcaLaboradas;
 import s.c.m.repositories.MarcasLaboradasRepository;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -54,6 +55,12 @@ public class MarcaLaboradaService {
             marcaLaboradas=marcasLaboradasRepository.findByColaboradorAndEstado(idColaborador,estado);//Aca se listan las marcas por colaborador y estado usando la funcion del repository
         }catch (Exception ex){}
         return marcaLaboradas;
+    }
+
+    public List<Colaborador> buscarLaborando()
+    {
+        Calendar calendar=Calendar.getInstance();
+        return  marcasLaboradasRepository.findByEstadoAndFechaMarca("Entrada",calendar.getTime());
     }
 
     public void createMarcaLaborada(MarcaLaboradas marcaLaboradas)//Funcion para agregar marca laborada a la base.
