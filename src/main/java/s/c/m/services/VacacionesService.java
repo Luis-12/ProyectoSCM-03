@@ -81,12 +81,6 @@ public class VacacionesService {
 
     }
 
-    public Vacaciones buscarPendientes(String estado, Colaborador a) {//Funcion para actualizar las vacaciones en la base
-
-       return vacacionesRepository.findByEstadoAndAndColaborador(estado,a);
-
-    }
-
 
 
 }

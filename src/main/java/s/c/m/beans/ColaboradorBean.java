@@ -763,11 +763,11 @@ public class ColaboradorBean {
             addMessage("Aviso", "No se encuentra el Colaborador");
             mensaje = "No se Encuentra el Colaborador";
             current.ajax().update("msj");
+            colaboradorMarca = new Colaborador();
         } else//Si es asi se pasa a validar que el colaborador este activo y tenga horario
         {
             habilitarAccion();
         }
-        colaboradorMarca = new Colaborador();
     }
 
     public void listaMarcasPorJornada() {//Funcion para listar las marcas que tiene el colaborador en la jornada
@@ -780,7 +780,7 @@ public class ColaboradorBean {
         if (mLaborada == null) {//Si no ha marcado entro aca
         } else {//Lleno objeto con hora entrada y la descripcion de entrada
             if (mLaborada.getHoraEntrada() != null) {//Si solo a marcado entrada
-                MarcasJornada miMJ = new MarcasJornada();
+                MarcasJornada miMJ = new MarcasJornada(); 
                 //Ingreso la entrada
                 miMJ.setMarca(mLaborada.getHoraEntrada());//Se agrega el objeto de entrada
                 miMJ.setDescripcion("Entrada");
@@ -1706,9 +1706,6 @@ public class ColaboradorBean {
 
             //Aca borre la validacion de dias iguales
             if (diasSol <= diasDispo) {//Si los dias solicitados son menores a los disponibles puede realizar la solicitud
-                if (vacacionesService.buscarPendientes("Pendiente", colaboradorSolicitante) != null) {
-                    addMessage("Aviso", "¡Tiene una solicitud pendiente. Espere a que se procese!");
-                } else {
                     solicitudVac.setColaborador(colaboradorSolicitante);
                     solicitudVac.setEstado("Pendiente");
                     solicitudVac.setDiasSolicitados(diasSol);
@@ -1724,7 +1721,6 @@ public class ColaboradorBean {
                     solicitudVac = new Vacaciones();
                     vacacionesList = vacacionesService.getAllSolVacaciones(colaboradorlogueado);
                     //Se refresca la tabla
-                }
             } else {
                 addMessage("Aviso", "¡NO puede solicitar más días de los que Dispone!");
             }
