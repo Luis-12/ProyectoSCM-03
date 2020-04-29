@@ -3,6 +3,7 @@ package s.c.m.beans;
 import com.lowagie.text.*;
 import com.lowagie.text.Font;
 import com.lowagie.text.pdf.BaseFont;
+import org.primefaces.PrimeFaces;
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.ChartSeries;
@@ -942,6 +943,12 @@ public class ReporteBean {
 
 //-------------------------------------------------------------------------------------------------------
 
+    public  void resetlist()
+    {
+        PrimeFaces current = PrimeFaces.current();
+        reporteColaboradorDetalladosList=new ArrayList<>();
+        current.ajax().update("formRCDetallado:tablaReporteDetallado");
+    }
 
     public void addMessage(String summary, String detail) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);

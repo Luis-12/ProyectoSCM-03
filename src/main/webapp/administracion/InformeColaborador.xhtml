@@ -186,6 +186,9 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                               <p:commandButton type="button" value="Descargar como Imagen" onclick="exportChart()"/>
                           </center>
                       </div>
+                      <h:form id="frm">
+                          <p:commandButton id="hdnBtn" actionListener="#{reporteBean.resetlist}"  style="display: none"/>
+                      </h:form>
 
                   </p:dialog>
                     <div id="footer">
@@ -206,6 +209,17 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                             link.click();
                             document.body.removeChild(link);
                             return false;
+                        }
+                        function limpiar() {
+
+                            $("#reporteDetalladoC")[0].reset();
+                            document.getElementById('frm'+':hdnBtn').click();
+                            document.getElementById('reporteDetalladoC'+':fecha2_input').setAttribute('value','');
+                            document.getElementById('reporteDetalladoC'+':fecha2_input').setAttribute('placeholder','Ingrese la fecha final');
+                            document.getElementById('reporteDetalladoC'+':fecha1_input').setAttribute('value','');
+                            document.getElementById('reporteDetalladoC'+':fecha1_input').setAttribute('placeholder','Ingrese la fecha inicial');
+                            document.getElementById('reporteDetalladoC'+':cedula').setAttribute('value','');
+                            document.getElementById('reporteDetalladoC'+':cedula').setAttribute('placeholder','Ingrese la cedula');
                         }
                     </script>
 
