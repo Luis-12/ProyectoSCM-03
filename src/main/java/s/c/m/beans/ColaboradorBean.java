@@ -57,7 +57,7 @@ public class ColaboradorBean {
     Calendar c2;
     private String base64Image = "";
     private MarcaLaboradas marcaLa = new MarcaLaboradas();
-    public String cantidadmes;
+    public String cantidadmes="";
 
     private Vacaciones vacaciones = new Vacaciones();
     private Vacaciones vacaciones1 = new Vacaciones();
@@ -452,12 +452,12 @@ public class ColaboradorBean {
             if(calculaMesesMinimos(colaborador1)<6)
             {
                cantidadmes="no";
-               current.ajax().update("mes");
             }else
             {
                 cantidadmes="si";
-                current.ajax().update("mes");
             }
+
+
 
             if (colaboradorlogueado.getPk_idColaborador().equals(dbUsername)
                     && colaboradorlogueado.getClave().equals(dbPassword)
@@ -564,6 +564,11 @@ public class ColaboradorBean {
             addMessage("Aviso", "El usuario ingresado no se encuetra registrado en el sistema");
             return null;
         }
+    }
+
+    public  String enableVacaciones()
+    {
+        return  cantidadmes;
     }
 
     public boolean validaClave() {//Valida que la clave no sea igual a la anterior

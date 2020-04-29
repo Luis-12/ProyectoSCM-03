@@ -50,11 +50,15 @@
         </p:dataTable>
     </div>
 
+    <h:form>
+        <p:outputLabel id="mesLa" value="#{colaboradorBean.enableVacaciones()}" style="display: none" />
+    </h:form>
 
-<p:outputLabel id="mes" value="#{colaboradorBean.cantidadmes}" style="display: none;"/>
+
     <div id="solicitud">
 
         <h:form id="AgregarSolicitud">
+
             <center>
                 <br/>
                 <br/>
@@ -109,7 +113,7 @@
         function habilitar() {
 
            var s= document.getElementById('diasDisponibles'+':0'+':dias');
-           var a=document.getElementById('mes');
+           var a=document.getElementById('j_idt13'+':mesLa');
            if(s.textContent == '0' || a.textContent == "no"){
                $("button[type=submit]").prop("disabled", false).addClass('ui-state-disabled');
                $("input[type=text]").prop("disabled", false).addClass('ui-state-disabled');
