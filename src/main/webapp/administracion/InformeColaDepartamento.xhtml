@@ -172,7 +172,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                             <center>
                                 <h:panelGrid id="grafico" style="width: 470px; height: 410px;">
                                     <p:autoUpdate/>
-                                    <p:barChart  widgetVar="chart" model="#{reporteBean.modelD}" style="width: 490px; height: 420px;" rendered="#{reporteBean.modelD != null}"/>
+                                    <p:chart type="bar"  widgetVar="chart" model="#{reporteBean.modelD}" style="width: 490px; height: 420px;" rendered="#{reporteBean.modelD != null}"/>
                                 </h:panelGrid>
                             </center>
                             <center>
