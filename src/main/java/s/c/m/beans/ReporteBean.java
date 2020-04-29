@@ -869,6 +869,8 @@ public class ReporteBean {
 
                 reporteColaboradorHorarioList.add(miRC);//Se llena la lista de la tabla
             }
+        }else {
+            addMessage("Aviso", "NO se encontraron colaboradores en el departamento seleccionado");
         }
     }
 
