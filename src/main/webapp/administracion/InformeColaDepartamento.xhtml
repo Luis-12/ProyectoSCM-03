@@ -162,6 +162,9 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                             </p:dataTable>
                         </h:form>
                     </div>
+                    <h:form id="frmD">
+                        <p:commandButton id="hdnBtnD" actionListener="#{reporteBean.resetlistDepart}"  style="display: none"/>
+                    </h:form>
 
                     <p:dialog id="graf" header="Gráfico Colaborador Detalle" style="text-align:center; width: 35%"  showEffect="fade" hideEffect="fade"
                               widgetVar="graf" resizable="false" minWidth="110" >
@@ -184,8 +187,17 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                         <h:outputLink value="../acerca.xhtml">©</h:outputLink> <p:outputLabel
                             value=" SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA"/>
                     </div>
+                    <script type="text/javascript">
+                    function limpiar() {
 
-
+                    $("#reporteDetalladoC")[0].reset();
+                    document.getElementById('frmD'+':hdnBtnD').click();
+                    document.getElementById('reporteDetalladoC'+':fecha2_input').setAttribute('value','');
+                    document.getElementById('reporteDetalladoC'+':fecha2_input').setAttribute('placeholder','Ingrese la fecha final');
+                    document.getElementById('reporteDetalladoC'+':fecha1_input').setAttribute('value','');
+                    document.getElementById('reporteDetalladoC'+':fecha1_input').setAttribute('placeholder','Ingrese la fecha inicial');
+                    }
+                    </script>
                 </h:body>
 
             </div>

@@ -54,17 +54,20 @@ public class MenuView {
 
         item = new DefaultMenuItem("Colaborador por Departamento");
         item.setIcon("ui-icon-clipboard");
-        item.setCommand("InformeColaDepartamento.xhtml");
+        item.setCommand("#{reporteBean.limpiaObjetosInformeCDepartamento}");
+        item.setOnclick("limpiar()");
         tercerSubmenu.addElement(item);
 
         item = new DefaultMenuItem("Reporte Horarios");
         item.setIcon("ui-icon-clipboard");
-        item.setCommand("ReporteHorarios.xhtml");
+        item.setCommand("#{reporteBean.limpiaObjetosInformeHorarios}");
+        item.setOnclick("limpiar()");
         tercerSubmenu.addElement(item);
 
         item = new DefaultMenuItem("Reporte Tardías");
         item.setIcon("ui-icon-clipboard");
-        item.setCommand("ReporteTardias.xhtml");
+        item.setCommand("#{reporteBean.limpiaObjetosInformeTardias}");
+        item.setOnclick("limpiar()");
         tercerSubmenu.addElement(item);
         //model.addElement(tercerSubmenu);
 

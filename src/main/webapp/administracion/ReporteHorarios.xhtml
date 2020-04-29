@@ -129,14 +129,21 @@
 
                         </h:form>
                     </div>
-
+                    <h:form id="frmH">
+                        <p:commandButton id="hdnBtnH" actionListener="#{reporteBean.resetlistHorarios}"  style="display: none"/>
+                    </h:form>
 
                     <div id="footer">
                         <br/>
                         <h:outputLink value="../acerca.xhtml" >©</h:outputLink>  <p:outputLabel value=" SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA" />
                     </div>
 
-
+                    <script type="text/javascript">
+                        function limpiar() {
+                            //$("#reporteDetalladoC")[0].reset();
+                            document.getElementById('frmH'+':hdnBtnH').click();
+                        }
+                    </script>
 
                 </h:body>
 

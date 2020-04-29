@@ -85,13 +85,35 @@ public class ReporteBean {
     @Autowired
     MarcaLaboradaService marcaLaboradaService;
 
-    public String limpiaObjetos(){
-        System.out.println("SE ESTANNNN LIMPIANDO LOS OBJETOOOOOOS");
+    public String limpiaObjetos(){//Funcion que limpia campos y redirecciona a Reporte COLADETALLADO
+        //System.out.println("SE ESTANNNN LIMPIANDO LOS OBJETOOOOOOS");
         this.cedulaReporte = "";
         fechaInicioR = null;
         fechaFinalR = null;
         this.reporteColaboradorDetalladosList = new ArrayList<>();
         return "InformeColaborador.xhtml";
+    }
+
+    public String limpiaObjetosInformeCDepartamento(){//Funcion que limpia campos y redirecciona a Reporte COLADETALLADODEPART
+        //System.out.println("SE ESTANNNN LIMPIANDO LOS OBJETOOOOOOS");
+        this.cedulaReporte = "";
+        fechaInicioR = null;
+        fechaFinalR = null;
+        this.reporteColaboradorDetalladosList = new ArrayList<>();
+        return "InformeColaDepartamento.xhtml";
+    }
+
+    public String limpiaObjetosInformeHorarios(){//Funcion que limpia campos y redirecciona a Reporte COLAHORARIOS
+        //System.out.println("SE ESTANNNN LIMPIANDO LOS OBJETOOOOOOS");
+        this.reporteColaboradorHorarioList = new ArrayList<>();
+        return "ReporteHorarios.xhtml";
+    }
+
+    public String limpiaObjetosInformeTardias(){//Funcion que limpia campos y redirecciona a Reporte COLATARDIAS
+        fechaInicioR = null;
+        fechaFinalR = null;
+        this.llegadasTardias = new ArrayList<>();
+        return "ReporteTardias.xhtml";
     }
 
     public Colaborador getColaboradorR() {
@@ -967,12 +989,30 @@ public class ReporteBean {
 
 //-------------------------------------------------------------------------------------------------------
 
-    public  void resetlist()
-    {
+    public  void resetlist() {//Funcion que resetea lista de reporte DETCOLABORADOR y actualiza la tabla
         PrimeFaces current = PrimeFaces.current();
         reporteColaboradorDetalladosList=new ArrayList<>();
         current.ajax().update("formRCDetallado:tablaReporteDetallado");
     }
+
+    public  void resetlistDepart() {//Funcion que resetea lista de reporte COLADEPARTAMENTO y actualiza la tabla
+        PrimeFaces current = PrimeFaces.current();
+        reporteColaboradorDetalladosList=new ArrayList<>();
+        current.ajax().update("formRCDetallado:tablaReporteDetalladoDEPAR");
+    }
+
+    public  void resetlistHorarios() {//Funcion que resetea lista de reporte HORARIOS y actualiza la tabla
+        PrimeFaces current = PrimeFaces.current();
+        reporteColaboradorHorarioList = new ArrayList<>();
+        current.ajax().update("ReporteHorarios:tablaReporteHorario");
+    }
+
+    public void resetlistTardias(){//Funcion que resetea lista de reporte LTARDIAS y actualiza la tabla
+        PrimeFaces current = PrimeFaces.current();
+        llegadasTardias = new ArrayList<>();
+        current.ajax().update("formTardias:tablaReporteTardias");
+    }
+
 
     public void addMessage(String summary, String detail) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);

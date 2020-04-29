@@ -142,14 +142,25 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                             </p:dataTable>
                         </h:form>
                     </div>
+                    <h:form id="frmLT">
+                        <p:commandButton id="hdnBtnLT" actionListener="#{reporteBean.resetlistTardias}"  style="display: none"/>
+                    </h:form>
 
                     <div id="footer">
                         <br/>
                         <h:outputLink value="../acerca.xhtml">©</h:outputLink> <p:outputLabel
                             value=" SISTEMA CONTROL DE MARCAS WYNDHAM HERRADURA"/>
                     </div>
-
-
+                    <script type="text/javascript">
+                        function limpiar() {
+                            $("#reporteTardias")[0].reset();
+                            document.getElementById('frmLT'+':hdnBtnLT').click();
+                            document.getElementById('reporteTardias'+':fecha2_input').setAttribute('value','');
+                            document.getElementById('reporteTardias'+':fecha2_input').setAttribute('placeholder','Ingrese la fecha final');
+                            document.getElementById('reporteTardias'+':fecha1_input').setAttribute('value','');
+                            document.getElementById('reporteTardias'+':fecha1_input').setAttribute('placeholder','Ingrese la fecha inicial');
+                        }
+                    </script>
                 </h:body>
 
             </div>

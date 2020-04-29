@@ -44,10 +44,10 @@
             </p:submenu>
             <p:submenu label="Informes">
                 <p:menuitem value="Cantidad Laborando" outcome="CantidadLaborando.xhtml" icon="ui-icon-clipboard"/>
-                <p:menuitem value="Colaborador Detallado" outcome="InformeColaborador.xhtml" icon="ui-icon-clipboard"/>
-                <p:menuitem value="Colaborador por Departamento" outcome="InformeColaDepartamento.xhtml" icon="ui-icon-clipboard"/>
-                <p:menuitem value="Reporte Horarios" outcome="ReporteHorarios.xhtml" icon="ui-icon-clipboard"/>
-                <p:menuitem value="Reporte Tardías" outcome="ReporteTardias.xhtml" icon="ui-icon-clipboard"/>
+                <p:menuitem value="Colaborador Detallado" action="#{reporteBean.limpiaObjetos}" icon="ui-icon-clipboard"/>
+                <p:menuitem value="Colaborador por Departamento" action="#{reporteBean.limpiaObjetosInformeCDepartamento}" icon="ui-icon-clipboard"/>
+                <p:menuitem value="Reporte Horarios" action="#{reporteBean.limpiaObjetosInformeHorarios}" icon="ui-icon-clipboard"/>
+                <p:menuitem value="Reporte Tardías" action="#{reporteBean.limpiaObjetosInformeTardias}" icon="ui-icon-clipboard"/>
 
             </p:submenu>
             <p:submenu label="Vacaciones" >
