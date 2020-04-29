@@ -297,6 +297,11 @@ public class ReporteBean {
         return (int) cantidadDiasMesesExtra;
     }
 
+    public List<Colaborador> colaboradroLaborando()
+    {
+        return  marcaLaboradaService.coladorLaborando();
+    }
+
     public int calculaAnios(Colaborador colaborador) throws ParseException {//Funcion para calcular la cantidad de year que lleva el colaborador laborando
  /*       Calendar c1 = Calendar.getInstance();
         c2 = Calendar.getInstance();

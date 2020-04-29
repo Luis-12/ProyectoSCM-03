@@ -7,6 +7,7 @@ import s.c.m.entities.MarcaLaboradas;
 import s.c.m.repositories.MarcasLaboradasRepository;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +26,20 @@ public class MarcaLaboradaService {
             marcaLaboradas=marcasLaboradasRepository.findByFechaMarca(date);//Se lista las marcas laboradas usando la funcion del repository
         }catch (Exception ex){}
         return marcaLaboradas;
+    }
+
+    public  List<Colaborador> coladorLaborando()
+    {
+        List<Colaborador> colaboradorList = new ArrayList<>();
+        Calendar calendar=Calendar.getInstance();
+        try{
+            List<MarcaLaboradas> marcaLaboradas=marcasLaboradasRepository.findByEstadoAndFechaMarca("Entrada",calendar.getTime());
+            for(MarcaLaboradas marcaLab : marcaLaboradas){
+                colaboradorList.add(marcaLab.getColaborador());
+            }
+        }catch (Exception e){};
+
+        return colaboradorList;
     }
 
     public MarcaLaboradas buscaMarcaSinSalida(Colaborador colaborador)//Funcion para consultar la fecha en que no se marco salida

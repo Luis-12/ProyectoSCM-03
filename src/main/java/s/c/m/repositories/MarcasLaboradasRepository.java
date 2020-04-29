@@ -16,6 +16,7 @@ public interface MarcasLaboradasRepository extends CrudRepository<MarcaLaboradas
     MarcaLaboradas findTop1ByColaboradorOrderByFechaMarcaDesc(Colaborador idColaborador);//Se declara funcion para consultar la fecha en la que no se marco salidalaborada por id de colaborador y por fecha de marca
     MarcaLaboradas findByColaboradorAndEstado(Colaborador idColaborador , String estado);//Se declara funcion para consultar marcas laboradas por estado y por el id del colaborador
 
+    List<MarcaLaboradas> findByEstadoAndFechaMarca(String a,Date date);
     //Funcion para buscar las marcas entre un rango de fechas
     List<MarcaLaboradas> findByFechaMarcaBetween(Date fechaInicioR, Date fechaFinR);
 
