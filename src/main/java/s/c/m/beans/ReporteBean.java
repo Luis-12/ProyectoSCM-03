@@ -23,6 +23,7 @@ import s.c.m.entities.*;
 import s.c.m.services.*;
 
 import javax.annotation.ManagedBean;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -67,9 +68,6 @@ public class ReporteBean {
     private BarChartModel barModel=null;
     private HorizontalBarChartModel model=null;
 
-
-
-
     private HorizontalBarChartModel modelD=null;
 
 
@@ -86,6 +84,15 @@ public class ReporteBean {
     MarcaDescansoService marcaDescansoService;
     @Autowired
     MarcaLaboradaService marcaLaboradaService;
+
+    public String limpiaObjetos(){
+        System.out.println("SE ESTANNNN LIMPIANDO LOS OBJETOOOOOOS");
+        this.cedulaReporte = "";
+        fechaInicioR = null;
+        fechaFinalR = null;
+        this.reporteColaboradorDetalladosList = new ArrayList<>();
+        return "InformeColaborador.xhtml";
+    }
 
     public Colaborador getColaboradorR() {
         return colaboradorR;

@@ -766,7 +766,7 @@ public class ColaboradorBean {
             colaboradorMarca = new Colaborador();
         } else//Si es asi se pasa a validar que el colaborador este activo y tenga horario
         {
-            habilitarAccion();
+            habilitarAccion();   
         }
     }
 

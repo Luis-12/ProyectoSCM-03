@@ -48,7 +48,7 @@ public class MenuView {
 
         item = new DefaultMenuItem("Colaborador Detallado");
         item.setIcon("ui-icon-clipboard");
-        item.setCommand("InformeColaborador.xhtml");
+        item.setCommand("#{reporteBean.limpiaObjetos}");
         tercerSubmenu.addElement(item);
 
         item = new DefaultMenuItem("Colaborador por Departamento");
