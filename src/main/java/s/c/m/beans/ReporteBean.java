@@ -841,21 +841,22 @@ public class ReporteBean {
     public void GraphicColaboradorxDepartamento(){
 
         modelD = new HorizontalBarChartModel();
+        ChartSeries horas= new ChartSeries();
+        ChartSeries tardias = new ChartSeries();
+        ChartSeries vacaciones = new ChartSeries();
         for(ReporteColaboradorDetallado miRC : reporteColaboradorDetalladosList){
-            ChartSeries horas= new ChartSeries();
-            ChartSeries tardias = new ChartSeries();
-            ChartSeries vacaciones = new ChartSeries();
+
             horas.setLabel("Horas Laboradas");
             tardias.setLabel("Marcas Tardías");
             vacaciones.setLabel("Vacaciones Disponibles");
             horas.set(miRC.getCedula(), miRC.getCantHorasLaboradas());
             tardias.set(miRC.getCedula(), miRC.getCantLlegadasTardias());
             vacaciones.set(miRC.getCedula(), miRC.getDiasDispoVacaciones());
-            modelD.addSeries(horas);
-            modelD.addSeries(tardias);
-            modelD.addSeries(vacaciones);
-        }
 
+        }
+        modelD.addSeries(horas);
+        modelD.addSeries(tardias);
+        modelD.addSeries(vacaciones);
         modelD.setTitle("Gráfica");
         modelD.setLegendPosition("e");
         modelD.setStacked(true);
