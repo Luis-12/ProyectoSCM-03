@@ -55,7 +55,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                     <h1 id="h1Centro"> Detalle del Departamento </h1>
                     <center>
                         <h:form id="reporteDetalladoC">
-                            <h:panelGrid columns="2">
+                            <h:panelGrid columns="12">
 
                                 <p:outputLabel value="Desde:" styleClass="required" id="FIRLabel"
                                                indicateRequired="false" for="fecha1"/>
@@ -90,9 +90,8 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                                    itemLabel="#{departamento.nombre}"/>
                                 </p:selectOneMenu>
                             </h:panelGrid>
-                            <h:panelGrid columns="4">
                                 <p:commandButton value="Buscar"
-                                                 style="margin-right:30px;margin-top: 20px;"
+                                                 style="margin-right:30px;margin-top: 10px;"
                                                  update="formIC:msgsIC, reporteDetalladoC, formRCDetallado:tablaReporteDetalladoDEPAR"
                                                  styleClass="ui-priority-primary"
                                                  action="#{reporteBean.buscarDatosColaboradorDetalladoPorDepartamento}"
@@ -112,8 +111,10 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                                     fileName="Reporte Detallado de Colaborador #{reporteBean.colaboradorR.nombre}"/>
                                 </h:commandLink>
 
+                            <p:commandLink onclick="PF('graf').show();">
+                                <h:graphicImage url="imagen/gra.png" width="50"/>
+                            </p:commandLink>
 
-                            </h:panelGrid>
                         </h:form>
                     </center>
                     <div>
@@ -162,6 +163,22 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                         </h:form>
                     </div>
 
+                    <p:dialog id="graf" header="Gráfico Colaborador Detalle" style="text-align:center; width: 35%"  showEffect="fade" hideEffect="fade"
+                              widgetVar="graf" resizable="false" minWidth="110" >
+                        <div>
+                            <center>
+                                <h:panelGrid id="grafico" style="width: 470px; height: 410px;">
+                                    <p:autoUpdate/>
+                                    <p:barChart  widgetVar="chart" model="#{reporteBean.modelD}" style="width: 490px; height: 420px;" rendered="#{reporteBean.modelD != null}"/>
+                                </h:panelGrid>
+                            </center>
+                            <center>
+                                <p:commandButton type="button" value="Descargar como Imagen" onclick="exportChart()"/>
+                            </center>
+                        </div>
+
+                    </p:dialog>
+
                     <div id="footer">
                         <br/>
                         <h:outputLink value="../acerca.xhtml">©</h:outputLink> <p:outputLabel
@@ -182,6 +199,21 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                 <title>Acceso denegado</title>
 
             </h:head>
+
+            <script type="text/javascript">
+                function exportChart() {
+                    var image = PF('chart').exportAsImage();
+                    var imageSrc = $(image).attr('src');
+                    var url = imageSrc.replace(/^data:image\/[^;]+/, 'data:application/octet-stream');
+                    var link = document.createElement('a');
+                    link.download = "Reporte.png";
+                    link.href = url;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    return false;
+                }
+            </script>
 
             <h:body>
                 <div class="error">

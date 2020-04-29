@@ -67,7 +67,6 @@ public class ReporteBean {
     private Asignaciones asignacionesDelColaReporte;
     private AsignacionDescansos asignacionDescansos;
     private BarChartModel barModel=null;
-    private HorizontalBarChartModel model=null;
 
     private HorizontalBarChartModel modelD=null;
 
@@ -108,14 +107,6 @@ public class ReporteBean {
 
     public void setModelD(HorizontalBarChartModel modelD) {
         this.modelD = modelD;
-    }
-
-    public HorizontalBarChartModel getModel() {
-        return model;
-    }
-
-    public void setModel(HorizontalBarChartModel model) {
-        this.model = model;
     }
 
     public List<ReporteLlegadasTardias> getLlegadasTardias() {
@@ -816,12 +807,40 @@ public class ReporteBean {
                         miRC.setDiasDispoVacaciones(diasDisponibles);
 
                         reporteColaboradorDetalladosList.add(miRC);//Se llena la lista de la tabla
-
+                        GraphicColaboradorxDepartamento();
                     }
                 }
 
             }
+
         }
+
+    }
+
+    public void GraphicColaboradorxDepartamento(){
+
+        modelD = new HorizontalBarChartModel();
+        for(ReporteColaboradorDetallado miRC : reporteColaboradorDetalladosList){
+            ChartSeries horas= new ChartSeries();
+            ChartSeries tardias = new ChartSeries();
+            ChartSeries vacaciones = new ChartSeries();
+            horas.setLabel("Horas Laboradas");
+            tardias.setLabel("Marcas Tardías");
+            vacaciones.setLabel("Vacaciones Disponibles");
+            horas.set(miRC.getCedula(), miRC.getCantHorasLaboradas());
+            tardias.set(miRC.getCedula(), miRC.getCantLlegadasTardias());
+            vacaciones.set(miRC.getCedula(), miRC.getDiasDispoVacaciones());
+            modelD.addSeries(horas);
+            modelD.addSeries(tardias);
+            modelD.addSeries(vacaciones);
+        }
+
+        modelD.setTitle("Gráfica");
+        modelD.setLegendPosition("e");
+        modelD.setStacked(true);
+        Axis xAxis = modelD.getAxis(AxisType.X);
+        Axis yAxis = modelD.getAxis(AxisType.Y);
+        yAxis.setLabel("Cedula");
 
     }
 
@@ -940,6 +959,9 @@ public class ReporteBean {
         not.setSize(14);
         not.setColor(Color.red);
     }
+
+
+
 
 //-------------------------------------------------------------------------------------------------------
 
