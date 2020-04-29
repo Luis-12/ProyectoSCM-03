@@ -53,7 +53,7 @@ public class ReporteBean {
     //PARAMETROS PARA HACER REPORTE DETALLADO CONFORME A COLABORADOR ESPECIFICO
     private Date fechaInicioR;
     private Date fechaFinalR;
-    private  Departamento departamentoReporte;
+    private Departamento departamentoReporte;
     private String cedulaReporte;
     private Colaborador colaboradorR;
     List<MarcaLaboradas> marcaLaboradasPorCYR;
@@ -65,9 +65,9 @@ public class ReporteBean {
     private List<ReporteColaboradorDetallado> reporteColaboradorDetalladosList = new ArrayList<>();
     private Asignaciones asignacionesDelColaReporte;
     private AsignacionDescansos asignacionDescansos;
-    private BarChartModel barModel=null;
+    private BarChartModel barModel = null;
 
-    private HorizontalBarChartModel modelD=null;
+    private HorizontalBarChartModel modelD = null;
 
 
     @Autowired
@@ -84,7 +84,7 @@ public class ReporteBean {
     @Autowired
     MarcaLaboradaService marcaLaboradaService;
 
-    public String limpiaObjetos(){//Funcion que limpia campos y redirecciona a Reporte COLADETALLADO
+    public String limpiaObjetos() {//Funcion que limpia campos y redirecciona a Reporte COLADETALLADO
         //System.out.println("SE ESTANNNN LIMPIANDO LOS OBJETOOOOOOS");
         this.cedulaReporte = "";
         fechaInicioR = null;
@@ -93,7 +93,7 @@ public class ReporteBean {
         return "InformeColaborador.xhtml";
     }
 
-    public String limpiaObjetosInformeCDepartamento(){//Funcion que limpia campos y redirecciona a Reporte COLADETALLADODEPART
+    public String limpiaObjetosInformeCDepartamento() {//Funcion que limpia campos y redirecciona a Reporte COLADETALLADODEPART
         //System.out.println("SE ESTANNNN LIMPIANDO LOS OBJETOOOOOOS");
         this.cedulaReporte = "";
         fechaInicioR = null;
@@ -102,13 +102,13 @@ public class ReporteBean {
         return "InformeColaDepartamento.xhtml";
     }
 
-    public String limpiaObjetosInformeHorarios(){//Funcion que limpia campos y redirecciona a Reporte COLAHORARIOS
+    public String limpiaObjetosInformeHorarios() {//Funcion que limpia campos y redirecciona a Reporte COLAHORARIOS
         //System.out.println("SE ESTANNNN LIMPIANDO LOS OBJETOOOOOOS");
         this.reporteColaboradorHorarioList = new ArrayList<>();
         return "ReporteHorarios.xhtml";
     }
 
-    public String limpiaObjetosInformeTardias(){//Funcion que limpia campos y redirecciona a Reporte COLATARDIAS
+    public String limpiaObjetosInformeTardias() {//Funcion que limpia campos y redirecciona a Reporte COLATARDIAS
         fechaInicioR = null;
         fechaFinalR = null;
         this.llegadasTardias = new ArrayList<>();
@@ -118,6 +118,7 @@ public class ReporteBean {
     public Colaborador getColaboradorR() {
         return colaboradorR;
     }
+
     public BarChartModel getBarModel() {
         return barModel;
     }
@@ -141,6 +142,7 @@ public class ReporteBean {
     public List<ReporteColaboradorH> getReporteColaboradorHorarioList() {
         return reporteColaboradorHorarioList;
     }
+
     public void setReporteColaboradorHorarioList(List<ReporteColaboradorH> reporteColaboradorHorarioList) {
         this.reporteColaboradorHorarioList = reporteColaboradorHorarioList;
     }
@@ -148,15 +150,19 @@ public class ReporteBean {
     public void setBarModel(BarChartModel barModel) {
         this.barModel = barModel;
     }
+
     public List<ReporteColaboradorDetallado> getReporteColaboradorDetalladosList() {
         return reporteColaboradorDetalladosList;
     }
+
     public void setColaboradorR(Colaborador colaboradorR) {
         this.colaboradorR = colaboradorR;
     }
+
     public void setReporteColaboradorDetalladosList(List<ReporteColaboradorDetallado> reporteColaboradorDetalladosList) {
         this.reporteColaboradorDetalladosList = reporteColaboradorDetalladosList;
     }
+
     public VacacionesPorColaborador getVacacionesPorColaborador() {
         return vacacionesPorColaborador;
     }
@@ -164,6 +170,7 @@ public class ReporteBean {
     public void setVacacionesPorColaborador(VacacionesPorColaborador vacacionesPorColaborador) {
         this.vacacionesPorColaborador = vacacionesPorColaborador;
     }
+
     public Date getFechaInicioR() {
         return fechaInicioR;
     }
@@ -197,7 +204,6 @@ public class ReporteBean {
     }
 
 
-
     public void setColaboradorDepartamento(List<Colaborador> colaboradorDepartamento) {
         this.colaboradorDepartamento = colaboradorDepartamento;
     }
@@ -206,7 +212,7 @@ public class ReporteBean {
         this.departamentoReporte = departamentoReporte;
     }
 
-    public int calculaMesesMinimos(Colaborador c){
+    public int calculaMesesMinimos(Colaborador c) {
         int meses = 0;
         Date fechaInicioL = c.getFechaInicioLaboral();
         Calendar fechaInicio = Calendar.getInstance();
@@ -215,9 +221,9 @@ public class ReporteBean {
         Calendar fechaActual = Calendar.getInstance();
 
         //Saco los meses de la fecha de inicio y de la actual
-        int mesIni = fechaInicio.get(Calendar.MONTH) +1;
+        int mesIni = fechaInicio.get(Calendar.MONTH) + 1;
         //System.out.println("Mes ini: " + mesIni);
-        int mesAct = fechaActual.get(Calendar.MONTH) +1;
+        int mesAct = fechaActual.get(Calendar.MONTH) + 1;
         //System.out.println("Mes act: " + mesAct);
 
         //Saco los dias de la fecha de inicio y de la actual
@@ -230,40 +236,36 @@ public class ReporteBean {
         int yearAct = fechaActual.get(Calendar.YEAR);
         //System.out.println("Year act: " + yearAct);
         int yearDiferencia = yearAct - yearIni;
-        if(diaAct >= diaIni && yearIni == yearAct){//Si es el mismo year
+        if (diaAct >= diaIni && yearIni == yearAct) {//Si es el mismo year
             meses = mesAct - mesIni;//Si el dia es mayor o igual se resta normal
-        }
-        else if(diaAct >= diaIni && yearIni <= yearAct){//Si es un year mayor
+        } else if (diaAct >= diaIni && yearIni <= yearAct) {//Si es un year mayor
             mesAct = mesAct + (yearDiferencia * 12);//Se le suman los meses del year
             meses = mesAct - mesIni;//Si el dia es mayor o igual se resta normal
-        }
-        else if(diaAct < diaIni && yearIni == yearAct){
+        } else if (diaAct < diaIni && yearIni == yearAct) {
             meses = mesAct - mesIni;
             meses--;//Si el dia de entrada no se cumple se resta un mes
-        }
-        else if(diaAct < diaIni && yearIni <= yearAct){
+        } else if (diaAct < diaIni && yearIni <= yearAct) {
             mesAct = mesAct + (yearDiferencia * 12);//Se le suman los meses del year
             meses = mesAct - mesIni;
             meses--;//Si el dia de entrada no se cumple se resta un mes
         }
 
-        System.out.println("Meses laborados hasta el momento: "+ meses);
+        System.out.println("Meses laborados hasta el momento: " + meses);
         return meses;
     }
 
 
     public double diasDisponibles(Colaborador colaborador) throws ParseException {//Funcion para calcular los dias disponible de vacaciones
- 
+
         VacacionesPorColaborador disponibles = new VacacionesPorColaborador();
         disponibles = vacacionesPorColaboradorService.findVacacionesPorColaborador(colaborador);//Se consulta los dia disponibles
         int anios = calculaAnios(colaborador);//Se consulta los years que este laborando el cola en la empresa
         int diasDisf = disponibles.getDiasdisfrutados();
         double diasLibresTotales = 0.0;
 
-        if(anios == 0){//Si solo ha trabajado meses
+        if (anios == 0) {//Si solo ha trabajado meses
             diasLibresTotales = calculaMesesMinimos(colaborador) - diasDisf;//Los meses que tenga laborados cuentan como dias libres
-        } 
-        else if(anios > 0) {//Si ha trabajado un anio ya se le pueden contar los dias libres
+        } else if (anios > 0) {//Si ha trabajado un anio ya se le pueden contar los dias libres
             for (int i = 1; i <= anios; i++) {//Cambio aqui
                 if (i == 1 || i == 2) {//IF QUE INCLUYE TAMBIEN EL PRIMER DIA
                     //if (i == 2) {
@@ -277,9 +279,9 @@ public class ReporteBean {
             diasLibresTotales = (diasLibresTotales + CalculaDiasMesesExtra(colaborador)) - diasDisf;
             System.out.println("Dias totales disponibles: " + diasLibresTotales);
         }
-            System.out.println("Dias totales disponibles: " + diasLibresTotales);
-            disponibles.setDiasdisponibles((int) diasLibresTotales);
-            vacacionesPorColaboradorService.updateVacacionesPorColaborador(disponibles);
+        System.out.println("Dias totales disponibles: " + diasLibresTotales);
+        disponibles.setDiasdisponibles((int) diasLibresTotales);
+        vacacionesPorColaboradorService.updateVacacionesPorColaborador(disponibles);
         //}
         return diasLibresTotales;
     }
@@ -317,9 +319,8 @@ public class ReporteBean {
         return (int) cantidadDiasMesesExtra;
     }
 
-    public List<Colaborador> colaboradroLaborando()
-    {
-        return  marcaLaboradaService.coladorLaborando();
+    public List<Colaborador> colaboradroLaborando() {
+        return marcaLaboradaService.coladorLaborando();
     }
 
     public int calculaAnios(Colaborador colaborador) throws ParseException {//Funcion para calcular la cantidad de year que lleva el colaborador laborando
@@ -360,44 +361,43 @@ public class ReporteBean {
         int fInicio = Integer.parseInt(fechaI);
         int fFinal = Integer.parseInt(fechaF);
 
-        colaboradorR=new Colaborador();
+        colaboradorR = new Colaborador();
         llegadasTardias = new ArrayList<>();
-        marcaLaboradasPorCYR=new ArrayList<>();
+        marcaLaboradasPorCYR = new ArrayList<>();
 
 
-            if (fInicio >= fFinal) {
-                addMessage("Aviso", "La Fecha Final debe ser mayor a la Fecha Inicial");
-            } else {
-                marcaLaboradasPorCYR = marcaLaboradaService.findLlegadasTardias(fechaInicioR, fechaFinalR);
-                if (marcaLaboradasPorCYR.size() != 0) {//Si se encontro alguna marca tardia se hace el reporte
-                    for (MarcaLaboradas ml : marcaLaboradasPorCYR) {//Por cada marca laborada
+        if (fInicio >= fFinal) {
+            addMessage("Aviso", "La Fecha Final debe ser mayor a la Fecha Inicial");
+        } else {
+            marcaLaboradasPorCYR = marcaLaboradaService.findLlegadasTardias(fechaInicioR, fechaFinalR);
+            if (marcaLaboradasPorCYR.size() != 0) {//Si se encontro alguna marca tardia se hace el reporte
+                for (MarcaLaboradas ml : marcaLaboradasPorCYR) {//Por cada marca laborada
 
-                        if (ml.getDescripcion() != null) {//Si es diferente de null quiere decir que justifico por lo tanto llego tarde
-                            ReporteLlegadasTardias miRT = new ReporteLlegadasTardias();
-                            Calendar c = Calendar.getInstance();
-                            c.setTime(ml.getFechaMarca());
-                            c.set(Calendar.HOUR_OF_DAY, ml.getHoraEntrada().getHours());
-                            c.set(Calendar.MINUTE, ml.getHoraEntrada().getMinutes());
-                            c.set(Calendar.SECOND, ml.getHoraEntrada().getSeconds());
-                            colaboradorR = colaboradorService.findColaboradorYEstado(ml.getColaborador().getPk_idColaborador());
-                            miRT.setCedula(colaboradorR.getPk_idColaborador());
-                            miRT.setNombre(colaboradorR.getNombre());
-                            SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                            String fecha = DATE_FORMAT.format(c.getTime());
-                            miRT.setFecha(fecha);
-                            miRT.setJustificacion(ml.getDescripcion());
-                            llegadasTardias.add(miRT);
-                        }
+                    if (ml.getDescripcion() != null) {//Si es diferente de null quiere decir que justifico por lo tanto llego tarde
+                        ReporteLlegadasTardias miRT = new ReporteLlegadasTardias();
+                        Calendar c = Calendar.getInstance();
+                        c.setTime(ml.getFechaMarca());
+                        c.set(Calendar.HOUR_OF_DAY, ml.getHoraEntrada().getHours());
+                        c.set(Calendar.MINUTE, ml.getHoraEntrada().getMinutes());
+                        c.set(Calendar.SECOND, ml.getHoraEntrada().getSeconds());
+                        colaboradorR = colaboradorService.findColaboradorYEstado(ml.getColaborador().getPk_idColaborador());
+                        miRT.setCedula(colaboradorR.getPk_idColaborador());
+                        miRT.setNombre(colaboradorR.getNombre());
+                        SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                        String fecha = DATE_FORMAT.format(c.getTime());
+                        miRT.setFecha(fecha);
+                        miRT.setJustificacion(ml.getDescripcion());
+                        llegadasTardias.add(miRT);
                     }
-                } else {
-                    addMessage("Aviso", "NO se encontraron Marcas Laboradas con ese Rango");
                 }
+            } else {
+                addMessage("Aviso", "NO se encontraron Marcas Laboradas con ese Rango");
             }
+        }
     }
 
 
-
-        //reporte colaborador detallado
+    //reporte colaborador detallado
     public void buscarDatosColaboradorRDetallado() throws Exception {//Funcion para generar y consultar datos de colaborador detallado
 
         marcaLaboradasPorCYR = new ArrayList<>();
@@ -466,7 +466,7 @@ public class ReporteBean {
                 } else {
                     addMessage("Aviso", "NO se encontraron Marcas Laboradas con ese Rango");
                 }
-            } 
+            }
         } else {
             addMessage("Aviso", "NO se encontró el Colaborador con la cédula: " + cedulaReporte);
         }
@@ -476,12 +476,13 @@ public class ReporteBean {
     public double calculaHorasEntreDosTiempos(Time tInicio, Time tFinal) {
         double horasTotales = 0.0;
         long iniM = tInicio.getTime();
-        long finM=0;
+        long finM = 0;
         try {
-             finM = tFinal.getTime();
-        }catch (Exception e){}
+            finM = tFinal.getTime();
+        } catch (Exception e) {
+        }
 
-        if(finM!=0) {
+        if (finM != 0) {
             if (finM < iniM) {//Si la fecha de marca fin es menor a la fecha de marca inicio quiere decir que marco el otro dia
                 finM = finM + 86400000;//Por lo tanto se le suman los milisegundos de un dia
                 horasTotales = (double) ((Math.abs(finM - iniM)) / (1000 * 60 * 60));//Se hace le calculo normal
@@ -490,8 +491,8 @@ public class ReporteBean {
                 horasTotales = (double) ((Math.abs(finM - iniM)) / (1000 * 60 * 60));//Se hace le calculo normal
                 System.out.println("Horas Calculadas: " + horasTotales);
             }
-        }else {
-            horasTotales=0.0;
+        } else {
+            horasTotales = 0.0;
         }
 
         return horasTotales;
@@ -513,7 +514,7 @@ public class ReporteBean {
         pdf.setPageSize(PageSize.A4);
 
         //Preparo fuentes
-        BaseFont bfTitulos = BaseFont.createFont(BaseFont.HELVETICA_BOLDOBLIQUE,BaseFont.WINANSI,BaseFont.EMBEDDED);
+        BaseFont bfTitulos = BaseFont.createFont(BaseFont.HELVETICA_BOLDOBLIQUE, BaseFont.WINANSI, BaseFont.EMBEDDED);
         com.lowagie.text.Font fuenteTitulos = new com.lowagie.text.Font(bfTitulos);
         com.lowagie.text.Font informacion = new com.lowagie.text.Font(bfTitulos);
         fuenteTitulos.setSize(14);
@@ -528,7 +529,7 @@ public class ReporteBean {
         pdf.add(com.lowagie.text.Image.getInstance(logo));
 
         Paragraph pTC = new Paragraph("Reporte Detallado del Colaborador: ", fuenteTitulos);
-        Paragraph pTC1 = new Paragraph( colaboradorR.getNombre() + "  " + colaboradorR.getPk_idColaborador(),informacion);
+        Paragraph pTC1 = new Paragraph(colaboradorR.getNombre() + "  " + colaboradorR.getPk_idColaborador(), informacion);
         pTC.setAlignment("left");
         pTC.setSpacingBefore(30);
         pTC.setSpacingBefore(20);
@@ -536,75 +537,75 @@ public class ReporteBean {
         pdf.add(pTC);
         pdf.add(pTC1);
 
-        Paragraph pT = new Paragraph("Datos de Marcas Realizadas en el Rango de: " , fuenteTitulos);
-        Paragraph pt1 = new Paragraph(fechaI + " a " + fechaF,informacion);
+        Paragraph pT = new Paragraph("Datos de Marcas Realizadas en el Rango de: ", fuenteTitulos);
+        Paragraph pt1 = new Paragraph(fechaI + " a " + fechaF, informacion);
         pT.setAlignment("left");
         pTC.setSpacingBefore(15);
         pt1.setAlignment("center");
         pdf.add(pT);
         pdf.add(pt1);
 
-        Paragraph titulo = new Paragraph("Información del Horario" , fuenteTitulos);
+        Paragraph titulo = new Paragraph("Información del Horario", fuenteTitulos);
         titulo.setAlignment("left");
         titulo.setSpacingBefore(10);
         pdf.add(titulo);
 
-        BaseFont bfMarca = BaseFont.createFont(BaseFont.TIMES_ROMAN,BaseFont.WINANSI,BaseFont.EMBEDDED);
+        BaseFont bfMarca = BaseFont.createFont(BaseFont.TIMES_ROMAN, BaseFont.WINANSI, BaseFont.EMBEDDED);
         com.lowagie.text.Font marcaft = new com.lowagie.text.Font(bfMarca);
         marcaft.setSize(14);
         marcaft.setColor(Color.BLACK);
 
-        BaseFont bfDes = BaseFont.createFont(BaseFont.TIMES_BOLDITALIC,BaseFont.WINANSI,BaseFont.EMBEDDED);
+        BaseFont bfDes = BaseFont.createFont(BaseFont.TIMES_BOLDITALIC, BaseFont.WINANSI, BaseFont.EMBEDDED);
         com.lowagie.text.Font subt = new com.lowagie.text.Font(bfDes);
         subt.setSize(14);
         subt.setColor(azulC);
 
-        BaseFont bfNot = BaseFont.createFont(BaseFont.TIMES_ROMAN,BaseFont.WINANSI,BaseFont.EMBEDDED);
+        BaseFont bfNot = BaseFont.createFont(BaseFont.TIMES_ROMAN, BaseFont.WINANSI, BaseFont.EMBEDDED);
         com.lowagie.text.Font not = new Font(bfDes);
         not.setSize(14);
         not.setColor(Color.red);
 
         Paragraph par = new Paragraph("Jornada: " + asignacionesDelColaReporte.getHorario().getJornada().getDescripcion()
-                +"\n"+ " Horario: " + asignacionesDelColaReporte.getHorario().getHoraentrada() + " " +
-                asignacionesDelColaReporte.getHorario().getHorasalida(),marcaft);
+                + "\n" + " Horario: " + asignacionesDelColaReporte.getHorario().getHoraentrada() + " " +
+                asignacionesDelColaReporte.getHorario().getHorasalida(), marcaft);
         par.setAlignment("left");
         pdf.add(par);
 
-        Paragraph tk = new Paragraph("Información de las Marcas" , fuenteTitulos);
+        Paragraph tk = new Paragraph("Información de las Marcas", fuenteTitulos);
         tk.setAlignment("left");
         tk.setSpacingBefore(8);
         pdf.add(tk);
 
         for (MarcaLaboradas ml : marcaLaboradasPorCYR) {//Se hace el proceso de carga en el pdf para cada marca laborada
-            Paragraph parML = new Paragraph( "Fecha de la Marca: "+ formateador.format(ml.getFechaMarca()) +"\n Hora de Entrada " + ml.getHoraEntrada()
+            Paragraph parML = new Paragraph("Fecha de la Marca: " + formateador.format(ml.getFechaMarca()) + "\n Hora de Entrada " + ml.getHoraEntrada()
                     + "\n Hora de Salida: " + ml.getHoraSalida()
-                    + "\n Horas Realizadas en Jornada Aprox: " + calculaHorasEntreDosTiempos(ml.getHoraEntrada(),ml.getHoraSalida()), marcaft);
+                    + "\n Horas Realizadas en Jornada Aprox: " + calculaHorasEntreDosTiempos(ml.getHoraEntrada(), ml.getHoraSalida()), marcaft);
             parML.setAlignment("left");
             parML.setSpacingBefore(1);
             pdf.add(parML);
 
             for (MarcaDescansos md : marcaDescansosPorCYR) {//Se buscan las marca descanso de la marca laborada en cuestion
-                if(md.getMarcaLaboradas().getPk_idMarcasLaboradas() == ml.getPk_idMarcasLaboradas()){
+                if (md.getMarcaLaboradas().getPk_idMarcasLaboradas() == ml.getPk_idMarcasLaboradas()) {
                     auxMD.add(md);//LLeno con los descanso de la marca
                 }
             }
-            if(auxMD.size() > 0){
-                Paragraph parTI = new Paragraph("Descansos Realizados en la Jornada: ",subt);
+            if (auxMD.size() > 0) {
+                Paragraph parTI = new Paragraph("Descansos Realizados en la Jornada: ", subt);
                 parTI.setAlignment("left");
                 parTI.setSpacingAfter(5);
                 pdf.add(parTI);
-            }else{
-                Paragraph parND = new Paragraph("    No Registró Descansos",not);
+            } else {
+                Paragraph parND = new Paragraph("    No Registró Descansos", not);
                 parND.setAlignment("left");
                 parND.setSpacingAfter(5);
                 pdf.add(parND);
             }
-            for(MarcaDescansos mdDmL : auxMD){//Luego de haber llenado la lista con los descansos de la marca
+            for (MarcaDescansos mdDmL : auxMD) {//Luego de haber llenado la lista con los descansos de la marca
                 //Se ingresan al pdf
                 Paragraph parMD = new Paragraph("   Descripción: " + mdDmL.getDescansos().getDescripcion() + "\n"
                         + "    Hora de Inicio: " + mdDmL.getHoraInicio() + "\n"
                         + "    Hora de Finalización: " + mdDmL.getHoraFin() + "\n"
-                        + "    Horas Disfrutadas en el Descanso Aprox: " + calculaHorasEntreDosTiempos(mdDmL.getHoraInicio(),mdDmL.getHoraFin()), marcaft);
+                        + "    Horas Disfrutadas en el Descanso Aprox: " + calculaHorasEntreDosTiempos(mdDmL.getHoraInicio(), mdDmL.getHoraFin()), marcaft);
                 parMD.setAlignment("left");
                 parMD.setSpacingAfter(5);
                 pdf.add(parMD);
@@ -613,19 +614,19 @@ public class ReporteBean {
             auxMD.clear();
         }
 
-        Paragraph p = new Paragraph("Marcas de Llegadas Tardías",subt);
+        Paragraph p = new Paragraph("Marcas de Llegadas Tardías", subt);
         p.setAlignment("left");
         pdf.add(p);
         //System.out.println("CANTIDAD DE LLEGADAS TARDIAS PDF: " + marcaLaboradasTardias);
         for (MarcaLaboradas mt : marcaLaboradasTardias) {
-            Paragraph p3 = new Paragraph("Fecha de Marca Tardía: "+ formateador.format(mt.getFechaMarca())+"\n"
-                    + "Justificación: "+ mt.getDescripcion(), marcaft);
+            Paragraph p3 = new Paragraph("Fecha de Marca Tardía: " + formateador.format(mt.getFechaMarca()) + "\n"
+                    + "Justificación: " + mt.getDescripcion(), marcaft);
             p3.setAlignment("left");
             p3.setSpacingAfter(5);
             pdf.add(p3);
         }
 
-        Paragraph pR = new Paragraph("Resumen de la Tabla",fuenteTitulos);
+        Paragraph pR = new Paragraph("Resumen de la Tabla", fuenteTitulos);
         pR.setAlignment("center");
         pR.setSpacingAfter(50);
         pR.setSpacingAfter(10);
@@ -647,7 +648,7 @@ public class ReporteBean {
         pdf.setPageSize(PageSize.A4);
 
         //Preparo fuentes
-        BaseFont bfTitulos = BaseFont.createFont(BaseFont.HELVETICA_BOLDOBLIQUE,BaseFont.WINANSI,BaseFont.EMBEDDED);
+        BaseFont bfTitulos = BaseFont.createFont(BaseFont.HELVETICA_BOLDOBLIQUE, BaseFont.WINANSI, BaseFont.EMBEDDED);
         com.lowagie.text.Font fuenteTitulos = new com.lowagie.text.Font(bfTitulos);
         com.lowagie.text.Font informacion = new com.lowagie.text.Font(bfTitulos);
         fuenteTitulos.setSize(14);
@@ -667,8 +668,8 @@ public class ReporteBean {
         pTC.setSpacingAfter(20);
         pdf.add(pTC);
 
-        Paragraph pT = new Paragraph("Datos de llegadas tardías en el Rango de: " , fuenteTitulos);
-        Paragraph pt1 = new Paragraph(fechaI + " a " + fechaF,informacion);
+        Paragraph pT = new Paragraph("Datos de llegadas tardías en el Rango de: ", fuenteTitulos);
+        Paragraph pt1 = new Paragraph(fechaI + " a " + fechaF, informacion);
         pT.setAlignment("center");
         pTC.setSpacingBefore(15);
         pt1.setAlignment("center");
@@ -678,26 +679,26 @@ public class ReporteBean {
         pdf.add(pt1);
 
 
-        BaseFont bfMarca = BaseFont.createFont(BaseFont.TIMES_ROMAN,BaseFont.WINANSI,BaseFont.EMBEDDED);
+        BaseFont bfMarca = BaseFont.createFont(BaseFont.TIMES_ROMAN, BaseFont.WINANSI, BaseFont.EMBEDDED);
         com.lowagie.text.Font marcaft = new com.lowagie.text.Font(bfMarca);
         marcaft.setSize(14);
         marcaft.setColor(Color.BLACK);
 
-        BaseFont bfDes = BaseFont.createFont(BaseFont.TIMES_BOLDITALIC,BaseFont.WINANSI,BaseFont.EMBEDDED);
+        BaseFont bfDes = BaseFont.createFont(BaseFont.TIMES_BOLDITALIC, BaseFont.WINANSI, BaseFont.EMBEDDED);
         com.lowagie.text.Font subt = new com.lowagie.text.Font(bfDes);
         subt.setSize(14);
         subt.setColor(azulC);
 
-        BaseFont bfNot = BaseFont.createFont(BaseFont.TIMES_ROMAN,BaseFont.WINANSI,BaseFont.EMBEDDED);
+        BaseFont bfNot = BaseFont.createFont(BaseFont.TIMES_ROMAN, BaseFont.WINANSI, BaseFont.EMBEDDED);
         com.lowagie.text.Font not = new Font(bfDes);
         not.setSize(14);
         not.setColor(Color.red);
     }
 
-    public void GraphicColaboradorDetallado(){ //métodos del grafico colaborador detallado
+    public void GraphicColaboradorDetallado() { //métodos del grafico colaborador detallado
 
 
-        ReporteColaboradorDetallado reporte=reporteColaboradorDetalladosList.get(0);
+        ReporteColaboradorDetallado reporte = reporteColaboradorDetalladosList.get(0);
 
         barModel = new BarChartModel();
         ChartData data = new ChartData();
@@ -761,7 +762,7 @@ public class ReporteBean {
 
     }
 
-    int ausencias(String id){
+    int ausencias(String id) {
         List<ReporteLlegadasTardias> result = llegadasTardias.stream()
                 .filter(item -> item.getCedula().equals(id))
                 .collect(Collectors.toList());
@@ -777,7 +778,7 @@ public class ReporteBean {
         List<MarcaDescansos> mdAux = new ArrayList<>();
         ReporteColaboradorDetallado miRC;
 
-            asignacionesDelColaReporte = new Asignaciones();
+        asignacionesDelColaReporte = new Asignaciones();
         double totalHorasLaboradas = 0;
         double totalHorasDescansadas = 0;
         double horasFinal = 0;
@@ -793,9 +794,8 @@ public class ReporteBean {
         if (colaboradorDepartamento.size() != 0) {//Quiere decir que se encontro el colaborador
             if (fInicio >= fFinal) {
                 addMessage("Aviso", "La Fecha Final debe ser mayor a la Fecha Inicial");
-            }
-            else {
-                for(Colaborador colaborador : colaboradorDepartamento){
+            } else {
+                for (Colaborador colaborador : colaboradorDepartamento) {
                     marcaLaboradasPorCYR = marcaLaboradaService.findMarcasLaboradasPorRango(fechaInicioR, fechaFinalR, colaborador);
                     if (marcaLaboradasPorCYR.size() != 0) {//Si se encontro alguna marca se hace el reporte
                         //Aca empiezan los calculos y la magia
@@ -838,13 +838,13 @@ public class ReporteBean {
 
     }
 
-    public void GraphicColaboradorxDepartamento(){
+    public void GraphicColaboradorxDepartamento() {
 
         modelD = new HorizontalBarChartModel();
-        ChartSeries horas= new ChartSeries();
+        ChartSeries horas = new ChartSeries();
         ChartSeries tardias = new ChartSeries();
         ChartSeries vacaciones = new ChartSeries();
-        for(ReporteColaboradorDetallado miRC : reporteColaboradorDetalladosList){
+        for (ReporteColaboradorDetallado miRC : reporteColaboradorDetalladosList) {
 
             horas.setLabel("Horas Laboradas");
             tardias.setLabel("Marcas Tardías");
@@ -875,23 +875,29 @@ public class ReporteBean {
 
         if (colaboradorDepartamento.size() != 0) {
 
-            for(Colaborador colaborador : colaboradorDepartamento){
+            for (Colaborador colaborador : colaboradorDepartamento) {//For que recorre lista de colaboradores que pertenecen a ese departamento
                 asignacionesDelColaReporte = asignacionesServices.buscarHorario(colaborador);
-                descansosCantidad = asignacionDescansosService.buscarDescansosAsignadosPorColaborador(colaborador);
-                convertirDia();
-                convertirDia2();
-                miRC= new ReporteColaboradorH();
-                miRC.setCedula(colaborador.getPk_idColaborador());
-                miRC.setNombre(colaborador.getNombre());
-                miRC.setHorario(" " + asignacionesDelColaReporte.getHorario().getHoraentrada() + " " +
-                        asignacionesDelColaReporte.getHorario().getHorasalida() + " ");
-                miRC.setCantidadDescansos(descansosCantidad.size());
-                miRC.setDiaDescanso(asignacionesDelColaReporte.getDiaDescanso());
-                miRC.setDia2(asignacionesDelColaReporte.getSegundodiades());
+                if (asignacionesDelColaReporte != null) {//IF QUE VALIDA SI SE ENCONTRO UNA ASIGNACION PARA ESE COLABORADOR
+                    descansosCantidad = asignacionDescansosService.buscarDescansosAsignadosPorColaborador(colaborador);
+                    convertirDia();
+                    convertirDia2();
 
-                reporteColaboradorHorarioList.add(miRC);//Se llena la lista de la tabla
+                    //ACA SE CARGA EL OBJETO REPORTE CON LOS DATOS EXTRAIDOS
+                    miRC = new ReporteColaboradorH();
+                    miRC.setCedula(colaborador.getPk_idColaborador());
+                    miRC.setNombre(colaborador.getNombre());
+                    miRC.setHorario(" " + asignacionesDelColaReporte.getHorario().getHoraentrada() + " " +
+                            asignacionesDelColaReporte.getHorario().getHorasalida() + " ");
+                    miRC.setCantidadDescansos(descansosCantidad.size());
+                    miRC.setDiaDescanso(asignacionesDelColaReporte.getDiaDescanso());
+                    miRC.setDia2(asignacionesDelColaReporte.getSegundodiades());
+
+                    reporteColaboradorHorarioList.add(miRC);//Se llena la lista de la tabla
+                } else {
+                    System.out.println("EL COLABORADOR "+colaborador.getNombre() +" DEL DEPART : " + departamentoReporte.getNombre() + " NO TIENE HORARIOS ASIGNADOS");
+                }
             }
-        }else {
+        } else {
             addMessage("Aviso", "NO se encontraron colaboradores en el departamento seleccionado");
         }
     }
@@ -918,6 +924,7 @@ public class ReporteBean {
         }
         asignacionesDelColaReporte.setDiadescanso(diaDescanso);
     }
+
     public void convertirDia2() {//Convierte el formato del día
         String diaDescanso2 = null;
 
@@ -953,7 +960,7 @@ public class ReporteBean {
         pdf.setPageSize(PageSize.A4);
 
         //Preparo fuentes
-        BaseFont bfTitulos = BaseFont.createFont(BaseFont.HELVETICA_BOLDOBLIQUE,BaseFont.WINANSI,BaseFont.EMBEDDED);
+        BaseFont bfTitulos = BaseFont.createFont(BaseFont.HELVETICA_BOLDOBLIQUE, BaseFont.WINANSI, BaseFont.EMBEDDED);
         com.lowagie.text.Font fuenteTitulos = new com.lowagie.text.Font(bfTitulos);
         com.lowagie.text.Font informacion = new com.lowagie.text.Font(bfTitulos);
         fuenteTitulos.setSize(14);
@@ -973,41 +980,39 @@ public class ReporteBean {
         pdf.add(pTC);
 
 
-        BaseFont bfDes = BaseFont.createFont(BaseFont.TIMES_BOLDITALIC,BaseFont.WINANSI,BaseFont.EMBEDDED);
+        BaseFont bfDes = BaseFont.createFont(BaseFont.TIMES_BOLDITALIC, BaseFont.WINANSI, BaseFont.EMBEDDED);
         com.lowagie.text.Font subt = new com.lowagie.text.Font(bfDes);
         subt.setSize(14);
         subt.setColor(azulC);
 
-        BaseFont bfNot = BaseFont.createFont(BaseFont.TIMES_ROMAN,BaseFont.WINANSI,BaseFont.EMBEDDED);
+        BaseFont bfNot = BaseFont.createFont(BaseFont.TIMES_ROMAN, BaseFont.WINANSI, BaseFont.EMBEDDED);
         com.lowagie.text.Font not = new Font(bfDes);
         not.setSize(14);
         not.setColor(Color.red);
     }
 
 
-
-
 //-------------------------------------------------------------------------------------------------------
 
-    public  void resetlist() {//Funcion que resetea lista de reporte DETCOLABORADOR y actualiza la tabla
+    public void resetlist() {//Funcion que resetea lista de reporte DETCOLABORADOR y actualiza la tabla
         PrimeFaces current = PrimeFaces.current();
-        reporteColaboradorDetalladosList=new ArrayList<>();
+        reporteColaboradorDetalladosList = new ArrayList<>();
         current.ajax().update("formRCDetallado:tablaReporteDetallado");
     }
 
-    public  void resetlistDepart() {//Funcion que resetea lista de reporte COLADEPARTAMENTO y actualiza la tabla
+    public void resetlistDepart() {//Funcion que resetea lista de reporte COLADEPARTAMENTO y actualiza la tabla
         PrimeFaces current = PrimeFaces.current();
-        reporteColaboradorDetalladosList=new ArrayList<>();
+        reporteColaboradorDetalladosList = new ArrayList<>();
         current.ajax().update("formRCDetallado:tablaReporteDetalladoDEPAR");
     }
 
-    public  void resetlistHorarios() {//Funcion que resetea lista de reporte HORARIOS y actualiza la tabla
+    public void resetlistHorarios() {//Funcion que resetea lista de reporte HORARIOS y actualiza la tabla
         PrimeFaces current = PrimeFaces.current();
         reporteColaboradorHorarioList = new ArrayList<>();
         current.ajax().update("ReporteHorarios:tablaReporteHorario");
     }
 
-    public void resetlistTardias(){//Funcion que resetea lista de reporte LTARDIAS y actualiza la tabla
+    public void resetlistTardias() {//Funcion que resetea lista de reporte LTARDIAS y actualiza la tabla
         PrimeFaces current = PrimeFaces.current();
         llegadasTardias = new ArrayList<>();
         current.ajax().update("formTardias:tablaReporteTardias");

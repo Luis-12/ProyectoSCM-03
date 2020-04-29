@@ -19,7 +19,9 @@ public Asignaciones buscarHorario(Colaborador id){//Funcion para consultar horar
     Asignaciones asignacion=null;
     try {
         asignacion=asignacionesRepository.findByColaborador(id);//Se invoca la funcion para realizar la consulta del repository
-    }catch (Exception ex) { }
+    }catch (Exception ex) {
+        asignacion=null;
+    }
     return asignacion;//Aca retorna el objeto con la asignacion encontrada en caso de que asi sea
 }
 
