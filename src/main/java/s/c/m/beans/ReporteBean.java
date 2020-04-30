@@ -979,6 +979,49 @@ public class ReporteBean {
         pTC.setSpacingAfter(20);
         pdf.add(pTC);
 
+        BaseFont bfDes = BaseFont.createFont(BaseFont.TIMES_BOLDITALIC, BaseFont.WINANSI, BaseFont.EMBEDDED);
+        com.lowagie.text.Font subt = new com.lowagie.text.Font(bfDes);
+        subt.setSize(14);
+        subt.setColor(azulC);
+
+        BaseFont bfNot = BaseFont.createFont(BaseFont.TIMES_ROMAN, BaseFont.WINANSI, BaseFont.EMBEDDED);
+        com.lowagie.text.Font not = new Font(bfDes);
+        not.setSize(14);
+        not.setColor(Color.red);
+    }
+
+
+
+    public void preProcessPDFCant(Object document) throws IOException, BadElementException, DocumentException {
+
+        Color azul = new Color(31, 97, 141);
+        Color azulC = new Color(46, 134, 193);
+
+        Document pdf = (Document) document;
+        pdf.addTitle("Reporte Cantidad De Colaboradores Laborando");
+        pdf.open();
+        pdf.setPageSize(PageSize.A4);
+
+        //Preparo fuentes
+        BaseFont bfTitulos = BaseFont.createFont(BaseFont.HELVETICA_BOLDOBLIQUE, BaseFont.WINANSI, BaseFont.EMBEDDED);
+        com.lowagie.text.Font fuenteTitulos = new com.lowagie.text.Font(bfTitulos);
+        com.lowagie.text.Font informacion = new com.lowagie.text.Font(bfTitulos);
+        fuenteTitulos.setSize(14);
+        fuenteTitulos.setColor(azul);
+        informacion.setColor(Color.BLACK);
+        informacion.setSize(14);
+
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        String logo = externalContext.getRealPath("") + File.separator + "css" + File.separator + "imagen" + File.separator + "logo1.jpg";
+
+        pdf.add(com.lowagie.text.Image.getInstance(logo));
+
+        Paragraph pTC = new Paragraph("Reporte Cantidad De Colaboradores Laborando", fuenteTitulos);
+        pTC.setAlignment("center");
+        pTC.setSpacingBefore(30);
+        pTC.setSpacingAfter(20);
+        pdf.add(pTC);
+
 
         BaseFont bfDes = BaseFont.createFont(BaseFont.TIMES_BOLDITALIC, BaseFont.WINANSI, BaseFont.EMBEDDED);
         com.lowagie.text.Font subt = new com.lowagie.text.Font(bfDes);
@@ -990,6 +1033,64 @@ public class ReporteBean {
         not.setSize(14);
         not.setColor(Color.red);
     }
+
+    public void preProcessPDFColaDepa(Object document) throws IOException, BadElementException, DocumentException {
+        Format formateador = new SimpleDateFormat("yyyy-MM-dd");
+        String fechaI = formateador.format(fechaInicioR);
+        String fechaF = formateador.format(fechaFinalR);
+
+        Color azul = new Color(31, 97, 141);
+        Color azulC = new Color(46, 134, 193);
+
+        Document pdf = (Document) document;
+        pdf.addTitle("Reporte Colaboradores por Departamento" + departamentoReporte.getNombre());
+        pdf.open();
+        pdf.setPageSize(PageSize.A4);
+
+        //Preparo fuentes
+        BaseFont bfTitulos = BaseFont.createFont(BaseFont.HELVETICA_BOLDOBLIQUE, BaseFont.WINANSI, BaseFont.EMBEDDED);
+        com.lowagie.text.Font fuenteTitulos = new com.lowagie.text.Font(bfTitulos);
+        com.lowagie.text.Font informacion = new com.lowagie.text.Font(bfTitulos);
+        fuenteTitulos.setSize(14);
+        fuenteTitulos.setColor(azul);
+        informacion.setColor(Color.BLACK);
+        informacion.setSize(14);
+
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        String logo = externalContext.getRealPath("") + File.separator + "css" + File.separator + "imagen" + File.separator + "logo1.jpg";
+
+        pdf.add(com.lowagie.text.Image.getInstance(logo));
+
+        Paragraph pTC = new Paragraph(" Detalle del Departamento " + departamentoReporte.getNombre(), informacion);
+        pTC.setAlignment("center");
+        pTC.setSpacingBefore(30);
+        pTC.setSpacingAfter(20);
+        pdf.add(pTC);
+
+
+        Paragraph pT = new Paragraph("Datos de Marcas Realizadas en el Rango de: ", fuenteTitulos);
+        Paragraph pt1 = new Paragraph(fechaI + " a " + fechaF, informacion);
+        pT.setAlignment("center");
+        pt1.setAlignment("center");
+        pt1.setSpacingAfter(20);
+        pdf.add(pT);
+        pdf.add(pt1);
+
+
+
+
+        BaseFont bfDes = BaseFont.createFont(BaseFont.TIMES_BOLDITALIC, BaseFont.WINANSI, BaseFont.EMBEDDED);
+        com.lowagie.text.Font subt = new com.lowagie.text.Font(bfDes);
+        subt.setSize(14);
+        subt.setColor(azulC);
+
+        BaseFont bfNot = BaseFont.createFont(BaseFont.TIMES_ROMAN, BaseFont.WINANSI, BaseFont.EMBEDDED);
+        com.lowagie.text.Font not = new Font(bfDes);
+        not.setSize(14);
+        not.setColor(Color.red);
+    }
+
+
 
 
 //-------------------------------------------------------------------------------------------------------
