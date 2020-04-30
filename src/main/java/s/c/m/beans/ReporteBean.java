@@ -643,7 +643,7 @@ public class ReporteBean {
         Color azulC = new Color(46, 134, 193);
 
         Document pdf = (Document) document;
-        pdf.addTitle("Reporte llegadas tardias");
+        pdf.addTitle("Reporte de Llegadas Tardías");
         pdf.open();
         pdf.setPageSize(PageSize.A4);
 
@@ -662,15 +662,15 @@ public class ReporteBean {
 
         pdf.add(com.lowagie.text.Image.getInstance(logo));
 
-        Paragraph pTC = new Paragraph("Reporte llegadas tardías ", fuenteTitulos);
+        Paragraph pTC = new Paragraph("Reporte de Llegadas Tardías ", fuenteTitulos);
         pTC.setAlignment("center");
         pTC.setSpacingBefore(30);
         pTC.setSpacingAfter(20);
         pdf.add(pTC);
 
-        Paragraph pT = new Paragraph("Datos de llegadas tardías en el Rango de: ", fuenteTitulos);
+        Paragraph pT = new Paragraph("Datos de Llegadas Tardías en el Rango de: ", fuenteTitulos);
         Paragraph pt1 = new Paragraph(fechaI + " a " + fechaF, informacion);
-        pT.setAlignment("center");
+        pT.setAlignment("left");
         pTC.setSpacingBefore(15);
         pt1.setAlignment("center");
         pt1.setSpacingAfter(20);
@@ -973,11 +973,16 @@ public class ReporteBean {
 
         pdf.add(com.lowagie.text.Image.getInstance(logo));
 
-        Paragraph pTC = new Paragraph("Reporte Horarios Del Departamento " + departamentoReporte.getNombre(), fuenteTitulos);
-        pTC.setAlignment("center");
+        Paragraph pTC = new Paragraph("Reporte de Horarios Del Departamento: ", fuenteTitulos);
+        Paragraph pTC1= new Paragraph(departamentoReporte.getNombre(), informacion);
+        pTC.setAlignment("left");
         pTC.setSpacingBefore(30);
-        pTC.setSpacingAfter(20);
+        pTC.setSpacingAfter(5);
+        pTC1.setAlignment("center");
+        pTC1.setSpacingAfter(15);
         pdf.add(pTC);
+        pdf.add(pTC1);
+
 
         BaseFont bfDes = BaseFont.createFont(BaseFont.TIMES_BOLDITALIC, BaseFont.WINANSI, BaseFont.EMBEDDED);
         com.lowagie.text.Font subt = new com.lowagie.text.Font(bfDes);
@@ -1043,7 +1048,7 @@ public class ReporteBean {
         Color azulC = new Color(46, 134, 193);
 
         Document pdf = (Document) document;
-        pdf.addTitle("Reporte Colaboradores por Departamento" + departamentoReporte.getNombre());
+        pdf.addTitle("Reporte Detallado del Colaborador por Departamento" + departamentoReporte.getNombre());
         pdf.open();
         pdf.setPageSize(PageSize.A4);
 
@@ -1061,33 +1066,28 @@ public class ReporteBean {
 
         pdf.add(com.lowagie.text.Image.getInstance(logo));
 
-        Paragraph pTC = new Paragraph(" Detalle del Departamento " + departamentoReporte.getNombre(), informacion);
-        pTC.setAlignment("center");
+
+        Paragraph pTC = new Paragraph("Reporte Detallado del Colaborador por el Departamento de: " , fuenteTitulos);
+        Paragraph pTC1 = new Paragraph(departamentoReporte.getNombre(), informacion);
+        pTC.setAlignment("left");
         pTC.setSpacingBefore(30);
-        pTC.setSpacingAfter(20);
+        pTC.setSpacingAfter(5);
+        pTC1.setAlignment("center");
+        pTC1.setSpacingAfter(5);
         pdf.add(pTC);
+        pdf.add(pTC1);
+
 
 
         Paragraph pT = new Paragraph("Datos de Marcas Realizadas en el Rango de: ", fuenteTitulos);
         Paragraph pt1 = new Paragraph(fechaI + " a " + fechaF, informacion);
-        pT.setAlignment("center");
+        pT.setAlignment("left");
         pt1.setAlignment("center");
-        pt1.setSpacingAfter(20);
+        pt1.setSpacingAfter(30);
         pdf.add(pT);
         pdf.add(pt1);
 
 
-
-
-        BaseFont bfDes = BaseFont.createFont(BaseFont.TIMES_BOLDITALIC, BaseFont.WINANSI, BaseFont.EMBEDDED);
-        com.lowagie.text.Font subt = new com.lowagie.text.Font(bfDes);
-        subt.setSize(14);
-        subt.setColor(azulC);
-
-        BaseFont bfNot = BaseFont.createFont(BaseFont.TIMES_ROMAN, BaseFont.WINANSI, BaseFont.EMBEDDED);
-        com.lowagie.text.Font not = new Font(bfDes);
-        not.setSize(14);
-        not.setColor(Color.red);
     }
 
 

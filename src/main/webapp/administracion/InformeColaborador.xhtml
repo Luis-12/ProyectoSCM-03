@@ -62,7 +62,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                 <p:calendar autocomplete="off" required="true"
                                             value="#{reporteBean.fechaInicioR}"
                                             maxdate="#{colaboradorBean.fecha}"
-                                            requiredMessage="Ingrese la Fecha inicio"
+                                            requiredMessage="Ingrese la fecha inicial"
                                             id="fecha1" pattern="yyyy-MM-dd">
                                     <f:ajax event="dateSelect" execute="@this" render="@this fIRmessage"/>
                                     <p:ajax update="FIRLabel"/>
@@ -77,7 +77,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                             value="#{reporteBean.fechaFinalR}"
                                             maxdate="#{colaboradorBean.fecha}"
                                             mindate="#{reporteBean.fechaInicioR}"
-                                            requiredMessage="Ingrese la Fecha final"
+                                            requiredMessage="Ingrese la fecha final"
                                             id="fecha2" pattern="yyyy-MM-dd">
                                     <f:ajax event="dateSelect" execute="@this" render="@this FFRmessage"/>
                                     <p:ajax update="FFRLabel"/>
@@ -88,7 +88,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                 <p:outputLabel value="Cédula: " styleClass="required" id="cedRLabel"
                                                indicateRequired="cedula" for="cedula"/>
                                 <p:inputText autocomplete="off" maxlength="20" required="true"
-                                             requiredMessage="Ingrese la Cedula" id="cedula"
+                                             requiredMessage="Ingrese la cédula" id="cedula"
                                              validatorMessage="La cédula debe tener mínimo 9 caracteres numéricos, y sin guiones"
                                              value="#{reporteBean.cedulaReporte}">
                                     <f:validateRegex pattern="[0-9]{9,20}"/>
@@ -110,7 +110,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                 <h:commandLink style="margin-left: 60px">
                                     <h:graphicImage url="imagen/exc.png" width="40"/>
                                     <p:dataExporter type="xls" target="formRCDetallado:tablaReporteDetallado"
-                                                    fileName="Reporte Detallado de Colaborador #{reporteBean.colaboradorR.nombre}"/>
+                                                    fileName="Reporte Detallado del Colaborador #{reporteBean.colaboradorR.nombre}"/>
                                 </h:commandLink>
 
                                 <h:commandLink>
@@ -118,7 +118,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                     <p:dataExporter type="pdf" encoding="ISO-8859-1"
                                                     target="formRCDetallado:tablaReporteDetallado"
                                                     preProcessor="#{reporteBean.preProcessPDFReporteCD}"
-                                                    fileName="Reporte Detallado de Colaborador #{reporteBean.colaboradorR.nombre}"/>
+                                                    fileName="Reporte Detallado del Colaborador #{reporteBean.colaboradorR.nombre}"/>
                                 </h:commandLink>
 
                                 <p:commandLink onclick="PF('graf').show();">
@@ -173,7 +173,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                             </p:dataTable>
                         </h:form>
                     </div>
-                  <p:dialog id="graf" header="Gráfico Colaborador Detalle" style="text-align:center; width: 35%"  showEffect="fade" hideEffect="fade"
+                  <p:dialog id="graf" header="Gráfico del Colaborador Detallado" style="text-align:center; width: 35%"  showEffect="fade" hideEffect="fade"
                             widgetVar="graf" resizable="false" minWidth="110" >
                       <div>
                           <center>

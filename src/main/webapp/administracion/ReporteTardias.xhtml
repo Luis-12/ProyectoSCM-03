@@ -62,7 +62,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                 <p:calendar autocomplete="off" required="true"
                                             maxdate="#{colaboradorBean.fecha}"
                                             value="#{reporteBean.fechaInicioR}"
-                                            requiredMessage="Ingrese la Fecha inicio"
+                                            requiredMessage="Ingrese la fecha inicial"
                                             id="fecha1" pattern="yyyy-MM-dd">
                                     <f:ajax event="dateSelect" execute="@this" render="@this fIRmessage"/>
                                     <p:ajax update="FIRLabel"/>
@@ -94,7 +94,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                 <h:commandLink style="margin-left: 60px">
                                     <h:graphicImage url="imagen/exc.png" width="40"/>
                                     <p:dataExporter type="xls" target="formTardias:tablaReporteTardias"
-                                                    fileName="Reporte llegadas tardías"/>
+                                                    fileName="Reporte de Llegadas Tardías"/>
                                 </h:commandLink>
 
                                 <h:commandLink>
@@ -102,7 +102,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                     <p:dataExporter type="pdf" encoding="ISO-8859-1"
                                                     target="formTardias:tablaReporteTardias"
                                                     preProcessor="#{reporteBean.preProcessPDFReporteTardias}"
-                                                    fileName="Reporte llegadas tardías"/>
+                                                    fileName="Reporte de Llegadas Tardías"/>
                                 </h:commandLink>
 
 

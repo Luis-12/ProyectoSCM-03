@@ -49,7 +49,7 @@
                     <h1 id="h1Centro" style="margin-top: 1px">Reporte de Horarios por Departamento</h1>
                     <h:form id="reporteH" >
                         <center>
-                            <h:panelGrid columns="2" style="margin-top: 10px;" >
+                            <h:panelGrid columns="2" style="margin-top: 10px; font-size: 19px;" >
                                 <p:outputLabel value="Departamento:"/>
                                 <p:selectOneMenu style="min-width: 197px" value="#{reporteBean.departamentoReporte}" converter="departamentoConverter">
                                     <f:selectItems value="#{departamentoBean.departamentos}" var="departamento"
@@ -58,7 +58,7 @@
                                 </p:selectOneMenu>
                             </h:panelGrid>
 
-                            <h:panelGrid columns="4" style="margin-top: 2px;" >
+                            <h:panelGrid columns="4" style="margin-top: 5px;" >
                                 <p:commandButton value="Buscar"
                                                  style="margin-right:23px;"
                                                  update="formIC:msgsIC, reporteH, ReporteHorarios:tablaReporteHorario"

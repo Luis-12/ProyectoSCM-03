@@ -62,7 +62,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                 <p:calendar autocomplete="off" required="true"
                                             value="#{reporteBean.fechaInicioR}"
                                             maxdate="#{colaboradorBean.fecha}"
-                                            requiredMessage="Ingrese la Fecha inicio"
+                                            requiredMessage="Ingrese la fecha inicial"
                                             id="fecha1" pattern="yyyy-MM-dd">
                                     <f:ajax event="dateSelect" execute="@this" render="@this fIRmessage"/>
                                     <p:ajax update="FIRLabel"/>
@@ -76,7 +76,8 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                 <p:calendar autocomplete="off" required="true"
                                             value="#{reporteBean.fechaFinalR}"
                                             maxdate="#{colaboradorBean.fecha}"
-                                            mindate="#{reporteBean.fechaInicioR}"                                            requiredMessage="Ingrese la Fecha final"
+                                            mindate="#{reporteBean.fechaInicioR}"
+                                            requiredMessage="Ingrese la fecha final"
                                             id="fecha2" pattern="yyyy-MM-dd">
                                     <f:ajax event="dateSelect" execute="@this" render="@this FFRmessage"/>
                                     <p:ajax update="FFRLabel"/>
@@ -84,7 +85,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                 <p:watermark value="Ingrese la fecha final " for="fecha2"/>
                                 <p:message id="FFRmessage" for="fecha2"/>
                                 <p:outputLabel  value="Departamento:" />
-                                <p:selectOneMenu style="min-width: 195px" value="#{reporteBean.departamentoReporte}" converter="departamentoConverter">
+                                <p:selectOneMenu style="min-width: 195px; font-size: 20px;" value="#{reporteBean.departamentoReporte}" converter="departamentoConverter">
                                     <f:selectItems value="#{departamentoBean.departamentos}" var="departamento"
                                                    itemValue="#{departamento}"
                                                    itemLabel="#{departamento.nombre}"/>
@@ -97,10 +98,10 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                                  action="#{reporteBean.buscarDatosColaboradorDetalladoPorDepartamento}"
                                 />
 
-                                <h:commandLink style="margin-left: 60px">
+                                <h:commandLink style="margin-left: 60px;">
                                     <h:graphicImage url="imagen/exc.png" width="40"/>
                                     <p:dataExporter type="xls" target="formRCDetallado:tablaReporteDetalladoDEPAR"
-                                                    fileName="Reporte Detallado de Colaborador #{reportesBean.colaboradorR.nombre}"/>
+                                                    fileName="Reporte Detallado del Colaborador por Departamento #{reportesBean.departamentoReporte.getNombre()}"/>
                                 </h:commandLink>
 
                                 <h:commandLink>
@@ -108,7 +109,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                     <p:dataExporter type="pdf" encoding="ISO-8859-1"
                                                     target="formRCDetallado:tablaReporteDetalladoDEPAR"
                                                     preProcessor="#{reporteBean.preProcessPDFColaDepa}"
-                                                    fileName="Reporte Detallado de Colaborador #{reporteBean.colaboradorR.nombre}"/>
+                                                    fileName="Reporte Detallado del Colaborador por Departamento #{reporteBean.departamentoReporte.getNombre()}"/>
                                 </h:commandLink>
 
                             <p:commandLink onclick="PF('graf').show();">
@@ -166,7 +167,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                         <p:commandButton id="hdnBtnD" actionListener="#{reporteBean.resetlistDepart}"  style="display: none"/>
                     </h:form>
 
-                    <p:dialog id="graf" header="Gráfico Colaborador Detalle" style="text-align:center; width: 35%"  showEffect="fade" hideEffect="fade"
+                    <p:dialog id="graf" header="Gráfico Colaborador por Departamento" style="text-align:-moz-left; width: 20%"  showEffect="fade" hideEffect="fade"
                               widgetVar="graf" resizable="false" minWidth="110" >
                         <div>
                             <center>
