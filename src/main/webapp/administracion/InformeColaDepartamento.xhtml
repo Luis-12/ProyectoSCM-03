@@ -99,13 +99,13 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                 />
 
                                 <h:commandLink style="margin-left: 60px;">
-                                    <h:graphicImage url="imagen/exc.png" width="40"/>
+                                    <h:graphicImage url="imagen/exc.png" width="40" style="margin-bottom: -0.9%"/>
                                     <p:dataExporter type="xls" target="formRCDetallado:tablaReporteDetalladoDEPAR"
                                                     fileName="Reporte Detallado del Colaborador por Departamento #{reportesBean.departamentoReporte.getNombre()}"/>
                                 </h:commandLink>
 
                                 <h:commandLink>
-                                    <h:graphicImage url="imagen/png.jpg" width="40"/>
+                                    <h:graphicImage url="imagen/png.jpg" width="40" style="margin-bottom: -0.9%"/>
                                     <p:dataExporter type="pdf" encoding="ISO-8859-1"
                                                     target="formRCDetallado:tablaReporteDetalladoDEPAR"
                                                     preProcessor="#{reporteBean.preProcessPDFColaDepa}"
@@ -113,7 +113,7 @@ or colaboradorBean.colaboradorlogueado.puesto.descripcion=='Dirección Corporati
                                 </h:commandLink>
 
                             <p:commandLink onclick="PF('graf').show();">
-                                <h:graphicImage url="imagen/gra.png" width="50"/>
+                                <h:graphicImage url="imagen/gra.png" width="50" style="margin-bottom: -0.9%"/>
                             </p:commandLink>
 
                         </h:form>
