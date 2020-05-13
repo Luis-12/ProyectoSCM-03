@@ -2,7 +2,9 @@ package s.c.m.beans;
 
 
 import com.lowagie.text.*;
+import com.lowagie.text.Font;
 import com.lowagie.text.Image;
+import com.lowagie.text.pdf.BaseFont;
 import org.primefaces.PrimeFaces;
 import org.primefaces.model.menu.MenuModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.xml.bind.DatatypeConverter;
+import java.awt.*;
 import java.io.*;
 import java.sql.Time;
 import java.text.Format;
@@ -54,7 +57,7 @@ public class ColaboradorBean {
     Calendar c2;
     private String base64Image = "";
     private MarcaLaboradas marcaLa = new MarcaLaboradas();
-    public String cantidadmes="";
+    public String cantidadmes = "";
 
     private Vacaciones vacaciones = new Vacaciones();
     private Vacaciones vacaciones1 = new Vacaciones();
@@ -76,7 +79,6 @@ public class ColaboradorBean {
     private AsignacionDescansos asignacionDescansos = new AsignacionDescansos();
     public String mensaje;
     public String estado;
-    int diasFeriados=0;
 
 
     @Autowired
@@ -447,14 +449,11 @@ public class ColaboradorBean {
             FacesContext context = FacesContext.getCurrentInstance();
             colaboradorClave.setPk_idColaborador(colaboradorlogueado.getPk_idColaborador());
             colaboradorClave.setClave(colaboradorlogueado.getClave());
-            if(calculaMesesMinimos(colaborador1)<6)
-            {
-               cantidadmes="no";
-            }else
-            {
-                cantidadmes="si";
+            if (calculaMesesMinimos(colaborador1) < 6) {
+                cantidadmes = "no";
+            } else {
+                cantidadmes = "si";
             }
-
 
 
             if (colaboradorlogueado.getPk_idColaborador().equals(dbUsername)
@@ -564,9 +563,8 @@ public class ColaboradorBean {
         }
     }
 
-    public  String enableVacaciones()
-    {
-        return  cantidadmes;
+    public String enableVacaciones() {
+        return cantidadmes;
     }
 
     public boolean validaClave() {//Valida que la clave no sea igual a la anterior
@@ -769,7 +767,7 @@ public class ColaboradorBean {
             colaboradorMarca = new Colaborador();
         } else//Si es asi se pasa a validar que el colaborador este activo y tenga horario
         {
-            habilitarAccion();   
+            habilitarAccion();
         }
     }
 
@@ -783,7 +781,7 @@ public class ColaboradorBean {
         if (mLaborada == null) {//Si no ha marcado entro aca
         } else {//Lleno objeto con hora entrada y la descripcion de entrada
             if (mLaborada.getHoraEntrada() != null) {//Si solo a marcado entrada
-                MarcasJornada miMJ = new MarcasJornada(); 
+                MarcasJornada miMJ = new MarcasJornada();
                 //Ingreso la entrada
                 miMJ.setMarca(mLaborada.getHoraEntrada());//Se agrega el objeto de entrada
                 miMJ.setDescripcion("Entrada");
@@ -1686,7 +1684,6 @@ public class ColaboradorBean {
         return meses;
     }
 
-
     public void createSolicitud(String idColaborador) throws Exception {
 
         colaboradorSolicitante = colaboradorService.findColaborador(idColaborador);
@@ -1699,135 +1696,68 @@ public class ColaboradorBean {
 
         System.out.println("Meses desde CSolicitud: " + calculaMesesMinimos(colaboradorSolicitante));
 
-        if (fInicio > fFinal) {
-            addMessage("Aviso", "Las fecha final de vacaciones NO puede ser menor que la de fecha de inicio de vacaciones");
-        } else if (calculaMesesMinimos(colaboradorSolicitante) < 6) {//ACA VA LA VALIDACION DE 6 MESES LABORANDO si es menor de 6
-            addMessage("Aviso", "No a laborado los meses suficientes para poder solicitar vacaciones");
-        } else {//Si cumple con la condicion de 6 mese laborado puede hacer la solicitud
-            int diasSol = CalculaDiasSolicitados();
-            int diasDispo = vacacionesPorColaborador.getDiasdisponibles();
+        //Valido que tenga un horario asignado
+        Asignaciones asigCola = asignacionesServices.buscarHorario(colaboradorSolicitante);
+        if (asigCola != null) {//Si encontro una asignacion
+            if (fInicio > fFinal) {
+                addMessage("Aviso", "Las fecha final de vacaciones NO puede ser menor que la de fecha de inicio de vacaciones");
+            } else if (calculaMesesMinimos(colaboradorSolicitante) < 6) {//ACA VA LA VALIDACION DE 6 MESES LABORANDO si es menor de 6
+                addMessage("Aviso", "No a laborado los meses suficientes para poder solicitar vacaciones");
+            } else {//Si cumple con la condicion de 6 mese laborado puede hacer la solicitud
+                int diasSol = CalculaDiasSolicitados(asigCola);
+                int diasDispo = vacacionesPorColaborador.getDiasdisponibles();
 
-            //Aca borre la validacion de dias iguales
-            if (diasSol <= diasDispo) {//Si los dias solicitados son menores a los disponibles puede realizar la solicitud
-                    solicitudVac.setColaborador(colaboradorSolicitante);
-                rangoFechas(solicitudVac.getFechainicio(),solicitudVac.getFechafinal());
-                solicitudVac.setEstado("Pendiente");
-                diasSol=diasSol-diasFeriados;
-                    solicitudVac.setDiasSolicitados(diasSol);
-                    solicitudVac.setJustificacion("Justifique la Decisión");
-                    System.out.println("Colaborador Solicitante desde VB: " + colaboradorSolicitante.getPk_idColaborador());
-                    System.out.println("NOMBRE: " + colaboradorSolicitante.getNombre());
-                    System.out.println("Fecha inicio: " + solicitudVac.getFechainicio());
-                    System.out.println("Fecha final: " + solicitudVac.getFechafinal());
-                    System.out.println("Dias Disponibles: " + diasDispo);
-                 //Aca despues de cargar los datos en el objeto
-                    vacacionesService.createVacaciones(solicitudVac);//Se llama la funcion para agregar la solicitud a la base
-                    addMessage("Aviso", "Solicitud Realizada con Éxito.");
-                    solicitudVac = new Vacaciones();
-                    diasFeriados=0;
-                    vacacionesList = vacacionesService.getAllSolVacaciones(colaboradorlogueado);
-                    //Se refresca la tabla
-            } else {
-                addMessage("Aviso", "¡NO puede solicitar más días de los que Dispone!");
+                if (diasSol > 0) {//Si esta solicitando algun dia puede hacer la solicitud
+                    //Aca borre la validacion de dias iguales
+                    if (diasSol <= diasDispo) {//Si los dias solicitados son menores a los disponibles puede realizar la solicitud
+                        solicitudVac.setColaborador(colaboradorSolicitante);
+                        solicitudVac.setEstado("Pendiente");
+                        solicitudVac.setDiasSolicitados(diasSol);
+                        solicitudVac.setJustificacion("Justifique la Decisión");
+                        System.out.println("Colaborador Solicitante desde VB: " + colaboradorSolicitante.getPk_idColaborador());
+                        System.out.println("NOMBRE: " + colaboradorSolicitante.getNombre());
+                        System.out.println("Fecha inicio: " + solicitudVac.getFechainicio());
+                        System.out.println("Fecha final: " + solicitudVac.getFechafinal());
+                        System.out.println("Dias Disponibles: " + diasDispo);
+                        //Aca despues de cargar los datos en el objeto
+                        vacacionesService.createVacaciones(solicitudVac);//Se llama la funcion para agregar la solicitud a la base
+                        addMessage("Aviso", "Solicitud Realizada con Éxito.");
+                        solicitudVac = new Vacaciones();
+                        vacacionesList = vacacionesService.getAllSolVacaciones(colaboradorlogueado);
+                        //Se refresca la tabla
+                    } else {
+                        addMessage("Aviso", "¡NO puede solicitar más días de los que Dispone!");
+                    }
+                } else {//Si el calculo de dias solicitados es 0
+                    addMessage("Aviso", "¡No esta solicitando ningun dia de vacaciones, puede que este incluyendo dias libres en el rango!");
+                }
             }
+        } else {//Si no se encontro asignacion de horario
+            addMessage("Aviso", "¡Para solicitar vacaciones debe tener un horario asignado!");
         }
         solicitudVac = new Vacaciones();
     }
 
-
-    public void rangoFechas(
-            Date startDate, Date endDate) {
-        List<Date> datesInRange = new ArrayList<>();
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(startDate);
-
-        Calendar endCalendar = new GregorianCalendar();
-        endCalendar.setTime(endDate);
-
-        while (calendar.before(endCalendar)||calendar.equals(endCalendar)) {
-            Date result = calendar.getTime();
-            feriados(result);
-            datesInRange.add(result);
-            calendar.add(Calendar.DATE, 1);
-        }
-    }
-
-    public void feriados(Date date){
-
-        Calendar juevesSanto = Calendar.getInstance();
-        Calendar viernesSanto = Calendar.getInstance();
-        juevesSanto.setTime(semanaSanta(date.getYear()).getTime());
-        juevesSanto.add(Calendar.DATE, -3);
-        viernesSanto.setTime(semanaSanta(date.getYear()).getTime());
-        viernesSanto.add(Calendar.DATE, -2);
-
-        if(date.equals(new Date(date.getYear(), Calendar.JANUARY, 1))){
-        diasFeriados++;
-        }
-        else if(date.equals(new Date(date.getYear(), juevesSanto.getTime().getMonth(), juevesSanto.getTime().getDay()))){
-            diasFeriados++;
-
-        }
-        else if(date.equals(new Date(date.getYear(), viernesSanto.getTime().getMonth(), viernesSanto.getTime().getDay()))){
-            diasFeriados++;
-
-        }
-        else if(date.equals(new Date(date.getYear(), Calendar.APRIL, 11))){
-            diasFeriados++;
-
-        }
-        else if(date.equals(new Date(date.getYear(), Calendar.MAY, 1))){
-            diasFeriados++;
-
-        }
-        else if(date.equals(new Date(date.getYear(), Calendar.JULY, 25))){
-            diasFeriados++;
-
-        }
-        else if(date.equals(new Date(date.getYear(), Calendar.AUGUST, 15))){
-            diasFeriados++;
-
-        }
-        else if(date.equals(new Date(date.getYear(), Calendar.SEPTEMBER, 15))){
-            diasFeriados++;
-
-        }
-        else if(date.equals(new Date(date.getYear(), Calendar.DECEMBER, 25))){
-            diasFeriados++;
-        }
-
-    }
-
-    public Calendar semanaSanta(int year) {
-        int golden, century, x, z, d, epact, n;
-        golden = (year % 19) + 1;
-        century = (year / 100) + 1;
-        x = (3 * century / 4) - 12;
-        z = ((8 * century + 5) / 25) - 5;
-        d = (5 * year / 4) - x - 10;
-        epact = (11 * golden + 20 + z - x) % 30;
-        if ((epact == 25 && golden > 11) || epact == 24)
-            epact++;
-        n = 44 - epact;
-        n += 30 * (n < 21 ? 1 : 0);
-        n += 7 - ((d + n) % 7);
-        if (n > 31)
-            return new GregorianCalendar(year, 4 - 1, n - 31);
-        else
-            return new GregorianCalendar(year, 3 - 1, n);
-    }
-
-
-
     //Falta funcion que calcula los dias que pide el mae
-    public int CalculaDiasSolicitados() {
+    public int CalculaDiasSolicitados(Asignaciones asigColaborador) {
         int totalDiasSolicitados = 0;
         Calendar finicio = Calendar.getInstance();
         Calendar ffinal = Calendar.getInstance();
+        double semanas = 0.0;
+
+        //Obtengo la asignacion del colaborador
+        String diaLibre1 = asigColaborador.getDiaDescanso();
+        String diaLibre2 = asigColaborador.getSegundodiades();
+        int diaL1 = conversionDiaLibre(diaLibre1);
+        int diaL2 = conversionDiaLibre(diaLibre2);
+
+        System.out.println("Dia libre 1 en numero " + diaL1);
+        System.out.println("Dia libre 2 en numero " + diaL2);
 
         finicio.set(YEAR, solicitudVac.getFechainicio().getYear() + 1900);
         finicio.set(Calendar.MONTH, solicitudVac.getFechainicio().getMonth() + 1);
         finicio.set(Calendar.DAY_OF_MONTH, solicitudVac.getFechainicio().getDate());
+        //finicio.set(Calendar.DAY_OF_WEEK, solicitudVac.getFechainicio().getDay());
         finicio.set(Calendar.HOUR, 0);
         finicio.set(Calendar.HOUR_OF_DAY, 0);
         finicio.set(Calendar.MINUTE, 0);
@@ -1836,6 +1766,7 @@ public class ColaboradorBean {
         ffinal.set(YEAR, solicitudVac.getFechafinal().getYear() + 1900);
         ffinal.set(Calendar.MONTH, solicitudVac.getFechafinal().getMonth() + 1);
         ffinal.set(Calendar.DAY_OF_MONTH, solicitudVac.getFechafinal().getDate());
+        //ffinal.set(Calendar.DAY_OF_WEEK, solicitudVac.getFechafinal().getDay());
         ffinal.set(Calendar.HOUR, 0);
         ffinal.set(Calendar.HOUR_OF_DAY, 0);
         ffinal.set(Calendar.MINUTE, 0);
@@ -1844,8 +1775,8 @@ public class ColaboradorBean {
         Format formateador = new SimpleDateFormat("yyyy-MM-dd");
         String fechaI = formateador.format(finicio.getTime());
         String fechaF = formateador.format(ffinal.getTime());
-        System.out.println("Fecha inicio: " + fechaI);
-        System.out.println("Fecha final: " + fechaF);
+        //System.out.println("Fecha inicio: " + fechaI);
+        //System.out.println("Fecha final: " + fechaF);
 
         long iniMS = finicio.getTimeInMillis();
         long finMS = ffinal.getTimeInMillis();
@@ -1853,7 +1784,61 @@ public class ColaboradorBean {
         totalDiasSolicitados = (int) ((Math.abs(finMS - iniMS)) / (1000 * 60 * 60 * 24));//86.400.000
         totalDiasSolicitados++;
 
+        System.out.println("Dia de fecha de inicio: " + finicio.get(Calendar.DAY_OF_WEEK));
+        System.out.println("Dia de fecha de final: " + ffinal.get(Calendar.DAY_OF_WEEK));
+        if (iniMS == finMS) {//Si solicito solo un dia de vacaciones
+            if ((diaL1 == finicio.get(Calendar.DAY_OF_WEEK) || diaL2 == finicio.get(Calendar.DAY_OF_WEEK))
+                    || (diaL1 == ffinal.get(Calendar.DAY_OF_WEEK) || diaL2 == ffinal.get(Calendar.DAY_OF_WEEK))) {//Si la fecha de inicio y final son iguales a dias disponibles
+                totalDiasSolicitados--;//Resta 1 por que es la misma fecha osea solicita un dia
+                System.out.println("Dias solicitados final: " + totalDiasSolicitados);
+            }
+        } else {//si solicito mas de 1 dia de vacaciones
+            if (diaL1 == finicio.get(Calendar.DAY_OF_WEEK) || diaL2 == finicio.get(Calendar.DAY_OF_WEEK)) {//Si algun dia libre es igual a la fecha de inicio
+                totalDiasSolicitados--;//Resta 1 por que es igual al dia libre
+            }
+            if (diaL1 == ffinal.get(Calendar.DAY_OF_WEEK) || diaL2 == ffinal.get(Calendar.DAY_OF_WEEK)) {//Si algun dia libre es igual a la fecha de final
+                totalDiasSolicitados--;//Resta 1 por que es igual al dia libre
+            }
+            semanas = (double) ((Math.abs(finMS - iniMS)) / (1000 * 60 * 60 * 24 * 7));
+
+
+        }
+
+        System.out.println("Dias solicitados final: " + totalDiasSolicitados);
+        System.out.println("Semanas solicitadad: " + semanas);
+
         return totalDiasSolicitados;
+    }
+
+    public int conversionDiaLibre(String d) {//Funcion que verifica segun el dia por numero el dia en string
+        int day = 0;
+        switch (d) {//Se hace un cambio de formato segun el numero del dia a letras
+            case "DO":
+                day = 7;
+                break;
+            case "LU":
+                day = 1;
+                break;
+            case "MA":
+                day = 2;
+                break;
+            case "MI":
+                day = 3;
+                break;
+            case "JU":
+                day = 4;
+                break;
+            case "VI":
+                day = 5;
+                break;
+            case "SA":
+                day = 6;
+                break;
+            case "N/A":
+                day = 0;
+                break;
+        }
+        return day;
     }
 
 //---------------------------Fin  métodos de Vacaciones ----------------------------------------------
