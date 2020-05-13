@@ -2,9 +2,7 @@ package s.c.m.beans;
 
 
 import com.lowagie.text.*;
-import com.lowagie.text.Font;
 import com.lowagie.text.Image;
-import com.lowagie.text.pdf.BaseFont;
 import org.primefaces.PrimeFaces;
 import org.primefaces.model.menu.MenuModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +21,6 @@ import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.xml.bind.DatatypeConverter;
-import java.awt.*;
 import java.io.*;
 import java.sql.Time;
 import java.text.Format;
@@ -79,6 +76,7 @@ public class ColaboradorBean {
     private AsignacionDescansos asignacionDescansos = new AsignacionDescansos();
     public String mensaje;
     public String estado;
+    int diasFeriados=0;
 
 
     @Autowired
@@ -1712,7 +1710,9 @@ public class ColaboradorBean {
             //Aca borre la validacion de dias iguales
             if (diasSol <= diasDispo) {//Si los dias solicitados son menores a los disponibles puede realizar la solicitud
                     solicitudVac.setColaborador(colaboradorSolicitante);
-                    solicitudVac.setEstado("Pendiente");
+                rangoFechas(solicitudVac.getFechainicio(),solicitudVac.getFechafinal());
+                solicitudVac.setEstado("Pendiente");
+                diasSol=diasSol-diasFeriados;
                     solicitudVac.setDiasSolicitados(diasSol);
                     solicitudVac.setJustificacion("Justifique la Decisión");
                     System.out.println("Colaborador Solicitante desde VB: " + colaboradorSolicitante.getPk_idColaborador());
@@ -1720,10 +1720,11 @@ public class ColaboradorBean {
                     System.out.println("Fecha inicio: " + solicitudVac.getFechainicio());
                     System.out.println("Fecha final: " + solicitudVac.getFechafinal());
                     System.out.println("Dias Disponibles: " + diasDispo);
-                    //Aca despues de cargar los datos en el objeto
+                 //Aca despues de cargar los datos en el objeto
                     vacacionesService.createVacaciones(solicitudVac);//Se llama la funcion para agregar la solicitud a la base
                     addMessage("Aviso", "Solicitud Realizada con Éxito.");
                     solicitudVac = new Vacaciones();
+                    diasFeriados=0;
                     vacacionesList = vacacionesService.getAllSolVacaciones(colaboradorlogueado);
                     //Se refresca la tabla
             } else {
@@ -1732,6 +1733,91 @@ public class ColaboradorBean {
         }
         solicitudVac = new Vacaciones();
     }
+
+
+    public void rangoFechas(
+            Date startDate, Date endDate) {
+        List<Date> datesInRange = new ArrayList<>();
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(startDate);
+
+        Calendar endCalendar = new GregorianCalendar();
+        endCalendar.setTime(endDate);
+
+        while (calendar.before(endCalendar)||calendar.equals(endCalendar)) {
+            Date result = calendar.getTime();
+            feriados(result);
+            datesInRange.add(result);
+            calendar.add(Calendar.DATE, 1);
+        }
+    }
+
+    public void feriados(Date date){
+
+        Calendar juevesSanto = Calendar.getInstance();
+        Calendar viernesSanto = Calendar.getInstance();
+        juevesSanto.setTime(semanaSanta(date.getYear()).getTime());
+        juevesSanto.add(Calendar.DATE, -3);
+        viernesSanto.setTime(semanaSanta(date.getYear()).getTime());
+        viernesSanto.add(Calendar.DATE, -2);
+
+        if(date.equals(new Date(date.getYear(), Calendar.JANUARY, 1))){
+        diasFeriados++;
+        }
+        else if(date.equals(new Date(date.getYear(), juevesSanto.getTime().getMonth(), juevesSanto.getTime().getDay()))){
+            diasFeriados++;
+
+        }
+        else if(date.equals(new Date(date.getYear(), viernesSanto.getTime().getMonth(), viernesSanto.getTime().getDay()))){
+            diasFeriados++;
+
+        }
+        else if(date.equals(new Date(date.getYear(), Calendar.APRIL, 11))){
+            diasFeriados++;
+
+        }
+        else if(date.equals(new Date(date.getYear(), Calendar.MAY, 1))){
+            diasFeriados++;
+
+        }
+        else if(date.equals(new Date(date.getYear(), Calendar.JULY, 25))){
+            diasFeriados++;
+
+        }
+        else if(date.equals(new Date(date.getYear(), Calendar.AUGUST, 15))){
+            diasFeriados++;
+
+        }
+        else if(date.equals(new Date(date.getYear(), Calendar.SEPTEMBER, 15))){
+            diasFeriados++;
+
+        }
+        else if(date.equals(new Date(date.getYear(), Calendar.DECEMBER, 25))){
+            diasFeriados++;
+        }
+
+    }
+
+    public Calendar semanaSanta(int year) {
+        int golden, century, x, z, d, epact, n;
+        golden = (year % 19) + 1;
+        century = (year / 100) + 1;
+        x = (3 * century / 4) - 12;
+        z = ((8 * century + 5) / 25) - 5;
+        d = (5 * year / 4) - x - 10;
+        epact = (11 * golden + 20 + z - x) % 30;
+        if ((epact == 25 && golden > 11) || epact == 24)
+            epact++;
+        n = 44 - epact;
+        n += 30 * (n < 21 ? 1 : 0);
+        n += 7 - ((d + n) % 7);
+        if (n > 31)
+            return new GregorianCalendar(year, 4 - 1, n - 31);
+        else
+            return new GregorianCalendar(year, 3 - 1, n);
+    }
+
+
 
     //Falta funcion que calcula los dias que pide el mae
     public int CalculaDiasSolicitados() {
