@@ -1026,7 +1026,7 @@ public class ReporteBean {
         pTC.setSpacingBefore(30);
         pTC.setSpacingAfter(20);
         pdf.add(pTC);
-        Paragraph pt2 = new Paragraph("Cantidad de colaboradores: "+reporteColaboradorDetalladosList.size(), informacion);
+        Paragraph pt2 = new Paragraph("Cantidad de colaboradores: "+colaboradroLaborando().size(), informacion);
         pt2.setAlignment("left");
         pt2.setSpacingBefore(10);
         pt2.setSpacingAfter(10);
