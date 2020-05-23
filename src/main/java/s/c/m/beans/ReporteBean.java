@@ -1026,10 +1026,10 @@ public class ReporteBean {
         pTC.setSpacingBefore(30);
         pTC.setSpacingAfter(20);
         pdf.add(pTC);
-        Paragraph pt2 = new Paragraph("Cantidad de colaboradores: "+colaboradroLaborando().size(), informacion);
+        Paragraph pt2 = new Paragraph("Total de Colaboradores Laborando: "+colaboradroLaborando().size(), informacion);
         pt2.setAlignment("left");
         pt2.setSpacingBefore(10);
-        pt2.setSpacingAfter(10);
+        pt2.setSpacingAfter(20);
         pdf.add(pt2);
         BaseFont bfDes = BaseFont.createFont(BaseFont.TIMES_BOLDITALIC, BaseFont.WINANSI, BaseFont.EMBEDDED);
         com.lowagie.text.Font subt = new com.lowagie.text.Font(bfDes);
