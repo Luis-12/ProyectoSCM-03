@@ -1026,8 +1026,11 @@ public class ReporteBean {
         pTC.setSpacingBefore(30);
         pTC.setSpacingAfter(20);
         pdf.add(pTC);
-
-
+        Paragraph pt2 = new Paragraph("Cantidad de colaboradores: "+reporteColaboradorDetalladosList.size(), informacion);
+        pt2.setAlignment("left");
+        pt2.setSpacingBefore(10);
+        pt2.setSpacingAfter(10);
+        pdf.add(pt2);
         BaseFont bfDes = BaseFont.createFont(BaseFont.TIMES_BOLDITALIC, BaseFont.WINANSI, BaseFont.EMBEDDED);
         com.lowagie.text.Font subt = new com.lowagie.text.Font(bfDes);
         subt.setSize(14);
@@ -1069,6 +1072,7 @@ public class ReporteBean {
 
         Paragraph pTC = new Paragraph("Reporte Detallado del Colaborador por el Departamento de: " , fuenteTitulos);
         Paragraph pTC1 = new Paragraph(departamentoReporte.getNombre(), informacion);
+
         pTC.setAlignment("left");
         pTC.setSpacingBefore(30);
         pTC.setSpacingAfter(5);
@@ -1086,6 +1090,7 @@ public class ReporteBean {
         pt1.setSpacingAfter(30);
         pdf.add(pT);
         pdf.add(pt1);
+
 
 
     }
