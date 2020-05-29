@@ -79,7 +79,7 @@ public class MenuView {
         cuartoSubmenu.addElement(item);
         //model.addElement(cuartoSubmenu);
 
-        DefaultSubMenu quintoSubmenu = new DefaultSubMenu("Solicitud de Vaciones");
+        DefaultSubMenu quintoSubmenu = new DefaultSubMenu("Solicitud de Vacaciones");
         item = new DefaultMenuItem("Formulario de Solicitud");
         item.setIcon("ui-icon-clipboard");
         item.setCommand("SolicitudVacaciones.xhtml");
