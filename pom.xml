@@ -14,7 +14,7 @@
         <org.primefaces.themes.version>1.0.10</org.primefaces.themes.version>
         <hibernate-jpa-2-1.version>1.0.0.Final</hibernate-jpa-2-1.version>
         <hibernate.version>5.0.12.Final</hibernate.version>
-        <hibernate.validator.version>5.2.4.Final</hibernate.validator.version>
+        <hibernate.validator.version>5.3.5.Final</hibernate.validator.version>
 
 
     </properties>
