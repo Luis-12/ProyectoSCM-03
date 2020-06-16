@@ -1214,7 +1214,7 @@ public class ColaboradorBean {
         marcaLaboradas.setHoraSalida(time);//se guarda el tiempo de la marca
         marcaLaboradas.setJustSalidaTemprana(justST);
         marcaLaboradas.setJustTiempoExtra(justTE);
-        marcaLaboradas.setEstado("Finalizado");
+        marcaLaboradas.setEstado("Finalizado"); //ACABADO
         marcaLaboradaService.updateMarcaLaborada(marcaLaboradas);//y por ultimo se agrega la marca de entrada a la base de datos
 
         listaMarcasPorJornadaFinalizada(marcaLaboradas);
@@ -1259,7 +1259,7 @@ public class ColaboradorBean {
         Time time = new Time(now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), now.get(Calendar.SECOND));
         marcaDescansos.setHoraInicio(time);
         marcaDescansoService.crearMarcaDescanso(marcaDescansos);
-        saveImage();//Funcion para guardar imagen
+        //saveImage();//Funcion para guardar imagen
         listaMarcasPorJornada();
     }
 
